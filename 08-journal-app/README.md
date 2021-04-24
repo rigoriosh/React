@@ -1,0 +1,1 @@
+Aplicaion web about journals

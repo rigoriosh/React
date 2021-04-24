@@ -1,0 +1,29 @@
+import React from 'react'
+import { Redirect, Route } from 'react-router-dom'
+import PropTypes from 'prop-types'
+
+
+export const PublicRout = ({isUserLoggedIn, component: Component, ...rest}) => {
+
+    return (
+       <Route {...rest}
+        component = { (props) => (
+            (isUserLoggedIn)
+            ? <Redirect to="/" />
+            : <Component {...props} />
+        )}
+
+
+       />
+    )
+}
+
+PublicRout.propTypes = {
+    isUserLoggedIn: PropTypes.bool.isRequired,
+    component: PropTypes.func.isRequired
+}
+
+
+
+
+export default PublicRout
