@@ -25,3 +25,7 @@ https://github.com/wojtekmaj/enzyme-adapter-react-17
 // estructua de carpetas
 https://hackernoon.com/structuring-projects-and-naming-components-in-react-1261b6e18d76
 https://es.reactjs.org/docs/faq-structure.html
+
+* typeScript
+
+npx create-react-app --template typescript
