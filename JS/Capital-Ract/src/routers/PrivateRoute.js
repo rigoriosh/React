@@ -3,7 +3,7 @@ import { Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 
-export const PrivateRoute = ({isAuthenticated, component: Component, ...rest}) => {
+export const PrivateRoute = ({isAuthenticated, redirec, component: Component, ...rest}) => {
     console.log(rest);
     //localStorage.setItem('lastPath', rest.location.pathname+rest.location.search);
     return (
@@ -11,7 +11,7 @@ export const PrivateRoute = ({isAuthenticated, component: Component, ...rest}) =
         component = { (props) => (
             (isAuthenticated)
             ? <Component {...props}/>
-            : <Redirect to="/auth/login" />
+            : <Redirect to={redirec} />
         )}
 
 
@@ -21,7 +21,8 @@ export const PrivateRoute = ({isAuthenticated, component: Component, ...rest}) =
 
 PrivateRoute.propTypes = {
     isAuthenticated: PropTypes.bool.isRequired,
-    component: PropTypes.func.isRequired
+    component: PropTypes.func.isRequired,
+    redirec: PropTypes.string.isRequired
 }
 
 

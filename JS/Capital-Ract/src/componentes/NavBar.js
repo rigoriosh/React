@@ -15,7 +15,7 @@ export const NavBar = ({rol}) => {
     const handleLogOut = async() => {
         await dispatch(startLogOut())        
         history.replace('/');
-        closeMenu()
+        //closeMenu()
     }
 
     const closeMenu = () => {
@@ -57,6 +57,10 @@ export const NavBar = ({rol}) => {
                                                     <Link onClick={closeMenu} to="/owner/rockola" replace><strong className="colorText" >Rockola</strong></Link>
                                                     <i className="fab fa-spotify"></i>
                                                 </li>
+                                                <li >                                    
+                                                    <Link onClick={closeMenu} to="/owner/we" replace><strong className="colorText" >Nosotros</strong></Link>
+                                                    <i className="fas fa-users"></i>
+                                                </li>
                                             </>
                                             
                                         )
@@ -90,10 +94,7 @@ export const NavBar = ({rol}) => {
                                         </>
                                     )
                                 }
-                                <li >                                    
-                                    <Link onClick={closeMenu} to="/we" replace><strong className="colorText" >Nosotros</strong></Link>
-                                    <i className="fas fa-users"></i>
-                                </li>
+                                
                                 {
                                     (rol !== tipos.rolOwner && rol !== tipos.rolAdminBar && rol !== tipos.rolUser) && (
                                         <li >                                    

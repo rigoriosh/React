@@ -40,6 +40,7 @@ export const LoginScreen = () => {
     }
 
     const handleGoogleLogin = () => {
+        console.log("handleGoogleLogin")
         dispatch(startGoogleLogin());
     }
     return (

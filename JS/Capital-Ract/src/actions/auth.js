@@ -1,16 +1,18 @@
 import { tipos } from "../types/tipos"
 import {firebase, googleAuthProvider} from '../firebase/firebaseConfig';
-import { finishLoading, startLoading } from "./ui";
+//import { finishLoading, startLoading } from "./ui";
 import Swal from 'sweetalert2';
 
 
 
 export const startLoginEmailPassword = (email, password) => {
     return (dispatch) => {
+        console.log(email, password)
+        dispatch(login(password, email));
+        
+        //dispatch(startLoading())
 
-        dispatch(startLoading())
-
-        firebase.auth().signInWithEmailAndPassword(email, password)
+        /* firebase.auth().signInWithEmailAndPassword(email, password)
             .then(r => {
                 console.log(r);
                 dispatch(login(email, password));
@@ -20,7 +22,7 @@ export const startLoginEmailPassword = (email, password) => {
                 console.log(e)
                 dispatch(finishLoading());
                 Swal.fire('Error', e.message, 'error');
-            })
+            }) */
 
     }
 }
@@ -53,8 +55,9 @@ export const startRegisterWithEmailPasswordName = (email, password, name) => {
 export const startGoogleLogin = () => {
     
     return (dispatch) => {
-        
-        firebase.auth().signInWithPopup(googleAuthProvider)
+        dispatch(login(12345, 'rigo'));
+        console.log(12345, 'rigo')
+        /* firebase.auth().signInWithPopup(googleAuthProvider)
             .then( resp => {
                 const {user} = resp;
                 dispatch(login(user.uid, user.displayName));
@@ -62,12 +65,13 @@ export const startGoogleLogin = () => {
             })
             .catch(e => {
                 Swal.fire('Error', e.message, 'error');
-            })
+            }) */
     }
 } 
 
-export const login = (uid, name, rol='') => (
-    {
+export const login = (uid, name, rol=tipos.rolAdminBar) => {
+    console.log(uid, name, rol)
+    return {
         type: tipos.login,
         payload:{
             uid,
@@ -75,7 +79,7 @@ export const login = (uid, name, rol='') => (
              rol
         }
     }
-)
+}
 
 //funcion asincrona
 /* 

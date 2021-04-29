@@ -3,13 +3,13 @@ import { Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 
-export const PublicRout = ({isAuthenticated, component: Component, ...rest}) => {
-
+export const PublicRout = ({isAuthenticated, redirec, component: Component, ...rest}) => {
+    console.log({isAuthenticated})
     return (
        <Route {...rest}
         component = { (props) => (
             (isAuthenticated)
-            ? <Redirect to="/" />
+            ? <Redirect to={redirec} />
             : <Component {...props} />
         )}
 
@@ -20,7 +20,8 @@ export const PublicRout = ({isAuthenticated, component: Component, ...rest}) => 
 
 PublicRout.propTypes = {
     isAuthenticated: PropTypes.bool.isRequired,
-    component: PropTypes.func.isRequired
+    component: PropTypes.func.isRequired,
+    redirec: PropTypes.string.isRequired
 }
 
 

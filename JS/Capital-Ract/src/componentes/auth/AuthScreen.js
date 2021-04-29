@@ -44,6 +44,7 @@ export const AuthScreen = ({history}) => {
     }
 
     const handleGoogleLogin = () => {
+        console.log("handleGoogleLogin");
         dispatch(startGoogleLogin());
     }
 

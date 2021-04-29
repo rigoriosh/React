@@ -9,9 +9,9 @@ import { uiReducer } from "../reducers/uiReducer";
 const reducers = combineReducers(
     {
         auth: authReducer,
-        ui: uiReducer,
         drinksReducer,
-        foodsReducer
+        foodsReducer,
+        ui: uiReducer,
     }
 );
 

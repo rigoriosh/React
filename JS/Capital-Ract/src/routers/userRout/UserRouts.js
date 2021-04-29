@@ -4,6 +4,7 @@ import { Redirect, Route } from 'react-router-dom'
 import { tipos } from '../../types/tipos'
 
 const UserRouts = ({rol, component: Component, ...rest}) => {
+    
     return (
         <Route {...rest}
          component = { (props) => (
