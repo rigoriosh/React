@@ -8,7 +8,7 @@ export const RoutsUser = () => {
     return (
         <>
             <Switch>    
-                    <Route exact path="/user"           component={HomeScreen} />               
+                    <Route exact path="/user"          component={HomeScreen} />               
                     <Route exact path="/user/menu"     component={Menu} />
                     <Route exact path="/user/rockola"  component={Rockola} />
                     <Redirect to='/user' />

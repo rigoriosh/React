@@ -8,7 +8,7 @@ export const RoutsAdminBar = () => {
     return (
         <>
             <Switch>            
-                <Route exact path="/adminBar"          component={HomeScreen} />       
+                <Route exact path="/adminBar"      component={HomeScreen} />       
                 <Route exact path="/adminBar/bar"  component={Bar} />
                 <Route exact path="/adminBar/menu" component={Menu} />                    
                 <Redirect to='/adminBar' />

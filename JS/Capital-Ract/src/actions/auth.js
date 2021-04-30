@@ -54,18 +54,17 @@ export const startRegisterWithEmailPasswordName = (email, password, name) => {
 
 export const startGoogleLogin = () => {
     
-    return (dispatch) => {
-        dispatch(login(12345, 'rigo'));
-        console.log(12345, 'rigo')
-        /* firebase.auth().signInWithPopup(googleAuthProvider)
+    return (dispatch) => {        
+        firebase.auth().signInWithPopup(googleAuthProvider)
             .then( resp => {
                 const {user} = resp;
+                console.log(resp)
                 dispatch(login(user.uid, user.displayName));
                 
             })
             .catch(e => {
                 Swal.fire('Error', e.message, 'error');
-            }) */
+            })
     }
 } 
 

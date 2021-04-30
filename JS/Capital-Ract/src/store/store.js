@@ -8,10 +8,10 @@ import { uiReducer } from "../reducers/uiReducer";
 
 const reducers = combineReducers(
     {
-        auth: authReducer,
+        authReducer,
         drinksReducer,
         foodsReducer,
-        ui: uiReducer,
+        uiReducer,
     }
 );
 

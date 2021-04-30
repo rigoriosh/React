@@ -1,6 +1,6 @@
 import React, {useEffect, useState } from 'react'
 //import {firebase} from '../firebase/firebaseConfig';
-import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Switch } from "react-router-dom";
 import { AuthScreen } from '../componentes/auth/AuthScreen';
 /* import { HomeScreen } from '../componentes/home/HomeScreen';
 
@@ -29,17 +29,17 @@ export const AppRouter = ({history}) => {
     const state = useSelector(state => state);//para acceder a la info del redux
     const [checkingLogin, setChecking] = useState(false);
     const dispatch = useDispatch();
-    const {auth} = state
-    console.log(auth.uid)
+    const {authReducer} = state
+    console.log(authReducer.uid)
 
     const [isLogin, setisLogin] = useState(false)
     console.log(isLogin)
 
 
     useEffect(() => {
-        (auth.uid) ? setisLogin(true) : setisLogin(false);
-        //(auth.uid) ? setRol(tipos.rolOwner) : setRol('tipos.rolOwner');
-    }, [auth])
+        (authReducer.uid) ? setisLogin(true) : setisLogin(false);
+        //(authReducer.uid) ? setRol(tipos.rolOwner) : setRol('tipos.rolOwner');
+    }, [authReducer])
     
 
     useEffect(() => {
@@ -67,7 +67,7 @@ export const AppRouter = ({history}) => {
 
     /* 
     useEffect(() => {        
-        firebase.auth().onAuthStateChanged((user) => {
+        firebase.authReducer().onAuthStateChanged((user) => {
             console.log(user, {isLogin});
             setChecking(true);
             if (user?.uid) {
@@ -91,7 +91,7 @@ export const AppRouter = ({history}) => {
                 
                 <Switch>
                     {/* <Route exact path="/we" component={Nosotros} />
-                    <Route exact path="/auth" component={AuthScreen} />                    
+                    <Route exact path="/authReducer" component={AuthScreen} />                    
                     */}
                      
                     <PublicRout isAuthenticated={isLogin} path="/auth" component={AuthScreen} redirec={"/"}/>                    
