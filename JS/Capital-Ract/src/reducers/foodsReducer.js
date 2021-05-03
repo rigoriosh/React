@@ -45,6 +45,7 @@ const initialState = {foods:[], idSelected: '',
     ]
 };
 export const foodsReducer = (state = initialState, action) => {
+    console.log(action);
     let i = 0;
     switch (action.type) {
         case tipos.addFood:

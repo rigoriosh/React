@@ -68,7 +68,7 @@ export const startGoogleLogin = () => {
     }
 } 
 
-export const login = (uid, name, rol=tipos.rolAdminBar) => {
+export const login = (uid, name, rol=tipos.rolOwner) => {
     console.log(uid, name, rol)
     return {
         type: tipos.login,

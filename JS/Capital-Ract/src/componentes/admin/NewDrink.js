@@ -2,23 +2,26 @@ import React, { useEffect, useState } from 'react'
 import ColorPicker, { useColor } from "react-color-palette";
 import { useDispatch, useSelector } from 'react-redux';
 import { addDrink, editDrinks, selectedDrink} from '../../actions/drinksActions';
-import { removeErrorAction, setErrorAction } from '../../actions/ui';
 import { useForm } from '../../hooks/useForm';
 
 import { DragNdrop } from '../../utilsComponents/DragNdrop';
 import { PaletColor } from '../../utilsComponents/PaletColor';
 
+import Msgerror from '../helpersComponents/Msgerror'
+
 
 export const NewDrink = ({history}) => {
+    console.log("NewDrink")
     const dispatch = useDispatch();
     const defaultColor = "#823f3f"
     const [archivos, setArchivos] = useState('');//archivos hacer referencia a la imagen del producto
-    const [idCategoria, setCategoria] = useState('select...');
     const [drinkKinds, setDrinksKinds] = useState([]);
+    const [idCategoria, setCategoria] = useState('select...');
     const [idKind, setidKind] = useState('select...');
+    const [msgError, setMsgError] = useState("");
     const [color, setColor] = useColor("hex", defaultColor);
     let initialState = null;    
-    const {ui, drinksReducer} = useSelector(state => state);//ui es para los mensajes de error    
+    const {drinksReducer} = useSelector(state => state);
     const {idDrinkSelected, drinks, categorias} = drinksReducer;
     console.log(drinksReducer)
     if(idDrinkSelected !== '' && idDrinkSelected !== undefined){
@@ -49,7 +52,7 @@ export const NewDrink = ({history}) => {
     }
     const [fields, handledInputChange] = useForm(initialState);
     const {id, name, description, price, quantity} = fields;    
-
+    console.log({initialState})
     const handleForm = (e) =>{
         e.preventDefault();        
         console.log("objec2t");
@@ -68,39 +71,39 @@ export const NewDrink = ({history}) => {
     const isFormValid = () => {
         
         if (name === '') {            
-            dispatch(setErrorAction('El nombre de la bebida es requerido'));
+            setMsgError('El nombre de la bebida es requerido');
             return false;
         }
         if (idCategoria === 'select...'){
-            dispatch(setErrorAction('La categoría de la bebida es requerido'));
+            setMsgError('La categoría de la bebida es requerido');
             return false;
         }
         if (idKind === 'select...'){
-            dispatch(setErrorAction('El tipo de la bebida es requerido'));
+            setMsgError('El tipo de la bebida es requerido');
             return false;
         }
         if (description === ''){
-            dispatch(setErrorAction('La descripción de la bebida es requerido'));
+            setMsgError('La descripción de la bebida es requerido');
             return false;
         }
         if (price < 1){
-            dispatch(setErrorAction('El precio de la bebida es requerido'));
+            setMsgError('El precio de la bebida es requerido');
             return false;
         }
         if (quantity < 1){
-            dispatch(setErrorAction('La cantidad de bebidas es requerida'));
+            setMsgError('La cantidad de bebidas es requerida');
             return false;
         }
         if (archivos.length ===  0){
-            dispatch(setErrorAction('La imagen de la bebida es requerida'));
+            setMsgError('La imagen de la bebida es requerida');
             return false;
         }
         if (color.hex === defaultColor){            
-            dispatch(setErrorAction('El color del fondo de la imagen es requerido'));
+            setMsgError('El color del fondo de la imagen es requerido');
             return false;
         }
         
-        dispatch(removeErrorAction());        
+        setMsgError("");        
         return true
     }
 
@@ -125,15 +128,15 @@ export const NewDrink = ({history}) => {
                 <i className="fa fa-arrow-left"></i>    Return                
             </button>
 
-            <div style={{"marginTop": "60px"}}>    
+            <div style={{"marginTop": "20px"}}>    
             
             <form onSubmit={handleForm} >
-                    <div className="form-group">
+                    {/* <div className="form-group">
                         <label style={{"marginTop": "45px"}}>ID by Firebase</label>
                         <input type="text" className="form-control" placeholder="Firebase ID" disabled
                             name="id" value={id}/>
                         <small className="form-text ">this field is auto generated</small>
-                    </div>
+                    </div> */}
                     <div className="form-group">
                         <label >Name</label>
                         <input type="text" className="form-control" placeholder="Drink name" required name="name" value={name} onChange={handledInputChange}/>
@@ -179,20 +182,8 @@ export const NewDrink = ({history}) => {
                         
                     </div>
                     
-                    {//alert para los mensajes de validacion
-                        ui.msgError && 
-                            (
-                                <>
-                                    
-                                <div className="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Nota!</strong> {ui.msgError}
-                                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>                                    
-                            </>
-                            )
-                    } 
+                    <Msgerror msgError = {msgError}/>
+                   
 
                     <div className="form-group text-center mt-3 mb-5 pb-3">
                         <button className="btn btn-success" type="submit">

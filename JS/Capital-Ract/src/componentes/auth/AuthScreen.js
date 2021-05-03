@@ -17,22 +17,26 @@ export const AuthScreen = ({history}) => {
 
     const state = useSelector(state => state);
     console.log({state})
-    const {ui, auth} = state
+    const {uiReducer, authReducer} = state
+
+    useEffect(() => {// quita despues de 3 segundos el mensaje de error
+        setTimeout(() => {
+            console.log(uiReducer)
+            if (!!uiReducer.msgError) dispatch(removeErrorAction())
+        }, 3000);
+        return () => {}
+    }, [dispatch, uiReducer])
 
     //// login
-    useEffect(() => {
+    useEffect(() => {// valida si ya esta registrado, para redireccionar al homeScreen
         console.log('in effect')
-        if(auth.uid) history.push('/');//si ya esta registrado lo redirecciona a home
-    }, [auth, history])
+        if(authReducer.uid) history.push('/');//si ya esta registrado lo redirecciona a home
+    }, [authReducer, history])
 
-    const [fieldsLogin, handledInputChange] = useForm(
-        {
-            email:'',
-            password: ''
-        });
+    const [fieldsLogin, handledInputChange] = useForm( { email:'', password: '' } );
     const {email, password} = fieldsLogin;
 
-    const registrarse = () => {
+    const registrarse = () => {// toogle para mostrar vista de login o register
         setRegister(!register);
         if (register) {
             setclaseEstilo("containerAuth");                        
@@ -43,12 +47,12 @@ export const AuthScreen = ({history}) => {
         console.log(claseEstilo);
     }
 
-    const handleGoogleLogin = () => {
+    const handleGoogleLogin = () => { // dispara la ejecución de login with google
         console.log("handleGoogleLogin");
         dispatch(startGoogleLogin());
     }
 
-    const handleLogin = async(e) =>{
+    const handleLogin = async(e) =>{ // maneja el login con usuario y password
         e.preventDefault();
         console.log(email, password);
         if (isFormValid()) {
@@ -56,23 +60,21 @@ export const AuthScreen = ({history}) => {
         }
     }
 
-    const isFormValid = () => {
+    const isFormValid = () => { // valida el login with email and password, emit messages
         if (!validator.isEmail(email)) {            
-            dispatch(setErrorAction('Email valid is requerid'))
+            dispatch(setErrorAction('An email valid is requerid'))
+            return false;
+        }else if(!password.trim()){
+            dispatch(setErrorAction('Password is empty'))
             return false;
         }
         dispatch(removeErrorAction());
         return true
     }
 
-    //////////////register
+    ////////////// handle view new register
 
-    const [fieldsRegister, handledInputChangeRegister] = useForm({
-        name:'',
-        emailRegister:'',
-        passwordRegister:'',
-        confirmPassword:''
-    });
+    const [fieldsRegister, handledInputChangeRegister] = useForm({ name:'', emailRegister:'', passwordRegister:'', confirmPassword:'' });
 
     const {name, emailRegister, passwordRegister, confirmPassword} = fieldsRegister;
 
@@ -87,7 +89,7 @@ export const AuthScreen = ({history}) => {
             dispatch(setErrorAction('Password should have at least six characteres to mach'))
             return false;
         }else if (passwordRegister !== confirmPassword) {            
-            dispatch(setErrorAction('las contraseñas debe coincidir'));
+            dispatch(setErrorAction('dose not macth the'));
             return false;
         }
         dispatch(removeErrorAction());
@@ -117,7 +119,21 @@ export const AuthScreen = ({history}) => {
                                 <i className="fas fa-lock"></i>
                                 <input type="password" placeholder="password" name="password" className="auth2__input" value={password} onChange={handledInputChange}/>
                             </div>
-                            <button type="submit" className="btnAuth colorBtn" disabled={ui.loading}>Ingresar</button>
+                            {
+                                uiReducer.msgError && 
+                                    (
+                                        <>
+                                            
+                                        <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong>Note!</strong> {uiReducer.msgError}
+                                            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>                                    
+                                    </>
+                                    )
+                            }
+                            <button type="submit" className="btnAuth colorBtn" disabled={uiReducer.loading}>Ingresar</button>
                             <p className="social-text"> O ingresa con alguna de tus cuentas</p>
                             <div className="social-media">
                                 {/* <a href="#" className="social-icon">
@@ -152,20 +168,7 @@ export const AuthScreen = ({history}) => {
                             <i className="fas fa-lock"></i>
                                 <input type="password" placeholder="confirm Password" name="confirmPassword" className="auth2__input" onChange={handledInputChangeRegister}/>
                             </div>   
-                            {
-                                ui.msgError && 
-                                    (
-                                        <>
-                                            
-                                        <div className="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <strong>Nota!</strong> {ui.msgError}
-                                            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>                                    
-                                    </>
-                                    )
-                            }                     
+                                                 
                             <input type="submit" className="btnAuth colorBtn" value="Registrarse" />
                             <p className="social-text">O registrarse con alguna de tus cuentas</p>
                             <div className="social-media">

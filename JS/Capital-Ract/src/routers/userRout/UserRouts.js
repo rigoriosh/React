@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Redirect, Route } from 'react-router-dom'
 import { tipos } from '../../types/tipos'
 
-const UserRouts = ({rol, component: Component, ...rest}) => {
+const UserRouts = ({rol="", component: Component, ...rest}) => {
     
     return (
         <Route {...rest}
