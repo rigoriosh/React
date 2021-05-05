@@ -605,7 +605,7 @@ form .input {
     border: 1px solid var(--color1);
     transition: .3s ease all;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 form .input:focus {
@@ -697,6 +697,26 @@ form .input:focus {
 
 .negrita {
     font-weight: bolder;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.ml-5 {
+    margin-left: 5px;
+}
+
+.ml-10 {
+    margin-left: 10px;
+}
+
+.aligSelfEnd {
+    align-self: flex-end;
+}
+
+.alignSelfCenter {
+    align-self: center
 }
 
 

@@ -1,0 +1,41 @@
+.menuNavbar {
+    background-image: url('../assets/images/Banner.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    /* background-attachment: fixed; */
+    /* height: 128px;
+    width: 100%; */
+}
+
+.menu-menuNavbar {
+    display: flex;
+    justify-content: space-between;
+    height: 95px;
+}
+
+.login-menuNavbar {
+    background-color: #80808070;
+    display: flex;
+    justify-content: flex-end;
+    font-style: italic;
+}
+
+.btn-menuNavbar {
+    background: #633e3e63;
+    border: none;
+    color: cornsilk;
+    cursor: pointer;
+    margin-top: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 5px;
+}
+
+.btn-menuNavbar:hover {
+    background: rgb(99, 62, 62);
+}
+
+.fecha-menuNavbar {
+    align-self: flex-end;
+}

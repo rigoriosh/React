@@ -5,5 +5,9 @@
 .titulo {
     font-family: 'Open Sans', sans-serif;
     color: rgba(160, 160, 160, 1);
-    ;
+}
+
+.msgError {
+    font-size: small;
+    color: red;
 }
