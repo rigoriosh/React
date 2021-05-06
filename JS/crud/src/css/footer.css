@@ -1,0 +1,9 @@
+.footer {
+    font-size: small;
+    background-color: #80808070;
+    padding: 1px 60px 50px 60px;
+}
+
+footer p {
+    line-height: inherit;
+}

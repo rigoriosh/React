@@ -1,20 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/frame-css.css';
-import Capchat from './Capchat'
-import MenuNavBar from './components/MenuNavBar'
+import Login from './components/Login'
+
+//import {Busquedaproyectos} from './components/Busquedaproyectos'
+import Projectsearch from './components/Projectsearch'
 
 /* Configuracion del moment en español */
 import moment from 'moment';
 import 'moment/locale/es';
 moment.locale('es');
 
+// <React.StrictMode>
 
 ReactDOM.render(
-  <React.StrictMode>
-    {/* <App /> */}
-    <Capchat />
-    <MenuNavBar />
-  </React.StrictMode>,
+  <>
+    {/* <App /> */}    
+    <Login />
+    <div style={{height: '10px', background: 'black'}}></div>
+    <Projectsearch />
+    <div style={{height: '10px', background: 'black'}}></div>
+    
+    
+  </>,
   document.getElementById('root')
 );

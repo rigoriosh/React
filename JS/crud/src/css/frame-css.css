@@ -600,7 +600,7 @@ form * {
 }
 
 form .input {
-    padding: 10px 10px;
+    padding: 5px 5px;
     border-radius: 3px;
     border: 1px solid var(--color1);
     transition: .3s ease all;
@@ -613,13 +613,27 @@ form .input:focus {
     outline: none;
 }
 
+.select {
+    border-radius: 3px;
+    border: 1px solid var(--color1);
+    margin-bottom: 5px;
+    padding: 5px 5px;
+    transition: .3s ease all;
+    width: 100%;
+}
+
+.select:focus {
+    border: 1px solid var(--color2);
+    outline: none;
+}
+
 .boton {
     background: var(--color2);
     border: none;
     cursor: pointer;
     color: var(--blanco);
     display: inline-block;
-    padding: 10px 10px;
+    padding: 5px 15px;
     border-radius: 3px;
     text-align: center;
     line-height: 22px;
@@ -717,6 +731,10 @@ form .input:focus {
 
 .alignSelfCenter {
     align-self: center
+}
+
+.w50 {
+    width: 50%;
 }
 
 

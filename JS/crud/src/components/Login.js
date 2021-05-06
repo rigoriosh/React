@@ -1,13 +1,17 @@
 
 import React, { useEffect, useRef, useState } from 'react'
+import TextField from '@material-ui/core/TextField';
 import { useForm } from 'react-hook-form';
-import './css/captchat.css'
-import banner from './assets/images/Banner.png'
+
+import '../css/login.css'
+import banner from '../assets/images/Banner.png'
+import {Footer} from './Footer'
 //import PropTypes from 'prop-types'
 
-const Capchat = props => {
+const Login = props => {
 
     const [captchat, setCaptchat] = useState('nothing');
+    const [errorCaptchat, setErrorCaptchat] = useState(null);
     const refNombreUsuario = useRef();
     const refCaptchat = useRef();
 
@@ -41,9 +45,9 @@ const Capchat = props => {
     /// estado inicial del componente
     useEffect(() => { // onInit
         verOtraImagen();
-        const rnu = refNombreUsuario.current;
-        rnu.focus()
+        refNombreUsuario.current.focus();
         return () => { }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
@@ -52,7 +56,7 @@ const Capchat = props => {
 
     const onSubmit = ({ inputCaptchat, nameUser, passUser }) => {        
         if (inputCaptchat !== captchat) {
-            console.log('Something is brown');
+            setErrorCaptchat('El código de la imagen no coincide.')
         } else {
             console.log('all is ok')
             console.log({ nameUser, passUser });
@@ -80,25 +84,30 @@ const Capchat = props => {
             <div className="contenedor  grid col-2 med-col-1 card">
 
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="columna2 ali-item-cent">
-                        <label htmlFor="nameUser">Nombre de usuario</label>
+                    <div className="columna1 ali-item-cent">
+                        {/* <label htmlFor="nameUser">Nombre de usuario</label> */}
                         <div>
-                            <input className="input no-margen-inferior" type="text" name="nameUser" id="nameUser"  {...register('nameUser', { required: true })} ref={refNombreUsuario} />
+                            {/* <input className="input no-margen-inferior" type="text" name="nameUser" id="nameUser"  {...register('nameUser', { required: true })} ref={refNombreUsuario} /> */}
+                            <TextField id="nameUser" className="input no-margen-inferior" label="Nombre de usuario" variant="outlined" {...register('nameUser', { required: true })} ref={refNombreUsuario}/>
                             {formState.errors.nameUser && <p className="msgError no-margen-superior">El nombre de usuario es requerido.</p>}
                         </div>
                     </div>
-                    <div className="columna2 ali-item-cent">
-                        <label htmlFor="passUser">Contraseña</label>
+                    <div className="columna1 ali-item-cent">
+                        {/* <label htmlFor="passUser">Contraseña</label> */}
                         <div>
-                            <input className="input no-margen-inferior" type="password" name="passUser" id="passUser" {...register('passUser', { required: true })} />
+                           {/*  <input className="input no-margen-inferior" type="password" name="passUser" id="passUser" {...register('passUser', { required: true })} /> */}
+                            <TextField id="outlined-password-input" label="Contraseña" type="password" autoComplete="current-password" variant="outlined" {...register('passUser', { required: true })}
+                                className="input no-margen-inferior"/>
                             {formState.errors.passUser && <p className="msgError no-margen-superior">La contraseña es requerida.</p>}
                         </div>
                     </div>
-                    <div className="columna2 ali-item-cent">
-                        <label htmlFor="inputCaptchat">Ingrese el texto mostrado en la imagen</label>
+                    <div className="columna1 ali-item-cent">
+                        {/* <label htmlFor="inputCaptchat">Ingrese el texto mostrado en la imagen</label> */}
                         <div>
-                            <input className="input no-margen-inferior" type="text" name="inputCaptchat" id="inputCaptchat" {...register('inputCaptchat', { required: true })} ref={refCaptchat} />
-                            {formState.errors.inputCaptchat && <p className="msgError no-margen-superior">El código de la imagen es requerido.</p>}
+                            {/* <input className="input no-margen-inferior" type="text" name="inputCaptchat" id="inputCaptchat" {...register('inputCaptchat', { required: true })} ref={refCaptchat} /> */}
+                            <TextField id="inputCaptchat" className="input no-margen-inferior" label="Ingrese el texto mostrado en la imagen" variant="outlined" {...register('inputCaptchat', { required: true })} ref={refCaptchat}/>
+                            {formState.errors.inputCaptchat && <p className="msgError no-margen-superior">El código de la imagen es requerido.</p>}                            
+                            {errorCaptchat && <p className="msgError no-margen-superior">{errorCaptchat}</p>}
                         </div>
                     </div>
                     <div className="columna2 ali-item-cent">
@@ -115,15 +124,15 @@ const Capchat = props => {
                 <h2 className="texto-centrado titulo">Módulo Mantenimiento Crédito Constructor</h2>
 
             </div>
-
-
+            
+            <Footer />
 
         </div>
     )
 }
 
-Capchat.propTypes = {
+Login.propTypes = {
 
 }
 
-export default Capchat
+export default Login

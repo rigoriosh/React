@@ -1,11 +1,7 @@
 .menuNavbar {
     background-image: url('../assets/images/Banner.png');
-    background-repeat: no-repeat;
+    background-repeat: round;
     background-size: cover;
-    background-position: center center;
-    /* background-attachment: fixed; */
-    /* height: 128px;
-    width: 100%; */
 }
 
 .menu-menuNavbar {
@@ -33,6 +29,10 @@
 }
 
 .btn-menuNavbar:hover {
+    background: rgb(99, 62, 62);
+}
+
+.btn-menuNavbar__pressed {
     background: rgb(99, 62, 62);
 }
 
