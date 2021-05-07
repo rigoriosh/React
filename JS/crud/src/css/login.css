@@ -1,3 +1,7 @@
+.Login {
+    height: 100vh;
+}
+
 .btnIngresar {
     background-color: #343a400a;
 }
@@ -10,4 +14,14 @@
 .msgError {
     font-size: small;
     color: red;
+}
+
+@media screen and (max-width: 992px) {
+    .card {
+        padding: 0px;
+    }
+    .contenedor {
+        display: flex;
+        flex-direction: column-reverse;
+    }
 }

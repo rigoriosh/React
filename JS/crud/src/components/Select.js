@@ -1,10 +1,12 @@
-
+import { memo } from 'react'
 import PropTypes from 'prop-types'
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
+
+import '../css/seleccionar.css'
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -17,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const Seleccionar = ({id, label, optInit, options, referencia, handleSelect, valorSeleccionado}) => {
+const Seleccionar = memo(({id, label, optInit, options, referencia, handleSelect, valorSeleccionado}) => {
     
     const classes = useStyles();
 
@@ -53,7 +55,7 @@ const Seleccionar = ({id, label, optInit, options, referencia, handleSelect, val
         </div>
         
     )
-}
+})
 
 Seleccionar.propTypes = {
     id: PropTypes.string.isRequired,

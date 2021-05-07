@@ -1,0 +1,12 @@
+.Projectsearch {
+    height: 100vh;
+}
+
+@media screen and (max-width: 992px) {
+    .contenedor-min {
+        flex-direction: column;
+    }
+    .w50 {
+        width: 100%
+    }
+}

@@ -1,0 +1,12 @@
+.ModuloAdministracion {
+    height: 100vh;
+}
+
+.menu2Admin {
+    display: flex;
+    align-items: center;
+}
+
+.menu2Admin-breadcrumb {
+    margin-left: 10% !important;
+}

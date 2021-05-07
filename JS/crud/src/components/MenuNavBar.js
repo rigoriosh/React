@@ -4,9 +4,10 @@ import { getDiaMesAnio } from '../helpers/tiempo';
 import '../css/menuNavbar.css'
 
 const MenuNavBar = props => {
-
+    console.log("MenuNavBar");
     const [currentView, setCurrentView] = useState('admin');
-    const dma = getDiaMesAnio();
+    let dma = getDiaMesAnio();
+    dma = dma.slice(0, dma.length - 5)    
 
     const admin = () => {
         setCurrentView('admin');
@@ -24,12 +25,13 @@ const MenuNavBar = props => {
     return (
         <div className="menuNavbar">
             <div className="login-menuNavbar">
-                <h4 className="no-margen-inferior">Bienvenido <span className="ml-5">jguzman</span><i className="fas fa-users ml-5"></i><button className="ml-10">Cerrar sesión</button></h4>                
+                <h4 className="no-margen-inferior">Bienvenido <span className="ml-5">jguzman</span><i className="fas fa-users ml-5"></i>
+                <button className="ml-10">Cerrar sesión</button></h4>                
             </div>
             <div className="menu-menuNavbar">
                 
                 
-                <div className="aligSelfEnd">
+                <div className="aligSelfEnd menu-menuNavbar__btns">
                     <button onClick={prorratas} className={currentView==='prorratas' ? 'btn-menuNavbar btn-menuNavbar__pressed' : 'btn-menuNavbar'}>
                         Prorratas
                     </button>
@@ -40,7 +42,7 @@ const MenuNavBar = props => {
                             Administración
                     </button>
                 </div>
-                <div className="alignSelfCenter">
+                <div className="alignSelfCenter menu-menuNavbar__titulo">
                     <h2 className="titulo no-margen-inferior">Módulo Mantenimiento Crédito Constructor</h2>
                 </div>
                 <div className="fecha-menuNavbar">

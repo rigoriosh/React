@@ -1,14 +1,14 @@
 import * as React from 'react';
-import {DataGrid} from '@material-ui/data-grid';
+import { DataGrid } from '@material-ui/data-grid';
 import PropTypes from "prop-types";
 
-const DataTable = ({columns, rows}) => {
-  /* 
+const DataTable = ({ columns, rows, setRegistroSeleccionado }) => {
+    /* 
     const columns = [
-      { field: "id", headerName: "Tipo de Identificación", width: 200 },
+      { field: "id",        headerName: "Tipo de Identificación",         width: 200 },
+      { field: "lastName",  headerName: "Código del proyecto",            width: 180 },
       { field: "firstName", headerName: "Identificación del constructor", width: 200 },
-      { field: "lastName", headerName: "Código del proyecto", width: 180 },
-      { field: "age", headerName: "Nombre del proyecto", type: "number", width: 200, },    
+      { field: "age",       headerName: "Nombre del proyecto",            width: 200,   type: "number",  },    
     ];
 
     const rows = [
@@ -24,17 +24,24 @@ const DataTable = ({columns, rows}) => {
     ];
  */
 
-    
-  return (
-    
-      <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection={false} autoHeight onCellClick={({id, row})=>{console.log(id, row);}}/>
-    
-  );
+
+    return (
+
+        < DataGrid rows = { rows } columns = { columns } pageSize = { 5 } checkboxSelection = { false } autoHeight 
+          onCellClick = {
+            ({row }) => {
+              setRegistroSeleccionado(row);
+            }
+          }
+        />
+
+    );
 };
 
 DataTable.propTypes = {
-  columns: PropTypes.array.isRequired,
-  rows: PropTypes.array.isRequired,
+    columns: PropTypes.array.isRequired,
+    rows: PropTypes.array.isRequired,
+    setRegistroSeleccionado: PropTypes.func.isRequired
 };
 
 export default DataTable;

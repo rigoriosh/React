@@ -33,9 +33,34 @@
 }
 
 .btn-menuNavbar__pressed {
-    background: rgb(99, 62, 62);
+    background: var(--primario);
 }
 
 .fecha-menuNavbar {
     align-self: flex-end;
+}
+
+.menu-menuNavbar__btns {
+    min-width: 350px;
+}
+
+@media screen and (max-width: 992px) {
+    .menuNavbar {
+        background-repeat: no-repeat;
+    }
+    .titulo {
+        font-size: small;
+    }
+    .fecha-menuNavbar {
+        font-size: small;
+    }
+    .menu-menuNavbar {
+        flex-direction: column-reverse;
+    }
+    .menu-menuNavbar__btns {
+        align-self: auto;
+    }
+    .menu-menuNavbar__titulo {
+        align-self: flex-end;
+    }
 }

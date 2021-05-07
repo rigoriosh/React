@@ -202,8 +202,9 @@ template {
     --fuente: 'Open Sans', sans-serif;
     --fondo: rgb(242, 242, 242);
     --ancho-contenedor: 100vw;
+    --primario: #BC5756;
     --color1: rgba(221, 221, 211, 0.3);
-    --color2: rgba(67, 16, 195);
+    --color2: #BC5756;
     --color3: rgba(89, 59, 221);
     --verde: rgb(0, 160, 74);
     --verdeHover: rgb(51, 104, 75);
@@ -236,7 +237,7 @@ img {
 ==================== */
 
 .contenedor {
-    max-width: 90%;
+    max-width: 95%;
     width: var(--ancho-contenedor);
     margin: 20px auto;
     overflow: hidden;
@@ -522,7 +523,7 @@ img {
 ==================== */
 
 .card {
-    padding: 40px;
+    padding: 20px;
     background: var(--blanco);
     border-radius: 3px;
     box-shadow: 0px 0px 30px var(--color1);
@@ -569,6 +570,12 @@ h4,
 h5,
 h6 {
     margin-top: 0;
+}
+
+h3 {
+    background: var(--primario);
+    color: var(--blanco);
+    padding-left: 20px;
 }
 
 .display-1 {

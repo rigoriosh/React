@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
+import TextField from '@material-ui/core/TextField';
+import { useForm } from 'react-hook-form';
 //import PropTypes from 'prop-types'
-import Seleccionar from '../helpers/Select'
-import DataTable from '../helpers/DataTable'
-import {Footer} from './Footer'
-import MenuNavBar from './MenuNavBar';
+import Seleccionar from '../components/Select'
+import DataTable from '../components/DataTable'
+import MenuNavBar from '../components/MenuNavBar';
+
+import '../css/projectSearch.css'
 
 const Projectsearch = props => {
     const refTipoIdentificacion = useRef();
@@ -33,24 +36,36 @@ const Projectsearch = props => {
     useEffect(() => {
         refTipoIdentificacion.current.focus();
         return () => {}
-    }, [])
+    }, []);
+
+    const { register, handleSubmit, formState, } = useForm();
+
+    const onSubmit = (form) => {        
+        console.log(form);
+    }
     return (
-        <>
-                <MenuNavBar />
-            <div className="contenedor">
+        <div className="Projectsearch">
+            <MenuNavBar />
+            <div className="contenedor contenedor-min">
                 <h4 className="">Búsqueda del proyecto</h4>
 
-                <form action="" className=" card">
+                <form onSubmit={handleSubmit(onSubmit)} className="w50 card">
                     <Seleccionar id={'selectTipoIdentificacion'} label={'Tipo de identificación'} optInit={'Seleccione'} options={tipoIdentificacion}
                         referencia={refTipoIdentificacion} handleSelect={setValorSeleccionado} valorSeleccionado={valorSeleccionado}
                     />
-                    <div className="columna2 ali-item-cent">
-                        <label htmlFor="numID">Número de identificación</label>
-                        <input className="input no-margen-inferior" type="text" name="numID" id="numID"  />
+                    <div className="columna1 ali-item-cent">
+                        {/* <label htmlFor="numID">Número de identificación</label>
+                        <input className="input no-margen-inferior" type="text" name="numID" id="numID"  /> */}
+                        <TextField id="numID" label="Número de identificación" variant="outlined"
+                            {...register('numID')} className="input no-margen-inferior"
+                        />
                     </div>
-                    <div className="columna2 ali-item-cent">
-                        <label htmlFor="projName">Nombre del proyecto</label>
-                        <input className="input no-margen-inferior" type="text" name="projName" id="projName"  />
+                    <div className="columna1 ali-item-cent">
+                        {/* <label htmlFor="projName">Nombre del proyecto</label>
+                        <input className="input no-margen-inferior" type="text" name="projName" id="projName"  /> */}
+                        <TextField id="projName" label="Nombre del proyecto" variant="outlined"
+                            {...register('projName')} className="input no-margen-inferior"
+                        />
                     </div>
                     <div className="elem-derecha btnIngresar mt-10">
                         <button className="boton" type="submit">Buscar</button>
@@ -63,8 +78,8 @@ const Projectsearch = props => {
                 </div>
                 
             </div>
-            <Footer />
-        </>
+            {/* <Footer /> */}
+        </div>
     )
 }
 

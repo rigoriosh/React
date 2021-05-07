@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 
 import '../css/login.css'
 import banner from '../assets/images/Banner.png'
-import {Footer} from './Footer'
 //import PropTypes from 'prop-types'
 
 const Login = props => {
@@ -75,7 +74,7 @@ const Login = props => {
     ///////////////////////////////////////
 
     return (
-        <div className="">
+        <div className="Login">
 
             <div>
                 <img src={banner} alt="Colpatria"/>
@@ -125,7 +124,7 @@ const Login = props => {
 
             </div>
             
-            <Footer />
+            {/* <Footer /> */}
 
         </div>
     )

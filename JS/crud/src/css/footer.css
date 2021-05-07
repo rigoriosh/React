@@ -1,7 +1,11 @@
 .footer {
-    font-size: small;
     background-color: #80808070;
+    bottom: 0;
+    font-size: small;
+    height: 5%;
     padding: 1px 60px 50px 60px;
+    position: fixed;
+    width: 100%;
 }
 
 footer p {
