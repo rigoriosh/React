@@ -21,8 +21,8 @@ ReactDOM.render(
     {/* <App /> */}    
     <div style={{height: '20px', background: 'black', color: 'white', textAlign: 'center'}}>Pagina admistración del sistema</div>
     <ModuloAdministracion />    
-    <div style={{height: '20px', background: 'black', color: 'white', textAlign: 'center'}}>Pagina buscar proyectos</div>
-    <Projectsearch />
+    {/* <div style={{height: '20px', background: 'black', color: 'white', textAlign: 'center'}}>Pagina buscar proyectos</div>
+    <Projectsearch /> */}
     <div style={{height: '20px', background: 'black', color: 'white', textAlign: 'center'}}>Pagina Login</div>
     <Login />
     <Footer/>

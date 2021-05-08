@@ -52,6 +52,7 @@ const Projectsearch = props => {
                 <form onSubmit={handleSubmit(onSubmit)} className="w50 card">
                     <Seleccionar id={'selectTipoIdentificacion'} label={'Tipo de identificación'} optInit={'Seleccione'} options={tipoIdentificacion}
                         referencia={refTipoIdentificacion} handleSelect={setValorSeleccionado} valorSeleccionado={valorSeleccionado}
+                        requerido={false}
                     />
                     <div className="columna1 ali-item-cent">
                         {/* <label htmlFor="numID">Número de identificación</label>

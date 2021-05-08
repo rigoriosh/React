@@ -41,7 +41,7 @@ const DataTable = ({ columns, rows, setRegistroSeleccionado }) => {
 DataTable.propTypes = {
     columns: PropTypes.array.isRequired,
     rows: PropTypes.array.isRequired,
-    setRegistroSeleccionado: PropTypes.func.isRequired
+    setRegistroSeleccionado: PropTypes.func
 };
 
 export default DataTable;

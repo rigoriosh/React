@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const Seleccionar = memo(({id, label, optInit, options, referencia, handleSelect, valorSeleccionado}) => {
+const Seleccionar = memo(({id, label, optInit, options, referencia, handleSelect, valorSeleccionado='', requerido}) => {
+    console.log({id, label, optInit, options, referencia, handleSelect, valorSeleccionado, requerido})
     
     const classes = useStyles();
 
@@ -42,7 +43,9 @@ const Seleccionar = memo(({id, label, optInit, options, referencia, handleSelect
                 </select>   */}  
                 <FormControl variant="outlined" className={classes.formControl}>
                     <InputLabel id={id}>{label}</InputLabel>    
-                    <Select labelId={id} id={id} value={valorSeleccionado} onChange={handleChange} ref={referencia} label={label}>
+                    <Select labelId={id} id={id} value={valorSeleccionado} onChange={handleChange} ref={referencia} label={label}
+                        required={requerido}
+                    >
                         
                             {
                                 options.map((e, i) => {
@@ -62,7 +65,8 @@ Seleccionar.propTypes = {
     label: PropTypes.string.isRequired,
     optInit: PropTypes.string.isRequired,
     handleSelect: PropTypes.func.isRequired,
-    valorSeleccionado: PropTypes.string.isRequired
+    valorSeleccionado: PropTypes.string.isRequired,
+    requerido: PropTypes.bool.isRequired
 }
 
 export default Seleccionar
