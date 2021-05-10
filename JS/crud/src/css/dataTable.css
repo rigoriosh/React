@@ -13,3 +13,23 @@
 .MuiDataGrid-root .MuiDataGrid-colCellTitleContainer {
     text-align: center !important;
 }
+
+.MuiDataGrid-root .MuiDataGrid-colCellTitleContainer {
+    display: block !important;
+}
+
+.MuiDataGrid-root .MuiDataGrid-cellWithRenderer {
+    display: block !important;
+}
+
+.makeStyles-formControl-14 {
+    margin: 0px !important;
+}
+
+.MuiSwitch-colorSecondary.Mui-checked {
+    color: var(--primario) !important;
+}
+
+.MuiSwitch-colorSecondary.Mui-checked+.MuiSwitch-track {
+    color: var(--secundario) !important;
+}

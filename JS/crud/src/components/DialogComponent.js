@@ -13,6 +13,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   });
 
 const DialogComponent = ({dialog, setDialog}) => {
+    //console.log({dialog})
     const {open, title, dialogContentText} = dialog;
 
     const handleClose = (info) => {        

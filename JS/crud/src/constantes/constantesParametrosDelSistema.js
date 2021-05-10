@@ -1,4 +1,3 @@
 export const tiposParametrosSis = {
-    guardar: '[PS] guardar',
-    editar: '[PS] editar'
+    optsMenuDrawer: ['Parámetros del sistema', 'Valores tipo', 'Desbloquear liberaciones', 'Permisos', 'Roles'],
 }

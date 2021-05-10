@@ -199,10 +199,11 @@ template {
 ==================== */
 
 :root {
+    --primario: #BC5756;
+    --secundario: #D6807F;
     --fuente: 'Open Sans', sans-serif;
     --fondo: rgb(242, 242, 242);
     --ancho-contenedor: 100vw;
-    --primario: #BC5756;
     --color1: rgba(221, 221, 211, 0.3);
     --color2: #BC5756;
     --color3: rgba(89, 59, 221);
@@ -573,7 +574,7 @@ h6 {
 }
 
 h3 {
-    background: var(--primario);
+    background: var(--secundario);
     color: var(--blanco);
     padding-left: 20px;
 }
@@ -692,6 +693,10 @@ form .input:focus {
     margin-bottom: 20px;
 }
 
+.mb60px {
+    margin-bottom: 60px;
+}
+
 .margen-superior {
     margin-top: 20px;
 }
@@ -744,6 +749,14 @@ form .input:focus {
     width: 50%;
 }
 
+.h100 {
+    height: 100% !important;
+}
+
+.pb-20px {
+    padding-bottom: 20px;
+}
+
 
 /* ///////////////////////// */
 
@@ -761,4 +774,13 @@ form .input:focus {
 .fila {
     display: grid;
     grid-template-rows: 50px;
+}
+
+.msgError {
+    font-size: small;
+    color: red;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }

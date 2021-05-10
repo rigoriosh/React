@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const Seleccionar = memo(({id, label, optInit, options, referencia, handleSelect, valorSeleccionado='', requerido}) => {
-    console.log({id, label, optInit, options, referencia, handleSelect, valorSeleccionado, requerido})
+    //console.log({id, label, optInit, options, referencia, handleSelect, valorSeleccionado, requerido})
     
     const classes = useStyles();
 

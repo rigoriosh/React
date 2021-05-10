@@ -10,7 +10,7 @@ function Alert(props) {
 
   
 const SnackbarComponent = ({mensajes, setMensajes}) => {
-    console.log(mensajes);
+    //console.log(mensajes);
    
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {

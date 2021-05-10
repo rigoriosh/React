@@ -13,8 +13,8 @@
 .login-menuNavbar {
     background-color: #80808070;
     display: flex;
-    justify-content: flex-end;
-    font-style: italic;
+    justify-content: space-between;
+    /* font-style: italic; */
 }
 
 .btn-menuNavbar {
@@ -29,7 +29,7 @@
 }
 
 .btn-menuNavbar:hover {
-    background: rgb(99, 62, 62);
+    background: var(--secundario);
 }
 
 .btn-menuNavbar__pressed {
@@ -42,6 +42,17 @@
 
 .menu-menuNavbar__btns {
     min-width: 350px;
+}
+
+.nombreProyecto {
+    background-color: var(--secundario);
+    padding: 1px 10px;
+    margin-left: -5px;
+}
+
+.proyecto {
+    background-color: var(--primario);
+    padding: 1px 10px;
 }
 
 @media screen and (max-width: 992px) {

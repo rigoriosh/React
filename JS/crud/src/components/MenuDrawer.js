@@ -6,10 +6,10 @@ import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import {tiposParametrosSis} from '../constantes/constantesParametrosDelSistema'
+
+
 
 const useStyles = makeStyles({
   list: {
@@ -20,7 +20,8 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MenuDrawer() {
+export default function MenuDrawer({optSelected}) {
+  console.log('MenuDrawer');
   const classes = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -47,9 +48,12 @@ export default function MenuDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Parámetros del sistema', 'Valores tipo', 'Desbloquear liberaciones', 'Permisos', 'Roles'].map((text, index) => (
+        {tiposParametrosSis.optsMenuDrawer.map((text, index) => (
             <div key={text}>
-                <ListItem button onClick={()=>{console.log(text, index)}}>
+                <ListItem button onClick={()=>{
+                  optSelected(text)
+                  console.log(text, index);
+                  }}>
                     {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
                     <ListItemText primary={text} />
                 </ListItem>

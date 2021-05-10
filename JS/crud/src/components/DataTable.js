@@ -33,6 +33,7 @@ const DataTable = ({ columns, rows, setRegistroSeleccionado }) => {
               setRegistroSeleccionado(row);
             }
           }
+          className="margen-inferior"
         />
 
     );

@@ -25,8 +25,17 @@ const MenuNavBar = props => {
     return (
         <div className="menuNavbar">
             <div className="login-menuNavbar">
-                <h4 className="no-margen-inferior">Bienvenido <span className="ml-5">jguzman</span><i className="fas fa-users ml-5"></i>
-                <button className="ml-10">Cerrar sesión</button></h4>                
+                <div>
+                    <h4 className="no-margen-inferior">
+                        <span className="proyecto">PROYECTO</span> <span className="nombreProyecto">{`K104 - Etapa 1`}</span>
+                        <button>
+                            <i className="fas fa-building"></i>
+                            Cambiar proyecto
+                        </button>
+                    </h4>
+                </div>
+                <h4 className="no-margen-inferior">Bienvenido <span className="ml-5">jguzman</span>
+                <button className="ml-10"><i className="fas fa-users ml-5"></i>Cerrar sesión</button></h4>                
             </div>
             <div className="menu-menuNavbar">
                 
