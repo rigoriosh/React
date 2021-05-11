@@ -1,34 +1,32 @@
 import React, { useEffect, useState } from 'react'
-//import PropTypes from 'prop-types'
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import PropTypes from 'prop-types'
 import TextField from "@material-ui/core/TextField";
-import DataTable from '../components/DataTable'
+import DataTable from '../../components/DataTable'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
-import { nombreRepetido } from '../helpers/helperUtil';
-import { tiposComunes } from '../constantes/generales';
+import { nombreRepetido } from '../../helpers/helperUtil';
+import { tiposComunes } from '../../constantes/generales';
 
 
 
-const ValoresTipo = ({setMensajes, dialog, setDialog}) => {
+const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) => {
     console.log("ValoresTipo");
-
-    const {agree} = dialog;
+    
     const [accionesFormulario, setAccionesFormulario] = useState(tiposComunes.guardar); // guardar, editar, eliminar
     const [valoresTipo, setValoresTipo] = useState([]);// ALMACENA LOS PARAMETROS DEL SISTEMA
     const [formulario, setformulario] = useState( { nombre:'', descripcion:'' } );
-    const [registroSeleccionado, setRegistroSeleccionado] = useState({});
+    const [eviarDB, setEviarDB] = useState(false); // bandera para controlar envios a DB
+        
     const [noEnviarDataDB, setNoEnviarDataDB] = useState(0);// para evitar que al despliegue inicial del componente envie datos a la DB
-    const [agregarRegistro, setAgregarRegistro] = useState(false); 
+    const [agregarRegistro, setAgregarRegistro] = useState(false); // muestra/oculta el formulario
   
 
     const columns = [
         /* { field: "id",                      headerName: "id",           width: 200 }, */
         { field: "nombre",         headerName: "Nombre",       width: 200 },
-        { field: "descripcion",    headerName: "Descripción",  width: 200 },       
-        { field: "actions",                 headerName: "Acciones",     width: 200,
+        { field: "descripcion",    headerName: "Descripción",  width: 835 },       
+        /* { field: "actions",                 headerName: "Acciones",     width: 200,
         renderCell: (params) => (
             <strong>   
                 
@@ -36,9 +34,8 @@ const ValoresTipo = ({setMensajes, dialog, setDialog}) => {
                 <DeleteForeverIcon onClick={()=>{eliminarRegistro(params.row)}} className="apuntador"/>
               
             </strong>
-          ), },
+          ), }, */
       ];
-
 
     const handleSubmit = (e) => {
         e.preventDefault();    
@@ -66,6 +63,7 @@ const ValoresTipo = ({setMensajes, dialog, setDialog}) => {
     }
 
     const agregarNuevoRegistroAlSistema = () => {
+        setEviarDB(true);
         setValoresTipo( //GUARDA UN NUEVO PARÁMETRO
             [
                 ...valoresTipo,
@@ -75,7 +73,7 @@ const ValoresTipo = ({setMensajes, dialog, setDialog}) => {
                     descripcion: formulario.descripcion
                     }
                 ]
-            );     
+            );                 
     }
 
     const resetCampos = () => {
@@ -86,25 +84,26 @@ const ValoresTipo = ({setMensajes, dialog, setDialog}) => {
         setAccionesFormulario(tiposComunes.guardar)
     }
 
-    const editarRegistro = (registroAeditar) => {
+    /* const editarRegistro = (registroAeditar) => {
         //console.log({registroAeditar});    
         setformulario({...registroAeditar}); //  carga los datos en el formulario para editarlos
         setAccionesFormulario(tiposComunes.editar); // ajusta la vandera de guardar o editar, por editar
+        setAgregarRegistro(true);
     }
     
     const eliminarRegistro = (parametroAEliminar) => {      
         setAccionesFormulario(tiposComunes.eliminar)
         setDialog({...dialog , open: true, title: 'Nota', dialogContentText:'Esta segur@ de eliminar este parámetro del sistema'});      
-    }
+    } */
 
-    const eliminarRegistroConfirmado = () => { 
+    /* const eliminarRegistroConfirmado = () => { 
         const parametrosDeslSistemaActualizados = valoresTipo.filter(parametro => parametro !== registroSeleccionado);
         setValoresTipo(parametrosDeslSistemaActualizados);
         setMensajes({open:true, severity:'success', mensaje:'El parámetro se eliminó correctamente'});
         resetCampos();
-    }
+    } */
 
-    const editarRegistroConfirmado = () => {
+    /* const editarRegistroConfirmado = () => {
         const registrosActualizados = valoresTipo.map(ps => {
             return ps.id === formulario.id ? formulario : ps;
         })
@@ -113,24 +112,10 @@ const ValoresTipo = ({setMensajes, dialog, setDialog}) => {
         setAccionesFormulario(tiposComunes.guardar); // ajusta la vandera de guardar o editar, por guardar
         setMensajes({open:true, severity:'success', mensaje:'El parámetro se editó correctamente'});
         resetCampos();
-    }
-
-    useEffect(() => {//SE ENCARGA DE TOMAR LA CONFIRMACIÓN DEL USUARIO Y ELIMINAR O EDITAR EL PARÁMETRO DEL SISTEMA
-        console.log(registroSeleccionado)
-        // agree(true o false) es la respuesta del modal
-        if (agree && accionesFormulario === tiposComunes.eliminar) eliminarRegistroConfirmado();
-
-        if (agree && accionesFormulario === tiposComunes.editar) editarRegistroConfirmado();
-
-
-        return () => {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [agree])    
+    } */
 
     const enviarDB = () => {
-        if(noEnviarDataDB < 2) {
-            setNoEnviarDataDB(a => a + 1)
-        }else{
+        if(eviarDB) {
             localStorage.setItem('valoresTipo', JSON.stringify(valoresTipo));      
             setMensajes({open:true, severity:'success', mensaje:'El parámetro se almacenó correctamente'});
         }
@@ -141,23 +126,26 @@ const ValoresTipo = ({setMensajes, dialog, setDialog}) => {
         if(!!db) setValoresTipo(db);
     }
 
+         
+
     // uploadComponent
     useEffect(() => {
         leerDB();
         return () => {}
     }, [])
 
-    console.log({valoresTipo})
-    useEffect(() => {
+    useEffect(() => { // captura los cambios en el arreglo de registro para actualiza la db
         enviarDB();
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [valoresTipo])
 
+    
+
     return (
-        <div>
+        <div className='contenedor'>
             {/* Formulario donde se capturan los datos para crear un nuevo parámetro del sistema */}
-            <div className="contenedor contenedor-min">
+            <div className="contenedor-min">
                 <form onSubmit={handleSubmit} className="w50 card">
                     <FormControlLabel control={ <Switch checked={!agregarRegistro} onChange={()=>{setAgregarRegistro(!agregarRegistro)}} name="checkedA" /> }
                             label="Agregar un tipo" 
@@ -190,18 +178,20 @@ const ValoresTipo = ({setMensajes, dialog, setDialog}) => {
                 </form>
             </div>
 
-            {/* Tabla donde se muestran los parámetros del sistema */}
-            <div className="margen-superior contenedor">
-            <h4>Resultado de la búsqueda</h4>
-            <DataTable columns={columns} rows={valoresTipo} setRegistroSeleccionado={setRegistroSeleccionado}/>
-        </div>
+            {/* Tabla donde se muestran los tipos del sistema */}
+            <div className="margen-superior">
+                <h4>Resultado de la búsqueda</h4>
+                <DataTable columns={columns} rows={valoresTipo} setRegistroSeleccionado={setRegistroSeleccionado}/>
+            </div>
         
         </div>
     )
 }
 
 ValoresTipo.propTypes = {
-
+    setMensajes: PropTypes.func.isRequired,
+    dialog: PropTypes.object.isRequired,
+    setDialog: PropTypes.func.isRequired
 }
 
 export default ValoresTipo

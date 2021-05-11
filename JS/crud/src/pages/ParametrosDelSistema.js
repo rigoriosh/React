@@ -11,14 +11,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { esEntero, esFlotante, nombreRepetido } from "../helpers/helperUtil";
 import { tiposComunes, tiposDeDatos } from "../constantes/generales";
-/* 
-import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker,
-  } from '@material-ui/pickers';
-  import DateFnsUtils from '@date-io/date-fns';
- */
+
 
 const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
     console.log("ParametrosDelSistema");  
@@ -230,21 +223,14 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
                                         />                                     
                                 }
                                 {
-                                     (formParametrosDelsistema.selectTipoDeDato === tiposDeDatos[0] || formParametrosDelsistema.selectTipoDeDato === tiposDeDatos[2]) &&
-                                     <TextField id="valorParametro" className="input no-margen-inferior" label="Valor " variant="outlined"
-                                        value={formParametrosDelsistema.valorParametro}   required     type="number"     
-                                        onChange={({target})=>{setFormParametrosDelsistema({...formParametrosDelsistema, valorParametro: target.value})}}
-                                    />
+                                     (formParametrosDelsistema.selectTipoDeDato === tiposDeDatos[0] || formParametrosDelsistema.selectTipoDeDato === tiposDeDatos[2] ||
+                                        formParametrosDelsistema.selectTipoDeDato === tiposDeDatos[1] ) &&
+                                            <TextField id="valorParametro" className="input no-margen-inferior" label="Valor " variant="outlined"
+                                                value={formParametrosDelsistema.valorParametro}   required
+                                                type={(formParametrosDelsistema.selectTipoDeDato === tiposDeDatos[0] || formParametrosDelsistema.selectTipoDeDato === tiposDeDatos[2]) ? 'number' : 'text'}
+                                                onChange={({target})=>{setFormParametrosDelsistema({...formParametrosDelsistema, valorParametro: target.value})}}
+                                            />
                                 }
-                                {
-                                     formParametrosDelsistema.selectTipoDeDato === tiposDeDatos[1] &&
-                                     <TextField id="valorParametro" className="input no-margen-inferior" label="Valor " variant="outlined"
-                                        value={formParametrosDelsistema.valorParametro}   required          
-                                        onChange={({target})=>{setFormParametrosDelsistema({...formParametrosDelsistema, valorParametro: target.value})}}
-                                    />
-                                }
-
-
                                  
                             </div>
 
