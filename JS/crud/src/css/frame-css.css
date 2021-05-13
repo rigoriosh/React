@@ -576,6 +576,7 @@ h6 {
 h3 {
     background: var(--secundario);
     color: var(--blanco);
+    margin-top: auto;
     padding-left: 20px;
 }
 
@@ -742,7 +743,7 @@ form .input:focus {
 }
 
 .alignSelfCenter {
-    align-self: center
+    align-self: flex-end
 }
 
 .w50 {

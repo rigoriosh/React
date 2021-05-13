@@ -5,12 +5,6 @@ export const nombreRepetido = (coleccion, nuevoRegistro, campoDiscriminador) => 
     return registroRepetido ? true : false;
 }
 
-export const nombreRepetidoValoresTipo = (coleccion, nuevoRegistro, campoDiscriminador) => {
-    console.log("nombreRepetido")
-    const registroRepetido = coleccion.find(e => e[campoDiscriminador].toUpperCase() === nuevoRegistro[campoDiscriminador].toUpperCase());
-    return registroRepetido ? true : false;
-}
-
 export const esFlotante = (dato) => {
 
     const datoIn = dato * 1
@@ -45,6 +39,31 @@ export const esEntero = (dato) => {
     if (esFloat) return true
 
     return false
+}
+
+const getRandIndex = (maxLength) => (Math.floor(Math.random() * maxLength));
+export const verOtraImagen = () => {
+    const canvas = document.querySelector('#canvas')
+    const ctx = canvas.getContext('2d');
+    let captch = Math.random().toString(36).substring(2, 8);
+
+    ctx.font = '30px Georgia';
+    ctx.fillStyle = '#262626';
+    ctx.fillRect(0, 0, 400, 400);
+    ctx.fillStyle = 'orange';
+    const maxLength = captch.length;
+    const index1 = getRandIndex(maxLength);
+    //const index2 = getRandIndex(maxLength);
+
+    captch = captch.substring(0, index1 - 1) + captch[index1].toUpperCase() + captch.substring(index1 + 1, maxLength);
+    //captch = captch.substring(0, index2 - 1) + captch[index2].toUpperCase() + captch.substring(index2 + 1, maxLength);
+    const data = captch;
+
+    captch = captch.split("").join('  ')
+    ctx.fillText(captch, 40, 40);
+
+    return data;
+    //refCaptchat.current.focus()
 }
 
 

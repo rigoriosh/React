@@ -10,7 +10,7 @@ import { nombreRepetido } from '../../helpers/helperUtil';
 import { tiposParametrosSis } from '../../constantes/constantesParametrosDelSistema';
 import DataTable from '../../components/DataTable';
 
-const VerEditarTipos = ({setMensajes, registroSeleccionado, dialog, setDialog}) => {
+const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccionado, dialog, setDialog}) => {
     console.log('VerEditarTipos');
     console.log(registroSeleccionado)
 
@@ -25,7 +25,7 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, dialog, setDialog}) 
     const columns = [
         /* { field: "id",   headerName: "id",       width: 200 }, */
         { field: "nombreTipo",  headerName: "Nombre",   width: 200 },
-        { field: "valor",       headerName: "Valor",    width: 835 },       
+        { field: "valor",       headerName: "Valor",    width: 535 },       
         { field: "actions",     headerName: "Acciones", width: 200,
         renderCell: (params) => (
             <strong>   
@@ -63,9 +63,10 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, dialog, setDialog}) 
         return true;
     }
     const agregarNuevoRegistroAlSistema = () => {
-        let registroSeleccionadoActualizado;
+
+        const registroSeleccionadoActualizado = {...registroSeleccionado};
         if (!registroSeleccionado.tipos) {
-            registroSeleccionadoActualizado = {...registroSeleccionado};
+            
             registroSeleccionadoActualizado.tipos = [{
                 id: Date.parse(Date()),
                 nombreTipo: formulario.nombreTipo,
@@ -73,22 +74,15 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, dialog, setDialog}) 
             }];
 
         }else{
-            
-        }
-        /* const nuevoTipo = !!registroSeleccionado.tipos
-            ?  registroSeleccionado.tipos = [
-                ...registroSeleccionado.tipos,
-                {
-                    id: Date.parse(Date()),
-                    nombre: formulario.nombreTipo,
-                    valor: formulario.valor
-                }
-            ]
-            : {
+            registroSeleccionadoActualizado.tipos = [{
                 id: Date.parse(Date()),
-                nombre: formulario.nombreTipo,
+                nombreTipo: formulario.nombreTipo,
                 valor: formulario.valor
-            }; */
+            }, ...registroSeleccionadoActualizado.tipos];            
+        }
+        
+        setRegistroSeleccionado(registroSeleccionadoActualizado);
+
         const DBActualizado = DB.map(vt => {
             return vt.id === registroSeleccionadoActualizado.id ? registroSeleccionadoActualizado : vt ;
         })

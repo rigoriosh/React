@@ -15,7 +15,8 @@
 }
 
 .MuiDataGrid-root .MuiDataGrid-colCellTitleContainer {
-    display: block !important;
+    display: flex !important;
+    justify-content: center !important;
 }
 
 .MuiDataGrid-root .MuiDataGrid-cellWithRenderer {
@@ -33,3 +34,57 @@
 .MuiSwitch-colorSecondary.Mui-checked+.MuiSwitch-track {
     color: var(--secundario) !important;
 }
+
+.MuiAppBar-positionFixed {
+    top: auto !important;
+}
+
+.MuiDrawer-paper {
+    top: auto !important;
+    z-index: 1 !important;
+    height: 82% !important;
+}
+
+.MuiIconButton-root {
+    padding: 9px 0px 0px 5px !important;
+    color: var(--primario) !important;
+}
+
+.MuiListItem-gutters {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.MuiListItemIcon-root {
+    min-width: 24px !important;
+}
+
+.MuiTypography-body1 {
+    font-size: 0.9rem !important;
+}
+
+.makeStyles-toolbar-9 {
+    padding: 0px !important;
+    /* justify-content: center !important; */
+}
+
+.makeStyles-toolbar-26 {
+    padding: 0px 0px !important;
+}
+
+.MuiListItem-button {
+    transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+}
+
+.makeStyles-drawerClose-8 {
+    transition: width 300ms cubic-bezier(0.4, 0, 0.6, 1) 0ms !important;
+}
+
+.makeStyles-drawerOpen-7 {
+    transition: width 300ms cubic-bezier(0.4, 0, 0.6, 1) 0ms !important;
+}
+
+
+/* .MuiTypography-displayBlock {
+    white-space: break-spaces !important;
+} */

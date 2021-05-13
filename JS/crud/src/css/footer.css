@@ -6,6 +6,7 @@
     padding: 1px 60px 50px 60px;
     position: fixed;
     width: 100%;
+    z-index: 1;
 }
 
 footer p {

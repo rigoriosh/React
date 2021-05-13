@@ -19,7 +19,7 @@ const AdminValoresTipo = ({setMensajes, dialog, setDialog, optMenuSeleccionado, 
             {
                 (optMenuSeleccionado === tiposParametrosSis.optsMenuDrawer[1])
                 ? <ValoresTipo setMensajes={setMensajes} dialog={dialog} setDialog={setDialog} setRegistroSeleccionado={setRegistroSeleccionado}/>
-                : <VerEditarTipos setMensajes={setMensajes} dialog={dialog} setDialog={setDialog} registroSeleccionado={registroSeleccionado}/>
+                : <VerEditarTipos setMensajes={setMensajes} dialog={dialog} setDialog={setDialog} registroSeleccionado={registroSeleccionado} setRegistroSeleccionado={setRegistroSeleccionado}/>
             }
         </>
     )

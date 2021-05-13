@@ -65,15 +65,15 @@ const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) 
     const agregarNuevoRegistroAlSistema = () => {
         setEviarDB(true);
         setValoresTipo( //GUARDA UN NUEVO PARÁMETRO
-            [
-                ...valoresTipo,
+            [                
                 {
                     id: Date.parse(Date()),
                     nombre: formulario.nombre,
                     descripcion: formulario.descripcion
-                    }
-                ]
-            );                 
+                },
+                ...valoresTipo
+            ]
+        );                 
     }
 
     const resetCampos = () => {
@@ -119,6 +119,7 @@ const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) 
             localStorage.setItem('valoresTipo', JSON.stringify(valoresTipo));      
             setMensajes({open:true, severity:'success', mensaje:'El parámetro se almacenó correctamente'});
         }
+        setEviarDB(false);
     }
 
     const leerDB = () => {
