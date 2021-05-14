@@ -7,30 +7,57 @@ import DataTable from '../components/DataTable'
 import MenuNavBar from '../components/MenuNavBar';
 
 import '../css/projectSearch.css'
+import { useDispatch } from 'react-redux';
+import { setProyecto } from '../acciones/proyecto_actions';
+import { setHijoBreadCrumb, setPadreBreadCrumb } from '../acciones/breadcrumb_action';
+import { rutasModulos } from '../constantes/generales';
 
-const Projectsearch = props => {
+const Projectsearch = ({history}) => {
     const refTipoIdentificacion = useRef();
+    
+    const dispatch = useDispatch();
     const tipoIdentificacion = ['cc', 'passport'];
-    const [valorSeleccionado, setValorSeleccionado] = useState('')
-
+    const [valorSeleccionado, setValorSeleccionado] = useState('');
+    const [proyectoSeleccionado, setProyectoSeleccionado] = useState('');
+    console.log(proyectoSeleccionado)
     const columns = [
         { field: "id", headerName: "Tipo de Identificación", width: 200 },
-        { field: "firstName", headerName: "Identificación del constructor", width: 250 },
-        { field: "lastName", headerName: "Código del proyecto", width: 180 },
-        { field: "age", headerName: "Nombre del proyecto", type: "number", width: 200, },    
+        { field: "identificacionConstructor", headerName: "Identificación del constructor", width: 250 },
+        { field: "codigoConstructor", headerName: "Código del proyecto", width: 180 },
+        { field: "nombreProyecto", headerName: "Nombre del proyecto", type: "text", width: 600, },    
       ];
     
-      const rows = [
-        { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-        { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-        { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-        { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-        { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-        { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-        { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-        { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-        { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-      ];
+    const rows = [
+    { id: 1, codigoConstructor: 'Snow', identificacionConstructor: 35, nombreProyecto: 'Jon'},
+    { id: 2, codigoConstructor: 'Lannister', identificacionConstructor: 42, nombreProyecto: 'Cersei'},
+    { id: 3, codigoConstructor: 'Lannister', identificacionConstructor: 45, nombreProyecto: 'Jaime'},
+    { id: 4, codigoConstructor: 'Stark', identificacionConstructor: 16, nombreProyecto: 'Arya'},
+    { id: 5, codigoConstructor: 'Targaryen', identificacionConstructor: null, nombreProyecto: 'Daenerys'},
+    { id: 6, codigoConstructor: 'Melisandre', identificacionConstructor: 150, nombreProyecto:  'Thiago'},
+    { id: 7, codigoConstructor: 'Clifford', identificacionConstructor: 44, nombreProyecto:  'Ferrara'},
+    { id: 8, codigoConstructor: 'Frances', identificacionConstructor: 36, nombreProyecto:  'Rossini'},
+    { id: 9, codigoConstructor: 'Roxie', identificacionConstructor: 65, nombreProyecto:  'Harvey'},
+    { id: 10, codigoConstructor: 'Snow', identificacionConstructor: 35, nombreProyecto: 'Jon'},
+    { id: 11, codigoConstructor: 'Snow', identificacionConstructor: 35, nombreProyecto: 'Jon'},
+    { id: 12, codigoConstructor: 'Lannister', identificacionConstructor: 42, nombreProyecto: 'Cersei'},
+    { id: 13, codigoConstructor: 'Lannister', identificacionConstructor: 45, nombreProyecto: 'Jaime'},
+    { id: 14, codigoConstructor: 'Stark', identificacionConstructor: 16, nombreProyecto: 'Arya'},
+    { id: 15, codigoConstructor: 'Targaryen', identificacionConstructor: null, nombreProyecto: 'Daenerys'},
+    { id: 16, codigoConstructor: 'Melisandre', identificacionConstructor: 150, nombreProyecto:  'Thiago'},
+    { id: 17, codigoConstructor: 'Clifford', identificacionConstructor: 44, nombreProyecto:  'Ferrara'},
+    { id: 18, codigoConstructor: 'Frances', identificacionConstructor: 36, nombreProyecto:  'Rossini'},
+    { id: 19, codigoConstructor: 'Roxie', identificacionConstructor: 65, nombreProyecto:  'Harvey'},
+    { id: 20, codigoConstructor: 'Snow', identificacionConstructor: 35, nombreProyecto: 'Jon'},
+    { id: 21, codigoConstructor: 'Snow', identificacionConstructor: 35, nombreProyecto: 'Jon'},
+    { id: 22, codigoConstructor: 'Lannister', identificacionConstructor: 42, nombreProyecto: 'Cersei'},
+    { id: 23, codigoConstructor: 'Lannister', identificacionConstructor: 45, nombreProyecto: 'Jaime'},
+    { id: 24, codigoConstructor: 'Stark', identificacionConstructor: 16, nombreProyecto: 'Arya'},
+    { id: 25, codigoConstructor: 'Targaryen', identificacionConstructor: null, nombreProyecto: 'Daenerys'},
+    { id: 26, codigoConstructor: 'Melisandre', identificacionConstructor: 150, nombreProyecto:  'Thiago'},
+    { id: 27, codigoConstructor: 'Clifford', identificacionConstructor: 44, nombreProyecto:  'Ferrara'},
+    { id: 28, codigoConstructor: 'Frances', identificacionConstructor: 36, nombreProyecto:  'Rossini'},
+    { id: 29, codigoConstructor: 'Roxie', identificacionConstructor: 65, nombreProyecto:  'Harvey'},
+    ];
 
     // onInit
     useEffect(() => {
@@ -43,11 +70,25 @@ const Projectsearch = props => {
     const onSubmit = (form) => {        
         console.log(form);
     }
+
+    useEffect(() => {
+        if(!!proyectoSeleccionado){
+            dispatch(setProyecto(proyectoSeleccionado));
+            dispatch(setHijoBreadCrumb(rutasModulos[2]));
+            history.push('/inicio'+rutasModulos[2].ruta);
+            console.log(1111);
+        }
+        return () => {}
+    }, [proyectoSeleccionado])
+
+
+
+
     return (
         <div className="Projectsearch">
-            <MenuNavBar />
+            <MenuNavBar history={history}/>
             <div className="contenedor contenedor-min">
-                <h4 className="">Búsqueda del proyecto</h4>
+                {/* <h4 className="">Búsqueda del proyecto</h4> */}
 
                 <form onSubmit={handleSubmit(onSubmit)} className="w50 card">
                     <Seleccionar id={'selectTipoIdentificacion'} label={'Tipo de identificación'} optInit={'Seleccione'} options={tipoIdentificacion}
@@ -73,9 +114,9 @@ const Projectsearch = props => {
                     </div>
                 </form>
 
-                <div className="margen-superior">
+                <div className="margen-superior mb60px">
                     <h4>Resultado de la búsqueda</h4>
-                    <DataTable columns={columns} rows={rows} />
+                    <DataTable columns={columns} rows={rows} setRegistroSeleccionado={setProyectoSeleccionado}/>
                 </div>
                 
             </div>

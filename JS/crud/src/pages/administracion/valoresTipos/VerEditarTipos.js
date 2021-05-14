@@ -5,10 +5,10 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from "@material-ui/core/TextField";
 import Switch from '@material-ui/core/Switch';
-import { tiposComunes } from '../../constantes/generales';
-import { nombreRepetido } from '../../helpers/helperUtil';
-import { tiposParametrosSis } from '../../constantes/constantesParametrosDelSistema';
-import DataTable from '../../components/DataTable';
+import { tiposComunes } from '../../../constantes/generales';
+import { nombreRepetido } from '../../../helpers/helperUtil';
+import { tiposParametrosSis } from '../../../constantes/constantesParametrosDelSistema';
+import DataTable from '../../../components/DataTable';
 
 const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccionado, dialog, setDialog}) => {
     console.log('VerEditarTipos');

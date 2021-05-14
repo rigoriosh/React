@@ -6,6 +6,8 @@ import { PrivateRoute } from "./PrivateRoute";
 import Login from '../pages/Login';
 import { HomeRoute } from './HomeRoute';
 import { login } from '../acciones/login_action';
+import Projectsearch from '../pages/Projectsearch';
+import { InicioRoute } from './InicioRoute';
 
 export const AppRouter = () => {
     console.log('AppRouter')
@@ -37,15 +39,14 @@ export const AppRouter = () => {
     
 
     if (banderaLogin) {
-        return <h1>Pagina de esperando revisar si el usuario esta logueado ....</h1>
-        
+        return <h1>Pagina de esperando revisar si el usuario esta logueado ....</h1>        
     }
 
     return (
         <Router>
             <Switch>
-                <PublicRout exact path="/login" isUserLoggedIn={isUserLoggedIn} component={Login}/>     
-                <PrivateRoute exact path="/" isUserLoggedIn={isUserLoggedIn} component={HomeRoute}/>  
+                <PublicRout     exact path="/login" isUserLoggedIn={isUserLoggedIn} component={Login}/>     
+                <PrivateRoute   exact path="/" isUserLoggedIn={isUserLoggedIn} component={InicioRoute}/>  
                 <Redirect to="/login" />                 
             </Switch>            
         </Router>

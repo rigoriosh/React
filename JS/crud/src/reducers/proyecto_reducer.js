@@ -18,8 +18,7 @@ export const proyecto_reducer = (state = initialState, action) => {
         case types.setProyecto:
             return {
                 ...state,
-                id: action.payload.id,
-                nombreProyecto: action.payload.nombreProyecto
+                ...action.payload
             }
 
         case types.quitarProyecto:

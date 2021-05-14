@@ -1,5 +1,6 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from 'redux-thunk';
+import { breadCrumb_reducer } from "../reducers/breadCrumb_reducer";
 import { login_reducer } from "../reducers/login_reducer";
 import { proyecto_reducer } from "../reducers/proyecto_reducer";
 
@@ -7,7 +8,8 @@ import { proyecto_reducer } from "../reducers/proyecto_reducer";
 
 const reducers = combineReducers({
     login_reducer,
-    proyecto_reducer
+    proyecto_reducer,
+    breadCrumb_reducer,
 });
 
 

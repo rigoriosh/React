@@ -1,8 +1,8 @@
 import { types } from "../constantes/types";
 
-export const setProyecto = (id, nombreProyecto) => ({
+export const setProyecto = (payload) => ({
     type: types.setProyecto,
-    payload: { id, nombreProyecto }
+    payload
 });
 
 export const quitarProyecto = () => ({

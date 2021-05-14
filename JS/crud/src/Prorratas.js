@@ -8,7 +8,9 @@ import { Footer } from './components/Footer';
 const Prorratas = props => {
     return (
         <Provider store={store} >
-            <AppRouter />
+            <div className="margen-inferior">
+                <AppRouter />
+            </div>
             <Footer/>
         </Provider>
     )

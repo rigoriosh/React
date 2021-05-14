@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import PropTypes from 'prop-types'
-import '../css/parametrosDelSistema.css'
+import '../../css/parametrosDelSistema.css'
 import TextField from "@material-ui/core/TextField";
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Seleccionar from "../components/Select";
-import DataTable from '../components/DataTable'
+import Seleccionar from "../../components/Select";
+import DataTable from '../../components/DataTable'
 
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { esEntero, esFlotante, nombreRepetido } from "../helpers/helperUtil";
-import { tiposComunes, tiposDeDatos } from "../constantes/generales";
+import { esEntero, esFlotante, nombreRepetido } from "../../helpers/helperUtil";
+import { tiposComunes, tiposDeDatos } from "../../constantes/generales";
 
 
 const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
@@ -255,10 +255,10 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
     );
 };
 
-ParametrosDelSistema.propTypes = {
+/* ParametrosDelSistema.propTypes = {
     setMensajes: PropTypes.func.isRequired,
     dialog: PropTypes.object.isRequired,
     setDialog: PropTypes.func.isRequired
-};
+}; */
 
 export default ParametrosDelSistema;

@@ -27,14 +27,19 @@ const DataTable = ({ columns, rows, setRegistroSeleccionado }) => {
 
     return (
 
-        < DataGrid rows = { rows } columns = { columns } pageSize = { 5 } checkboxSelection = { false } autoHeight 
-          onCellClick = {
-            ({row }) => {
-              setRegistroSeleccionado(row);
+        <
+        DataGrid rows = { rows }
+        columns = { columns }
+        pageSize = { 20 }
+        checkboxSelection = { false }
+        rowHeight = { 25 }
+        autoHeight onCellClick = {
+            ({ row }) => {
+                setRegistroSeleccionado(row);
             }
-          }
-          className="margen-inferior"
-        />
+        }
+        className = "margen-inferior" /
+        >
 
     );
 };

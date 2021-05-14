@@ -1,6 +1,6 @@
-.MuiDataGrid-root .MuiDataGrid-cellLeft {
+/* .MuiDataGrid-root .MuiDataGrid-cellLeft {
     text-align: center !important;
-}
+} */
 
 .makeStyles-formControl-7 {
     margin: 0px !important;
@@ -10,18 +10,20 @@
     height: 0.1876em !important;
 }
 
-.MuiDataGrid-root .MuiDataGrid-colCellTitleContainer {
+
+/* .MuiDataGrid-root .MuiDataGrid-colCellTitleContainer {
     text-align: center !important;
 }
 
 .MuiDataGrid-root .MuiDataGrid-colCellTitleContainer {
     display: flex !important;
     justify-content: center !important;
-}
+} */
 
-.MuiDataGrid-root .MuiDataGrid-cellWithRenderer {
+
+/* .MuiDataGrid-root .MuiDataGrid-cellWithRenderer {
     display: block !important;
-}
+} */
 
 .makeStyles-formControl-14 {
     margin: 0px !important;
