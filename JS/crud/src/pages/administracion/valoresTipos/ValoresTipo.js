@@ -6,14 +6,14 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 
 import { nombreRepetido } from '../../helpers/helperUtil';
-import { tiposComunes } from '../../constantes/generales';
+import { tiposCrud } from '../../constantes/types';
 
 
 
 const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) => {
     console.log("ValoresTipo");
     
-    const [accionesFormulario, setAccionesFormulario] = useState(tiposComunes.guardar); // guardar, editar, eliminar
+    const [accionesFormulario, setAccionesFormulario] = useState(tiposCrud.guardar); // guardar, editar, eliminar
     const [valoresTipo, setValoresTipo] = useState([]);// ALMACENA LOS PARAMETROS DEL SISTEMA
     const [formulario, setformulario] = useState( { nombre:'', descripcion:'' } );
     const [eviarDB, setEviarDB] = useState(false); // bandera para controlar envios a DB
@@ -40,7 +40,7 @@ const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) 
     const handleSubmit = (e) => {
         e.preventDefault();    
         if (checkValidaciones()) {          
-          if (accionesFormulario === tiposComunes.guardar) {
+          if (accionesFormulario === tiposCrud.guardar) {
               agregarNuevoRegistroAlSistema();
               resetCampos();              
           } else {
@@ -53,7 +53,7 @@ const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) 
 
     const checkValidaciones = () => {
     
-        if(nombreRepetido(valoresTipo, formulario, 'nombre') && accionesFormulario === tiposComunes.guardar){
+        if(nombreRepetido(valoresTipo, formulario, 'nombre') && accionesFormulario === tiposCrud.guardar){
             setMensajes({open:true, severity:'warning', mensaje:'No se puede almacenar el parámetro del sistema porque ya existe'});
             return false;
         }    
@@ -81,18 +81,18 @@ const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) 
         //setValidaciones({nombre:null, descripcion:null, valorParametro:null, selectTipoDeDato:null});
         setDialog({open: false, title: '', dialogContentText:'', agree: false});
         //setMensajes({open:false, severity:'success', mensaje:''});
-        setAccionesFormulario(tiposComunes.guardar)
+        setAccionesFormulario(tiposCrud.guardar)
     }
 
     /* const editarRegistro = (registroAeditar) => {
         //console.log({registroAeditar});    
         setformulario({...registroAeditar}); //  carga los datos en el formulario para editarlos
-        setAccionesFormulario(tiposComunes.editar); // ajusta la vandera de guardar o editar, por editar
+        setAccionesFormulario(tiposCrud.editar); // ajusta la vandera de guardar o editar, por editar
         setAgregarRegistro(true);
     }
     
     const eliminarRegistro = (parametroAEliminar) => {      
-        setAccionesFormulario(tiposComunes.eliminar)
+        setAccionesFormulario(tiposCrud.eliminar)
         setDialog({...dialog , open: true, title: 'Nota', dialogContentText:'Esta segur@ de eliminar este parámetro del sistema'});      
     } */
 
@@ -109,7 +109,7 @@ const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) 
         })
         
         setValoresTipo(registrosActualizados);      
-        setAccionesFormulario(tiposComunes.guardar); // ajusta la vandera de guardar o editar, por guardar
+        setAccionesFormulario(tiposCrud.guardar); // ajusta la vandera de guardar o editar, por guardar
         setMensajes({open:true, severity:'success', mensaje:'El parámetro se editó correctamente'});
         resetCampos();
     } */

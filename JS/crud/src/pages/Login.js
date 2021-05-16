@@ -11,7 +11,7 @@ import { startLogin } from '../acciones/login_action';
 //import PropTypes from 'prop-types'
 
 const Login = props => {
-    console.log('Login')
+    console.log('Loginhhh')
     const [captchat, setCaptchat] = useState('nothing');
     const [errorCaptchat, setErrorCaptchat] = useState(null);
     const refNombreUsuario = useRef();

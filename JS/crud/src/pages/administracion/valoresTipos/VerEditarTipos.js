@@ -5,7 +5,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from "@material-ui/core/TextField";
 import Switch from '@material-ui/core/Switch';
-import { tiposComunes } from '../../../constantes/generales';
+import { tiposCrud } from '../../../constantes/types';
 import { nombreRepetido } from '../../../helpers/helperUtil';
 import { tiposParametrosSis } from '../../../constantes/constantesParametrosDelSistema';
 import DataTable from '../../../components/DataTable';
@@ -14,7 +14,7 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccion
     console.log('VerEditarTipos');
     console.log(registroSeleccionado)
 
-    const [accionesFormulario, setAccionesFormulario] = useState(tiposComunes.guardar); // guardar, editar, eliminar
+    const [accionesFormulario, setAccionesFormulario] = useState(tiposCrud.guardar); // guardar, editar, eliminar
     const [DB, setDB] = useState([]);// INFO DB
     const [tipos, setTipos] = useState(registroSeleccionado?.tipos || []);
     console.log(DB)
@@ -42,7 +42,7 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccion
     const handleSubmit = (e) => {
         e.preventDefault();    
         if (checkValidaciones()) {          
-          if (accionesFormulario === tiposComunes.guardar) {
+          if (accionesFormulario === tiposCrud.guardar) {
               agregarNuevoRegistroAlSistema();
               resetCampos();              
           } else {
@@ -54,7 +54,7 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccion
     };
     const checkValidaciones = () => {        
 
-        if(nombreRepetido(registroSeleccionado.tipos, formulario, 'nombreTipo') && accionesFormulario === tiposComunes.guardar){
+        if(nombreRepetido(registroSeleccionado.tipos, formulario, 'nombreTipo') && accionesFormulario === tiposCrud.guardar){
             setMensajes({open:true, severity:'warning', mensaje:'No se puede almacenar este nombre de tipo porque ya existe'});
             return false;
         }    
@@ -96,16 +96,16 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccion
         //setValidaciones({nombre:null, descripcion:null, valorParametro:null, selectTipoDeDato:null});
         setDialog({open: false, title: '', dialogContentText:'', agree: false});
         //setMensajes({open:false, severity:'success', mensaje:''});
-        setAccionesFormulario(tiposComunes.guardar)
+        setAccionesFormulario(tiposCrud.guardar)
     }
     const editarRegistro = (registroAeditar) => {
         //console.log({registroAeditar});    
         setformulario({...registroAeditar}); //  carga los datos en el formulario para editarlos
-        setAccionesFormulario(tiposComunes.editar); // ajusta la vandera de guardar o editar, por editar
+        setAccionesFormulario(tiposCrud.editar); // ajusta la vandera de guardar o editar, por editar
         setAgregarRegistro(true);
     }    
     const eliminarRegistro = (parametroAEliminar) => {      
-        setAccionesFormulario(tiposComunes.eliminar)
+        setAccionesFormulario(tiposCrud.eliminar)
         setDialog({...dialog , open: true, title: 'Nota', dialogContentText:'Esta segur@ de eliminar este parámetro del sistema'});      
     }
     const eliminarRegistroConfirmado = () => { 
@@ -120,7 +120,7 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccion
         })
         
         setDB(registrosActualizados);      
-        setAccionesFormulario(tiposComunes.guardar); // ajusta la vandera de guardar o editar, por guardar
+        setAccionesFormulario(tiposCrud.guardar); // ajusta la vandera de guardar o editar, por guardar
         setMensajes({open:true, severity:'success', mensaje:'El parámetro se editó correctamente'});
         resetCampos();
     }
@@ -142,9 +142,9 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccion
     useEffect(() => {
         console.log(registroSeleccionado)
         //agree(true o false) es la respuesta del modal
-        if (agree && accionesFormulario === tiposComunes.eliminar) eliminarRegistroConfirmado();
+        if (agree && accionesFormulario === tiposCrud.eliminar) eliminarRegistroConfirmado();
 
-        if (agree && accionesFormulario === tiposComunes.editar) editarRegistroConfirmado();
+        if (agree && accionesFormulario === tiposCrud.editar) editarRegistroConfirmado();
 
         return () => {}    
     }, [agree])   

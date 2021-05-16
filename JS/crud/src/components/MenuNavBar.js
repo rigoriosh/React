@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 //import PropTypes from 'prop-types'
-import { getDiaMesAnio } from '../helpers/tiempo';
+import { getDiaMesAnio } from '../helpers/helperUtil';
 import '../css/menuNavbar.css'
-import { salir } from '../acciones/login_action';
+import { limpiarReducers, salir } from '../acciones/login_action';
 import { quitarProyecto } from '../acciones/proyecto_actions';
-import { rutasModulos } from '../constantes/generales';
+import { rutasModulos } from '../constantes/rutas';
 import { resetBreadCrumb, setHijoBreadCrumb } from '../acciones/breadcrumb_action';
-import { useHistory } from 'react-router-dom';
+//import { useHistory } from 'react-router-dom';
 
 const MenuNavBar = ({history}) => {
     console.log("MenuNavBar");
@@ -39,6 +39,7 @@ const MenuNavBar = ({history}) => {
 
     const reportes = () => { 
         dispatch(setHijoBreadCrumb(rutasModulos[3]));
+        console.log('/inicio'+rutasModulos[3].ruta)
         history.push('/inicio'+rutasModulos[3].ruta); 
     }
 
@@ -46,7 +47,7 @@ const MenuNavBar = ({history}) => {
 
     const cerrarCesion = () => {
         localStorage.clear();
-        dispatch(salir());
+        dispatch(limpiarReducers());
     }
 
     const cambiarProyecto = () => {

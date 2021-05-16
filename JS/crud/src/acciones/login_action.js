@@ -1,4 +1,6 @@
 import { types } from "../constantes/types";
+import { resetBreadCrumb } from "./breadcrumb_action";
+import { quitarProyecto } from "./proyecto_actions";
 
 
 
@@ -21,6 +23,14 @@ export const login = (id, nombre) => ({
         nombre
     }
 })
+
+export const limpiarReducers = () => {
+    return (dispath) => {
+        dispath(resetBreadCrumb());
+        dispath(quitarProyecto());
+        dispath(salir());
+    }
+}
 
 export const salir = () => ({
     type: types.logout

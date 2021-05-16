@@ -108,11 +108,11 @@ const Menu = ({optsMenuDrawer, setOptMenuSeleccionado}) => {
             {
                 open &&
                 <List>
-                    {optsMenuDrawer.map((text, index) => (
-                        <ListItem button key={text}>
+                    {optsMenuDrawer.map((opt, index) => (
+                        <ListItem button key={opt.nombre}>
                             <ListItemIcon>{<LabelIcon onClick={()=>{setOpen(!open)}}/>}</ListItemIcon>
                             
-                            <ListItemText primary={text} onClick={()=>{setOptMenuSeleccionado(text)}}/>
+                            <ListItemText primary={opt.nombre} onClick={()=>{setOptMenuSeleccionado(opt.nombre)}}/>
                         </ListItem>
                     ))}
                 </List>

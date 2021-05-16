@@ -9,8 +9,8 @@ import MenuNavBar from '../components/MenuNavBar';
 import '../css/projectSearch.css'
 import { useDispatch } from 'react-redux';
 import { setProyecto } from '../acciones/proyecto_actions';
-import { setHijoBreadCrumb, setPadreBreadCrumb } from '../acciones/breadcrumb_action';
-import { rutasModulos } from '../constantes/generales';
+import { setHijoBreadCrumb, /* setPadreBreadCrumb */ } from '../acciones/breadcrumb_action';
+import { rutasModulos } from '../constantes/rutas';
 
 const Projectsearch = ({history}) => {
     const refTipoIdentificacion = useRef();
@@ -75,10 +75,12 @@ const Projectsearch = ({history}) => {
         if(!!proyectoSeleccionado){
             dispatch(setProyecto(proyectoSeleccionado));
             dispatch(setHijoBreadCrumb(rutasModulos[2]));
-            history.push('/inicio'+rutasModulos[2].ruta);
+            console.log('/inicio'+rutasModulos[2].ruta)
+            history.push('/inicio');
             console.log(1111);
         }
         return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [proyectoSeleccionado])
 
 
@@ -86,8 +88,8 @@ const Projectsearch = ({history}) => {
 
     return (
         <div className="Projectsearch">
-            <MenuNavBar history={history}/>
-            <div className="contenedor contenedor-min">
+            {/* <MenuNavBar history={history}/> */}
+            <div className="contenedor contenedor-min">{/* Vista ProjectSearch */}
                 {/* <h4 className="">Búsqueda del proyecto</h4> */}
 
                 <form onSubmit={handleSubmit(onSubmit)} className="w50 card">
@@ -120,7 +122,7 @@ const Projectsearch = ({history}) => {
                 </div>
                 
             </div>
-            {/* <Footer /> */}
+            
         </div>
     )
 }

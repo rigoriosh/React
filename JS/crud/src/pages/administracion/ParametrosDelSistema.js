@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import PropTypes from 'prop-types'
-import '../../css/parametrosDelSistema.css'
+//import PropTypes from 'prop-types'
 import TextField from "@material-ui/core/TextField";
 import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Seleccionar from "../../components/Select";
-import DataTable from '../../components/DataTable'
-
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
+import '../../css/parametrosDelSistema.css'
+import Seleccionar from "../../components/Select";
+import DataTable from '../../components/DataTable'
 import { esEntero, esFlotante, nombreRepetido } from "../../helpers/helperUtil";
-import { tiposComunes, tiposDeDatos } from "../../constantes/generales";
+import { tiposCrud, tiposDeDatos } from "../../constantes/types";
 
 
 const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
@@ -49,14 +49,14 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
         }
     );
     const [validaciones, setValidaciones] = useState({ValnombreParametro:null, descripcionParametro:null, valorParametro:null, selectTipoDeDato:null}); 
-    const [accionesFormulario, setAccionesFormulario] = useState(tiposComunes.guardar); // guardar, editar, eliminar
+    const [accionesFormulario, setAccionesFormulario] = useState(tiposCrud.guardar); // guardar, editar, eliminar
     const [parametrosDeslSistema, setParametrosDeslSistema] = useState([]);// ALMACENA LOS PARAMETROS DEL SISTEMA
     const [agregarRegistro, setAgregarRegistro] = useState(false);
     
     const handleSubmit = (e) => {
         e.preventDefault();    
         if (checkValidaciones()) {          
-        if (accionesFormulario === tiposComunes.guardar) {
+        if (accionesFormulario === tiposCrud.guardar) {
             agregarNuevoParametroAlSistema();
             resetCampos();            
         } else {
@@ -88,7 +88,7 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
         })
         
         setParametrosDeslSistema(parametrosDeslSistemaActualizados);      
-        setAccionesFormulario(tiposComunes.guardar); // ajusta la vandera de guardar o editar, por guardar
+        setAccionesFormulario(tiposCrud.guardar); // ajusta la vandera de guardar o editar, por guardar
         setMensajes({open:true, severity:'success', mensaje:'El parámetro se editó correctamente'});
         resetCampos();
     }
@@ -96,12 +96,12 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
     const editarParametro = (parametroAeditar) => {
         //console.log({parametroAeditar});    
         setFormParametrosDelsistema({...parametroAeditar}); //  carga los datos en el formulario para editarlos
-        setAccionesFormulario(tiposComunes.editar); // ajusta la vandera de guardar o editar, por editar
+        setAccionesFormulario(tiposCrud.editar); // ajusta la vandera de guardar o editar, por editar
         setAgregarRegistro(true);
     }
 
     const eliminarParametro = (parametroAEliminar) => {      
-        setAccionesFormulario(tiposComunes.eliminar)
+        setAccionesFormulario(tiposCrud.eliminar)
         setDialog({...dialog , open: true, title: 'Nota', dialogContentText:'Esta segur@ de eliminar este parámetro del sistema'});      
     }
 
@@ -114,7 +114,7 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
 
     const checkValidaciones = () => {
 
-        if(nombreRepetido(parametrosDeslSistema, formParametrosDelsistema, 'nombreParametro') && accionesFormulario === tiposComunes.guardar){
+        if(nombreRepetido(parametrosDeslSistema, formParametrosDelsistema, 'nombreParametro') && accionesFormulario === tiposCrud.guardar){
             setMensajes({open:true, severity:'warning', mensaje:'No se puede almacenar el parámetro del sistema porque ya existe'});
             return false;
         }    
@@ -137,7 +137,7 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
         setValidaciones({nombreParametro:null, descripcionParametro:null, valorParametro:null, selectTipoDeDato:null});
         setDialog({open: false, title: '', dialogContentText:'', agree: false, parametroAeliminar:{}});
         setMensajes({open:false, severity:'success', mensaje:''});
-        setAccionesFormulario(tiposComunes.guardar)
+        setAccionesFormulario(tiposCrud.guardar)
     }
 
     const enviarDB = () => {
@@ -157,12 +157,13 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
     useEffect(() => {//SE ENCARGA DE TOMAR LA CONFIRMACIÓN DEL USUARIO Y ELIMINAR O EDITAR EL PARÁMETRO DEL SISTEMA
         console.log(registroSeleccionado)
         // agree(true o false) es la respuesta del modal
-        if (agree && accionesFormulario === tiposComunes.eliminar) eliminarParametroDelSistema();
+        if (agree && accionesFormulario === tiposCrud.eliminar) eliminarParametroDelSistema();
 
-        if (agree && accionesFormulario === tiposComunes.editar) editarParametroDelSistema();
+        if (agree && accionesFormulario === tiposCrud.editar) editarParametroDelSistema();
 
 
         return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [agree])
 
     // uploadComponent
@@ -176,6 +177,7 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
     useEffect(() => {
         enviarDB();
         return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [parametrosDeslSistema])
         
         

@@ -1,4 +1,4 @@
-import { rutasModulos } from "../constantes/generales";
+import { rutasModulos } from "../constantes/rutas";
 import { types } from "../constantes/types";
 
 

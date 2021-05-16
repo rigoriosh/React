@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
 import { PublicRout } from "./PublicRout";
 import { PrivateRoute } from "./PrivateRoute";
 import Login from '../pages/Login';
-import { HomeRoute } from './HomeRoute';
+//import { HomeRoute } from './HomeRoute';
 import { login } from '../acciones/login_action';
-import Projectsearch from '../pages/Projectsearch';
+//import Projectsearch from '../pages/Projectsearch';
 import { InicioRoute } from './InicioRoute';
 
 export const AppRouter = () => {
@@ -46,7 +46,7 @@ export const AppRouter = () => {
         <Router>
             <Switch>
                 <PublicRout     exact path="/login" isUserLoggedIn={isUserLoggedIn} component={Login}/>     
-                <PrivateRoute   exact path="/" isUserLoggedIn={isUserLoggedIn} component={InicioRoute}/>  
+                <PrivateRoute   path="/" isUserLoggedIn={isUserLoggedIn} component={InicioRoute}/>  
                 <Redirect to="/login" />                 
             </Switch>            
         </Router>

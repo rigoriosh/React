@@ -8,13 +8,13 @@ const Breadcrumb = React.memo(props => {
     console.log('Breadcrumb');
     const history = useHistory();
     const { breadCrumb_reducer } = useSelector(state => state);
-    const {rutaPadre, rutaHijo, rutaNieto } = breadCrumb_reducer;
+    const {rutaPadre, rutaHijo,/*  rutaNieto */ } = breadCrumb_reducer;
     
     const [breads, setBreads] = useState([rutaPadre.ruta.split('/')[1]])
     console.log(breads);
 
     function handleClick(breadcrumb) {
-        
+        history.push('/');
         console.info('You clicked a breadcrumb.', breadcrumb);
       }
     

@@ -1,3 +1,9 @@
+const moment = require('moment');
+
+export const getDiaMesAnio = () => {
+    return moment().format("LLLL"); // eje: martes, 4 de mayo de 2021 21:20
+}
+
 export const nombreRepetido = (coleccion, nuevoRegistro, campoDiscriminador) => {
     console.log("nombreRepetido")
     if (!coleccion || coleccion.length === 0) return false
