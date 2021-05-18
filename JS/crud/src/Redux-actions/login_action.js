@@ -1,4 +1,4 @@
-import { types } from "../constantes/types";
+import { types } from "../Tools/types";
 import { resetBreadCrumb } from "./breadcrumb_action";
 import { quitarProyecto } from "./proyecto_actions";
 

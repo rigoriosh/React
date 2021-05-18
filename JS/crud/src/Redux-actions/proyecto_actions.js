@@ -1,4 +1,4 @@
-import { types } from "../constantes/types";
+import { types } from "../Tools/types";
 
 export const setProyecto = (payload) => ({
     type: types.setProyecto,

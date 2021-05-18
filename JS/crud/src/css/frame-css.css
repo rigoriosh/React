@@ -203,6 +203,8 @@ template {
     --secundario: #D6807F;
     --fuente: 'Open Sans', sans-serif;
     --fondo: rgb(242, 242, 242);
+    --fondo1: #80808070;
+    --fondo2: #808080;
     --ancho-contenedor: 100vw;
     --color1: rgba(221, 221, 211, 0.3);
     --color2: #BC5756;

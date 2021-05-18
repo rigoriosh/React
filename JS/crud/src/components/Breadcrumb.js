@@ -11,21 +11,30 @@ const Breadcrumb = React.memo(props => {
     const {rutaPadre, rutaHijo,/*  rutaNieto */ } = breadCrumb_reducer;
     
     const [breads, setBreads] = useState([rutaPadre.ruta.split('/')[1]])
-    console.log(breads);
+    console.log(history.location.pathname);
 
     function handleClick(breadcrumb) {
-        history.push('/');
+        //history.push('/');
         console.info('You clicked a breadcrumb.', breadcrumb);
+        
+        //ubicar ruta a seguir        
+        
+        if (rutaPadre.ruta === `/${breadcrumb}`) {
+            history.push(`/`);
+        }else if (rutaHijo.ruta === `/${breadcrumb}`) {
+            history.push(`${breadCrumb_reducer.rutaPadre.ruta}/${breadcrumb}`);
+        }
       }
     
 
     useEffect(() => {
-        if (!!rutaHijo.ruta) {            
+          
             //history.push('/prorratas');            
-            setBreads([breads[0] , rutaHijo.ruta.split('/')[1]])
-        }
+            setBreads(history.location.pathname.split('/').slice(1,4))
+       
         return () => { }
-    }, [breadCrumb_reducer])
+    
+    }, [history.location.pathname])
 
 
     return (

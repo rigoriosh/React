@@ -5,7 +5,7 @@ import { PublicRout } from "./PublicRout";
 import { PrivateRoute } from "./PrivateRoute";
 import Login from '../pages/Login';
 //import { HomeRoute } from './HomeRoute';
-import { login } from '../acciones/login_action';
+import { login } from '../Redux-actions/login_action';
 //import Projectsearch from '../pages/Projectsearch';
 import { InicioRoute } from './InicioRoute';
 

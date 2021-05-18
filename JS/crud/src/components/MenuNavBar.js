@@ -1,12 +1,12 @@
 import React, { useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 //import PropTypes from 'prop-types'
-import { getDiaMesAnio } from '../helpers/helperUtil';
 import '../css/menuNavbar.css'
-import { limpiarReducers, salir } from '../acciones/login_action';
-import { quitarProyecto } from '../acciones/proyecto_actions';
-import { rutasModulos } from '../constantes/rutas';
-import { resetBreadCrumb, setHijoBreadCrumb } from '../acciones/breadcrumb_action';
+import { resetBreadCrumb, setHijoBreadCrumb } from '../Redux-actions/breadcrumb_action';
+import { limpiarReducers } from '../Redux-actions/login_action';
+import { quitarProyecto } from '../Redux-actions/proyecto_actions';
+import { getDiaMesAnio } from '../helpers/helperUtil';
+import { rutasModulos } from '../Tools/rutas';
 //import { useHistory } from 'react-router-dom';
 
 const MenuNavBar = ({history}) => {

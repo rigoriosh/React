@@ -1,8 +1,8 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from 'redux-thunk';
-import { breadCrumb_reducer } from "../reducers/breadCrumb_reducer";
-import { login_reducer } from "../reducers/login_reducer";
-import { proyecto_reducer } from "../reducers/proyecto_reducer";
+import { breadCrumb_reducer } from "../Redux-reducer/breadCrumb_reducer";
+import { login_reducer } from "../Redux-reducer/login_reducer";
+import { proyecto_reducer } from "../Redux-reducer/proyecto_reducer";
 
 
 

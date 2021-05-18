@@ -1,4 +1,4 @@
-import { types } from "../constantes/types";
+import { types } from "../Tools/types";
 
 const initialState = {
     id: '',

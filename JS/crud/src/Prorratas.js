@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from "react-redux";
-import { store } from './context/Store';
+import { store } from './Redux-store/Store';
 import { AppRouter } from './routers/AppRouter';
 import { Footer } from './components/Footer';
 

@@ -1,0 +1,17 @@
+.MuiListItem-root {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    transition: background-color 1s ease !important;
+}
+
+.MuiListItem-root:hover {
+    background-color: var(--primario) !important;
+}
+
+.MuiList-padding {
+    margin-bottom: 100px !important;
+}
+
+.makeStyles-toolbar-38 {
+    padding: 0px !important;
+}

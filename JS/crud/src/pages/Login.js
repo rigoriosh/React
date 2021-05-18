@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import '../css/login.css'
 import banner from '../assets/images/Banner.png'
 import { verOtraImagen } from '../helpers/helperUtil';
-import { startLogin } from '../acciones/login_action';
+import { startLogin } from '../Redux-actions/login_action';
 //import PropTypes from 'prop-types'
 
 const Login = props => {

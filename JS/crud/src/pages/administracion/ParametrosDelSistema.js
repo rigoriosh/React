@@ -10,7 +10,7 @@ import '../../css/parametrosDelSistema.css'
 import Seleccionar from "../../components/Select";
 import DataTable from '../../components/DataTable'
 import { esEntero, esFlotante, nombreRepetido } from "../../helpers/helperUtil";
-import { tiposCrud, tiposDeDatos } from "../../constantes/types";
+import { tiposCrud, tiposDeDatos } from "../../Tools/types";
 
 
 const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {

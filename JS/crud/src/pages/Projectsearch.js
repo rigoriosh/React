@@ -2,15 +2,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import TextField from '@material-ui/core/TextField';
 import { useForm } from 'react-hook-form';
 //import PropTypes from 'prop-types'
-import Seleccionar from '../components/Select'
-import DataTable from '../components/DataTable'
-import MenuNavBar from '../components/MenuNavBar';
 
 import '../css/projectSearch.css'
+import Seleccionar from '../components/Select'
+import DataTable from '../components/DataTable'
+//import MenuNavBar from '../components/MenuNavBar';
+
 import { useDispatch } from 'react-redux';
-import { setProyecto } from '../acciones/proyecto_actions';
-import { setHijoBreadCrumb, /* setPadreBreadCrumb */ } from '../acciones/breadcrumb_action';
-import { rutasModulos } from '../constantes/rutas';
+import { setProyecto } from '../Redux-actions/proyecto_actions';
+import { setHijoBreadCrumb, /* setPadreBreadCrumb */ } from '../Redux-actions/breadcrumb_action';
+import { rutasModulos } from '../Tools/rutas';
 
 const Projectsearch = ({history}) => {
     const refTipoIdentificacion = useRef();

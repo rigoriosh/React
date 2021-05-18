@@ -11,7 +11,7 @@
 }
 
 .login-menuNavbar {
-    background-color: #80808070;
+    background-color: var(--fondo1);
     display: flex;
     justify-content: space-between;
     /* font-style: italic; */

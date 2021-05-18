@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect, useState } from 'react'
+import "../css/menu.css";
 import { makeStyles} from '@material-ui/core/styles';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -11,6 +11,8 @@ import LabelIcon from '@material-ui/icons/Label';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import clsx from 'clsx';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const drawerWidth = 200;
 const useStyles = makeStyles((theme) => ({
@@ -75,15 +77,34 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const Menu = ({optsMenuDrawer, setOptMenuSeleccionado}) => {
+const Menu = () => {
 
+    const history = useHistory();
     const [open, setOpen] = useState(false);
+    const {breadCrumb_reducer} = useSelector(state => state);
+    const {rutaPadre, rutaHijo} =  breadCrumb_reducer;
+    
     const classes = useStyles();    
+    const [optMenuSeleccionado, setOptMenuSeleccionado] = useState();
     
-    
+
     const handleDrawerClose = () => {
         setOpen(!open);        
       };
+
+    useEffect(() => {
+      
+      console.log(rutaPadre, rutaHijo)
+      console.log({optMenuSeleccionado});
+      if (!!optMenuSeleccionado) {       
+        console.log(rutaPadre.ruta + rutaHijo.ruta + rutaHijo.optsMenu.find( e => e.nombre === optMenuSeleccionado).ruta); 
+        history.push(
+          rutaPadre.ruta + rutaHijo.ruta + rutaHijo.optsMenu.find( e => e.nombre === optMenuSeleccionado).ruta
+        );
+      }
+
+      return () => { }
+    }, [optMenuSeleccionado])
 
     return (
         <Drawer
@@ -108,7 +129,7 @@ const Menu = ({optsMenuDrawer, setOptMenuSeleccionado}) => {
             {
                 open &&
                 <List>
-                    {optsMenuDrawer.map((opt, index) => (
+                    {rutaHijo.optsMenu.map((opt, index) => (
                         <ListItem button key={opt.nombre}>
                             <ListItemIcon>{<LabelIcon onClick={()=>{setOpen(!open)}}/>}</ListItemIcon>
                             
@@ -121,9 +142,5 @@ const Menu = ({optsMenuDrawer, setOptMenuSeleccionado}) => {
     )
 }
 
-Menu.propTypes = {
-    optsMenuDrawer: PropTypes.array.isRequired,
-    setOptMenuSeleccionado: PropTypes.func.isRequired
-}
 
 export default Menu

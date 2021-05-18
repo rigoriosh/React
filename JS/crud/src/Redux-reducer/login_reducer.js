@@ -1,4 +1,4 @@
-import { types } from "../constantes/types";
+import { types } from "../Tools/types";
 
 const initialState = {
     id: '',
@@ -6,9 +6,9 @@ const initialState = {
 }
 
 export const login_reducer = (state = initialState, action) => {
-    
+
     switch (action.type) {
-        
+
         case types.login:
             return {
                 id: action.payload.id,

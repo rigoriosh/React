@@ -44,7 +44,7 @@
 .MuiDrawer-paper {
     top: auto !important;
     z-index: 1 !important;
-    height: 82% !important;
+    height: 80% !important;
 }
 
 .MuiIconButton-root {
@@ -86,7 +86,6 @@
     transition: width 300ms cubic-bezier(0.4, 0, 0.6, 1) 0ms !important;
 }
 
-
-/* .MuiTypography-displayBlock {
+.MuiTypography-displayBlock {
     white-space: break-spaces !important;
-} */
+}

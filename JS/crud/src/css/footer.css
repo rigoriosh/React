@@ -1,5 +1,5 @@
 .footer {
-    background-color: #80808070;
+    background-color: var(--fondo2);
     bottom: 0;
     font-size: small;
     height: 5%;
