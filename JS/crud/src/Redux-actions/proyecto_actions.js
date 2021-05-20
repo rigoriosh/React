@@ -1,8 +1,8 @@
 import { types } from "../Tools/types";
 
-export const setProyecto = (payload) => ({
+export const setProyecto = (proyecto) => ({
     type: types.setProyecto,
-    payload
+    payload: proyecto
 });
 
 export const quitarProyecto = () => ({

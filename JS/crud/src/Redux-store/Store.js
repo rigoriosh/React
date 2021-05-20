@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import { breadCrumb_reducer } from "../Redux-reducer/breadCrumb_reducer";
 import { login_reducer } from "../Redux-reducer/login_reducer";
 import { proyecto_reducer } from "../Redux-reducer/proyecto_reducer";
+import { alertas_mensajes_reducer } from "../Redux-reducer/alertas_mensajes_reducer";
 
 
 
@@ -10,6 +11,7 @@ const reducers = combineReducers({
     login_reducer,
     proyecto_reducer,
     breadCrumb_reducer,
+    alertas_mensajes_reducer
 });
 
 

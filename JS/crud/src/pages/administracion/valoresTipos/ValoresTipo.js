@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import TextField from "@material-ui/core/TextField";
-import DataTable from '../../components/DataTable'
+import { useHistory } from 'react-router-dom';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import TextField from "@material-ui/core/TextField";
 import Switch from '@material-ui/core/Switch';
-
-import { nombreRepetido } from '../../helpers/helperUtil';
-import { tiposCrud } from '../../constantes/types';
+//import PropTypes from 'prop-types'
 
 
+import DataTable from '../../../components/DataTable'
+import { nombreRepetido } from '../../../helpers/helperUtil';
+import { tiposCrud } from '../../../Tools/types';
 
-const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) => {
+
+
+const ValoresTipo = (/* {setMensajes, dialog, setDialog, setRegistroSeleccionado} */) => {
     console.log("ValoresTipo");
     
+    const history = useHistory();
+    const [registroSeleccionado, setRegistroSeleccionado] = useState({});
     const [accionesFormulario, setAccionesFormulario] = useState(tiposCrud.guardar); // guardar, editar, eliminar
     const [valoresTipo, setValoresTipo] = useState([]);// ALMACENA LOS PARAMETROS DEL SISTEMA
     const [formulario, setformulario] = useState( { nombre:'', descripcion:'' } );
     const [eviarDB, setEviarDB] = useState(false); // bandera para controlar envios a DB
         
-    const [noEnviarDataDB, setNoEnviarDataDB] = useState(0);// para evitar que al despliegue inicial del componente envie datos a la DB
+    
     const [agregarRegistro, setAgregarRegistro] = useState(false); // muestra/oculta el formulario
   
 
@@ -44,7 +48,7 @@ const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) 
               agregarNuevoRegistroAlSistema();
               resetCampos();              
           } else {
-              setDialog({open: true, title: 'Atención', dialogContentText:'Esta segur@ de EDITAR este registro'});
+              //setDialog({open: true, title: 'Atención', dialogContentText:'Esta segur@ de EDITAR este registro'});
           }  
             
         }    
@@ -54,7 +58,7 @@ const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) 
     const checkValidaciones = () => {
     
         if(nombreRepetido(valoresTipo, formulario, 'nombre') && accionesFormulario === tiposCrud.guardar){
-            setMensajes({open:true, severity:'warning', mensaje:'No se puede almacenar el parámetro del sistema porque ya existe'});
+            //setMensajes({open:true, severity:'warning', mensaje:'No se puede almacenar el parámetro del sistema porque ya existe'});
             return false;
         }    
         
@@ -78,9 +82,9 @@ const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) 
 
     const resetCampos = () => {
         setformulario({nombre:'', descripcion:''}); // resetea los campos del formulario
-        //setValidaciones({nombre:null, descripcion:null, valorParametro:null, selectTipoDeDato:null});
-        setDialog({open: false, title: '', dialogContentText:'', agree: false});
-        //setMensajes({open:false, severity:'success', mensaje:''});
+        
+        //setDialog({open: false, title: '', dialogContentText:'', agree: false});
+        
         setAccionesFormulario(tiposCrud.guardar)
     }
 
@@ -117,7 +121,7 @@ const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) 
     const enviarDB = () => {
         if(eviarDB) {
             localStorage.setItem('valoresTipo', JSON.stringify(valoresTipo));      
-            setMensajes({open:true, severity:'success', mensaje:'El parámetro se almacenó correctamente'});
+            //setMensajes({open:true, severity:'success', mensaje:'El parámetro se almacenó correctamente'});
         }
         setEviarDB(false);
     }
@@ -139,7 +143,15 @@ const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) 
         enviarDB();
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [valoresTipo])
+    }, [valoresTipo]);
+
+    useEffect(() => {
+        if(!!registroSeleccionado.id){
+            console.log(registroSeleccionado);
+            history.push(`/inicio/administracion/ValoresTipo/${registroSeleccionado.id}`);
+        }
+        return () => { }
+    }, [registroSeleccionado])
 
     
 
@@ -188,11 +200,11 @@ const ValoresTipo = ({setMensajes, dialog, setDialog, setRegistroSeleccionado}) 
         </div>
     )
 }
-
+/* 
 ValoresTipo.propTypes = {
     setMensajes: PropTypes.func.isRequired,
     dialog: PropTypes.object.isRequired,
     setDialog: PropTypes.func.isRequired
-}
+} */
 
 export default ValoresTipo

@@ -5,21 +5,25 @@ import Switch from '@material-ui/core/Switch';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { useDispatch, useSelector } from "react-redux";
 
 import '../../css/parametrosDelSistema.css'
 import Seleccionar from "../../components/Select";
 import DataTable from '../../components/DataTable'
 import { esEntero, esFlotante, nombreRepetido } from "../../helpers/helperUtil";
 import { tiposCrud, tiposDeDatos } from "../../Tools/types";
+import { mostrarDialog, mostrarMensaje } from "../../Redux-actions/alertasMensajes_action";
 
 
-const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
+const ParametrosDelSistema = (/* {setMensajes, dialog, setDialog} */) => {
     console.log("ParametrosDelSistema");  
+
+    const dispatch = useDispatch();
+    const {alertas_mensajes_reducer} = useSelector(state => state);
+    const {respuestaDialog} = alertas_mensajes_reducer;
     const refTipoDato = useRef();
+    
 
-    const [noEnviarDataDB, setNoEnviarDataDB] = useState(0);// para evitar que al despliegue inicial del componente envie datos a la DB
-
-    const {agree} = dialog;
     const [registroSeleccionado, setRegistroSeleccionado] = useState({});
     const columns = [
     /* { field: "id",                      headerName: "id",           width: 200 }, */
@@ -37,9 +41,7 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
         </strong>
         ), },
     ];
-
     
-
     const [formParametrosDelsistema, setFormParametrosDelsistema] = useState(
         {
             nombreParametro:'',
@@ -51,33 +53,24 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
     const [validaciones, setValidaciones] = useState({ValnombreParametro:null, descripcionParametro:null, valorParametro:null, selectTipoDeDato:null}); 
     const [accionesFormulario, setAccionesFormulario] = useState(tiposCrud.guardar); // guardar, editar, eliminar
     const [parametrosDeslSistema, setParametrosDeslSistema] = useState([]);// ALMACENA LOS PARAMETROS DEL SISTEMA
-    const [agregarRegistro, setAgregarRegistro] = useState(false);
+    const [agregarRegistro, setAgregarRegistro] = useState(false); // muestra el formulario para agregar un registro
     
     const handleSubmit = (e) => {
         e.preventDefault();    
-        if (checkValidaciones()) {          
-        if (accionesFormulario === tiposCrud.guardar) {
-            agregarNuevoParametroAlSistema();
-            resetCampos();            
-        } else {
-            setDialog({open: true, title: 'Nota', dialogContentText:'Esta segur@ de EDITAR este parámetro del sistema'});
-        }  
-            
-        }    
-        
+        if (checkValidaciones()) accionesFormulario === tiposCrud.guardar ? agregarNuevoParametroAlSistema() : dispatch(mostrarDialog('Nota', 'Esta segur@ de EDITAR este parámetro del sistema'));
     };
 
     const agregarNuevoParametroAlSistema = () => {
-    setParametrosDeslSistema( //GUARDA UN NUEVO PARÁMETRO
-        [
-            ...parametrosDeslSistema,
-            {
-                id: Date.parse(Date()),
-                nombreParametro: formParametrosDelsistema.nombreParametro,
-                descripcionParametro: formParametrosDelsistema.descripcionParametro,
-                valorParametro: formParametrosDelsistema.valorParametro,
-                selectTipoDeDato: formParametrosDelsistema.selectTipoDeDato
-                }
+        setParametrosDeslSistema( //GUARDA UN NUEVO PARÁMETRO
+            [            
+                {
+                    id: Date.parse(Date()),
+                    nombreParametro: formParametrosDelsistema.nombreParametro,
+                    descripcionParametro: formParametrosDelsistema.descripcionParametro,
+                    valorParametro: formParametrosDelsistema.valorParametro,
+                    selectTipoDeDato: formParametrosDelsistema.selectTipoDeDato
+                },
+                ...parametrosDeslSistema,
             ]
         );     
     }
@@ -87,35 +80,31 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
             return ps.id === formParametrosDelsistema.id ? formParametrosDelsistema : ps;
         })
         
-        setParametrosDeslSistema(parametrosDeslSistemaActualizados);      
-        setAccionesFormulario(tiposCrud.guardar); // ajusta la vandera de guardar o editar, por guardar
-        setMensajes({open:true, severity:'success', mensaje:'El parámetro se editó correctamente'});
-        resetCampos();
+        setParametrosDeslSistema(parametrosDeslSistemaActualizados);              
     }
 
-    const editarParametro = (parametroAeditar) => {
-        //console.log({parametroAeditar});    
+    const editarParametro = (parametroAeditar) => {        
         setFormParametrosDelsistema({...parametroAeditar}); //  carga los datos en el formulario para editarlos
         setAccionesFormulario(tiposCrud.editar); // ajusta la vandera de guardar o editar, por editar
         setAgregarRegistro(true);
     }
 
     const eliminarParametro = (parametroAEliminar) => {      
-        setAccionesFormulario(tiposCrud.eliminar)
-        setDialog({...dialog , open: true, title: 'Nota', dialogContentText:'Esta segur@ de eliminar este parámetro del sistema'});      
+        setAccionesFormulario(tiposCrud.eliminar)        
+        dispatch(mostrarDialog('Nota', '¿ Esta segur@ de eliminar este parámetro del sistema ?'));
     }
 
     const eliminarParametroDelSistema = () => { 
-    const parametrosDeslSistemaActualizados = parametrosDeslSistema.filter(parametro => parametro !== registroSeleccionado);
-    setParametrosDeslSistema(parametrosDeslSistemaActualizados);
-    setMensajes({open:true, severity:'success', mensaje:'El parámetro se eliminó correctamente'});
-    resetCampos();
+        const parametrosDeslSistemaActualizados = parametrosDeslSistema.filter(parametro => parametro !== registroSeleccionado);
+        setParametrosDeslSistema(parametrosDeslSistemaActualizados);        
+        dispatch(mostrarMensaje('success', 'El parámetro se eliminó correctamente'));
+        resetCampos();
     }
 
     const checkValidaciones = () => {
 
-        if(nombreRepetido(parametrosDeslSistema, formParametrosDelsistema, 'nombreParametro') && accionesFormulario === tiposCrud.guardar){
-            setMensajes({open:true, severity:'warning', mensaje:'No se puede almacenar el parámetro del sistema porque ya existe'});
+        if(nombreRepetido(parametrosDeslSistema, formParametrosDelsistema, 'nombreParametro') && accionesFormulario === tiposCrud.guardar){            
+            dispatch(mostrarMensaje('warning', 'No se puede almacenar el parámetro del sistema porque ya existe'));
             return false;
         }    
 
@@ -134,18 +123,17 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
 
     const resetCampos = () => {
         setFormParametrosDelsistema({nombreParametro:'', descripcionParametro:'', valorParametro:'', selectTipoDeDato:''}); // resetea los campos del formulario
-        setValidaciones({nombreParametro:null, descripcionParametro:null, valorParametro:null, selectTipoDeDato:null});
-        setDialog({open: false, title: '', dialogContentText:'', agree: false, parametroAeliminar:{}});
-        setMensajes({open:false, severity:'success', mensaje:''});
+        setValidaciones({nombreParametro:null, descripcionParametro:null, valorParametro:null, selectTipoDeDato:null});        
         setAccionesFormulario(tiposCrud.guardar)
     }
 
     const enviarDB = () => {
-        if(noEnviarDataDB < 2) {
-            setNoEnviarDataDB(a => a + 1)
-        }else{
-            localStorage.setItem('parametrosDeslSistema', JSON.stringify(parametrosDeslSistema));   
-            setMensajes({open:true, severity:'success', mensaje:'El parámetro se almacenó correctamente'});   
+        if(agregarRegistro) {
+            localStorage.setItem('parametrosDeslSistema', JSON.stringify(parametrosDeslSistema));               
+            const txtmsg = accionesFormulario === tiposCrud.guardar ? 'guardó' : 'editó';
+            dispatch(mostrarMensaje('success', `El parámetro se ${txtmsg} correctamente`));
+            setAgregarRegistro(false);// switch el formulario para mejorar la vista de la tabla
+            resetCampos();
         }
     }
 
@@ -156,21 +144,20 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
     
     useEffect(() => {//SE ENCARGA DE TOMAR LA CONFIRMACIÓN DEL USUARIO Y ELIMINAR O EDITAR EL PARÁMETRO DEL SISTEMA
         console.log(registroSeleccionado)
-        // agree(true o false) es la respuesta del modal
-        if (agree && accionesFormulario === tiposCrud.eliminar) eliminarParametroDelSistema();
+        // respuestaDialog es la respuesta del modal
+        if (respuestaDialog && accionesFormulario === tiposCrud.eliminar) eliminarParametroDelSistema();
 
-        if (agree && accionesFormulario === tiposCrud.editar) editarParametroDelSistema();
+        if (respuestaDialog && accionesFormulario === tiposCrud.editar) editarParametroDelSistema();
 
 
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [agree])
+    }, [respuestaDialog])
 
     // uploadComponent
     useEffect(() => {
         leerDB();
         return () => { //onCloseComponent
-            
         }
     }, [])
 
@@ -249,18 +236,12 @@ const ParametrosDelSistema = ({setMensajes, dialog, setDialog}) => {
 
             {/* Tabla donde se muestran los parámetros del sistema */}
             <div className="margen-superior contenedor ">
-                <h4>Resultado de la búsqueda</h4>
+                
                 <DataTable columns={columns} rows={parametrosDeslSistema} setRegistroSeleccionado={setRegistroSeleccionado}/>
             </div>
 
         </div>
     );
 };
-
-/* ParametrosDelSistema.propTypes = {
-    setMensajes: PropTypes.func.isRequired,
-    dialog: PropTypes.object.isRequired,
-    setDialog: PropTypes.func.isRequired
-}; */
 
 export default ParametrosDelSistema;

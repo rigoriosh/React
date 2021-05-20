@@ -5,18 +5,26 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from "@material-ui/core/TextField";
 import Switch from '@material-ui/core/Switch';
-import { tiposCrud } from '../../../constantes/types';
+import { tiposCrud } from '../../../Tools/types';
 import { nombreRepetido } from '../../../helpers/helperUtil';
-import { tiposParametrosSis } from '../../../constantes/constantesParametrosDelSistema';
+//import { tiposParametrosSis } from '../../../constantes/constantesParametrosDelSistema';
 import DataTable from '../../../components/DataTable';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { mostrarDialog, mostrarMensaje } from '../../../Redux-actions/alertasMensajes_action';
 
-const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccionado, dialog, setDialog}) => {
+const VerEditarTipos = (/* {setMensajes, registroSeleccionado, setRegistroSeleccionado, dialog, setDialog} */) => {
     console.log('VerEditarTipos');
-    console.log(registroSeleccionado)
-
-    const [accionesFormulario, setAccionesFormulario] = useState(tiposCrud.guardar); // guardar, editar, eliminar
+    
+    const {EditarValoresTipo} = useParams();
+    const dispatch = useDispatch();
+    const {alertas_mensajes_reducer} = useSelector(state => state);
+    const {respuestaDialog} = alertas_mensajes_reducer;
     const [DB, setDB] = useState([]);// INFO DB
-    const [tipos, setTipos] = useState(registroSeleccionado?.tipos || []);
+    const [registroSeleccionado, setRegistroSeleccionado] = useState();
+    console.log(registroSeleccionado);
+    const [accionesFormulario, setAccionesFormulario] = useState(tiposCrud.guardar); // guardar, editar, eliminar
+    const [tipos, setTipos] = useState([]);
     console.log(DB)
     const [formulario, setformulario] = useState( { nombreTipo:'', valor:'' } );
     const [agregarRegistro, setAgregarRegistro] = useState(false); // muestra/oculta el formulario
@@ -37,29 +45,19 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccion
           ),
         },
     ];
-    const {agree} = dialog;
+    //const {agree} = dialog;
 
     const handleSubmit = (e) => {
         e.preventDefault();    
-        if (checkValidaciones()) {          
-          if (accionesFormulario === tiposCrud.guardar) {
-              agregarNuevoRegistroAlSistema();
-              resetCampos();              
-          } else {
-              setDialog({open: true, title: 'Atención', dialogContentText:'Esta segur@ de EDITAR este registro'});
-          }  
-            
-        }    
-        
+        if (checkValidaciones()) accionesFormulario === tiposCrud.guardar ? agregarNuevoRegistroAlSistema() : dispatch(mostrarDialog('Nota', 'Esta segur@ de EDITAR este parámetro del sistema'));        
     };
     const checkValidaciones = () => {        
 
         if(nombreRepetido(registroSeleccionado.tipos, formulario, 'nombreTipo') && accionesFormulario === tiposCrud.guardar){
-            setMensajes({open:true, severity:'warning', mensaje:'No se puede almacenar este nombre de tipo porque ya existe'});
+            dispatch(mostrarMensaje('warning', 'No se puede almacenar el parámetro del sistema porque ya existe'));
             return false;
         }    
-        
-        //setValidaciones({nombre:null, descripcion:null, valorParametro:null, selectTipoDeDato:null});
+                
         return true;
     }
     const agregarNuevoRegistroAlSistema = () => {
@@ -92,10 +90,7 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccion
         setTipos(registroSeleccionadoActualizado.tipos);
     };
     const resetCampos = () => {
-        setformulario({nombreTipo:'', valor:''}); // resetea los campos del formulario
-        //setValidaciones({nombre:null, descripcion:null, valorParametro:null, selectTipoDeDato:null});
-        setDialog({open: false, title: '', dialogContentText:'', agree: false});
-        //setMensajes({open:false, severity:'success', mensaje:''});
+        setformulario({nombreTipo:'', valor:''}); // resetea los campos del formulario                
         setAccionesFormulario(tiposCrud.guardar)
     }
     const editarRegistro = (registroAeditar) => {
@@ -105,30 +100,30 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccion
         setAgregarRegistro(true);
     }    
     const eliminarRegistro = (parametroAEliminar) => {      
-        setAccionesFormulario(tiposCrud.eliminar)
-        setDialog({...dialog , open: true, title: 'Nota', dialogContentText:'Esta segur@ de eliminar este parámetro del sistema'});      
+        setAccionesFormulario(tiposCrud.eliminar)        
+        dispatch(mostrarDialog('Nota', '¿ Esta segur@ de eliminar el registro del sistema ?'));
     }
     const eliminarRegistroConfirmado = () => { 
         const registrosSistemaActualizados = DB.filter(parametro => parametro !== registroSeleccionado);
-        setDB(registrosSistemaActualizados);
-        setMensajes({open:true, severity:'success', mensaje:'El registro se eliminó correctamente'});
+        setDB(registrosSistemaActualizados);        
+        dispatch(mostrarMensaje('success', 'El registro se eliminó correctamente'));
         resetCampos();
     }
     const editarRegistroConfirmado = () => {
-        const registrosActualizados = DB.map(ps => {
-            return ps.id === formulario.id ? formulario : ps;
-        })
-        
-        setDB(registrosActualizados);      
-        setAccionesFormulario(tiposCrud.guardar); // ajusta la vandera de guardar o editar, por guardar
-        setMensajes({open:true, severity:'success', mensaje:'El parámetro se editó correctamente'});
-        resetCampos();
+        const registrosActualizados = DB.map(vt => {
+            return vt.tipos.map(tipo => {
+                return tipo.id === formulario.id ? formulario : tipo;
+            })            
+        })        
+        setDB(registrosActualizados);              
     }
     const enviarDB = () => {
-        if(eviarDB) {
+        if(agregarRegistro) {
             localStorage.setItem('valoresTipo', JSON.stringify(DB));      
-            setMensajes({open:true, severity:'success', mensaje:'El valor tipo se almacenó correctamente'});
-            setEviarDB(false);
+            const txtmsg = accionesFormulario === tiposCrud.guardar ? 'guardó' : 'editó';
+            dispatch(mostrarMensaje('success', `El valor tipo se ${txtmsg} correctamente`));
+            setAgregarRegistro(false);// switch el formulario para mejorar la vista de la tabla
+            resetCampos();
         }
     }
 
@@ -141,13 +136,13 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccion
     //SE ENCARGA DE TOMAR LA CONFIRMACIÓN DEL USUARIO Y ELIMINAR O EDITAR EL PARÁMETRO DEL SISTEMA
     useEffect(() => {
         console.log(registroSeleccionado)
-        //agree(true o false) es la respuesta del modal
-        if (agree && accionesFormulario === tiposCrud.eliminar) eliminarRegistroConfirmado();
+        //respuestaDialog(true o false) es la respuesta del modal
+        if (respuestaDialog && accionesFormulario === tiposCrud.eliminar) eliminarRegistroConfirmado();
 
-        if (agree && accionesFormulario === tiposCrud.editar) editarRegistroConfirmado();
+        if (respuestaDialog && accionesFormulario === tiposCrud.editar) editarRegistroConfirmado();
 
         return () => {}    
-    }, [agree])   
+    }, [respuestaDialog])   
 
     // uploadComponent
     useEffect(() => {
@@ -161,13 +156,22 @@ const VerEditarTipos = ({setMensajes, registroSeleccionado, setRegistroSeleccion
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [DB])
 
+    useEffect(() => {
+        const tipoSeleccionado = DB.find(e => e.id === Number(EditarValoresTipo)); 
+        console.log(tipoSeleccionado);
+        setRegistroSeleccionado(tipoSeleccionado);
+        setTipos(tipoSeleccionado?.tipos ||  [])        
+        return () => { }
+    }, [DB, EditarValoresTipo])
+
     return (
         <div className='contenedor'>
             <div className="contenedor-min">
                 <form onSubmit={handleSubmit} className="w50 card">
-                    <FormControlLabel control={ <Switch checked={!agregarRegistro} onChange={()=>{setAgregarRegistro(!agregarRegistro)}} name="checkedA" /> }
-                            label={tiposParametrosSis.optsMenuDrawer[5]} 
-                        />
+                    <FormControlLabel 
+                        control={ <Switch checked={!agregarRegistro} onChange={()=>{setAgregarRegistro(!agregarRegistro)}} name="checkedA" /> }
+                            label="Agregar un tipo"
+                    />
                         {
                             agregarRegistro && 
                             <>

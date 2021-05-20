@@ -5,12 +5,13 @@ const initialState = {
     tipoDeMensaje: 'success',
     textoMensaje: '',
 
+    respuestaDialog: false,
     desplegarDialog: false,
     tituloDelDialog: '',
     textoDialog: '',
 }
 
-export const proyecto_reducer = (state = initialState, action) => {
+export const alertas_mensajes_reducer = (state = initialState, action) => {
 
     switch (action.type) {
 
@@ -36,10 +37,11 @@ export const proyecto_reducer = (state = initialState, action) => {
                 textoDialog: action.payload.textoDialog,
             }
         
-        case types.ocultarDialog:
+        case types.respuestaDialog:
             return {
                 ...state,
-                desplegarDialog: false
+                desplegarDialog: false,
+                respuestaDialog: action.payload
             }
 
         case types.resetAlertasMensajes:

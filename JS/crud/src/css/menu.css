@@ -15,3 +15,15 @@
 .makeStyles-toolbar-38 {
     padding: 0px !important;
 }
+
+.MuiInputLabel-outlined {
+    z-index: 0 !important;
+}
+
+.MuiDrawer-paperAnchorLeft {
+    background: var(--fondo2) !important;
+}
+
+.makeStyles-toolbar-18 {
+    padding: 0px !important;
+}
