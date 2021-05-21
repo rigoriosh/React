@@ -111,10 +111,12 @@ const VerEditarTipos = (/* {setMensajes, registroSeleccionado, setRegistroSelecc
     }
     const editarRegistroConfirmado = () => {
         const registrosActualizados = DB.map(vt => {
-            return vt.tipos.map(tipo => {
-                return tipo.id === formulario.id ? formulario : tipo;
-            })            
-        })        
+            const bb = vt.tipos.map(tipo => {
+                return tipo.id === formulario.id ? formulario : tipo
+            })
+            vt.tipos = bb            
+            return vt
+        })
         setDB(registrosActualizados);              
     }
     const enviarDB = () => {

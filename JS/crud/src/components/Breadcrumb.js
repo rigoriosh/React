@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from "react-router-dom";
-//import PropTypes from 'prop-types'
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { useSelector } from 'react-redux';
+
+import '../css/breadCrumb.css'
 
 const Breadcrumb = React.memo(props => {
     console.log('Breadcrumb');
@@ -17,12 +18,14 @@ const Breadcrumb = React.memo(props => {
         //history.push('/');
         console.info('You clicked a breadcrumb.', breadcrumb);
         
-        //ubicar ruta a seguir        
-        
-        if (rutaPadre.ruta === `/${breadcrumb}`) {
-            history.push(`/`);
-        }else if (rutaHijo.ruta === `/${breadcrumb}`) {
-            history.push(`${breadCrumb_reducer.rutaPadre.ruta}/${breadcrumb}`);
+        //ubicar ruta a seguir   
+        if (breadcrumb === 'inicio') {
+            history.push(`/`);    
+        }else{
+            const pathNames = history.location.pathname.split('/');
+            const item = pathNames.findIndex(e => e === breadcrumb);
+            const nuevaRuta = pathNames.slice(1, item + 1).join('/');
+            history.push(`/${nuevaRuta}`);
         }
       }
     
@@ -30,7 +33,8 @@ const Breadcrumb = React.memo(props => {
     useEffect(() => {
           
             //history.push('/prorratas');            
-            setBreads(history.location.pathname.split('/').slice(1,4))
+            const pathnames = history.location.pathname.split('/');
+            setBreads(pathnames.slice(1,pathnames.length));
        
         return () => { }
     
@@ -56,9 +60,5 @@ const Breadcrumb = React.memo(props => {
         </Breadcrumbs>
     )
 })
-
-Breadcrumb.propTypes = {
-
-}
 
 export default Breadcrumb

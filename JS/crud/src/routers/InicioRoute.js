@@ -13,7 +13,7 @@ export const InicioRoute = ({history}) => {
         <div>
             
                     <MenuNavBar history={history}/>
-                    <Breadcrumb />
+                    <Breadcrumb className="ml-5"/>
                     <Switch>
                         <Route path="/inicio" component={HomeRoute}/>                                    
                         <Route path="/" component={Projectsearch} />
