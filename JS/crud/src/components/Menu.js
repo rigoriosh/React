@@ -86,7 +86,15 @@ const Menu = () => {
     
     const classes = useStyles();    
     const [optMenuSeleccionado, setOptMenuSeleccionado] = useState();
+    const [pathName, setPathName] = useState(); // se emplea para modificar el estilo de sumnenu seleccionado
     
+    useEffect(() => {
+      let pathname = history.location.pathname;
+      pathname = '/'+pathname.split('/')[pathname.split('/').length - 1];      
+      setPathName(pathname);
+      
+      return () => {}
+    }, [history.location.pathname])
 
     const handleDrawerClose = () => {
         setOpen(!open);        
@@ -107,7 +115,7 @@ const Menu = () => {
     }, [optMenuSeleccionado])
 
     return (
-        <Drawer
+        <Drawer 
             onClick={()=>{setOpen(!open)}}
             variant="permanent"
             className={clsx(classes.drawer, {
@@ -122,15 +130,15 @@ const Menu = () => {
             }}
         >
             <div className={classes.toolbar}>
-            <IconButton onClick={handleDrawerClose}>
-                {!open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
+              <IconButton onClick={handleDrawerClose} className="iconMenu">
+                  {!open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              </IconButton>
             </div>
             {
                 open &&
-                <List>
+                <List className="menu">
                     {rutaHijo.optsMenu.map((opt, index) => (
-                        <ListItem button key={opt.nombre}>
+                        <ListItem button key={index + opt.nombre} className={(pathName === opt.ruta) ? 'menuHover' : ''}>
                             <ListItemIcon>{<LabelIcon onClick={()=>{setOpen(!open)}}/>}</ListItemIcon>
                             
                             <ListItemText primary={opt.nombre} onClick={()=>{setOptMenuSeleccionado(opt.nombre)}}/>

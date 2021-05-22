@@ -170,7 +170,7 @@ const ParametrosDelSistema = (/* {setMensajes, dialog, setDialog} */) => {
         
     
     return (
-        <div className='pb-20px'>
+        <div className='pb-20px '>
 
             {/* Formulario donde se capturan los datos para crear un nuevo parámetro del sistema */}
             <div className="contenedor contenedor-min">

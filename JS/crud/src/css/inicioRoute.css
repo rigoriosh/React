@@ -1,0 +1,18 @@
+.InicioRoute {
+    overflow-y: auto;
+}
+
+.inicioRoute-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.inicioRoute-header {
+    position: fixed;
+    width: -webkit-fill-available;
+    z-index: 1;
+}
+
+.inicioRoute-content {
+    margin-top: 120px;
+}

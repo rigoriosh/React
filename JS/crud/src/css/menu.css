@@ -1,11 +1,27 @@
+.menu {
+    color: white;
+}
+
+.menuHover {
+    background-color: var(--primario) !important;
+}
+
+.iconMenu {
+    margin: 0px !important;
+    padding: 0px !important;
+    background: var(--primario) !important;
+    color: black !important;
+}
+
 .MuiListItem-root {
     padding-top: 0px !important;
     padding-bottom: 0px !important;
-    transition: background-color 1s ease !important;
+    transition: background-color 0.5s ease !important;
 }
 
 .MuiListItem-root:hover {
     background-color: var(--primario) !important;
+    border-style: dotted !important;
 }
 
 .MuiList-padding {
@@ -26,4 +42,12 @@
 
 .makeStyles-toolbar-18 {
     padding: 0px !important;
+}
+
+.makeStyles-toolbar-32 {
+    padding: 0px !important;
+}
+
+.MuiDrawer-paperAnchorDockedLeft {
+    height: 100vh !important;
 }

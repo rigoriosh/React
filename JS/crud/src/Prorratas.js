@@ -1,4 +1,9 @@
 import React from 'react';
+import OverlayScrollbars from 'overlayscrollbars';
+import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
+
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { esES } from '@material-ui/core/locale';
 import { Provider } from "react-redux";
 import { store } from './Redux-store/Store';
 import { AppRouter } from './routers/AppRouter';
@@ -8,15 +13,26 @@ import SnackbarComponent from './components/Snackbar';
 
 
 const Prorratas = props => {
+    const theme = createMuiTheme({
+        palette: {
+          primary: { main: '#1976d2' },
+        },
+      }, esES);
     return (
-        <Provider store={store} >
-            <div className="margen-inferior">
-                <AppRouter />
-            </div>
-            <DialogComponent />
-            <SnackbarComponent />
-            <Footer/>
-        </Provider>
+        
+            <ThemeProvider theme={theme}>
+                <Provider store={store} >
+                {/* <OverlayScrollbarsComponent> */}
+                    <div className="mb200px ">
+                        <AppRouter />                    
+                        <DialogComponent />
+                        <SnackbarComponent />
+                        <Footer/>
+                    </div>
+                    {/* </OverlayScrollbarsComponent> */}
+                </Provider>
+            </ThemeProvider>
+           
     )
 }
 

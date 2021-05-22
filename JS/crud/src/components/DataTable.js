@@ -1,9 +1,12 @@
-import * as React from 'react';
-import { DataGrid } from '@material-ui/data-grid';
+import * as React from "react";
+import { DataGrid } from "@material-ui/data-grid";
 import PropTypes from "prop-types";
 
-const DataTable = ({ columns, rows, setRegistroSeleccionado }) => {
-    /* 
+/* const filterModel = {
+    items: [{ columnField: 'rating', value: '3.5', operatorValue: '>=' }],
+  }; */
+const DataTable = ({ columns, rows, setRegistroSeleccionado, clase='' }) => {
+  /* 
     const columns = [
       { field: "id",        headerName: "Tipo de Identificación",         width: 200 },
       { field: "lastName",  headerName: "Código del proyecto",            width: 180 },
@@ -24,30 +27,27 @@ const DataTable = ({ columns, rows, setRegistroSeleccionado }) => {
     ];
  */
 
-
-    return (
-
-        <
-        DataGrid rows = { rows }
-        columns = { columns }
-        pageSize = { 20 }
-        checkboxSelection = { false }
-        rowHeight = { 25 }
-        autoHeight onCellClick = {
-            ({ row }) => {
-                setRegistroSeleccionado(row);
-            }
-        }
-        className = "margen-inferior" /
-        >
-
-    );
+  return (
+    <DataGrid
+      /* filterModel={filterModel} */
+      rows={rows}
+      columns={columns}
+      pageSize={20}
+      checkboxSelection={false}
+      rowHeight={25}
+      autoHeight
+      onCellClick={({ row }) => {
+        setRegistroSeleccionado(row);
+      }}
+      className={`margen-inferior ${clase}`}
+    />
+  );
 };
 
 DataTable.propTypes = {
-    columns: PropTypes.array.isRequired,
-    rows: PropTypes.array.isRequired,
-    setRegistroSeleccionado: PropTypes.func
+  columns: PropTypes.array.isRequired,
+  rows: PropTypes.array.isRequired,
+  setRegistroSeleccionado: PropTypes.func,
 };
 
 export default DataTable;

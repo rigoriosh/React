@@ -8,7 +8,7 @@ html {
 }
 
 body {
-    margin: 0
+    margin: 0;
 }
 
 main {
@@ -700,6 +700,10 @@ form .input:focus {
     margin-bottom: 60px;
 }
 
+.mb200px {
+    margin-bottom: 200px;
+}
+
 .margen-superior {
     margin-top: 20px;
 }
@@ -760,6 +764,18 @@ form .input:focus {
     padding-bottom: 20px;
 }
 
+.lh-0px {
+    line-height: 0px;
+}
+
+.fwb {
+    font-weight: bold;
+}
+
+.fzm {
+    font-size: medium;
+}
+
 
 /* ///////////////////////// */
 
@@ -785,5 +801,18 @@ form .input:focus {
 }
 
 ::-webkit-scrollbar {
-    display: none;
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--fondo1);
+}
+
+::-webkit-scrollbar-thumb {
+    background-image: linear-gradient(var(--primario), var(--secundario));
+    border-radius: 25px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-image: linear-gradient(var(--secundario), var(--primario));
 }

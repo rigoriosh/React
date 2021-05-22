@@ -9,7 +9,7 @@ const Breadcrumb = React.memo(props => {
     console.log('Breadcrumb');
     const history = useHistory();
     const { breadCrumb_reducer } = useSelector(state => state);
-    const {rutaPadre, rutaHijo,/*  rutaNieto */ } = breadCrumb_reducer;
+    const {rutaPadre} = breadCrumb_reducer;
     
     const [breads, setBreads] = useState([rutaPadre.ruta.split('/')[1]])
     console.log(history.location.pathname);
@@ -42,7 +42,7 @@ const Breadcrumb = React.memo(props => {
 
 
     return (
-        <Breadcrumbs aria-label="breadcrumb">
+        <Breadcrumbs aria-label="breadcrumb" className="breadcrumb">
             {
                 breads.map(e => (
                     <div key={e} color="inherit" onClick={()=> handleClick(e)} className="apuntador">

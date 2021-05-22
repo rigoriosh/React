@@ -9,7 +9,7 @@ import Roles from '../pages/administracion/Roles';
 export const AdministracionRoute = () => {
     console.log('AdministracionRoute')
     return (
-        <div>
+        <div className="">
             AdministracionRoute
             <Switch>                            
                 <Route  path="/inicio/administracion/ParametrosDelSistema" component={ParametrosDelSistema}/>

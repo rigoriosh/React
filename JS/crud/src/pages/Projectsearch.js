@@ -25,7 +25,7 @@ const Projectsearch = ({history}) => {
         { field: "id", headerName: "Tipo de Identificación", width: 200 },
         { field: "identificacionConstructor", headerName: "Identificación del constructor", width: 250 },
         { field: "codigoConstructor", headerName: "Código del proyecto", width: 180 },
-        { field: "nombreProyecto", headerName: "Nombre del proyecto", type: "text", width: 600, },    
+        { field: "nombreProyecto", headerName: "Nombre del proyecto", width: 600, },    
       ];
     
     const rows = [

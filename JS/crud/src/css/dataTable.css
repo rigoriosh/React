@@ -1,5 +1,5 @@
-/* .MuiDataGrid-root .MuiDataGrid-cellLeft {
-    text-align: center !important;
+/* .MuiDataGrid-root {
+    z-index: -1 !important;
 } */
 
 .makeStyles-formControl-7 {
@@ -48,7 +48,7 @@
 }
 
 .MuiIconButton-root {
-    padding: 9px 0px 0px 5px !important;
+    /* padding: 9px 0px 0px 5px !important; */
     color: var(--primario) !important;
 }
 
@@ -88,4 +88,9 @@
 
 .MuiTypography-displayBlock {
     white-space: break-spaces !important;
+}
+
+.MuiIconButton-sizeSmall {
+    background: var(--primario) !important;
+    color: black !important;
 }
