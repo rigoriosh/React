@@ -21,7 +21,6 @@
 
 .MuiListItem-root:hover {
     background-color: var(--primario) !important;
-    border-style: dotted !important;
 }
 
 .MuiList-padding {

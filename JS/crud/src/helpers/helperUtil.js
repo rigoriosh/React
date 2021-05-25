@@ -48,7 +48,7 @@ export const esEntero = (dato) => {
 }
 
 const getRandIndex = (maxLength) => (Math.floor(Math.random() * maxLength));
-export const verOtraImagen = () => {
+export const verOtraImagen = () => { // genera imagen para el captcha
     const canvas = document.querySelector('#canvas')
     const ctx = canvas.getContext('2d');
     let captch = Math.random().toString(36).substring(2, 8);

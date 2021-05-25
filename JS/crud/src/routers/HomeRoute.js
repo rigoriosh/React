@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route, Redirect } from "react-router-dom";
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 
 
 import { AdministracionRoute } from './AdministracionRoute';
@@ -8,7 +7,7 @@ import { ProrratasRoute } from './ProrratasRoute';
 import { ReportesRoute } from './ReportesRoute';
 import Menu from '../components/Menu';
 
-export const HomeRoute = ({history, location}) => {
+export const HomeRoute = () => {
     console.log('HomeRoute')
    
     
@@ -20,7 +19,7 @@ export const HomeRoute = ({history, location}) => {
                 <div className="ml-10 ">
                     <Menu className="homeRoute-Menu"/>
                 
-                <main className='contenedor '>  
+                <main className='contenedor ' style={{height: '600vh'}}>  
                 
                     
                     

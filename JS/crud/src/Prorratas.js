@@ -1,6 +1,4 @@
 import React from 'react';
-import OverlayScrollbars from 'overlayscrollbars';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { esES } from '@material-ui/core/locale';
@@ -18,18 +16,20 @@ const Prorratas = props => {
           primary: { main: '#1976d2' },
         },
       }, esES);
+
+      
     return (
         
             <ThemeProvider theme={theme}>
                 <Provider store={store} >
-                {/* <OverlayScrollbarsComponent> */}
+                
                     <div className="mb200px ">
                         <AppRouter />                    
                         <DialogComponent />
                         <SnackbarComponent />
                         <Footer/>
                     </div>
-                    {/* </OverlayScrollbarsComponent> */}
+                    
                 </Provider>
             </ThemeProvider>
            
