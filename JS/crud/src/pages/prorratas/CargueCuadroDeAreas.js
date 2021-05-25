@@ -6,6 +6,7 @@ import '../../css/cargueCuadroDeAreas.css'
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { mostrarMensaje } from '../../Redux-actions/alertasMensajes_action';
+import DataTable from "../../components/DataTable";
 
 
 const nombresColumnas = ["Tipo de Inmueble", "Nomenclatura", "Interior", "Etapa", "Area Mt2"];
@@ -30,40 +31,62 @@ export const CargueCuadroDeAreas = ({history}) => {
             console.log(err);            
           }
           else{
-              const validaciones = validarNombreDeColumnas(resp.rows[0]);
-              if (!validaciones) {
+
+              const validaciones = validacionesIniciales(resp.rows);
+              if (!!validaciones) {
                   //Generar mensaje de error
-                  dispatch(mostrarMensaje('warning', `El nombre de las columnas no cumple con el formato`));
+                  dispatch(mostrarMensaje('warning', `${validaciones}`));
                   history.replace(history.location.pathname);
               }else{
-                  resp.rows[0].unshift('No Registro');
-                  resp.cols.unshift({name: 'No Registro', key: 0});
-                  const updateCols = resp.cols.map((e,i) => {
+                  //resp.rows[0].unshift('No Registro');
+                  //resp.cols.unshift({name: 'No Registro', key: 0});
+                  const updateCols = resp.rows[0].map((e,i) => {
                       return {
-                          key: i,
-                          name: resp.rows[0][i]
-                      }
-                  })
-                  console.log(updateCols);
+                          field: e.split(' ').join(''), 
+                          headerName: e,
+                          width: e.length * 20
+                        }
+                  })                  
+                  const namesCols = updateCols.map(nc => (nc.field));
                   const updateRows = resp.rows.slice(1, resp.rows.length);
+                  const filasTemporales = [];
+                  updateRows.forEach((fila,itemFila)=>{
+                        const objTemp = {id: itemFila};
+                        fila.forEach((campoFila,itemCampoFila)=>{
+                            objTemp[namesCols[itemCampoFila]] = campoFila;
+                        })
+                        filasTemporales.push(objTemp)
+                  });
                   setData({
                     cols: updateCols,
-                    rows: updateRows
+                    rows: filasTemporales
                   });
               }              
           }
         });               
         
       }
-
+      
+      const validacionesIniciales = (registros)=>{
+            let eco = validarNombreDeColumnas(registros[0]);
+            if(!!eco)  return eco 
+            eco = validarRegistros(registros.slice(1, registros.length))
+            if(!!eco) {
+                return eco;
+            }
+            return null
+      }
       const validarNombreDeColumnas = (columnsNames) => {
-          let estadoValidacion = true;
+          let estadoValidacion = null;
           columnsNames.forEach(nombreCol => {
               if(!nombresColumnas.includes(nombreCol)){
-                  estadoValidacion = nombresColumnas.includes(nombreCol)
+                  estadoValidacion = 'El nombre de las columnas del archivo no cumple con el formato'
               }
           });
           return estadoValidacion
+      }
+      const validarRegistros = (registros) => {
+
       }
 
     return (
@@ -75,7 +98,7 @@ export const CargueCuadroDeAreas = ({history}) => {
                 style={{display: 'none'}}
                 accept=".xls, .xlsx"                
                 id="contained-button-file"
-                multiple
+                /* multiple */
                 type="file"
                 
                 onChange={(e)=>fileHandler(e)}
@@ -86,7 +109,11 @@ export const CargueCuadroDeAreas = ({history}) => {
                 </Button>
             </label>
 
-            <OutTable data={data.rows} columns={data.cols} tableClassName="tableSimple" tableHeaderRowClass="heading" />
+            {
+                (data.rows.length > 0) && (<DataTable columns={data.cols} rows={data.rows} />)
+            }
+            
+            {/* <OutTable data={data.rows} columns={data.cols} tableClassName="tableSimple" tableHeaderRowClass="heading" /> */}
         </>
         
     )
