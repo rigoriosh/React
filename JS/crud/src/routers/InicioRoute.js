@@ -18,7 +18,7 @@ export const InicioRoute = ({history}) => {
                 </div>                    
                 <div className="inicioRoute-content">
                     <Switch>
-                        <Route path="/inicio" component={HomeRoute}/>                                    
+                        <Route path="/Inicio" component={HomeRoute}/>                                    
                         <Route path="/" component={Projectsearch} />
                         <Redirect exact to="/" />
                     </Switch>

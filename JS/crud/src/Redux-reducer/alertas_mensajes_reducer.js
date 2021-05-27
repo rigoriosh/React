@@ -1,4 +1,4 @@
-import { types } from "../Tools/types";
+import { types } from "../Tools/dominios";
 
 const initialState = {
     desplegarMensaje: false,
@@ -22,13 +22,13 @@ export const alertas_mensajes_reducer = (state = initialState, action) => {
                 tipoDeMensaje: action.payload.tipoDeMensaje,
                 textoMensaje: action.payload.textoMensaje,
             }
-        
+
         case types.ocultarMensaje:
             return {
                 ...state,
                 desplegarMensaje: false
             }
-        
+
         case types.mostrarDialog:
             return {
                 ...state,
@@ -36,7 +36,7 @@ export const alertas_mensajes_reducer = (state = initialState, action) => {
                 tituloDelDialog: action.payload.tituloDelDialog,
                 textoDialog: action.payload.textoDialog,
             }
-        
+
         case types.respuestaDialog:
             return {
                 ...state,

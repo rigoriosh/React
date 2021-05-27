@@ -23,3 +23,17 @@ export const tiposCrud = {
 }
 
 export const tiposDeDatos = ["Entero", "Texto", "Flotante", "Fecha"];
+
+export const tiposDeInmuebles = ['ALMACEN', 'BODEGA', 'CONSULTORIO', 'GARAJE', 'LOTE', 'AREA PRIVADA 2', 'PENTHOUSE', 'CINEMA', 'CAJERO', 'NO APLICA',
+    'APARTASOL', 'APARTAMENTO', 'EDIFICIO', 'MEZANINE', 'PISO', 'TORRE', 'URBANIZACIÓN', 'BURBUJA', 'ANCLA', 'CASA', 'DEPOSITO', 'LOCAL', 'MANZANA'
+];
+
+export const tiposEstadoInmuebles = {
+    ACTIVO: 'ACTIVO',
+    INACTIVO: 'INACTIVO'
+};
+
+export const estadoLiberacion = {
+    LIBERADO: 'LIBERADO',
+    NOLIBERADO: 'NO_LIBERADO'
+}

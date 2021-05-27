@@ -77,7 +77,7 @@ const Projectsearch = ({history}) => {
             dispatch(setProyecto(proyectoSeleccionado));
             dispatch(setHijoBreadCrumb(rutasModulos[2]));
             console.log('/inicio'+rutasModulos[2].ruta)
-            history.push('/inicio');
+            history.push('/Inicio');
             console.log(1111);
         }
         return () => {}

@@ -12,14 +12,13 @@ export const ReportesRoute = () => {
         <div>
             ReportesRoute
             <Switch>                            
-                <Route  path="/inicio/reportes/ControlCartas" component={ControlCartas}/>                
-                <Route  path="/inicio/reportes/ExtractoDeCredito" component={ExtractoDeCredito}/>
-                <Route  path="/inicio/reportes/Liberaciones" component={Liberaciones}/>
-                <Route  path="/inicio/reportes/LiberacionesPorSuficienteGarantia" component={LiberacionesPorSuficienteGarantia}/>
-                <Route  path="/inicio/reportes/PolizasTRC" component={PolizasTRC}/>
-                <Route  path="/inicio/reportes/Subrogaciones" component={Subrogaciones}/>
-
-                <Redirect to="/inicio/reportes/ControlCartas" />
+                <Route  path="/Inicio/Reportes/ControlCartas" component={ControlCartas}/>                
+                <Route  path="/Inicio/Reportes/ExtractoDeCredito" component={ExtractoDeCredito}/>
+                <Route  path="/Inicio/Reportes/Liberaciones" component={Liberaciones}/>
+                <Route  path="/Inicio/Reportes/LiberacionesPorSuficienteGarantia" component={LiberacionesPorSuficienteGarantia}/>
+                <Route  path="/Inicio/Reportes/PolizasTRC" component={PolizasTRC}/>
+                <Route  path="/Inicio/Reportes/Subrogaciones" component={Subrogaciones}/>
+                <Redirect to="/Inicio/Reportes/ControlCartas" />
             </Switch>
         </div>
     )

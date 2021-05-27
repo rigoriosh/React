@@ -12,13 +12,12 @@ export const AdministracionRoute = () => {
         <div className="">
             AdministracionRoute
             <Switch>                            
-                <Route  path="/inicio/administracion/ParametrosDelSistema" component={ParametrosDelSistema}/>
-                <Route  path="/inicio/administracion/ValoresTipo" component={AdminValoresTipo}/>
-                <Route  path="/inicio/administracion/DesbloquearLiberaciones" component={DesbloquearLiberaciones}/>                
-                <Route  path="/inicio/administracion/Permisos" component={Permisos}/>
-                <Route  path="/inicio/administracion/Roles" component={Roles}/>
-                
-                <Redirect to="/inicio/administracion/ParametrosDelSistema" />
+                <Route  path="/Inicio/Administracion/ParametrosDelSistema" component={ParametrosDelSistema}/>
+                <Route  path="/Inicio/Administracion/ValoresTipo" component={AdminValoresTipo}/>
+                <Route  path="/Inicio/Administracion/DesbloquearLiberaciones" component={DesbloquearLiberaciones}/>                
+                <Route  path="/Inicio/Administracion/Permisos" component={Permisos}/>
+                <Route  path="/Inicio/Administracion/Roles" component={Roles}/>                
+                <Redirect to="/Inicio/Administracion/ParametrosDelSistema" />
             </Switch>
         </div>
     )

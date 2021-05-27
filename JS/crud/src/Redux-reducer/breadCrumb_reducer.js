@@ -1,5 +1,5 @@
 import { rutasModulos } from "../Tools/rutas";
-import { types } from "../Tools/types";
+import { types } from "../Tools/dominios";
 
 
 const initialState = {

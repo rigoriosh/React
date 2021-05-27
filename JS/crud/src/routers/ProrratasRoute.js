@@ -9,22 +9,22 @@ export const ProrratasRoute = () => {
     console.log('ProrratasRoute')
     return (
         <div>            
-            ProrratasRoutefff
+            {/* ProrratasRoutefff */}
             <Switch>                            
-                <Route  path="/inicio/prorratas/AdicionarValoresAprobacionCartas" component={AdicionarValoresAprobacionCartas}/>
-                <Route  path="/inicio/prorratas/AtarCreditos"                     component={AtarCreditos}/>
-                <Route  path="/inicio/prorratas/CargueCuadroDeAreas"              component={CargueCuadroDeAreas}/>
-                <Route  path="/inicio/prorratas/CrearDesistimiento"               component={CrearDesistimiento}/>
-                <Route  path="/inicio/prorratas/CrearSeleccion"                   component={CrearSeleccion}/>
-                <Route  path="/inicio/prorratas/CuadroDeProrratas"                component={CuadroDeProrratas}/>                
-                <Route  path="/inicio/prorratas/HistoricoDePagos"                 component={HistoricoDePagos}/>
-                <Route  path="/inicio/prorratas/LiberarInmueble"                  component={LiberarInmueble}/>
-                <Route  path="/inicio/prorratas/LiberarPorSuficienteGarantia"     component={LiberarPorSuficienteGarantia}/>
-                <Route  path="/inicio/prorratas/Subrrogaciones"                   component={Subrrogaciones}/>
-                <Route  path="/inicio/prorratas/RegistrarAprobarCartasCompromiso" component={RegistrarAprobarCartasCompromiso}/>
-                <Route  path="/inicio/prorratas/VerificarRPH"                     component={VerificarRPH}/>
+                <Route  path="/Inicio/Prorratas/AdicionarValoresAprobacionCartas" component={AdicionarValoresAprobacionCartas}/>
+                <Route  path="/Inicio/Prorratas/AtarCreditos"                     component={AtarCreditos}/>
+                <Route  path="/Inicio/Prorratas/CargueCuadroDeAreas"              component={CargueCuadroDeAreas}/>
+                <Route  path="/Inicio/Prorratas/CrearDesistimiento"               component={CrearDesistimiento}/>
+                <Route  path="/Inicio/Prorratas/CrearSeleccion"                   component={CrearSeleccion}/>
+                <Route  path="/Inicio/Prorratas/CuadroDeProrratas"                component={CuadroDeProrratas}/>                
+                <Route  path="/Inicio/Prorratas/HistoricoDePagos"                 component={HistoricoDePagos}/>
+                <Route  path="/Inicio/Prorratas/LiberarInmueble"                  component={LiberarInmueble}/>
+                <Route  path="/Inicio/Prorratas/LiberarPorSuficienteGarantia"     component={LiberarPorSuficienteGarantia}/>
+                <Route  path="/Inicio/Prorratas/Subrrogaciones"                   component={Subrrogaciones}/>
+                <Route  path="/Inicio/Prorratas/RegistrarAprobarCartasCompromiso" component={RegistrarAprobarCartasCompromiso}/>
+                <Route  path="/Inicio/Prorratas/VerificarRPH"                     component={VerificarRPH}/>
 
-                <Redirect to="/inicio/prorratas/CuadroDeProrratas" />
+                <Redirect to="/Inicio/Prorratas/CuadroDeProrratas" />
             </Switch>
         </div>
     )

@@ -8,7 +8,7 @@ import Switch from '@material-ui/core/Switch';
 
 import DataTable from '../../../components/DataTable'
 import { nombreRepetido } from '../../../helpers/helperUtil';
-import { tiposCrud } from '../../../Tools/types';
+import { tiposCrud } from '../../../Tools/dominios';
 
 
 

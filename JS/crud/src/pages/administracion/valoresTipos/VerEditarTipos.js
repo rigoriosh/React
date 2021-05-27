@@ -5,7 +5,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from "@material-ui/core/TextField";
 import Switch from '@material-ui/core/Switch';
-import { tiposCrud } from '../../../Tools/types';
+import { tiposCrud } from '../../../Tools/dominios';
 import { nombreRepetido } from '../../../helpers/helperUtil';
 //import { tiposParametrosSis } from '../../../constantes/constantesParametrosDelSistema';
 import DataTable from '../../../components/DataTable';

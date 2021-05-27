@@ -19,7 +19,7 @@ const Breadcrumb = React.memo(props => {
         console.info('You clicked a breadcrumb.', breadcrumb);
         
         //ubicar ruta a seguir   
-        if (breadcrumb === 'inicio') {
+        if (breadcrumb === 'Inicio') {
             history.push(`/`);    
         }else{
             const pathNames = history.location.pathname.split('/');

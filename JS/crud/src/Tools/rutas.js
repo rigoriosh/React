@@ -108,21 +108,21 @@ export const optsreportes = [{
 ];
 
 export const rutasModulos = [{ // se emplea para el breadcrumb
-        ruta: '/inicio',
+        ruta: '/Inicio',
         label: 'Busqueda de Proyecto'
     },
     {
-        ruta: '/administracion',
+        ruta: '/Administracion',
         label: 'Administración',
         optsMenu: optsMenuAdministracion
     },
     {
-        ruta: '/prorratas',
+        ruta: '/Prorratas',
         label: 'Prorratas',
         optsMenu: optsProrratas
     },
     {
-        ruta: '/reportes',
+        ruta: '/Reportes',
         label: 'Reportes',
         optsMenu: optsreportes
     }

@@ -1,6 +1,6 @@
 
 import Icon from '@material-ui/core/Icon';
-import {OutTable, ExcelRenderer} from 'react-excel-renderer';
+import {/* OutTable, */ ExcelRenderer} from 'react-excel-renderer';
 import Button from '@material-ui/core/Button';
 import '../../css/cargueCuadroDeAreas.css'
 import { useState } from 'react';
@@ -10,21 +10,19 @@ import DataTable from "../../components/DataTable";
 
 
 const nombresColumnas = ["Tipo de Inmueble", "Nomenclatura", "Interior", "Etapa", "Area Mt2"];
+const initialState = { cols: [], rows: [], nombreArchivo:'', cantidadRegistros: 0 }
 
 export const CargueCuadroDeAreas = ({history}) => {
 
     const dispatch = useDispatch();
     
-    const [data, setData] = useState({
-        cols: [],
-        rows: []
-      });
+    const [data, setData] = useState(initialState);
 
 
     const fileHandler = (event) => {
         let fileObj = event.target.files[0];
         
-        console.log(event);
+        console.log(fileObj);        
         //just pass the fileObj as parameter
         ExcelRenderer(fileObj, (err, resp) => {
           if(err){
@@ -34,12 +32,9 @@ export const CargueCuadroDeAreas = ({history}) => {
 
               const validaciones = validacionesIniciales(resp.rows);
               if (!!validaciones) {
-                  //Generar mensaje de error
-                  dispatch(mostrarMensaje('warning', `${validaciones}`));
-                  history.replace(history.location.pathname);
-              }else{
-                  //resp.rows[0].unshift('No Registro');
-                  //resp.cols.unshift({name: 'No Registro', key: 0});
+                  dispatch(mostrarMensaje('warning', `${validaciones}`)); //Genera mensaje de error
+                  history.replace(history.location.pathname);//limpie la memoria del onchage y pueda cargar el mismo archivo con el mismo nombre
+              }else{                  
                   const updateCols = resp.rows[0].map((e,i) => {
                       return {
                           field: e.split(' ').join(''), 
@@ -56,8 +51,11 @@ export const CargueCuadroDeAreas = ({history}) => {
                             objTemp[namesCols[itemCampoFila]] = campoFila;
                         })
                         filasTemporales.push(objTemp)
-                  });
+                  });                  
                   setData({
+                    ...data,
+                    nombreArchivo: fileObj.name,
+                    cantidadRegistros: updateRows.length,
                     cols: updateCols,
                     rows: filasTemporales
                   });
@@ -86,6 +84,7 @@ export const CargueCuadroDeAreas = ({history}) => {
           return estadoValidacion
       }
       const validarRegistros = (registros) => {
+          console.log(registros);
 
       }
 
@@ -93,25 +92,45 @@ export const CargueCuadroDeAreas = ({history}) => {
         <>
             <h3 id="idCuadroDeAreas" className="no-margen-inferior animate__animated animate__bounce texto-centrado">Cargue cuadro de áreas</h3>
            
-
-            <input
-                style={{display: 'none'}}
-                accept=".xls, .xlsx"                
-                id="contained-button-file"
-                /* multiple */
-                type="file"
-                
-                onChange={(e)=>fileHandler(e)}
-            />
-            <label htmlFor="contained-button-file" >
-                <Button variant="contained"  component="span" className="boton mt-10">
-                    <Icon>add_circle</Icon> Examinar
-                </Button>
-            </label>
-
             {
-                (data.rows.length > 0) && (<DataTable columns={data.cols} rows={data.rows} />)
+                (data.rows.length > 0) 
+                ? (
+                    <Button onClick={()=>{setData(initialState)}} variant="contained"  component="span" className="boton mt-10">
+                        Limpiar
+                    </Button>
+                )
+                : <>
+                    <input
+                        style={{display: 'none'}}
+                        accept=".xls, .xlsx"                
+                        id="contained-button-file"
+                        /* multiple */
+                        type="file"
+                        
+                        onChange={(e)=>fileHandler(e)}
+                    />
+                    <label htmlFor="contained-button-file" >
+                        <Button variant="contained"  component="span" className="boton mt-10">
+                            <Icon>add_circle</Icon> Examinar
+                        </Button>
+                    </label>
+                </>
             }
+            
+            <div className="grid col-2">
+                <div>
+                    {
+                        (data.rows.length > 0) && (<DataTable columns={data.cols} rows={data.rows} />)
+                    }
+                </div>
+                {   data.cantidadRegistros > 0 &&
+                    <div className="card">
+                        <p>Se importó el archivo {data.nombreArchivo}</p>
+                        <p>Se ingresaron {data.cantidadRegistros} inmuebles</p>
+                    </div>
+                }
+            </div>
+
             
             {/* <OutTable data={data.rows} columns={data.cols} tableClassName="tableSimple" tableHeaderRowClass="heading" /> */}
         </>

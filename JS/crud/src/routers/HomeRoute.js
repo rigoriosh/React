@@ -24,10 +24,10 @@ export const HomeRoute = () => {
                     
                     
                     <Switch>                            
-                        <Route  path="/inicio/prorratas" component={ProrratasRoute}/>                
-                        <Route  path="/inicio/reportes" component={ReportesRoute}/>
-                        <Route  path="/inicio/administracion" component={AdministracionRoute}/>
-                        <Redirect to="/inicio/prorratas" />
+                        <Route  path="/Inicio/Prorratas" component={ProrratasRoute}/>                
+                        <Route  path="/Inicio/Reportes" component={ReportesRoute}/>
+                        <Route  path="/Inicio/Administracion" component={AdministracionRoute}/>
+                        <Redirect to="/Inicio/Prorratas" />
                     </Switch>                    
                 </main>
             </div>
