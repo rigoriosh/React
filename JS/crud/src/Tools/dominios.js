@@ -14,6 +14,9 @@ export const types = {
     mostrarDialog: '[alertas_mensajes] mostrarDialog',
     respuestaDialog: '[alertas_mensajes] respuestaDialog',
     resetAlertasMensajes: '[alertas_mensajes] resetAlertasMensajes',
+
+    setCargueCuadroDeAreas: '[cargue cuadro de areas]  almacena listado de inmuebles traidos desde el archivo excel',
+    resetCargueCuadroDeAreas: '[cargue cuadro de areas]  quita el listado de inmuebles traidos desde el archivo excel',
 }
 
 export const tiposCrud = {

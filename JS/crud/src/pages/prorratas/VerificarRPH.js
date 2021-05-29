@@ -7,36 +7,39 @@ import TextField from "@material-ui/core/TextField";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
+import '../../css/verificarRPH.css'
 import DataTable from "../../components/DataTable";
 import { mostrarDialog, mostrarMensaje, ocultarMensaje } from '../../Redux-actions/alertasMensajes_action';
 import { estadoLiberacion, tiposCrud, tiposDeInmuebles, tiposEstadoInmuebles } from '../../Tools/dominios';
 import Seleccionar from '../../components/Select';
+import { subirScrollBar } from '../../helpers/helperUtil';
 
 
 const configRowsTable = [
-    { id:0, tipoInmueble: '', nomenclatura: '',  etapa: '', interior:'', area:'', verificadoRPH: '',
+    { id:0, TipodeInmueble: '', Nomenclatura: '',  Etapa: '', Interior:'', AreaMt2:'', verificadoRPH: '',
         estadoInmueble: '', estadoLiberacion: ''},
   ];
 const formularioInitialState = {
-    tipoInmueble:   '',
-    nomenclatura:   '',
-    etapa:          '',
-    interior:       '',
-    area:           '',
-    verificadoRPH:   false,
+    AreaMt2:           '',
+    Etapa:          '',
+    Interior:       '',
+    Nomenclatura:   '',
+    TipodeInmueble:   '',
     estadoInmueble: tiposEstadoInmuebles.INACTIVO,
-    estadoLiberacion: estadoLiberacion.NOLIBERADO
+    estadoLiberacion: estadoLiberacion.NOLIBERADO,
+    verificadoRPH:   false,
 };
 const validacionesFomrularioInitialState = {
-    tipoInmueble: null,
-    nomenclatura: null,   
-    area: null,
+    TipodeInmueble: null,
+    Nomenclatura: null,   
+    AreaMt2: null,
     verificadoRPH: null,
     estadoInmueble: null,
 }
 const initialState = {
     modoFormulario: tiposCrud.guardar, 
-    inmuebles:[],   
+    inmuebles:[],
+    inmueblesSeleccionadosParaModificar:[],
     formulario: formularioInitialState,
     validacionesFormlario: validacionesFomrularioInitialState,
     banderaAgregarRegistro: false,
@@ -46,11 +49,11 @@ const initialState = {
 export const VerificarRPH = () => {
     console.log('in VerificarRPH');
     const configColumnasTable = [
-        {field:'tipoInmueble', headerName: 'Tipo inmueble', width: 150},
-        {field:'nomenclatura', headerName: 'Nomenclatura', width: 150},
-        {field:'etapa', headerName: 'Etapa', width: 150},
-        {field:'interior', headerName: 'Interior', width: 150},
-        {field:'area', headerName: 'Área', width: 150},
+        {field:'TipodeInmueble', headerName: 'Tipo inmueble', width: 150},
+        {field:'Nomenclatura', headerName: 'Nomenclatura', width: 150},
+        {field:'Etapa', headerName: 'Etapa', width: 150},
+        {field:'Interior', headerName: 'Interior', width: 150},
+        {field:'AreaMt2', headerName: 'Área mt2', width: 150},
         {field:'verificadoRPH', headerName: 'Verificado RPH', width: 150},
         {field:'estadoInmueble', headerName: 'Estado', width: 150},
         {field:'estadoLiberacion', headerName: 'Estado Liberación', width: 150},
@@ -65,24 +68,37 @@ export const VerificarRPH = () => {
             ),},
     ];
     const dispatch = useDispatch();
+    const {cargueCuadroDeAreas_reducer} = useSelector(state => state);
+    const {rows} = cargueCuadroDeAreas_reducer;
     const {alertas_mensajes_reducer} = useSelector(state => state);
     const {respuestaDialog} = alertas_mensajes_reducer;
     const [state, setState] = useState(initialState);
-    const {modoFormulario, formulario, validacionesFormlario, banderaAgregarRegistro, tiposInmuebles} = state;
-    const {tipoInmueble, nomenclatura, interior, etapa, area, verificadoRPH, estadoInmueble} = formulario;
+    const {modoFormulario, formulario, validacionesFormlario, banderaAgregarRegistro,
+    tiposInmuebles} = state;
+    const {TipodeInmueble, Nomenclatura, Interior, Etapa, AreaMt2, verificadoRPH, estadoInmueble} = formulario;
     const [registroSeleccionado, setRegistroSeleccionado] = useState();
-    console.log(registroSeleccionado);    
-    const [inmuebles, setInmuebles] = useState([])
+    console.log(registroSeleccionado);
+    const [inmueblesFromCargueCuadroAreas, setInmueblesFromCargueCuadroAreas] = useState([]);
+    const [inmueblesSeleccionadosParaModificar, setInmueblesSeleccionadosParaModificar] = useState([]);
 
-    /* useEffect(() => {
-        // TODO: traer data de inmuebles
-        setState({
-            ...state,
-            inmuebles:configRowsTable
-        });
+
+    
+
+    useEffect(() => {
+        // TODO: traer data de inmuebles   
+        if (rows?.length > 0) {
+            setInmueblesFromCargueCuadroAreas(dataAjustada(rows));            
+        }     
+        subirScrollBar();
         return () => { }
-    }, []) */
+    }, [])
 
+    const dataAjustada = (rows) => {//toma el cuadro de areas cargado y a cada registro le agrega los tres campos por defecto.
+        const dataAjustada = rows.map(inmueble => ({
+            ...inmueble, verificadoRPH: false, estadoLiberacion: estadoLiberacion.NOLIBERADO, estadoInmueble: tiposEstadoInmuebles.INACTIVO
+        }))
+        return dataAjustada;
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();    
@@ -111,38 +127,42 @@ export const VerificarRPH = () => {
 
     const agregarNuevoInmueble = () => {
               
-        setInmuebles( //GUARDA UN NUEVO PARÁMETRO
+        setInmueblesSeleccionadosParaModificar( //GUARDA UN NUEVO PARÁMETRO
             [   
                 { id: Date.parse(Date()), ...formulario, verificadoRPH: verificadoRPH ? 'Si' : 'No', estadoLiberacion: estadoLiberacion.NOLIBERADO },
-                ...inmuebles,
+                ...inmueblesSeleccionadosParaModificar,
             ],
         );          
         
         ocultarMostarFormulario(false);
-        dispatch(mostrarMensaje('success', 'El inmueble se agregó correctamente'));
+        dispatch(mostrarMensaje('success', 'El inmueble se agregó correctamente a la lista de modificados'));
     }
-
-    useEffect(() => {
-        setState({...state, inmuebles});
-        limpiarFormulario();  
-        return () => { }
-    }, [inmuebles])
 
     const editarInmueble = (inmuebleAeditar) => {
         console.log('editarInmueble', inmuebleAeditar);
         // poner en modo editar, cargar el formulario con la data seleccionada y mostrar formulario
-        setState({ ...state, modoFormulario: tiposCrud.editar, formulario: inmuebleAeditar, banderaAgregarRegistro: !banderaAgregarRegistro});
+        setState({ ...state, modoFormulario: tiposCrud.editar, formulario: inmuebleAeditar, banderaAgregarRegistro: true});
+        subirScrollBar();
     }
 
     const confirmacionEditarInmueble = () => {
-        const inmueblesEditados = inmuebles.map(inmueble => {
-            return inmueble.id === formulario.id ? {...formulario, verificadoRPH:  verificadoRPH ? 'Si' : 'No'}: inmueble
-        });
-        setInmuebles(inmueblesEditados);
-        setState({...state, inmuebles: inmueblesEditados});
-        limpiarFormulario();
+
+        // Quitar inmueble seleccionado de la lista inmuebles y agregar a la lista de inmueblesSeleccionadosParaModificar
+        const listaInmueblesUpdated = inmueblesFromCargueCuadroAreas.filter(inmueble => inmueble.id !== formulario.id);        
+        setInmueblesFromCargueCuadroAreas(listaInmueblesUpdated);                
+        
+        /// agregar formulario a la lista de inmueblesSeleccionadosParaModificar        
+        if(inmueblesSeleccionadosParaModificar.length < 0 || !inmueblesSeleccionadosParaModificar.includes(formulario)){            
+            setInmueblesSeleccionadosParaModificar([...inmueblesSeleccionadosParaModificar, formulario])
+        } else{           
+            const dataTemp = inmueblesSeleccionadosParaModificar.map(inmueble => {
+                return inmueble.id === formulario.id ? {...formulario, verificadoRPH:  verificadoRPH ? 'Si' : 'No'}: inmueble
+            });
+            setInmueblesSeleccionadosParaModificar(dataTemp)
+        }              
+        
         ocultarMostarFormulario(false);
-        dispatch(mostrarMensaje('success', 'El inmueble se editó correctamente'));
+        dispatch(mostrarMensaje('success', 'El inmueble se adicionó correctamente a la lista'));
     }    
 
     const eliminarInmueble = (inmuebleAEliminar) => {
@@ -152,16 +172,23 @@ export const VerificarRPH = () => {
     }
     
     const confirmacionEliminarInmueble = () => {
-        const inmueblesEditados = inmuebles.filter(inmueble => inmueble.id !== registroSeleccionado.id);                
-        setInmuebles(inmueblesEditados);
-        setState({...state, inmuebles: inmueblesEditados});
-        limpiarFormulario();
+        const inmueblesEditados = inmueblesFromCargueCuadroAreas.filter(inmueble => inmueble.id !== formulario.id);                
+        setInmueblesFromCargueCuadroAreas(inmueblesEditados);        
+
+        const inmueblesEditadosParaModificar = inmueblesSeleccionadosParaModificar.filter(inmueble => inmueble.id !== formulario.id);                
+        setInmueblesSeleccionadosParaModificar(inmueblesEditadosParaModificar);        
+        
         ocultarMostarFormulario(false);
         dispatch(mostrarMensaje('success', 'El inmueble se eliminó correctamente'));
     }
 
     const limpiarFormulario = () => { setState({...state, formulario: formularioInitialState, modoFormulario: tiposCrud.guardar, banderaAgregarRegistro: false}); }
     const ocultarMostarFormulario = (estado) => {setState( { ...state, banderaAgregarRegistro: estado })}
+
+    useEffect(() => {//limpia el formulario despues de aver actualizado inmueblesSeleccionadosParaModificar
+        limpiarFormulario();  
+        return () => { }
+    }, [inmueblesSeleccionadosParaModificar])
 
     useEffect(() => {//SE ENCARGA DE TOMAR LA CONFIRMACIÓN DEL USUARIO Y ELIMINAR O EDITAR EL PARÁMETRO DEL SISTEMA
         console.log(registroSeleccionado)
@@ -174,76 +201,93 @@ export const VerificarRPH = () => {
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [respuestaDialog])
-    console.log(state, inmuebles);
+    console.log(state, inmueblesFromCargueCuadroAreas, inmueblesSeleccionadosParaModificar);
     return (
         <>
             <h3 className="no-margen-inferior animate__animated animate__bounce texto-centrado">Verificar RPH</h3>
-            <div className="contenedor-min">
-                <form onSubmit={handleSubmit} className="w50 card">
-                    <FormControlLabel control={ <Switch checked={!banderaAgregarRegistro} onChange={()=>ocultarMostarFormulario(!banderaAgregarRegistro)} name="checkedA" /> }
-                        label="Agregar inmueble" 
-                    />
-                    {
-                        banderaAgregarRegistro && 
-                        < >                             
-                            <div className="grid col-2">
-                                <div>
-                                    <Seleccionar id={"selectTipoInmueble"} label={"Tipo de inmmueble *"} optInit={"Seleccione"} options={tiposInmuebles}
-                                        valorSeleccionado={tipoInmueble} requerido={true}
-                                        handleSelect={(value)=>{setState({...state, formulario:{...formulario, tipoInmueble: value}})}}
-                                    /> 
-                                    <div className="columna1 ali-item-cent">
-                                        <TextField id="nomenclatura"  className="input no-margen-inferior" label="Nomenclatura " variant="outlined"
-                                            onChange={({target})=>{setState({...state, formulario:{...formulario, nomenclatura: target.value}})}}
-                                            value={nomenclatura} required 
-                                        />                    
-                                    </div>
+            <div className="verificarRPH-encabezado">
+                <div >
+                    <form onSubmit={handleSubmit} className="card">                    
+                        <FormControlLabel control={ <Switch checked={!banderaAgregarRegistro} onChange={()=>ocultarMostarFormulario(!banderaAgregarRegistro)} name="checkedA" /> }
+                            label="Agregar inmueble" 
+                        />
+                        {
+                            banderaAgregarRegistro && 
+                            < >                             
+                                <div className="grid col-2">
+                                    <div>
+                                        <Seleccionar id={"selectTipodeInmueble"} label={"Tipo de inmmueble *"} optInit={"Seleccione"} options={tiposInmuebles}
+                                            valorSeleccionado={TipodeInmueble} requerido={true}
+                                            handleSelect={(value)=>{setState({...state, formulario:{...formulario, TipodeInmueble: value}})}}
+                                        /> 
+                                        <div className="columna1 ali-item-cent">
+                                            <TextField id="Nomenclatura"  className="input no-margen-inferior" label="Nomenclatura " variant="outlined"
+                                                onChange={({target})=>{setState({...state, formulario:{...formulario, Nomenclatura: target.value}})}}
+                                                value={Nomenclatura} required 
+                                            />                    
+                                        </div>
 
-                                    <div className="columna1 ali-item-cent ">
-                                        <TextField id="interior" className="input no-margen-inferior h100" label="Interior" variant="outlined"
-                                            value={interior} /* multiline */
-                                            onChange={({target})=>{setState({...state, formulario:{...formulario, interior: target.value}})}}                                    
-                                        />                    
-                                    </div>                                    
+                                        <div className="columna1 ali-item-cent ">
+                                            <TextField id="Interior" className="input no-margen-inferior h100" label="Interior" variant="outlined"
+                                                value={Interior} /* multiline */
+                                                onChange={({target})=>{setState({...state, formulario:{...formulario, Interior: target.value}})}}                                    
+                                            />                    
+                                        </div>                                    
+                                    </div>
+                                    <div>
+                                        <div className="columna1 ali-item-cent ">
+                                            <TextField id="Etapa" className="input no-margen-inferior h100" label="Etapa" variant="outlined"
+                                                value={Etapa} /* multiline requerido*/
+                                                onChange={({target})=>{setState({...state, formulario:{...formulario, Etapa: target.value}})}}                                    
+                                            />                    
+                                        </div>
+                                        <div className="columna1 ali-item-cent ">
+                                            <TextField id="AreaMt2" className="input no-margen-inferior h100" label="Area " variant="outlined"
+                                                value={AreaMt2} required
+                                                onChange={({target})=>{setState({...state, formulario:{...formulario, AreaMt2: target.value}})}}                                    
+                                            />                    
+                                        </div>
+                                        <div className="columna1 ali-item-cent ">
+                                            <TextField id="estadoInmueble" className="input no-margen-inferior h100" label="Estado del inmueble" variant="outlined"
+                                                value={estadoInmueble} disabled 
+                                                onChange={({target})=>{setState({...state, formulario:{...formulario, estadoInmueble: target.value}})}}                                    
+                                            />                    
+                                        </div>
+                                        <div className="columna1 ali-item-cent ">
+                                            <label><input type="checkbox" id="verificadoRPH" checked={(verificadoRPH === 'Si' || verificadoRPH === true) ? true : false}
+                                                onChange={({target})=>{setState({...state, formulario:{...formulario, verificadoRPH: target.checked}})}}/> Verificado RPH</label>                                
+                                        </div>
+                                        
+
+                                    </div>                            
                                 </div>
-                                <div>
-                                    <div className="columna1 ali-item-cent ">
-                                        <TextField id="etapa" className="input no-margen-inferior h100" label="Etapa" variant="outlined"
-                                            value={etapa} /* multiline requerido*/
-                                            onChange={({target})=>{setState({...state, formulario:{...formulario, etapa: target.value}})}}                                    
-                                        />                    
-                                    </div>
-                                    <div className="columna1 ali-item-cent ">
-                                        <TextField id="area" className="input no-margen-inferior h100" label="Area " variant="outlined"
-                                            value={area} required
-                                            onChange={({target})=>{setState({...state, formulario:{...formulario, area: target.value}})}}                                    
-                                        />                    
-                                    </div>
-                                    <div className="columna1 ali-item-cent ">
-                                        <TextField id="estadoInmueble" className="input no-margen-inferior h100" label="Estado del inmueble" variant="outlined"
-                                            value={estadoInmueble} disabled 
-                                            onChange={({target})=>{setState({...state, formulario:{...formulario, estadoInmueble: target.value}})}}                                    
-                                        />                    
-                                    </div>
-                                    <div className="columna1 ali-item-cent ">
-                                        <label><input type="checkbox" id="verificadoRPH" checked={verificadoRPH}
-                                            onChange={({target})=>{setState({...state, formulario:{...formulario, verificadoRPH: target.checked}})}}/> Verificado RPH</label>                                
-                                    </div>
-                                    
-
+                                <div className="elem-derecha btnIngresar mt-10">
+                                    <button className="boton" type="submit"> {(modoFormulario === tiposCrud.editar) ? 'Adicionar a modificados' : modoFormulario} </button>
+                                    <button className="boton ml-10" type="reset" onClick={limpiarFormulario}> Nuevo </button>
                                 </div>                            
-                            </div>
-                            <div className="elem-derecha btnIngresar mt-10">
-                                <button className="boton" type="submit"> {modoFormulario} </button>
-                                <button className="boton ml-10" type="reset" onClick={limpiarFormulario}> Nuevo </button>
-                            </div>                            
-                            
-                        </>
-                    }
-                    
-                </form>                
+                                
+                            </>
+                        }
+                        
+                    </form>                
+                </div>                    
+                <div className="aligSelfEnd"><button className="boton ml-10" type="reset" > Actualizar </button></div>
             </div>
-            <DataTable columns={configColumnasTable} rows={inmuebles} setRegistroSeleccionado={setRegistroSeleccionado}/>
+            {
+                (inmueblesFromCargueCuadroAreas?.length > 0) &&
+                <DataTable columns={configColumnasTable} rows={inmueblesFromCargueCuadroAreas} setRegistroSeleccionado={setRegistroSeleccionado}/>
+            }
+            {
+                (inmueblesSeleccionadosParaModificar?.length > 0) && 
+                    <>
+                        <h3 className="no-margen-inferior animate__animated animate__bounce texto-centrado">Inmuebles seleccionados para modificar</h3>
+                        <DataTable columns={configColumnasTable} rows={inmueblesSeleccionadosParaModificar} setRegistroSeleccionado={setRegistroSeleccionado}/>
+                    </>
+            }
         </>
     )
 }
+
+
+
+    

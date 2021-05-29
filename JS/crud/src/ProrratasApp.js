@@ -10,7 +10,7 @@ import DialogComponent from './components/DialogComponent';
 import SnackbarComponent from './components/Snackbar';
 
 
-const Prorratas = props => {
+const ProrratasApp = props => {
     const theme = createMuiTheme({
         palette: {
           primary: { main: '#1976d2' },
@@ -37,4 +37,4 @@ const Prorratas = props => {
 }
 
 
-export default Prorratas
+export default ProrratasApp
