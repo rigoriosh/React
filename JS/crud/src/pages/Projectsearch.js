@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { setProyecto } from '../Redux-actions/proyecto_actions';
 import { setHijoBreadCrumb, /* setPadreBreadCrumb */ } from '../Redux-actions/breadcrumb_action';
 import { rutasModulos } from '../Tools/rutas';
+import { ubicarScrollBar } from '../helpers/helperUtil';
 
 const Projectsearch = ({history}) => {
     const refTipoIdentificacion = useRef();
@@ -63,6 +64,7 @@ const Projectsearch = ({history}) => {
     // onInit
     useEffect(() => {
         refTipoIdentificacion.current.focus();
+        ubicarScrollBar(-10);
         return () => {}
     }, []);
 

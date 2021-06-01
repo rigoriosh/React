@@ -2,10 +2,10 @@ import * as React from "react";
 import { DataGrid } from "@material-ui/data-grid";
 import PropTypes from "prop-types";
 
-/* const filterModel = {
+const filterModel = {
     items: [{ columnField: 'rating', value: '3.5', operatorValue: '>=' }],
-  }; */
-const DataTable = ({ columns, rows, setRegistroSeleccionado, clase='' }) => {
+  };
+const DataTable = ({ columns, rows, setRegistroSeleccionado, clase='', checkboxSelection = false }) => {
   /* 
     const columns = [
       { field: "id",        headerName: "Tipo de Identificación",         width: 200 },
@@ -29,11 +29,11 @@ const DataTable = ({ columns, rows, setRegistroSeleccionado, clase='' }) => {
 
   return (
     <DataGrid
-      /* filterModel={filterModel} */
+      filterModel={filterModel}
       rows={rows}
       columns={columns}
       pageSize={20}
-      checkboxSelection={false}
+      checkboxSelection={checkboxSelection}
       rowHeight={25}
       autoHeight
       onCellClick={({ row }) => {
@@ -47,7 +47,7 @@ const DataTable = ({ columns, rows, setRegistroSeleccionado, clase='' }) => {
 DataTable.propTypes = {
   columns: PropTypes.array.isRequired,
   rows: PropTypes.array.isRequired,
-  setRegistroSeleccionado: PropTypes.func,
+  //setRegistroSeleccionado: PropTypes.func,
 };
 
 export default DataTable;

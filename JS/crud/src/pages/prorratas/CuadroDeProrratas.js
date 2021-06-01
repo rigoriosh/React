@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../../css/cuadroProrratas.css';
 import DataTable from '../../components/DataTable';
 import { InformaciónDelProyecto } from './InformaciónDelProyecto'
+import { ubicarScrollBar } from '../../helpers/helperUtil';
 
 export const CuadroDeProrratas = () => {
 
@@ -65,6 +66,11 @@ export const CuadroDeProrratas = () => {
             migrado: 'sdfsf',
         },
       ]
+
+      useEffect(() => {
+          ubicarScrollBar();
+          return () => {}
+      }, [])
     return (
         <>
             <InformaciónDelProyecto/>  

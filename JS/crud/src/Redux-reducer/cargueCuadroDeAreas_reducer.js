@@ -1,13 +1,23 @@
 import { types } from "../Tools/dominios";
 
-const initialState = [];
+const initialState = {
+    cols: [],
+    rows: [],
+    nombreArchivo: '',
+    cantidadRegistros: 0
+};
 
-export const cargueCuadroDeAreas_reducer = (state = initialState, action) => {
-    switch (action.type) {
+export const cargueCuadroDeAreas_reducer = (state = initialState, { type, payload }) => {
+    switch (type) {
         case types.setCargueCuadroDeAreas:
-            return action.payload
+            return payload
+        case types.updateCargueCuadroDeAreas:
+            return {
+                ...state,
+                rows: payload
+            }
         case types.resetCargueCuadroDeAreas:
-            return []
+            return initialState
         default:
             return state;
     }

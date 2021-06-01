@@ -16,6 +16,7 @@ export const types = {
     resetAlertasMensajes: '[alertas_mensajes] resetAlertasMensajes',
 
     setCargueCuadroDeAreas: '[cargue cuadro de areas]  almacena listado de inmuebles traidos desde el archivo excel',
+    updateCargueCuadroDeAreas: '[cargue cuadro de areas]  quita el listado de inmuebles traidos desde el archivo excel',
     resetCargueCuadroDeAreas: '[cargue cuadro de areas]  quita el listado de inmuebles traidos desde el archivo excel',
 }
 

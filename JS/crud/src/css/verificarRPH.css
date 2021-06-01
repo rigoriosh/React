@@ -2,3 +2,7 @@
     display: flex;
     justify-content: space-between;
 }
+
+.MuiDataGrid-root.MuiDataGrid-autoHeight {
+    font-size: xx-small !important;
+}

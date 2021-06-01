@@ -672,6 +672,14 @@ form .input:focus {
 	* HELPERS *
 ==================== */
 
+.displayFlex {
+    display: flex;
+}
+
+.justiContFlexEnd {
+    justify-content: flex-end;
+}
+
 .no-margen {
     margin: 0
 }
@@ -774,6 +782,10 @@ form .input:focus {
 
 .fzm {
     font-size: medium;
+}
+
+.fxxs {
+    font-size: xx-small !important;
 }
 
 

@@ -73,10 +73,10 @@ export const verOtraImagen = () => { // genera imagen para el captcha
 }
 
 
-export const subirScrollBar = () => {
+export const ubicarScrollBar = (posicion = 0) => {
     window.scroll({
-        top: 0,
-        left: 100,
+        top: posicion,
+        //left: 100,
         behavior: 'smooth'
     });
 }

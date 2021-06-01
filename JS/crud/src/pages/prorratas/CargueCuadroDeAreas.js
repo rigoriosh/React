@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { mostrarMensaje } from "../../Redux-actions/alertasMensajes_action";
 import DataTable from "../../components/DataTable";
 import { setCargueCuadroDeAreas } from "../../Redux-actions/cargueCuadroDeAreas_action";
-import { subirScrollBar } from "../../helpers/helperUtil";
+import { ubicarScrollBar } from "../../helpers/helperUtil";
 
 const nombresColumnas = [
   "Tipo de Inmueble",
@@ -41,11 +41,11 @@ export const CargueCuadroDeAreas = ({ history }) => {
           dispatch(mostrarMensaje("warning", `${validaciones}`)); //Genera mensaje de error
           history.replace(history.location.pathname); //limpie la memoria del onchage y pueda cargar el mismo archivo con el mismo nombre
         } else {
-          const updateCols = resp.rows[0].map((e, i) => {//contrulle el objeto columnas para ser renderizado
+          const updateCols = resp.rows[0].map((e, i) => {//contrulle el objeto columnas para ser renderizado            
             return {
               field: e.split(" ").join(""),
               headerName: e,
-              width: e.length * 20,
+              width: (40 + e.length) * 2.25,
             };
           });
           const namesCols = updateCols.map((nc) => nc.field);//capatura el nombre de las columnas en un array
@@ -90,7 +90,7 @@ export const CargueCuadroDeAreas = ({ history }) => {
     return estadoValidacion;
   };
   const validarRegistros = (registros) => {
-    console.log(registros); // pendiente por si se debe realizar valdiaciones de cada registro desde el front
+    console.log(registros); // pendiente por si se debe realizar validaciones de cada registro desde el front
   };
   
   useEffect(() => {
@@ -100,7 +100,7 @@ export const CargueCuadroDeAreas = ({ history }) => {
   }, [data])
 
   useEffect(() => {
-    subirScrollBar();    
+    ubicarScrollBar();    
     return () => {}
   }, [])
 

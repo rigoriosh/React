@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import '../css/login.css'
 import banner from '../assets/images/Banner.png'
-import { verOtraImagen } from '../helpers/helperUtil';
+import { ubicarScrollBar, verOtraImagen } from '../helpers/helperUtil';
 import { startLogin } from '../Redux-actions/login_action';
 //import PropTypes from 'prop-types'
 
@@ -24,6 +24,7 @@ const Login = props => {
         console.log(captChat)
         setCaptchat(captChat);
         refNombreUsuario.current.focus();
+        ubicarScrollBar();
         return () => { }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
