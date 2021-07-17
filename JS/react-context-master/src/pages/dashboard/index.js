@@ -1,19 +1,22 @@
 import React from 'react';
 import Layout from '../../components/layout';
-import { AppContextProvider } from '../../context/appContext';
+import { AppContext, AppContextProvider } from '../../context/appContext';
 
 class Dashboard extends React.Component {
     render() {
+
+        console.log('context: ', this.context)
+        const {nombre} = this.context;
         return (
-            <AppContextProvider>
+            
                 <Layout>
                     <div>
-                        dashboard
+                        dashboard {nombre}
                     </div>
                 </Layout>
-            </AppContextProvider>
         );
     }
 }
 
+Dashboard.contextType = AppContext;
 export default Dashboard;

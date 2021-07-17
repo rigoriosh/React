@@ -11,28 +11,34 @@ export class AppContextProvider extends React.Component {
 
         this.state = {
             isModalOpen: false,
+            nombre: ''
         };
-
         this.toggleModal = this.toggleModal.bind(this);
+        this.updateContext = this.updateContext.bind(this);
     }
 
     toggleModal() {
+        console.log(444)
         this.setState({ isModalOpen: !this.state.isModalOpen });
     }
 
+    updateContext(keys,values){
+        console.log(keys,values)
+        keys.forEach((element, item) => {
+            this.setState({...this.state, [element]: values[item]})
+        });
+    }
+
     render() {
-        const {
-            children,
-        } = this.props;
-        const {
-            isModalOpen,
-        } = this.state;
+        const { children, } = this.props;
+        const { isModalOpen, nombre} = this.state;
 
         return (
             <AppContext.Provider
                 value={{
-                    isModalOpen,
+                    isModalOpen, nombre, 
                     toggleModal: this.toggleModal,
+                    updateContext: this.updateContext
                 }}
             >
                 {children}

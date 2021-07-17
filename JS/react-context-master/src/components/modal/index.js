@@ -13,9 +13,10 @@ class Modal extends React.Component {
             <div
                 className="modal-container"
                 onClick={(e) => {
-                    if (e.target.className === 'modal-container') {
+                    /* if (e.target.className === 'modal-container') { */
+                        console.log(555)
                         toggleModal();
-                    }
+                   /*  } */
                 }}
             >
                 <div className="modal">

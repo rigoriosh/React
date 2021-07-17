@@ -30,6 +30,9 @@ class Navbar extends React.Component {
                 >
                     Modal
                 </a>
+                <Link to="/rigo" className={`item ${match.path === '/rigo' ? 'active' : ''}`}>
+                    GoRigoGo
+                </Link>
             </div>
         );
     }
