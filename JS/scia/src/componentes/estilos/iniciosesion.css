@@ -1,0 +1,50 @@
+.marcoBordeado {
+    border-radius: 8px;
+    padding: 20px;
+    border-top: 2px solid #1d647b;
+    border-left: 2px solid #1d647b;
+    background-image: linear-gradient(to right,#65a6bd, #69a2bb);
+}
+
+.textoBlanco{
+  color: white;
+  font-size: 20px;
+}
+
+
+
+input:invalid{
+  color: red;
+}
+
+input:invalid+span:after {
+  margin-left: -5px;
+  position:absolute;
+  content: 'x';
+  color: red;
+  font-size: 20px;
+  font: bold;
+}
+
+input:required:invalid {
+  border-color: red;
+}
+
+
+
+input:valid{
+  color: green;
+}
+
+input:valid+span:after {
+  margin-left: -10px;
+  position:absolute;
+  content: '✓';
+  color:green;
+  font-size: 30px;
+  font: bold;
+}
+
+input:required:valid {
+  border-color: green;
+}
