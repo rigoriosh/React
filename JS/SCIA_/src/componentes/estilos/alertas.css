@@ -1,0 +1,26 @@
+#contenedorAlertas{
+    min-width: 19rem;
+    padding: 0px;
+    font-size: 0.85rem;
+    background-color:#333689;
+}
+
+#btnCerrar{
+    padding-left: 7px;
+    float: right;
+    font-size: 1rem;
+    color: red;
+}
+
+#msjSinNotificacion{
+    color: white;
+    font-size: 1.3rem;
+    border: 1px solid white;
+    padding: 5px;
+    margin: 5px;
+}
+
+.numeroDeNotificaciones{
+    font-size: 0.7rem;
+    float: left;
+}

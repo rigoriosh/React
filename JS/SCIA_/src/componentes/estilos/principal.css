@@ -1,0 +1,16 @@
+.colorTexto{
+    color: #333689 !important;
+}
+
+.logo{
+    width: 137px;
+    height: 56px;
+  }
+
+.fotoUsuario{
+    width: 30px;
+    height: 30px;
+    border: 1px solid #333689;
+    border-radius: 30%;
+    padding: 1px;
+}

@@ -1,4 +1,4 @@
-import Steps from "../actividades/componentes/Steps"
+import React from 'react'
 import { Actividad } from "../actividades/Actividad"
 
 
@@ -9,7 +9,7 @@ function objeto (){
 }*/
 
     return(
-        <div>
+        <div style={{height:'100%'}}>
             <div>{`Bienvendio a la homepage`}</div>
             <Actividad/>
         </div>

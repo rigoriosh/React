@@ -1,0 +1,35 @@
+.tamanoImg{
+    width: 2rem;
+    height: 2rem;
+   
+}
+
+.tamanoLetraImg{
+    font-size: 0.6rem;
+}
+
+.botonesSuperior{
+    margin-right: 0px;
+}
+
+.colorRed{
+    color: red;
+}
+
+.td{
+    vertical-align: middle;
+    padding: 0px;
+    border: solid 1px black; 
+    font-size: 0.8rem;
+    line-height: 0.9;
+}
+
+.th{
+    background-color: #d4d4d4 !important;
+    font-weight: bold;
+    line-height: 1;
+}
+
+#table{
+    overflow: scroll;
+}

@@ -43,10 +43,10 @@ export default function Steps({updateStateActividades, stateActividades}) {
   //const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
 
-  const handleNext = () => {
+  const handleNext = (state) => {
     //setActiveStep((prevActiveStep) => prevActiveStep + 1);
     updateStateActividades('step', (step + 1))
-    //console.log(11, (activeStep))
+    console.log(state)
   };
 
   const handleBack = () => {
@@ -61,7 +61,7 @@ export default function Steps({updateStateActividades, stateActividades}) {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{position:'relative', bottom:'-120', paddingRight:'0px'}}>
       
       <div>
         {step === steps.length ? (
@@ -80,7 +80,7 @@ export default function Steps({updateStateActividades, stateActividades}) {
               >
                 Atras
               </Button>
-              <Button variant="contained" color="primary" onClick={handleNext}>
+              <Button variant="contained" color="primary" onClick={()=>handleNext(step === steps.length - 1 ? 'Guardar' : 'Siguiente/Guardar')}>
                 {step === steps.length - 1 ? 'Guardar' : 'Siguiente/Guardar'}
               </Button>
             </div>

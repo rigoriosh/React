@@ -1,0 +1,36 @@
+#onLine{
+    border-end-end-radius: 5px;
+    border-end-start-radius: 5px;
+    border-start-end-radius: 5px;
+    border-start-start-radius: 5px;
+    padding: 5px;
+    border: 1px solid #333689;
+    color: #333689;
+    background-color: #dbead5;
+}
+
+#circuloOnLine{
+    color: #6eaa5e;
+    border-radius: 50%;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+
+#offLine{
+    border-end-end-radius: 5px;
+    border-end-start-radius: 5px;
+    border-start-end-radius: 5px;
+    border-start-start-radius: 5px;
+    padding: 5px;
+    border: 1px solid #333689;
+    color: #333689;
+    background-color: #ffdfd4;
+}
+
+#circuloOffLine{
+    color: #ff7b5a;
+    border-radius: 50%;
+    margin-right: 5px;
+    margin-left: 5px;
+}
