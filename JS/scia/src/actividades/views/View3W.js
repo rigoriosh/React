@@ -22,11 +22,9 @@ export const View3W = () => {
             </div>
             <div style={estilos.fila}>
                 <div>
-                    <p>inicio Planeado: 21-mar-21</p>
+                    <p style={{fontSize:'small'}}>inicio Planeado: 21-mar-21   Terminó Planeado: 5-abr-21 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dignissimos rem, atque laboriosam doloremque distinctio molestias pariatur a non et maxime quibusdam reiciendis? Dolorem, totam necessitatibus tenetur quae ex maiores eveniet?</p>
                 </div>
-                <div>
-                    <p>Terminó Planeado: 5-abr-21</p>
-                </div>
+                
             </div>
             <div style={estilos.fila}>
                 <div><p>Unidad de medida</p></div>

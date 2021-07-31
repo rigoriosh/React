@@ -8,7 +8,7 @@ export const ModalCalendar = ({openModalCalendar, setOpenModalCalendar, handlein
             
             <Modal.Body>
                 <div className="input-group mb-3">
-                    <input onChange={({target})=>handleinputsChange(target)} name="scheduledStart" type="date" className="form-control" 
+                    <input onChange={({target})=>handleinputsChange(target)} name="calendar" type="date" className="form-control" 
                         aria-label="CantidadProgramda" aria-describedby="basic-addon1"/>
                 </div>                
             </Modal.Body>

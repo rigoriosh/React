@@ -61,13 +61,13 @@ export default function Steps({updateStateActividades, stateActividades}) {
   };
 
   return (
-    <div className={classes.root} style={{position:'relative', bottom:'-120', paddingRight:'0px'}}>
+    <div className={classes.root} style={{position:'fixed', bottom:'0', paddingRight:'0px'}}>
       
       <div>
         {step === steps.length ? (
           <div>
             <Typography className={classes.instructions}>All steps completed</Typography>
-            <Button onClick={handleReset}>Reset</Button>
+            <Button className={classes.backButton} onClick={handleReset}>Reset</Button>
           </div>
         ) : (
           <div >
@@ -78,7 +78,7 @@ export default function Steps({updateStateActividades, stateActividades}) {
                 onClick={handleBack}
                 className={classes.backButton}
               >
-                Atras
+                Eliminar Act Campo
               </Button>
               <Button variant="contained" color="primary" onClick={()=>handleNext(step === steps.length - 1 ? 'Guardar' : 'Siguiente/Guardar')}>
                 {step === steps.length - 1 ? 'Guardar' : 'Siguiente/Guardar'}
