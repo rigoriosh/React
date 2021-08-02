@@ -61,7 +61,7 @@ export default function Steps({updateStateActividades, stateActividades}) {
   };
 
   return (
-    <div className={classes.root} style={{position:'fixed', bottom:'0', paddingRight:'0px'}}>
+    <div className={classes.root} style={{position:'relative', bottom:'0', paddingRight:'0px', marginTop:'20px'}}>
       
       <div>
         {step === steps.length ? (

@@ -28,8 +28,10 @@ export const Actividad = () => {
             updateStateActividades('titlePage', 'Actividad 3W - { Estado }');
         }else if(step === 1){
             updateStateActividades('titlePage', 'Recursos Actividad');
-        }else {
+        }else if(step === 2){
             updateStateActividades('titlePage', 'Variables Cumplidas');
+        }else {
+            updateStateActividades('titlePage', '');
         }
         return () => { }
     }, [step])
@@ -37,11 +39,14 @@ export const Actividad = () => {
     
     
     return (
-        <div style={{backgroundColor:'aliceblue', paddingTop:'10px', height:'110%'}}>
+        <div style={{backgroundColor:'aliceblue', paddingTop:'10px'/* , height:'100%' */}}>
             <div style={{display:'flex', /* justifyContent:'space-around', */ alignItems:'center', marginBottom:'20px'}}>
                 
                 <p>{titlePage}</p>
-                <button onClick={cerrar} type="button" class="btn btn-outline-danger btn-sm" style={{position:'absolute', right:'10px'}}>Cerrar</button>
+                {
+                    step < 3 && <button onClick={cerrar} type="button" class="btn btn-outline-danger btn-sm" style={{position:'absolute', right:'10px'}}>Cerrar</button>
+                }
+                
             </div>
             {
                 (step === 0)  && <View3W/>

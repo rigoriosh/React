@@ -41,10 +41,16 @@ export const ViewVariables = () => {
         : `Observación de no cumplimiento de variable(s)`
         
     }
+    const textObservaciones = () => {
+        return (personas && HSE && Documentos && Calidad && Area && Materiales && Herramientas && Equipos)
+        ? `Por tando; la actividad "descripción de la actividad", cambia de estado a "Programada"`
+        : `Observaciones`
+        
+    }
     return (
-        <div>
-            <p>{titleView()}</p>
-            <div style={{display:'flex', justifyContent:'space-around'}}>
+        <div >
+            <p style={{height:'70px'}}>{titleView()}</p>
+            <div style={{display:'flex', justifyContent:'space-around', marginTop:'15px', marginBottom:'15px'}}>
                 <div>
                     <div className="form-check form-switch">
                         <label className="form-check-label" htmlFor="personas" style={{color:personas?'green':'red', fontWeight:'bold'}}>Personas</label>
@@ -82,8 +88,10 @@ export const ViewVariables = () => {
                     </div>
                 </div>
             </div>
+            <p>{textObservaciones()}</p>
             <div className="input-group">
-                <textarea onChange={({target})=>updateChecksFormulario(target)} name="observations" className="form-control" aria-label="observations" placeholder={observationsPlaceHolder} style={{height: "100px"}}></textarea>
+                <textarea onChange={({target})=>updateChecksFormulario(target)} name="observations" className="form-control" aria-label="observations" 
+                    placeholder={observationsPlaceHolder()} style={{height: "100px"}}></textarea>
             </div>
         </div>
     )

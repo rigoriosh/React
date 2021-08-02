@@ -2,9 +2,9 @@
     background-color: transparent;
 }
 
-.makeStyles-root-1{
-    width: 95% !important;
-}
+/* .makeStyles-root-1{
+    width: 85% !important;
+} */
 
 /* .form-check-input{
     background-color: red !important;
@@ -25,4 +25,9 @@ p {
 
 .cursor{
     cursor: pointer;
+}
+
+.MuiDataGrid-root{
+    letter-spacing:0px !important;
+    font-size: 0.71rem !important;
 }
