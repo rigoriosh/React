@@ -10,11 +10,11 @@ export const Paginador = () => {
             {/* <Pagination.First /> */}
             {/* <Pagination.Prev /> */}
             <Pagination.Item onClick={()=>getPaginationSelected('<<')}>{'<<'}</Pagination.Item>
-            <Pagination.Item onClick={()=>getPaginationSelected(1)}>{1}</Pagination.Item>
-            <Pagination.Item onClick={()=>getPaginationSelected(2)}>{2}</Pagination.Item>
-            <Pagination.Item onClick={()=>getPaginationSelected(3)}>{3}</Pagination.Item>
-            <Pagination.Item onClick={()=>getPaginationSelected('...')}>{'...'}</Pagination.Item>
-            <Pagination.Item onClick={()=>getPaginationSelected('n')}>{'n'}</Pagination.Item>
+            <Pagination.Item onClick={()=>getPaginationSelected('Inicio')}>{'Inicio'}</Pagination.Item>
+            <Pagination.Item onClick={()=>getPaginationSelected('Ejecucion')}>{'Ejecución'}</Pagination.Item>
+            <Pagination.Item onClick={()=>getPaginationSelected('Fin')}>{'Fin'}</Pagination.Item>
+            <Pagination.Item onClick={()=>getPaginationSelected('Relevante')}>{'Relev'}</Pagination.Item>
+            <Pagination.Item onClick={()=>getPaginationSelected('Amarillado')}>{'Amarillo'}</Pagination.Item>
             <Pagination.Item onClick={()=>getPaginationSelected('>>')}>{'>>'}</Pagination.Item>
             {/* <Pagination.Ellipsis /> */}
 

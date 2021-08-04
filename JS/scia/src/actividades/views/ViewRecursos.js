@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import { BsSearch, BsXSquare, BsPlusSquare, BsPencilSquare } from "react-icons/bs";
-import { FaEraser, FaSave } from "react-icons/fa";
+import { BsSearch, /* BsXSquare, */ BsPlusSquare, BsPencilSquare } from "react-icons/bs";
+import { FaEraser, /* FaSave */ } from "react-icons/fa";
 import { IconContext } from "react-icons";
 
 //import AlarmIcon from '@material-ui/icons/Alarm';
 
 //import { ModalCalendar } from '../componentes/ModalCalendar';
-import { DataTable_2 } from '../componentes/DataTable_2';
+import { DataTable2 } from '../componentes/DataTable2';
 //import { DataTable_1 } from '../componentes/DataTable_1';
-import { ModalForm_1 } from '../componentes/ModalForm_1';
+import { ModalForm1 } from '../componentes/ModalForm1';
 
 
 
@@ -61,10 +61,10 @@ export const ViewRecursos = ({updateStateActividades}) => {
                 </IconContext.Provider>
             </div>
             <div style={{overflow: 'scroll'}}>
-                <DataTable_2/>
+                <DataTable2/>
                 {/* <DataTable_1/> */}
             </div>
-            <ModalForm_1 openModal={openModalForm} setOpenModal={setOpenModalForm}/>
+            <ModalForm1 openModal={openModalForm} setOpenModal={setOpenModalForm}/>
             
         </div>
     )

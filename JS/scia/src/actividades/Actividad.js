@@ -15,6 +15,7 @@ export const Actividad = () => {
 
     const {step, titlePage} = stateActividades;
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const updateStateActividades = (variable, valor)=>{
         setStateActividades({...stateActividades, [variable]:valor});
     }
@@ -34,6 +35,7 @@ export const Actividad = () => {
             updateStateActividades('titlePage', '');
         }
         return () => { }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [step])
 
     

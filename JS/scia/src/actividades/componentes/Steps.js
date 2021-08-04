@@ -23,6 +23,7 @@ function getSteps() {
   return ['1', '2', '3'];
 }
 
+// eslint-disable-next-line no-unused-vars
 function getStepContent(stepIndex) {
   switch (stepIndex) {
     case 0:

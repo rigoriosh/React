@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import {Table} from 'react-bootstrap'
-import { Paginador } from '../componentes/Paginador';
+import { Paginador } from './Paginador';
 import { useTable } from 'react-table'
 import IconButton from '@material-ui/core/IconButton';
 import TodayIcon from '@material-ui/icons/Today';
 import { ModalCalendar } from './ModalCalendar';
 
-export const DataTable_1 = () => {
+export const DataTable1 = () => {
 
     const [openModalCalendar, setOpenModalCalendar] = useState(false);
     const [columns, setColumns] = useState([

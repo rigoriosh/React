@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { FaKey } from 'react-icons/fa'
 import Popup from './recordarclavepopup'
-import { ipPublica, NombreDispositivo, TipoClienteAccede } from '../../componentes/datosApiRest'
+import { /* ipPublica, */ NombreDispositivo, TipoClienteAccede } from '../../componentes/datosApiRest'
 
 const RecordarClave = (props) => {
 

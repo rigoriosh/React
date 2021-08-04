@@ -17,7 +17,7 @@ export const ViewVariables = () => {
             }
         }
     );
-    const {titlePag, formulario} = stateVariablesCumplidas;
+    const {/* titlePag, */ formulario} = stateVariablesCumplidas;
     const {personas, HSE, Documentos, Calidad, Area, Materiales, Herramientas, Equipos} = formulario;
     const updateChecksFormulario = (target) => {
         setStateVariablesCumplidas(

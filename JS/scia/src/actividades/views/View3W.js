@@ -43,7 +43,8 @@ export const View3W = () => {
             <div>
                 <p style={{fontWeight:'bold'}}>Inicio Programado</p>
                 <div className="input-group mb-3">
-                    <input onChange={({target})=>handleForm(target)} name="scheduledStart" type="datetime-local" className="form-control" aria-label="scheduledStart" aria-describedby="basic-addon1"/>
+                    <input onChange={({target})=>handleForm(target)} name="scheduledStart" type="datetime-local" 
+                    className="form-control" aria-label="scheduledStart" aria-describedby="basic-addon1"/>
                 </div>
             </div>
             <div>
@@ -56,6 +57,6 @@ export const View3W = () => {
     )
 }
 
-const estilos = {
+/* const estilos = {
     fila:{display:'flex', justifyContent:'space-between', alignItems:'center'}
-}
+} */
