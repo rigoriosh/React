@@ -4,6 +4,7 @@ import { View3W } from './views/View3W';
 import { ViewRecursos } from './views/ViewRecursos';
 import { ViewVariables } from './views/ViewVariables';
 import './actividades.css';
+import { ActividadRecursos } from './views/ActividadRecursos';
 
 export const Actividad = () => {
     const [stateActividades, setStateActividades] = useState(
@@ -12,7 +13,6 @@ export const Actividad = () => {
             titlePage: 'Actividad 3W - { Estado }',
         }
     );
-
     const {step, titlePage} = stateActividades;
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -28,7 +28,7 @@ export const Actividad = () => {
         if (step === 0) {
             updateStateActividades('titlePage', 'Actividad 3W - { Estado }');
         }else if(step === 1){
-            updateStateActividades('titlePage', 'Recursos Actividad');
+            updateStateActividades('titlePage', 'Tareas de Actividad');
         }else if(step === 2){
             updateStateActividades('titlePage', 'Variables Cumplidas');
         }else {
@@ -38,8 +38,6 @@ export const Actividad = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [step])
 
-    
-    
     return (
         <div style={{backgroundColor:'aliceblue', paddingTop:'10px'/* , height:'100%' */}}>
             <div style={{display:'flex', /* justifyContent:'space-around', */ alignItems:'center', marginBottom:'20px'}}>
@@ -54,7 +52,7 @@ export const Actividad = () => {
                 (step === 0)  && <View3W/>
             }
             {
-                (step === 1)  && <ViewRecursos />
+                (step === 1)  && <ActividadRecursos />
             }
             {
                 (step === 2)  && <ViewVariables/>

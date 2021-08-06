@@ -23,19 +23,6 @@ function getSteps() {
   return ['1', '2', '3'];
 }
 
-// eslint-disable-next-line no-unused-vars
-function getStepContent(stepIndex) {
-  switch (stepIndex) {
-    case 0:
-      return 'Select campaign settings...';
-    case 1:
-      return 'What is an ad group anyways?';
-    case 2:
-      return 'This is the bit I really care about!';
-    default:
-      return 'Unknown stepIndex';
-  }
-}
 
 export default function Steps({updateStateActividades, stateActividades}) {
 
@@ -67,12 +54,11 @@ export default function Steps({updateStateActividades, stateActividades}) {
       <div>
         {step === steps.length ? (
           <div>
-            <Typography className={classes.instructions}>All steps completed</Typography>
+            {/* <Typography className={classes.instructions}>All steps completed</Typography> */}
             <Button className={classes.backButton} onClick={handleReset}>Reset</Button>
           </div>
         ) : (
           <div >
-            {/* <Typography className={classes.instructions}>{getStepContent(step)}</Typography> */}
             <div style={{display:'flex', justifyContent:'space-between'}}>
               <Button color="primary" variant="contained"
                 disabled={step === 0}
@@ -82,7 +68,7 @@ export default function Steps({updateStateActividades, stateActividades}) {
                 Eliminar Act Campo
               </Button>
               <Button variant="contained" color="primary" onClick={()=>handleNext(step === steps.length - 1 ? 'Guardar' : 'Siguiente/Guardar')}>
-                {step === steps.length - 1 ? 'Guardar' : 'Siguiente/Guardar'}
+                {step === 0 ? 'Siguiente/Guardar' : 'Guardar'}
               </Button>
             </div>
           </div>

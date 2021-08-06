@@ -9,18 +9,14 @@ import { ModalCamera } from './componentes/ModalCamera';
 export const EjecutarActividad = () => {
 
     const [openCamera, setOpenCamera] = useState(false);
+    const [form, setForm] = useState({});
 
     const cerrar = () => {
         console.log('Cerrando....')
     }
-    const personEquipos = () => {
-        console.log('personEquipos....')
-    }
-    const variables = () => {
-        console.log('variables....')
-    }
     const handleForm = (target) => {
         console.log(target.name, target.value);
+        setForm({...form, [target.name]:target.value})
     }
 
     const btnSelected = (btnSlected) => {
@@ -31,12 +27,7 @@ export const EjecutarActividad = () => {
         console.log('camera');
         setOpenCamera(true)
     }
-    const search = ()=>{
-        console.log('search');
-    }
-    const trash = ()=>{
-        console.log('trash');
-    }
+    console.log('form => ', form);
     return (
         <div>
             <div style={{...estilos.fila, borderBottom:'2px #0000002b solid', marginBottom:'5px', paddingBottom:'5px'}}>
@@ -46,21 +37,19 @@ export const EjecutarActividad = () => {
             <IconContext.Provider value={{ color: "gray", className: "global-class-name", size:'4em' }}>
                 <div style={{...estilos.fila, justifyContent:'space-around'}}>
                     <div style={{textAlign:'center'}}>
-                        <FcSupport onClick={personEquipos} name="Agregar" className="cursor" title='Personal/Equipos' style={estilos.estiloIcono}/>
+                        <FcSupport onClick={()=>btnSelected('personEquipos')} name="Agregar" className="cursor" title='Personal/Equipos' style={estilos.estiloIcono}/>
                         <p style={{fontWeight:'600'}}>Personal / Eqipos</p>
                     </div>
                     <div style={{textAlign:'center'}}>
-                        <FcInspection onClick={variables} className="cursor" title='Variables' style={estilos.estiloIcono}/>
+                        <FcInspection onClick={()=>btnSelected('variables')} className="cursor" title='Variables' style={estilos.estiloIcono}/>
                         <p style={{fontWeight:'600'}}>Variables</p>
                     </div>
                 </div>
                 
             </IconContext.Provider>
+            <h3 style={{textAlign:'center'}}>{'Montaje estructura'}</h3>
             <div style={{...estilos.fila}}>
-                <h3>{'Descripción de la actividad a ejecutar'}</h3>
-            </div>
-            <div style={{...estilos.fila}}>
-                <p>{' Programación: Inicio 21-mar-21 Fin:5-abr-21Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores quod eum, temporibus ratione tempore praesentium nihil sunt autem accusantium, soluta ipsam? Laboriosam asperiores animi itaque, ab fugiat consequatur expedita perferendis.'}</p>
+                <p style={{fontSize:'small', color:'blueviolet'}}>{'Programado ejecución entre dd-MM-yyyy  y dd-MM-yyyy'}</p>
             </div>
             <div>
                     <p style={{fontWeight:'bold'}}>Fecha Ejecución</p>
@@ -70,23 +59,21 @@ export const EjecutarActividad = () => {
             </div>
             <div>
                     <p style={{fontWeight:'bold'}}>Cantidad Ejecutada</p>
-                    <div className="input-group mb-3">
-                        <input onChange={({target})=>handleForm(target)} name="amount" type="number" className="form-control" placeholder="Ingresa una cantidad" aria-label="amount" aria-describedby="basic-addon1"/>
+                    <div className=" mb-3" style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+                        <input style={{marginRight:'5px', width:'60%'}} onChange={({target})=>handleForm(target)} name="amount" type="number" className="form-control"
+                         placeholder="Ingresa una cantidad" aria-label="amount" aria-describedby="basic-addon1"/>
+                        <p style={{fontWeight:'bold'}}>UND Ingeniero</p>
                     </div>
-                    <p style={{fontWeight:'bold'}}>Unidad Medida</p>
             </div>
-            <div style={{display:'flex'}}>
+            <div style={{display:'flex', justifyContent:'space-around', marginBottom:'15px'}}>
                     <IconContext.Provider value={{ color: "gray", className: "global-class-name", size:'3em' }}>
                         <div style={{display:'flex', flexDirection:'column', }}>
                             <FcOldTimeCamera onClick={camera} className="cursor" title='Editar' style={estilos.estiloIcono} />
-                            <FcSearch onClick={search} className="cursor" title='Editar' style={estilos.estiloIcono}/>
-                            <FcFullTrash onClick={trash} className="cursor" title='Editar' style={estilos.estiloIcono}/>
+                            <FcSearch onClick={()=>btnSelected('search')} className="cursor" title='Editar' style={estilos.estiloIcono}/>
+                            <FcFullTrash onClick={()=>btnSelected('trash')} className="cursor" title='Editar' style={estilos.estiloIcono}/>
                         </div>
                     </IconContext.Provider>
-                <div style={{width:'100%', textAlign:'center', alignSelf:'center'}}>
-                    <img src={noImg} alt="./assets/" style={{width:'280px'}}/>
-                    {/* <Camera onTakePhoto = { (dataUri) => { handleTakePhoto(dataUri); } } /> */}
-                </div>
+                    <img src={form.foto ? form.foto : noImg} alt="./assets/" style={{width:'280px', borderRadius:'20px'}}/>
             </div>
             <div style={{marginBottom:'10px', textAlign:'center', width:'100%'}}>
                 <button onClick={()=>btnSelected('Inicio')} style={estilos.botonEjeAct}>{'Inicio'}</button>
@@ -109,7 +96,7 @@ export const EjecutarActividad = () => {
                 <button onClick={()=>btnSelected('Aprobar')} style={estilos.botonEjeAct}>{'Aprobar'}</button>
             </div>
 
-            <ModalCamera openModal={openCamera} setOpenModal={setOpenCamera} btnSelected={btnSelected}/>
+            <ModalCamera openModal={openCamera} setOpenModal={setOpenCamera} btnSelected={btnSelected} handleForm={handleForm}/>
         </div>
     )
 }
