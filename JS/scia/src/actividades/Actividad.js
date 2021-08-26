@@ -4,7 +4,7 @@ import { View3W } from './views/View3W';
 import { ViewRecursos } from './views/ViewRecursos';
 import { ViewVariables } from './views/ViewVariables';
 import './actividades.css';
-import { ActividadRecursos } from './views/ActividadRecursos';
+import { TareasDeActividad } from './views/TareasDeActividad';
 
 export const Actividad = () => {
     const [stateActividades, setStateActividades] = useState(
@@ -29,6 +29,8 @@ export const Actividad = () => {
             updateStateActividades('titlePage', 'Actividad 3W - { Estado }');
         }else if(step === 1){
             updateStateActividades('titlePage', 'Tareas de Actividad');
+        }else if(step === 1.1){
+            updateStateActividades('titlePage','Recursos Tarea');
         }else if(step === 2){
             updateStateActividades('titlePage', 'Variables Cumplidas');
         }else {
@@ -52,10 +54,13 @@ export const Actividad = () => {
                 (step === 0)  && <View3W/>
             }
             {
-                (step === 1)  && <ActividadRecursos />
+                (step === 1)  && <TareasDeActividad updateStateActividades={updateStateActividades}/>
             }
             {
-                (step === 2)  && <ViewVariables/>
+                (step === 1.1)  && <ViewRecursos updateStateActividades={updateStateActividades}/>
+            }
+            {
+                (step === 2 || step === 2.1)  && <ViewVariables/>
             }
             <Steps updateStateActividades={updateStateActividades} stateActividades={stateActividades}/>
             

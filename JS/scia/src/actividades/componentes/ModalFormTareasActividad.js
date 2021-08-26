@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
 //import Button from 'react-bootstrap/Button'
 import { IconContext } from "react-icons";
-import { BsXSquare } from "react-icons/bs";
-import { FaSave } from "react-icons/fa";
+import { FcApproval, FcCancel } from "react-icons/fc";
+
 import '../actividades.css';
 
 export const ModalFormTareasActividad = ({openModal, cerrarModal, registroSeleccionado }) => {
@@ -31,7 +31,11 @@ export const ModalFormTareasActividad = ({openModal, cerrarModal, registroSelecc
     
     return (
         <Modal show={openModal} onHide={cerrarModal} centered>
-            
+            <Modal.Header>
+                <div style={{textAlign:'center', width:'100%', fontWeight:'bold'}}>
+                    <p >{'Nueva Tarea'}</p>
+                </div>
+            </Modal.Header>
             <Modal.Body>
                 <div className="input-group mb-3">
                     <div style={{width:'113%'}}><p style={{fontWeight:'bold'}}>Tarea</p></div>
@@ -59,9 +63,15 @@ export const ModalFormTareasActividad = ({openModal, cerrarModal, registroSelecc
             </Modal.Body>
             <Modal.Footer>
                 <div style={{...estilos.fila, marginBottom:'1rem', marginLeft:'10px'}}>
-                    <IconContext.Provider value={{ color: "gray", className: "global-class-name", size:'2em' }}>
-                        <FaSave onClick={()=>guardar()} className="cursor" title='Guardar' style={estilos.estiloIcono}/>
-                        <BsXSquare onClick={cerrarModal} className="cursor" title='Cancelar' style={estilos.estiloIcono}/>
+                    <IconContext.Provider value={{ color: "gray", className: "global-class-name", size:'3em' }}>
+                        <div style={{textAlign:'center', marginRight:'20px'}}>
+                            <FcApproval onClick={()=>guardar()} className="cursor" title='Guardar' style={estilos.estiloIcono}/>
+                            <p style={{fontSize:'x-small'}}>Guardar</p>
+                        </div>
+                        <div style={{textAlign:'center'}}>
+                            <FcCancel onClick={cerrarModal} className="cursor" title='Cancelar' style={estilos.estiloIcono}/>
+                            <p style={{fontSize:'x-small'}}>Cancelar</p>
+                        </div>
                     </IconContext.Provider>
                 </div>
                 {/* <Button variant="secondary" onClick={()=>setOpenModal(false)}>
@@ -77,5 +87,5 @@ export const ModalFormTareasActividad = ({openModal, cerrarModal, registroSelecc
 
 const estilos = {
     fila:{display:'flex', justifyContent:'space-between', alignItems:'center'},
-    estiloIcono: {marginLeft:'5px', marginRight:'5px'}
+    estiloIcono: {marginLeft:'15px', marginRight:'5px'}
 }

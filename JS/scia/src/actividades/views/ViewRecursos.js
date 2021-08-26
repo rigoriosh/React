@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { BsSearch, /* BsXSquare, */ BsPlusSquare, BsPencilSquare } from "react-icons/bs";
-import { FaEraser, /* FaSave */ } from "react-icons/fa";
+import { FcPlus, FcEditImage, FcDeleteDatabase } from "react-icons/fc";
+import { BsSearch, /* BsXSquare, */  } from "react-icons/bs";
 import { IconContext } from "react-icons";
 
 //import AlarmIcon from '@material-ui/icons/Alarm';
@@ -11,16 +11,58 @@ import { DataTable2 } from '../componentes/DataTable2';
 import { ModalForm1 } from '../componentes/ModalForm1';
 
 
+const columns = [
+    /* { field: 'id', headerName: 'ID', width: 90 }, */
+    {
+      field: 'recurso',
+      headerName: 'Recurso',
+      width: 150,
+      editable: false,
+    },
+    {
+      field: 'fecha',
+      headerName: 'Fecha',
+      width: 120,
+      editable: false,
+    },
+    {
+      field: 'cantidad',
+      headerName: 'Cantidad',
+      //type: 'number',
+      width: 130,
+      editable: false,
+    },
+    /* {
+      field: 'fullName',
+      headerName: 'Full name',
+      description: 'This column has a value getter and is not sortable.',
+      sortable: false,
+      width: 160,
+      valueGetter: (params) =>
+        `${params.getValue(params.id, 'firstName') || ''} ${
+          params.getValue(params.id, 'lastName') || ''
+        }`,
+    }, */
+  ];
+
 
 export const ViewRecursos = ({updateStateActividades}) => {
 
     
     const [openModalForm, setOpenModalForm] = useState(false);
 
-    
+    const [filas, setFilas] = useState(
+        [
+          { id: 1, recurso: 'Ayudante Civil', fecha: '15-7-21',      cantidad: 1 },
+          { id: 2, recurso: 'Cadenero',       fecha: '15-7-21',   cantidad: 10 },
+          { id: 3, recurso: 'Grua 30T',        fecha: '15-7-21',   cantidad: 500 },
+          
+        ]
+        );
 
-    
-
+    const registroTareaActividadSeleccionado  = (fila) => {
+        console.log('registroTareaActividadSeleccionado => ', fila);
+    }
     
     const handleinputsChange = (target) => {
         console.log(target.name, target.value);
@@ -37,22 +79,20 @@ export const ViewRecursos = ({updateStateActividades}) => {
         console.log('eliminar');
     }
     
-    
-    
     return (
         <div>
-            <div style={estilos.fila}>
+            <p style={{marginBottom:'20px'}}>{'Descripción de la actividad'}</p>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1"><BsSearch/></span>
                     <input onChange={({target})=>handleinputsChange(target)} name="search" type="text" class="form-control" aria-label="Buscar" 
                         aria-describedby="basic-addon1"/>
                 </div>
-                
-                <IconContext.Provider value={{ color: "gray", className: "global-class-name", size:'2em' }}>
+            <div>
+                <IconContext.Provider value={{ color: "gray", className: "global-class-name", size:'3em' }}>
                     <div style={{...estilos.fila, marginBottom:'1rem', marginLeft:'10px'}}>
-                        <BsPlusSquare onClick={()=>agregar()} name="Agregar" className="cursor" title='Agregar' style={estilos.estiloIcono}/>
-                        <BsPencilSquare onClick={()=>editar()} className="cursor" title='Editar' style={estilos.estiloIcono}/>
-                        <FaEraser onClick={()=>eliminar()} className="cursor" title='Eliminar' style={estilos.estiloIcono}/>
+                        <FcPlus onClick={()=>agregar()} name="Agregar" className="cursor" title='Agregar' style={estilos.estiloIcono}/>
+                        <FcEditImage onClick={()=>editar()} className="cursor" title='Editar' style={estilos.estiloIcono}/>
+                        <FcDeleteDatabase onClick={()=>eliminar()} className="cursor" title='Eliminar' style={estilos.estiloIcono}/>
                     </div>
                     {/* <div style={{...estilos.fila, marginBottom:'1rem', marginLeft:'10px'}}>
                         <FaSave onClick={()=>guardar()} className="cursor" title='Guardar' style={estilos.estiloIcono}/>
@@ -61,7 +101,7 @@ export const ViewRecursos = ({updateStateActividades}) => {
                 </IconContext.Provider>
             </div>
             <div style={{overflow: 'scroll'}}>
-                <DataTable2/>
+                <DataTable2 columnas={columns} filas={filas} filaSeleccionada={registroTareaActividadSeleccionado}/>
                 {/* <DataTable_1/> */}
             </div>
             <ModalForm1 openModal={openModalForm} setOpenModal={setOpenModalForm}/>

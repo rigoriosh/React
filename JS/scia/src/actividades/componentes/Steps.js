@@ -33,14 +33,18 @@ export default function Steps({updateStateActividades, stateActividades}) {
 
   const handleNext = (state) => {
     //setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    updateStateActividades('step', (step + 1))
+    if (step === 1.1) {
+      updateStateActividades('step', 1)  
+    }else{
+      updateStateActividades('step', (Math.round(step) + 1))
+    }
     console.log(state)
   };
 
   const handleBack = () => {
     console.log(22)
     //setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    updateStateActividades('step', (step - 1))
+    updateStateActividades('step', (Math.round(step) - 1))
   };
 
   const handleReset = () => {
@@ -53,9 +57,10 @@ export default function Steps({updateStateActividades, stateActividades}) {
       
       <div>
         {step === steps.length ? (
-          <div>
-            {/* <Typography className={classes.instructions}>All steps completed</Typography> */}
-            <Button className={classes.backButton} onClick={handleReset}>Reset</Button>
+          <div style={{textAlign:'center'}}>
+            <Typography className={classes.instructions}>Todos los pasos completados</Typography>
+            <button onClick={handleReset} type="button" class="btn btn-outline-danger btn-sm" style={{marginTop:'10px'}}>Cerrar</button>
+            {/* <Button className="" onClick={handleReset}>Reset</Button> */}
           </div>
         ) : (
           <div >
@@ -67,7 +72,8 @@ export default function Steps({updateStateActividades, stateActividades}) {
               >
                 Eliminar Act Campo
               </Button>
-              <Button variant="contained" color="primary" onClick={()=>handleNext(step === steps.length - 1 ? 'Guardar' : 'Siguiente/Guardar')}>
+              <Button variant="contained" color="primary" 
+                onClick={()=>handleNext(step === steps.length - 1 ? 'Guardar' : 'Siguiente/Guardar')}>
                 {step === 0 ? 'Siguiente/Guardar' : 'Guardar'}
               </Button>
             </div>

@@ -17,20 +17,20 @@ const columns = [
       field: 'tarea',
       headerName: 'Tarea',
       width: 200,
-      editable: true,
+      editable: false,
     },
     {
       field: 'unidad',
       headerName: 'Unidad',
       width: 120,
-      editable: true,
+      editable: false,
     },
     {
       field: 'cantidad',
       headerName: 'Cantidad',
       //type: 'number',
       width: 130,
-      editable: true,
+      editable: false,
     },
     /* {
       field: 'fullName',
@@ -69,11 +69,16 @@ export const TareasDeActividad = ({updateStateActividades}) => {
 
     const btnOprimido = (btnOprimido) => {
         console.log('btnOprimido => ', btnOprimido)
-        if (btnOprimido === 'agregar' || btnOprimido === 'calendar') {
+        if (btnOprimido === 'agregar') {
             setOpenModal(true)
         } else {
             
         }
+
+        if (btnOprimido === 'calendar') {
+            updateStateActividades('step', 1.1);
+        }
+
         if (btnOprimido !== 'calendar') {
             setRegistroTreaActSeleccionado(initRegister)
         }
@@ -93,6 +98,7 @@ export const TareasDeActividad = ({updateStateActividades}) => {
     console.log(initRegister)
     return (
         <div style={{marginTop:'10px'}}>
+            <p style={{marginBottom:'20px'}}>{'Cuarto de Máquinas / Montaje estructura'}</p>
             <div >
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1"><BsSearch/></span>
