@@ -24,6 +24,7 @@ export default function Actividades3w(props){
                                                         CmdAuditoria:{visible: false, activo: false},
                                                         CmdCerrar:{visible: false, activo: false}})
     const [arbol, setArbol] = useState([])
+    
 
     const onCerrarActividades = () =>{
         setCargando(true)
@@ -108,7 +109,7 @@ export default function Actividades3w(props){
                             onClick={()=>onCerrarActividades()}>Cerrar</button>
                 </div>
                 <div className="panel-body border">
-                    {estadoBotones.CmdActividadCampo.visible && 
+                    {(estadoBotones.CmdActividadCampo.visible && idAbrirActividad !== null) && 
                         <button className="btn btn-light botonesSuperior" 
                                 disabled={JSON.parse(window.localStorage.getItem('offline')).modeOffline||
                                             !estadoBotones.CmdActividadCampo.activo}  
@@ -135,7 +136,7 @@ export default function Actividades3w(props){
                                         <p className="tamanoLetraImg">Programar</p>
                                     </span>
                         </button>}
-                    {estadoBotones.CmdEjecutar.visible && 
+                    {(estadoBotones.CmdEjecutar.visible && idAbrirActividad !== null) && 
                         <button className="btn btn-light botonesSuperior" 
                                 disabled={JSON.parse(window.localStorage.getItem('offline')).modeOffline||
                                             !estadoBotones.CmdEjecutar.activo} 
@@ -144,11 +145,11 @@ export default function Actividades3w(props){
                                         <p className="tamanoLetraImg">Ejecutar</p>
                                     </span>
                         </button>}
-                    {estadoBotones.CmdConfirmar.visible && 
+                    {(estadoBotones.CmdConfirmar.visible  && idAbrirActividad !== null) && 
                         <button className="btn btn-light botonesSuperior" 
                                 disabled={JSON.parse(window.localStorage.getItem('offline')).modeOffline||
                                             !estadoBotones.CmdConfirmar.activo} 
-                                onClick={() => null}>
+                                onClick={() => onAbrirActividad()}>
                                     <span><FaThumbsUp className="tamanoImg" />
                                         <p className="tamanoLetraImg">Confirmar</p>
                                     </span>
@@ -181,8 +182,8 @@ export default function Actividades3w(props){
                            idAbrirActividad={idAbrirActividad}
                            setIdAbrirActividad={setIdAbrirActividad}/>}
 
-                <EjecutarActividad showEjecutar={showEjecutar} 
-                                   setShowEjecutar={setShowEjecutar}/>
+                <EjecutarActividad showEjecutar={showEjecutar} idAbrirActividad={idAbrirActividad}
+                    arbol={arbol} setShowEjecutar={setShowEjecutar}/>
             </div>
         </div>
     )

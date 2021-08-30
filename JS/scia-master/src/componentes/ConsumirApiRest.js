@@ -390,3 +390,22 @@ export const GuardarUnaActividad = async (datos, onCambiarOffline, setCrudEjecut
     }
     return false
 }
+
+// Ejecutar Actividad
+export const GetEjecutarActividad = async (idtarea, idreporte) => {
+    const url = 'https://scia.cmsolinfo.com/api/Ejecucion'
+    const usuario =  JSON.parse(window.localStorage.getItem('logearUsuario'))
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${usuario.token}`,
+            'Georef': usuario.ubicacion
+        },
+        body: JSON.stringify({idtarea, idreporte})
+    };
+
+    const retorno = await fetch(url, requestOptions)
+                            .catch(error => { console.log({error}) })
+    return retorno.json();
+}

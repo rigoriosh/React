@@ -65,7 +65,6 @@ export const DataTable_2 = () => {
                 density='compact'
                 onRowClick={(e)=>console.log(e.row)}
                 autoPageSize={true}
-                pageSize={50}
                 scrollbarSize={30}
             />
         </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import {useState} from 'react'
 import SweetAlert from 'react-bootstrap-sweetalert'
-import { FaSearch, FaTrash, FaSave} from 'react-icons/fa'
+import { FaSearch, /* FaTrash, */ FaSave} from 'react-icons/fa'
 
 export const CambiarImagen = (props) => {
 

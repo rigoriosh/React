@@ -2,7 +2,7 @@ import React from 'react'
 import {useState, useEffect} from 'react'
 import {Table} from 'react-bootstrap'
 import { FaAngleDown, FaSearch} from 'react-icons/fa'
-import {GetDatosMaestra} from '../../componentes/ConsumirApiRest'
+// import {GetDatosMaestra} from '../../componentes/ConsumirApiRest'
 
 export default function ArbolDatos(props){
     
@@ -39,7 +39,7 @@ export default function ArbolDatos(props){
         
         
     })
-    let [registroChecked, setRegistroChecked] = useState(objetoSeleccionado)
+    let [registroChecked/* , setRegistroChecked */] = useState(objetoSeleccionado)
     const abrirArbol = (identificador) =>{
         let hijorRama = document.getElementById(identificador)
         hijorRama.hidden=hijorRama.hidden?false:true
@@ -146,14 +146,14 @@ export default function ArbolDatos(props){
             setOriginalArbol(objetoArbol)
         }
 
-        datosArbol = arbol.map(rama=>{
-            return  <div>
+        datosArbol = arbol.map((rama, i)=>{
+            return  <div id={rama +i}>
                         <a onClick={()=>abrirArbol(rama.padre)}>
                             <FaAngleDown />
                             <b>{rama.padre}</b>
                         </a>
                         <Table id={rama.padre} hidden>{rama.hijo.map((datosHijo,index)=>{
-                            return <tr className="border">
+                            return <tr className="border" id={datosHijo + index}>
                                     <td style={{paddingLeft:'20px', paddingRight:'10px', width:'50px'}}>
                                         <input id={datosHijo.id} 
                                                type="checkbox" 
@@ -181,7 +181,7 @@ export default function ArbolDatos(props){
                     }
                 }
 
-                const obj = {configuracion:{ microServicio: microServicio}}
+                // const obj = {configuracion:{ microServicio: microServicio}}
                 let apiActividades = JSON.parse(window.localStorage.getItem('actividades'))
                 setListaCombos(apiActividades.objetosDataColumn.filter(obj=>obj.activo))
             }
@@ -198,7 +198,7 @@ export default function ArbolDatos(props){
                                 {listaCombos!== undefined &&
                                     listaCombos.filter(opcion=>opcion.nombre==='idProyecto')
                                             .map(function(opcion,index){
-                                                return <option value={opcion.id}>{opcion.descripcion}</option>
+                                                return <option id={opcion + index} value={opcion.id}>{opcion.descripcion}</option>
                                             })
                                 }
                         </select>
@@ -209,7 +209,7 @@ export default function ArbolDatos(props){
                         {listaCombos!== undefined &&
                                     listaCombos.filter(opcion=>opcion.nombre==='idEspecialidad')
                                             .map(function(opcion,index){
-                                                return <option value={opcion.id}>{opcion.descripcion}</option>
+                                                return <option id={opcion + index} value={opcion.id}>{opcion.descripcion}</option>
                                             })
                                 }
                         </select>
@@ -220,7 +220,7 @@ export default function ArbolDatos(props){
                         {listaCombos!== undefined &&
                                     listaCombos.filter(opcion=>opcion.nombre==='RangoFecha')
                                             .map(function(opcion,index){
-                                                return <option value={opcion.id}>{opcion.descripcion}</option>
+                                                return <option id={opcion + index} value={opcion.id}>{opcion.descripcion}</option>
                                             })
                                 }
                         </select>

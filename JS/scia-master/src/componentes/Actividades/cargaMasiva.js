@@ -60,7 +60,7 @@ export default function CargaMasiva(props){
                 let libro = XLSX.read(data,{type: 'array'})
                 let hoja = libro.SheetNames[0]
                 let datos = XLSX.utils.sheet_to_json(libro.Sheets[hoja])
-                let uno = 0
+                // let uno = 0
                 datos.forEach((fila,idFila)=>{
                         for (const col in fila) {
                             const nombreColumna = col.replaceAll("_","")
@@ -113,7 +113,7 @@ export default function CargaMasiva(props){
         }
 
         const enviarDatos = async ()=>{
-            const resultado = await GuardarCargaMasiva(objDatos, ()=>console.log, setCrudEjecutadoBien)
+            // const resultado = await GuardarCargaMasiva(objDatos, ()=>console.log, setCrudEjecutadoBien)
             setCargando(false)
             onCancelCarga()
         }

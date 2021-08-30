@@ -28,7 +28,7 @@ function getSteps() {
 
 export default function Steps({ updateStateActividades, stateActividades, cerrar, apiActividad, idActividad, setIdActividad }) {
 
-  const [cargando, setCargando] = useState(true)
+  const [/* cargando,  */setCargando] = useState(true)
   const [crudEjecutadoBien, setCrudEjecutadoBien] = useState({accion:'', 
                                                                 titulo:'', 
                                                                 mensaje: '',
@@ -37,11 +37,11 @@ export default function Steps({ updateStateActividades, stateActividades, cerrar
                                                                 tipoMensaje: ''
                                                             })
 
-  let lblVentana = null, lblEliminar = null, lblSiguiente = null
+  let /* lblVentana = null, */ lblEliminar = null, lblSiguiente = null
   if (apiActividad !== null) {
-    lblVentana = apiActividad
+    // lblVentana = apiActividad
     lblSiguiente = apiActividad.lblobjeto10
-    lblVentana = apiActividad.lblobjeto11
+    // lblVentana = apiActividad.lblobjeto11
     lblEliminar = apiActividad.lblobjeto12
   }
 
