@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import { BrowserRouter } from "react-router-dom";
 
-function App() {
+import { createContext } from "react";
+import { initStore } from './helpers/utils';
+import { AppRouter } from './routers/AppRouter';
+export const StoreContext = createContext(null);
+
+export const App = () => {
+ const [store, setStore] = useState(initStore);
+ 
+ const updateStore = (data)=>{
+   setStore(data);
+   //TODO: actualizar Session store
+ }
+ 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <StoreContext.Provider value={{store, updateStore}}>
+      <BrowserRouter>
+        <AppRouter/>
+      </BrowserRouter>
+    </StoreContext.Provider>
+  )
 }
 
 export default App;
