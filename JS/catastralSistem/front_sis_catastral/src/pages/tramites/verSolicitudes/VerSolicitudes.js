@@ -1,9 +1,9 @@
 import React from 'react'
 
-export const CrearTramite = () => {
+export const VerSolicitudes = () => {
     return (
         <div>
-            <h1>CrearSolicitud</h1>
+            <h5>VerSolicitudes</h5>
         </div>
     )
 }

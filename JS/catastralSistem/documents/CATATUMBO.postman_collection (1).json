@@ -1,0 +1,253 @@
+{
+	"info": {
+		"_postman_id": "7e5826b6-5f8d-4334-bf33-5a331bda46e9",
+		"name": "CATATUMBO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "LOG IN",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTA5MzA5OTYwLCJuYmYiOjE2MzY1MDU3MDksImlhdCI6MTYzNjUwNTcwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjJjMTQ3MTA3LWFjYTctNDY3Ny04MzgyLWI5ZDNhYWViMjU5YyJ9.rzGp2dz4LEzijc0_4hijbhlBzu4w4TrOaZCvZkRnrlsCsPpaSxsQPPKh-AlkqAwq",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/seguridad/loginUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"seguridad",
+						"loginUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET TOKEN",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "data",
+						"value": "ZXlKMWMyVnlJam9pWkdGMmFXUnpJaXdnSW5CM1pDSTZJQ0pqU0VveFdsZEthQ0o5",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/seguridad/getToken",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"seguridad",
+						"getToken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREAR USUARIO INTERNO",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTk5NTA5NzQ1LCJuYmYiOjE2MzY1OTU5MDksImlhdCI6MTYzNjU5NTkwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjZiODBmMzY4LTBlZTYtNGMxMC1hYzllLTMwYjEzN2ZiNzc3NSJ9.iXa-0QFWvKLm2vMqwtHTUwHwOhRm8EXuKi8AxQZZ-zvRlX9ek4E-izG8mbIIrRii",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\t\t {\r\n\t\t    \"apellido\": \"apellido usuario\",\r\n\t\t    \"tipoDocumento\": \"CC\",\r\n\t\t    \"nombreUsuario\": \"admin\",\r\n\t\t    \"numeroDocumento\": \"1234554221\",\r\n\t\t    \"numeroCelular\": \"8000000\",\r\n            \"contrasena\": \"cHJ1ZWJh\",\r\n\t\t    \"nombre\": \"nombre usuario\",\r\n\t\t    \"email\": \"prueba@asomunicipios.com\",\r\n\t\t    \"roles\": [\r\n\t\t        {\r\n\t\t            \"idRol\": 1\r\n\t\t        }\r\n\t\t    ],\r\n            \"tipoUsuario\": \"I\"\r\n\t\t}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/usuario/createUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"usuario",
+						"createUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREAR USUARIO EXTERNO",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTk5NTA5NzQ1LCJuYmYiOjE2MzY1OTU5MDksImlhdCI6MTYzNjU5NTkwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjZiODBmMzY4LTBlZTYtNGMxMC1hYzllLTMwYjEzN2ZiNzc3NSJ9.iXa-0QFWvKLm2vMqwtHTUwHwOhRm8EXuKi8AxQZZ-zvRlX9ek4E-izG8mbIIrRii",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\t\t {\r\n\t\t    \"apellido\": \"test apellido\",\r\n\t\t    \"tipoDocumento\": \"CC\",\r\n\t\t    \"nombreUsuario\": \"externo\",\r\n\t\t    \"numeroDocumento\": \"1285988663\",\r\n\t\t    \"numeroCelular\": \"8000000\",\r\n            \"contrasena\": \"cHJ1ZWJh\",\r\n\t\t    \"nombre\": \"test nombre\",\r\n\t\t    \"email\": \"prueba@asomunicipios.com\",\r\n\t\t    \"roles\": [\r\n\t\t        {\r\n\t\t            \"idRol\": 2\r\n\t\t        }\r\n\t\t    ],\r\n            \"tipoUsuario\": \"E\"\r\n\t\t}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/usuario/createUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"usuario",
+						"createUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OBTENER TODOS LOS USUARIOS",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTk5NTA5NzQ1LCJuYmYiOjE2MzY1OTU5MDksImlhdCI6MTYzNjU5NTkwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjZiODBmMzY4LTBlZTYtNGMxMC1hYzllLTMwYjEzN2ZiNzc3NSJ9.iXa-0QFWvKLm2vMqwtHTUwHwOhRm8EXuKi8AxQZZ-zvRlX9ek4E-izG8mbIIrRii",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/usuario/getUsers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"usuario",
+						"getUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OBTENER LISTAS",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTA5MzA5OTYwLCJuYmYiOjE2MzY1MDU3MDksImlhdCI6MTYzNjUwNTcwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjJjMTQ3MTA3LWFjYTctNDY3Ny04MzgyLWI5ZDNhYWViMjU5YyJ9.rzGp2dz4LEzijc0_4hijbhlBzu4w4TrOaZCvZkRnrlsCsPpaSxsQPPKh-AlkqAwq",
+						"type": "text"
+					},
+					{
+						"key": "nombreDominio",
+						"value": "TIPO_DOCUMENTO",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/valorLista/getDomains",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"valorLista",
+						"getDomains"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OBTENER TIPOS DOCUMENTO",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTk1NjM3OTY4LCJuYmYiOjE2MzY1OTIwMzcsImlhdCI6MTYzNjU5MjAzNywibmljayI6ImRhdmlkcyIsImp0aSI6IjczNmVjNTdhLThhMDgtNDgxZi05ZGFiLWE1NjA1YmRjN2E2MCJ9.IPs2OH2g5nOYC_X8380pNfrLbRvpyJRZAOLMEcTeLkWnLXpho9LeGKTzA8DN2GKQ",
+						"type": "text"
+					},
+					{
+						"key": "nombreDominio",
+						"value": "TIPO_DOCUMENTO",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/valorLista/getTiposDocumento",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"valorLista",
+						"getTiposDocumento"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OBTENER ROLES",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTk5NTA5NzQ1LCJuYmYiOjE2MzY1OTU5MDksImlhdCI6MTYzNjU5NTkwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjZiODBmMzY4LTBlZTYtNGMxMC1hYzllLTMwYjEzN2ZiNzc3NSJ9.iXa-0QFWvKLm2vMqwtHTUwHwOhRm8EXuKi8AxQZZ-zvRlX9ek4E-izG8mbIIrRii",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/rol/getRoles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"rol",
+						"getRoles"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

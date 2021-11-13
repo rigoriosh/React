@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 
 export const NoMatch = () => {
     return (
-        <div>
-            <h2>Nothing to see here!</h2>
+        <div style={{paddingLeft:'40%'}}>
+            <h2>Ruta invalida!</h2>
             <p>
-                <Link to="/">Go to the home page</Link>
+                <Link to="/">Regresar</Link>
             </p>
         </div>
     )

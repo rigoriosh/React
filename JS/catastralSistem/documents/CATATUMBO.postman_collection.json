@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "7e5826b6-5f8d-4334-bf33-5a331bda46e9",
+		"name": "CATATUMBO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "LOG IN",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTA5MzA5OTYwLCJuYmYiOjE2MzY1MDU3MDksImlhdCI6MTYzNjUwNTcwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjJjMTQ3MTA3LWFjYTctNDY3Ny04MzgyLWI5ZDNhYWViMjU5YyJ9.rzGp2dz4LEzijc0_4hijbhlBzu4w4TrOaZCvZkRnrlsCsPpaSxsQPPKh-AlkqAwq",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/seguridad/loginUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"seguridad",
+						"loginUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET TOKEN",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "data",
+						"value": "ZXlKMWMyVnlJam9pWkdGMmFXUnpJaXdnSW5CM1pDSTZJQ0pqU0VveFdsZEthQ0o5",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/seguridad/getToken",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"seguridad",
+						"getToken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREAR USUARIO",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2MzIxMTA2NDA4LCJuYmYiOjE2MzYzMTc1MDYsImlhdCI6MTYzNjMxNzUwNiwibmljayI6ImRhdmlkcyIsImp0aSI6IjFlZGVkN2ZjLWJmZTgtNDYyYy04NDc0LWViMGJlMTEwYTMzYiJ9.qrpUsRlXkhHAObv9ChBrSXRG-jdxaxMKAXVYx5AX5DzNTwxUxLT-n7QRf1MVA9FN",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\t\t {\r\n\t\t    \"apellido\": \"apellido usuario\",\r\n\t\t    \"image\": \"imagentest/img.png\",\r\n\t\t    \"idTipoDocumento\": 1,\r\n\t\t    \"nombreUsuario\": \"test\",\r\n\t\t    \"numeroDocumento\": \"1234554221\",\r\n\t\t    \"ultimaFechaLogin\": \"2020-11-07\",\r\n\t\t    \"numeroCelular\": \"8000000\",\r\n            \"contrasena\": \"eHh4\",\r\n\t\t    \"nombre\": \"nombre usuario\",\r\n\t\t    \"estado\": \"A\",\r\n\t\t    \"email\": \"prueba@asomunicipios.com\",\r\n\t\t    \"roles\": [\r\n\t\t        {\r\n\t\t            \"idRol\": 1\r\n\t\t        }\r\n\t\t    ],\r\n            \"tipoUsuario\": \"I\"\r\n\t\t}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/usuario/createUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"usuario",
+						"createUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OBTENER TODOS LOS USUARIOS",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTA5MzA5OTYwLCJuYmYiOjE2MzY1MDU3MDksImlhdCI6MTYzNjUwNTcwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjJjMTQ3MTA3LWFjYTctNDY3Ny04MzgyLWI5ZDNhYWViMjU5YyJ9.rzGp2dz4LEzijc0_4hijbhlBzu4w4TrOaZCvZkRnrlsCsPpaSxsQPPKh-AlkqAwq",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/usuario/getUsers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"usuario",
+						"getUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OBTENER LISTAS",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTA5MzA5OTYwLCJuYmYiOjE2MzY1MDU3MDksImlhdCI6MTYzNjUwNTcwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjJjMTQ3MTA3LWFjYTctNDY3Ny04MzgyLWI5ZDNhYWViMjU5YyJ9.rzGp2dz4LEzijc0_4hijbhlBzu4w4TrOaZCvZkRnrlsCsPpaSxsQPPKh-AlkqAwq",
+						"type": "text"
+					},
+					{
+						"key": "nombreDominio",
+						"value": "TIPO_DOCUMENTO",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/valorLista/getDomains",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"valorLista",
+						"getDomains"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OBTENER TIPOS DOCUMENTO",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTA5MzA5OTYwLCJuYmYiOjE2MzY1MDU3MDksImlhdCI6MTYzNjUwNTcwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjJjMTQ3MTA3LWFjYTctNDY3Ny04MzgyLWI5ZDNhYWViMjU5YyJ9.rzGp2dz4LEzijc0_4hijbhlBzu4w4TrOaZCvZkRnrlsCsPpaSxsQPPKh-AlkqAwq",
+						"type": "text"
+					},
+					{
+						"key": "nombreDominio",
+						"value": "TIPO_DOCUMENTO",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/valorLista/getTiposDocumento",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"valorLista",
+						"getTiposDocumento"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
