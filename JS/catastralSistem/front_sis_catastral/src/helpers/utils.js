@@ -2,8 +2,23 @@ export const initStore = {
     user:{
         isLogin:false,
         token:'',
-        user:''
-    }
+        user:'',
+      },
+      openBackDrop:false,
+      snackBar:{
+        openSnackBar: false,
+        messageSnackBar:'',
+        severity: "success"/*  | "error" | "warning" | "info" */,
+      },
+};
+
+export const pathsRoutes = {
+  gestionarUsuario: "/tramites/gestionarUsuario",
+  tramites: '/tramites'
+}
+
+export const textosInfoWarnig = {
+  campoRequerido: ''
 }
 
 function utf8_encode (argString) { // eslint-disable-line camelcase
@@ -74,7 +89,6 @@ function utf8_encode (argString) { // eslint-disable-line camelcase
   }
 
 export const encript = (user, pwd) => {
-    console.log(user, pwd)
     const pswBase64 = btoa(utf8_encode(pwd));
     const payload = {
         user: user,
@@ -85,3 +99,57 @@ export const encript = (user, pwd) => {
     return payLoadBase64
     
 }
+
+
+
+
+/* -------------------- */
+// import * as React from 'react';
+// import Button from '@mui/material/Button';
+// import Snackbar from '@mui/material/Snackbar';
+
+// export default function PositionedSnackbar() {
+//   const [state, setState] = React.useState({
+//     open: false,
+//     vertical: 'top',
+//     horizontal: 'center',
+//   });
+
+//   const { vertical, horizontal, open } = state;
+
+//   const handleClick = (newState) => () => {
+//     setState({ open: true, ...newState });
+//   };
+
+//   const handleClose = () => {
+//     setState({ ...state, open: false });
+//   };
+
+//   const buttons = (
+//     <React.Fragment>
+      
+//       <Button
+//         onClick={handleClick({
+//           vertical: 'top',
+//           horizontal: 'right',
+//         })}
+//       >
+//         Top-Right
+//       </Button>
+      
+//     </React.Fragment>
+//   );
+
+//   return (
+//     <div>
+//       {buttons}
+//       <Snackbar
+//         anchorOrigin={{ vertical, horizontal }}
+//         open={open}
+//         onClose={handleClose}
+//         message="I love snacks"
+//         key={vertical + horizontal}
+//       />
+//     </div>
+//   );
+// }

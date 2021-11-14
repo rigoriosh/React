@@ -3,7 +3,7 @@ import React from 'react'
 export const ConsultarTramite = () => {
     return (
         <div>
-            <h1>ConsultarSolicitud</h1>
+            <h1>ConsultarTramite</h1>
         </div>
     )
 }

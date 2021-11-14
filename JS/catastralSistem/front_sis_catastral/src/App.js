@@ -9,9 +9,13 @@ export const StoreContext = createContext(null);
 export const App = () => {
  const [store, setStore] = useState(initStore);
  
- const updateStore = (data)=>{
-   setStore(data);
+ const updateStore = (data, updateSession=true)=>{
+   if (data) {
+     setStore(data);
+     sessionStorage.setItem('store', JSON.stringify(data))
+   }
    //TODO: actualizar Session store
+   
  }
  
   return (

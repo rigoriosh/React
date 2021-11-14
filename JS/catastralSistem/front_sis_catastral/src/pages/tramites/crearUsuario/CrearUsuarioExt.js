@@ -1,9 +1,9 @@
 import React from 'react'
 
-export const CrearUsuarios = () => {
+export const CrearUsuarioExt = () => {
     return (
         <div>
-            <h5>CrearUsuarios</h5>
+            <h3>CrearUsuarioExt</h3>
         </div>
     )
 }

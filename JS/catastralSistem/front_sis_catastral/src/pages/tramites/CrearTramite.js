@@ -3,7 +3,7 @@ import React from 'react'
 export const CrearTramite = () => {
     return (
         <div>
-            <h1>CrearSolicitud</h1>
+            <h1>CrearTramite</h1>
         </div>
     )
 }

@@ -2,7 +2,7 @@ import enviroment from "./helpers/enviroment";
 
 export const doGetToken = async(data) => {
     // const payload = `username=${String(username)}&password=${String(password)}`
-
+  // console.log(11111)
     try {
         const url_getToken = enviroment.getToken;
         const responseLogin = await fetch(url_getToken, {
