@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { /* useParams, */ useNavigate } from "react-router-dom";
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,11 +9,28 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import InputAdornment from '@mui/material/InputAdornment';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import Slide from '@mui/material/Slide';
+
 import IconButton from '@mui/material/IconButton';
+import enviroment from '../../helpers/enviroment';
+import { getInfo, getInfoGET } from '../../api';
+import { StoreContext } from '../../App';
+import { textosInfoWarnig } from '../../helpers/utils';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
 
 export const Signin = () => {
+    const {store, updateStore} = useContext(StoreContext);
     const navigate = useNavigate();
-    const [form, setForm] = useState({
+    const initForm = {
         nombre:{
             value:'',
             messageValidate:'',
@@ -49,11 +66,11 @@ export const Signin = () => {
             messageValidate:'',
             label:'Dirección de residencia'
         },
-        numeroContacto:{
-            value:'',
-            messageValidate:'',
-            label:'Número de contacto'
-        },
+        // numeroContacto:{
+        //     value:'',
+        //     messageValidate:'',
+        //     label:'Número de contacto'
+        // },
         telefonoContacto:{
             value:'',
             messageValidate:'',
@@ -79,36 +96,47 @@ export const Signin = () => {
             messageValidate:'',
             label:'Confirmar contraseña'
         }
-    });
+    }
+    const [form, setForm] = useState(initForm);
     const [tiposDocumento, setTiposDocumento] = useState([
         {
-            value: 'seleccione',
-            label: 'Seleccione ...',
+            descripcionValor: 'Seleccione ...',
+            idValorLista: 1,
+            valor: 'seleccione',
+            nombreLista: 'seleccione'
         },
         {
-          value: 'cc',
-          label: 'Cédula de ciudadania',
+            descripcionValor: 'Cedula de ciudadanía',
+            idValorLista: 1,
+            valor: 'CC',
+            nombreLista: 'TIPO_DOCUMENTO'
         },
         {
-          value: 'ti',
-          label: 'Tarjeta de identidad',
+            descripcionValor: 'Cédula de extranjería',
+            idValorLista: 6,
+            valor: 'CE',
+            nombreLista: 'TIPO_DOCUMENTO'
         },
         {
-          value: 'ce',
-          label: 'Cédula de extrangeria',
-        },
-        {
-          value: 'pasport',
-          label: 'Pasaporte',
+            descripcionValor: 'Pasaporte',
+            idValorLista: 7,
+            valor: 'PA',
+            nombreLista: 'TIPO_DOCUMENTO'
         },
       ])
     const [showPass, setShowPass] = useState(false);
     const {nombre, apellido, tipoDocumento, numeroDocumento, /* departamento, municipio, */ direccionResidencia,
         /* numeroContacto, */ telefonoContacto, email, confirmaremail, pass, confPass} = form;
-
+    const [openDialog, setOpenDialog] = useState({open:false, msg :'',tittle:''});
     useEffect(() => {
         // get Tipos documentos
+        if (store.tiposDocumento.length === 0) {
+            getTiposDocumento();
+        } else {
+            setTiposDocumento(store.tiposDocumento);
+        }
         return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const handleFormChange = ({target:{name, value}}) => {
         console.log(name, value)
@@ -120,323 +148,421 @@ export const Signin = () => {
         }
     }
 
+    const getTiposDocumento = async() => {
+        // const token = JSON.parse(sessionStorage.getItem('store')).user.token;
+        // TODO: validar si ya existen tipos de documentos si no pedirlos
+        debugger
+        const token = 'eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNjk3NjQ5NjM2MywibmJmIjoxNjM2OTcyODk2LCJpYXQiOjE2MzY5NzI4OTYsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiI0MWEwYjU4OC1iYjgyLTRmM2YtYmRmYS1jMDk0NTg1MDk5YzYifQ.Xt3F2vOWBuQ7wuQ0Ym3L-zdmRMPzw-I7nSk9fHME-fjLnQTC-GeGxNunS-PnXKv3';
+        const headers = {token, nombreDominio:'TIPO_DOCUMENTO'};
+        const getTiposDocumento = await getInfoGET(headers, enviroment.getTiposDocumento)
+        // let getTiposDocumento = {"resultado":{"dominios":[{"descripcionValor":"Cedula de ciudadanía","idValorLista":1,"valor":"CC","nombreLista":"TIPO_DOCUMENTO"},{"descripcionValor":"Cédula de extranjería","idValorLista":6,"valor":"CE","nombreLista":"TIPO_DOCUMENTO"},{"descripcionValor":"Pasaporte","idValorLista":7,"valor":"PA","nombreLista":"TIPO_DOCUMENTO"}]}}
+
+        console.log(getTiposDocumento)
+
+        if (!getTiposDocumento.resultado) {
+            updateStore({
+                ...store,
+                snackBar:{
+                    openSnackBar: true,
+                    messageSnackBar:textosInfoWarnig.falloComunicacion,
+                    severity: 'error'
+                  },
+            });
+        } else {
+            // ajusta tipos de documentos a ser renderizados
+            const tiposDocumento = [
+                {
+                    descripcionValor: 'Seleccione ...',
+                    idValorLista: 1,
+                    valor: 'seleccione',
+                    nombreLista: 'seleccione'
+                }
+            ];
+            getTiposDocumento.resultado.dominios.forEach(dominio => {
+                tiposDocumento.push(dominio);
+            });
+            setTiposDocumento(tiposDocumento);
+            updateStore({ ...store, tiposDocumento, });
+        }
+
+        // TODO: poblar los tipos de documentos
+    }
+
 
     const crearUsuario = async() => {
         if (validateForm()) {
-            // TODO: ENVIAR AL BACK
-            try {
-                const url = 'https://api.themoviedb.org/3/movie/550?api_key=568f0c60273063c49307f18b57ce33fd';
-                const response = await fetch(url);
-                const respoJson = await response.json();
-                console.log(respoJson);
+            updateStore({ ...store, openBackDrop:true, });
+            // const token = JSON.parse(sessionStorage.getItem('store')).user.token;
+            const token = 'eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNjk3OTU1MDYyNCwibmJmIjoxNjM2OTc1OTUwLCJpYXQiOjE2MzY5NzU5NTAsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiJiMDM1YjJkYS1lNGZjLTQ5NTctYjg5OC1mNTgxYTNlYWE5YTkifQ.oTe6-bM1TDl-CqzNUU_I1OIWjFKSQ38pzcriUfTZL1f8yt0sqIIsQKVyJCmb1vzj';
+            const headers = {token, 'Content-Type': 'application/json'};
+            const body = {
+                "nombreUsuario": form.numeroDocumento.value,
+                "nombre": form.nombre.value,
+                "apellido": form.apellido.value,
+                "tipoDocumento": form.tipoDocumento.value,
+                "numeroDocumento": form.numeroDocumento.value,
+                "numeroCelular": form.telefonoContacto.value,
+                "contrasena": form.pass.value,
+                "email": form.email.value,
+                "roles": [
+                    {
+                        "idRol": 2
+                    }
+                ],
+                "tipoUsuario": "E"
+            }
+            const crearUsuarioExterno = await getInfo(headers, enviroment.crearUsuarioExterno, 'POST', JSON.stringify(body))
+            console.log(crearUsuarioExterno);
+            if (!crearUsuarioExterno.resultado) {
+                updateStore({
+                    ...store,
+                    snackBar:{
+                        openSnackBar: true,
+                        messageSnackBar: crearUsuarioExterno.error ? crearUsuarioExterno.error.descripcion : textosInfoWarnig.falloComunicacion,
+                        severity: 'error'
+                      },
+                    openBackDrop:false,
+                });
+            } else {
+                updateStore({ ...store, snackBar:{
+                    openSnackBar: true,
+                    messageSnackBar:crearUsuarioExterno.resultado.mensaje,
+                    severity: 'success'
+                }, openBackDrop:false, });
+                setForm(initForm);
+                setOpenDialog({open:true, msg :`El usuario ha sido creado exitosamente.
+                Usuario: ${numeroDocumento.value}`, tittle:''})
                 
-            } catch (error) {
-                console.log(error);
             }
         }
     }
 
     const validateForm = () => {
-debugger
-        const formOk = false;
+        const formOk = true;
         const keysForm = Object.keys(form);
         keysForm.forEach(field => {
-            
+            if (form) {
+                
+            } else {
+                
+            }
         });
 
         return formOk;
     }
     return (
-        <div style={{display:'flex', alignItems:'center', flexDirection:'column'}}>
-            <h1>Registrarse</h1>
-            <div style={{display:'flex', flexDirection:'column', marginTop:'20px'}}>
-                <TextField
-                    fullWidth
-                    required
-                    id="nombre"
-                    label={nombre.label}
-                    error={nombre.messageValidate?true:false}
-                    name="nombre"
-                    // defaultValue="Hello World"
-                    value={nombre.value}
-                    onChange={handleFormChange}
-                    size="small"
-                    // margin="dense"
-                    variant="outlined"
-                />
-                {
-                    nombre.messageValidate && 
-                        <Alert severity="error" sx={{
-                            //   bgcolor: 'background.paper',
-                            boxShadow: 1,
-                            //   borderRadius: 1,
-                            p: '0 20px',
-                            minWidth: 300,
-                            fontSize:'12px'
-                            }}>{nombre.messageValidate}</Alert>
-                }
-                <TextField
-                    fullWidth
-                    required
-                    id="apellido"
-                    label={apellido.label}
-                    error={apellido.messageValidate?true:false}
-                    name="apellido"
-                    // defaultValue="Hello World"
-                    value={apellido.value}
-                    onChange={handleFormChange}
-                    size="small"
-                    margin="dense"
-                />
-                {
-                    apellido.messageValidate && 
-                        <Alert severity="error" sx={{
-                            //   bgcolor: 'background.paper',
-                            boxShadow: 1,
-                            //   borderRadius: 1,
-                            p: '0 20px',
-                            minWidth: 300,
-                            fontSize:'12px'
-                            }}>{apellido.messageValidate}</Alert>
-                }
-                <div style={{display:'flex'}}>
-                    <div>
-                        <TextField
-                            fullWidth
-                            required
-                            id="tipoDocumento"
-                            label={tipoDocumento.label}
-                            error={tipoDocumento.messageValidate?true:false}
-                            name="tipoDocumento"
-                            // defaultValue="Hello World"
-                            value={tipoDocumento.value}
-                            onChange={handleFormChange}
-                            size="small"
-                            select
-                            // helperText="Seleccione tipo de documento"
-                            margin="dense"
-                        >
-                            {tiposDocumento.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                        {
-                            tipoDocumento.messageValidate && 
-                                <Alert severity="error" sx={{
-                                    //   bgcolor: 'background.paper',
-                                    boxShadow: 1,
-                                    //   borderRadius: 1,
-                                    p: '0 20px',
-                                    minWidth: 300,
-                                    fontSize:'12px'
-                                    }}>{tipoDocumento.messageValidate}</Alert>
-                        }
-
-                    </div>
+        <div style={{display:'flex', alignItems:'center', flexDirection:'column', backgroundColor:'white', width:'50%', margin: '20px 0 20px 25%',
+                    borderRadius:'20px', padding:'10px 0', height:'92vh'}}>
+            <div style={{height:'100%', overflowY:'scroll'}}>
+                <div style={{display:'flex', flexDirection:'column'}}>
                     <TextField
                         fullWidth
                         required
-                        id="numeroDocumento"
-                        label={numeroDocumento.label}
-                        error={numeroDocumento.messageValidate?true:false}
-                        name="numeroDocumento"
-                        type="number"
-                        max="10"
+                        id="nombre"
+                        label={nombre.label}
+                        error={nombre.messageValidate?true:false}
+                        name="nombre"
                         // defaultValue="Hello World"
-                        value={numeroDocumento.value}
+                        value={nombre.value}
+                        onChange={handleFormChange}
+                        size="small"
+                        // margin="dense"
+                        variant="outlined"
+                    />
+                    {
+                        nombre.messageValidate && 
+                            <Alert severity="error" sx={{
+                                //   bgcolor: 'background.paper',
+                                boxShadow: 1,
+                                //   borderRadius: 1,
+                                p: '0 20px',
+                                minWidth: 300,
+                                fontSize:'12px'
+                                }}>{nombre.messageValidate}</Alert>
+                    }
+                    <TextField
+                        fullWidth
+                        required
+                        id="apellido"
+                        label={apellido.label}
+                        error={apellido.messageValidate?true:false}
+                        name="apellido"
+                        // defaultValue="Hello World"
+                        value={apellido.value}
                         onChange={handleFormChange}
                         size="small"
                         margin="dense"
                     />
                     {
-                    numeroDocumento.messageValidate && 
-                        <Alert severity="error" sx={{
-                            //   bgcolor: 'background.paper',
-                            boxShadow: 1,
-                            //   borderRadius: 1,
-                            p: '0 20px',
-                            minWidth: 300,
-                            fontSize:'12px'
-                            }}>{numeroDocumento.messageValidate}</Alert>
-                }
+                        apellido.messageValidate && 
+                            <Alert severity="error" sx={{
+                                //   bgcolor: 'background.paper',
+                                boxShadow: 1,
+                                //   borderRadius: 1,
+                                p: '0 20px',
+                                minWidth: 300,
+                                fontSize:'12px'
+                                }}>{apellido.messageValidate}</Alert>
+                    }
+                    <div style={{display:'flex'}}>
+                        <div>
+                            <TextField
+                                fullWidth
+                                required
+                                id="tipoDocumento"
+                                label={tipoDocumento.label}
+                                error={tipoDocumento.messageValidate?true:false}
+                                name="tipoDocumento"
+                                // defaultValue="Hello World"
+                                value={tipoDocumento.value}
+                                onChange={handleFormChange}
+                                size="small"
+                                select
+                                // helperText="Seleccione tipo de documento"
+                                margin="dense"
+                            >
+                                {tiposDocumento.map((option) => (
+                                    <MenuItem key={option.valor} value={option.valor}>
+                                    {option.descripcionValor}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            {
+                                tipoDocumento.messageValidate && 
+                                    <Alert severity="error" sx={{
+                                        //   bgcolor: 'background.paper',
+                                        boxShadow: 1,
+                                        //   borderRadius: 1,
+                                        p: '0 20px',
+                                        minWidth: 300,
+                                        fontSize:'12px'
+                                        }}>{tipoDocumento.messageValidate}</Alert>
+                            }
+
+                        </div>
+                        <TextField
+                            fullWidth
+                            required
+                            id="numeroDocumento"
+                            label={numeroDocumento.label}
+                            error={numeroDocumento.messageValidate?true:false}
+                            name="numeroDocumento"
+                            type="number"
+                            max="10"
+                            // defaultValue="Hello World"
+                            value={numeroDocumento.value}
+                            onChange={handleFormChange}
+                            size="small"
+                            margin="dense"
+                        />
+                        {
+                        numeroDocumento.messageValidate && 
+                            <Alert severity="error" sx={{
+                                //   bgcolor: 'background.paper',
+                                boxShadow: 1,
+                                //   borderRadius: 1,
+                                p: '0 20px',
+                                minWidth: 300,
+                                fontSize:'12px'
+                                }}>{numeroDocumento.messageValidate}</Alert>
+                    }
+                    </div>
+                    <TextField
+                        fullWidth
+                        required
+                        id="direccionResidencia"
+                        label={direccionResidencia.label}
+                        error={direccionResidencia.messageValidate?true:false}
+                        name="direccionResidencia"
+                        // defaultValue="Hello World"
+                        value={direccionResidencia.value}
+                        onChange={handleFormChange}
+                        size="small"
+                        margin="dense"
+                    />
+                    {
+                        direccionResidencia.messageValidate && 
+                            <Alert severity="error" sx={{
+                                //   bgcolor: 'background.paper',
+                                boxShadow: 1,
+                                //   borderRadius: 1,
+                                p: '0 20px',
+                                minWidth: 300,
+                                fontSize:'12px'
+                                }}>{direccionResidencia.messageValidate}</Alert>
+                    }
+                    
+                    <TextField
+                        fullWidth
+                        required
+                        id="telefonoContacto"
+                        label={telefonoContacto.label}
+                        error={telefonoContacto.messageValidate?true:false}
+                        name="telefonoContacto"
+                        // defaultValue="Hello World"
+                        value={telefonoContacto.value}
+                        onChange={handleFormChange}
+                        size="small"
+                        margin="dense"
+                        // type="number"
+                    />
+                    {
+                        telefonoContacto.messageValidate && 
+                            <Alert severity="error" sx={{
+                                //   bgcolor: 'background.paper',
+                                boxShadow: 1,
+                                //   borderRadius: 1,
+                                p: '0 20px',
+                                minWidth: 300,
+                                fontSize:'12px'
+                                }}>{telefonoContacto.messageValidate}</Alert>
+                    }
+                    <TextField
+                        fullWidth
+                        required
+                        id="email"
+                        label={email.label}
+                        error={email.messageValidate?true:false}
+                        name="email"
+                        // defaultValue="Hello World"
+                        value={email.value}
+                        onChange={handleFormChange}
+                        size="small"
+                        margin="dense"
+                    />
+                    {
+                        email.messageValidate && 
+                            <Alert severity="error" sx={{
+                                //   bgcolor: 'background.paper',
+                                boxShadow: 1,
+                                //   borderRadius: 1,
+                                p: '0 20px',
+                                minWidth: 300,
+                                fontSize:'12px'
+                                }}>{email.messageValidate}</Alert>
+                    }
+                    <TextField
+                        fullWidth
+                        required
+                        id="confirmaremail"
+                        label={confirmaremail.label}
+                        error={confirmaremail.messageValidate?true:false}
+                        name="confirmaremail"
+                        // defaultValue="Hello World"
+                        value={confirmaremail.value}
+                        onChange={handleFormChange}
+                        size="small"
+                        margin="dense"
+                    />
+                    {
+                        confirmaremail.messageValidate && 
+                            <Alert severity="error" sx={{
+                                //   bgcolor: 'background.paper',
+                                boxShadow: 1,
+                                //   borderRadius: 1,
+                                p: '0 20px',
+                                minWidth: 300,
+                                fontSize:'12px'
+                                }}>{confirmaremail.messageValidate}</Alert>
+                    }
+                    <FormControl sx={{ p:'10px 0'  }} variant="outlined">
+                        <InputLabel htmlFor="outlined-adornment-password">{pass.label}</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment-password"
+                            type={showPass ? 'text' :'password'}
+                            value={pass.value}
+                            onChange={handleFormChange}
+                            error={pass.messageValidate?true:false}
+                            name="pass"
+                            // label={pass.label}
+                            endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={()=>setShowPass(!showPass)}
+                                // onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                                >
+                                {showPass ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                            }
+                            label="Password"
+                        />
+                        </FormControl>
+                    {
+                        pass.messageValidate && 
+                            <Alert severity="error" sx={{
+                                //   bgcolor: 'background.paper',
+                                boxShadow: 1,
+                                //   borderRadius: 1,
+                                p: '0 20px',
+                                minWidth: 300,
+                                fontSize:'12px'
+                                }}>{pass.messageValidate}</Alert>
+                    }
+                    <FormControl sx={{  }} variant="outlined" >
+                        <InputLabel htmlFor="outlined-adornment">{confPass.label}</InputLabel>
+                        <OutlinedInput
+                            id="outlined-adornment"
+                            type={showPass ? 'text' :'password'}
+                            value={confPass.value}
+                            onChange={handleFormChange}
+                            error={confPass.messageValidate?true:false}
+                            name="confPass"
+                            // label={confPass.label}
+                            endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={()=>setShowPass(!showPass)}
+                                // onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                                >
+                                {showPass ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                            }
+                            label="Password"
+                        />
+                        </FormControl>
+                    {
+                        confPass.messageValidate && 
+                            <Alert severity="error" sx={{
+                                //   bgcolor: 'background.paper',
+                                boxShadow: 1,
+                                //   borderRadius: 1,
+                                p: '0 20px',
+                                minWidth: 300,
+                                fontSize:'12px'
+                                }}>{confPass.messageValidate}</Alert>
+                    }
                 </div>
-                <TextField
-                    fullWidth
-                    required
-                    id="direccionResidencia"
-                    label={direccionResidencia.label}
-                    error={direccionResidencia.messageValidate?true:false}
-                    name="direccionResidencia"
-                    // defaultValue="Hello World"
-                    value={direccionResidencia.value}
-                    onChange={handleFormChange}
-                    size="small"
-                    margin="dense"
-                />
-                {
-                    direccionResidencia.messageValidate && 
-                        <Alert severity="error" sx={{
-                            //   bgcolor: 'background.paper',
-                            boxShadow: 1,
-                            //   borderRadius: 1,
-                            p: '0 20px',
-                            minWidth: 300,
-                            fontSize:'12px'
-                            }}>{direccionResidencia.messageValidate}</Alert>
-                }
-                
-                <TextField
-                    fullWidth
-                    required
-                    id="telefonoContacto"
-                    label={telefonoContacto.label}
-                    error={telefonoContacto.messageValidate?true:false}
-                    name="telefonoContacto"
-                    // defaultValue="Hello World"
-                    value={telefonoContacto.value}
-                    onChange={handleFormChange}
-                    size="small"
-                    margin="dense"
-                    // type="number"
-                />
-                {
-                    telefonoContacto.messageValidate && 
-                        <Alert severity="error" sx={{
-                            //   bgcolor: 'background.paper',
-                            boxShadow: 1,
-                            //   borderRadius: 1,
-                            p: '0 20px',
-                            minWidth: 300,
-                            fontSize:'12px'
-                            }}>{telefonoContacto.messageValidate}</Alert>
-                }
-                <TextField
-                    fullWidth
-                    required
-                    id="email"
-                    label={email.label}
-                    error={email.messageValidate?true:false}
-                    name="email"
-                    // defaultValue="Hello World"
-                    value={email.value}
-                    onChange={handleFormChange}
-                    size="small"
-                    margin="dense"
-                />
-                {
-                    email.messageValidate && 
-                        <Alert severity="error" sx={{
-                            //   bgcolor: 'background.paper',
-                            boxShadow: 1,
-                            //   borderRadius: 1,
-                            p: '0 20px',
-                            minWidth: 300,
-                            fontSize:'12px'
-                            }}>{email.messageValidate}</Alert>
-                }
-                <TextField
-                    fullWidth
-                    required
-                    id="confirmaremail"
-                    label={confirmaremail.label}
-                    error={confirmaremail.messageValidate?true:false}
-                    name="confirmaremail"
-                    // defaultValue="Hello World"
-                    value={confirmaremail.value}
-                    onChange={handleFormChange}
-                    size="small"
-                    margin="dense"
-                />
-                {
-                    confirmaremail.messageValidate && 
-                        <Alert severity="error" sx={{
-                            //   bgcolor: 'background.paper',
-                            boxShadow: 1,
-                            //   borderRadius: 1,
-                            p: '0 20px',
-                            minWidth: 300,
-                            fontSize:'12px'
-                            }}>{confirmaremail.messageValidate}</Alert>
-                }
-                <FormControl sx={{ p:'10px 0'  }} variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-password">{pass.label}</InputLabel>
-                    <OutlinedInput
-                        id="outlined-adornment-password"
-                        type={showPass ? 'text' :'password'}
-                        value={pass.value}
-                        onChange={handleFormChange}
-                        error={pass.messageValidate?true:false}
-                        name="pass"
-                        // label={pass.label}
-                        endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={()=>setShowPass(!showPass)}
-                            // onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                            >
-                            {showPass ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                        </InputAdornment>
-                        }
-                        label="Password"
-                    />
-                    </FormControl>
-                {
-                    pass.messageValidate && 
-                        <Alert severity="error" sx={{
-                            //   bgcolor: 'background.paper',
-                            boxShadow: 1,
-                            //   borderRadius: 1,
-                            p: '0 20px',
-                            minWidth: 300,
-                            fontSize:'12px'
-                            }}>{pass.messageValidate}</Alert>
-                }
-                <FormControl sx={{  }} variant="outlined" >
-                    <InputLabel htmlFor="outlined-adornment">{confPass.label}</InputLabel>
-                    <OutlinedInput
-                        id="outlined-adornment"
-                        type={showPass ? 'text' :'password'}
-                        value={confPass.value}
-                        onChange={handleFormChange}
-                        error={confPass.messageValidate?true:false}
-                        name="confPass"
-                        // label={confPass.label}
-                        endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={()=>setShowPass(!showPass)}
-                            // onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                            >
-                            {showPass ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                        </InputAdornment>
-                        }
-                        label="Password"
-                    />
-                    </FormControl>
-                {
-                    confPass.messageValidate && 
-                        <Alert severity="error" sx={{
-                            //   bgcolor: 'background.paper',
-                            boxShadow: 1,
-                            //   borderRadius: 1,
-                            p: '0 20px',
-                            minWidth: 300,
-                            fontSize:'12px'
-                            }}>{confPass.messageValidate}</Alert>
-                }
+                <div style={{display:'flex', width:'50%', justifyContent:'space-around', marginTop:'20px'}}>
+                    <button onClick={()=>crearUsuario()}>Crear</button>
+                    <button onClick={()=>{navigate("/");}}>Cancelar</button>
+                </div>
             </div>
-            <div style={{display:'flex', width:'50%', justifyContent:'space-around', marginTop:'20px'}}>
-                <button onClick={()=>crearUsuario()}>Crear</button>
-                <button onClick={()=>{navigate("/");}}>Cancelar</button>
-            </div>
+            <Dialog
+                open={openDialog.open}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={()=>setOpenDialog({...openDialog, open:false})}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle>{openDialog.tittle}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                        {openDialog.msg}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={()=>{
+                        setOpenDialog({...openDialog, open:false});
+                        // TODO: enviarlo a IngresarRegistrarse
+                        }}>Ok</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }

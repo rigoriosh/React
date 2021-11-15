@@ -4,12 +4,13 @@ export const initStore = {
         token:'',
         user:'',
       },
-      openBackDrop:false,
-      snackBar:{
-        openSnackBar: false,
-        messageSnackBar:'',
-        severity: "success"/*  | "error" | "warning" | "info" */,
-      },
+    openBackDrop:false,
+    snackBar:{
+      openSnackBar: false,
+      messageSnackBar:'',
+      severity: "success"/*  | "error" | "warning" | "info" */,
+    },
+    tiposDocumento:[],
 };
 
 export const pathsRoutes = {
@@ -18,7 +19,9 @@ export const pathsRoutes = {
 }
 
 export const textosInfoWarnig = {
-  campoRequerido: ''
+  campoRequerido: '',
+  falloComunicacion:'Estamos presentando inconvenientes en la comunicación, porfavor intentalo mas tarde',
+  credencialesIncorrectas:'Credenciales incorrectas',
 }
 
 function utf8_encode (argString) { // eslint-disable-line camelcase

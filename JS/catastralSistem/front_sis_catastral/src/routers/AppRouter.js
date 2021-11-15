@@ -73,7 +73,7 @@ export const AppRouter = () => {
     });
     }
     return (
-        <div className="App">
+        <div className="App" style={{}}>
             {
                 usuario.isLogin &&
                     <div style={{display:'flex', height:'25px', alignItems:'center', justifyContent:'end', padding:'0px 20px'}}>
@@ -105,8 +105,7 @@ export const AppRouter = () => {
             </Routes>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={openBackDrop}
-                onClick={closeBackDrop}
+                open={openBackDrop} onClick={closeBackDrop} transitionDuration={10000}
             >
                 <CircularProgress color="inherit" />
             </Backdrop>

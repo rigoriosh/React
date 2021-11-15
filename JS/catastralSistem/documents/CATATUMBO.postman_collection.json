@@ -12,7 +12,7 @@
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTA5MzA5OTYwLCJuYmYiOjE2MzY1MDU3MDksImlhdCI6MTYzNjUwNTcwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjJjMTQ3MTA3LWFjYTctNDY3Ny04MzgyLWI5ZDNhYWViMjU5YyJ9.rzGp2dz4LEzijc0_4hijbhlBzu4w4TrOaZCvZkRnrlsCsPpaSxsQPPKh-AlkqAwq",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NzcxNDI4OTIxLCJuYmYiOjE2MzY3Njc4MjgsImlhdCI6MTYzNjc2NzgyOCwibmljayI6ImRhdmlkcyIsImp0aSI6Ijk5ODlhY2I2LTAxY2ItNDVkYi04NjZlLTg4ZDIyMjQzNmMwNyJ9.GPs-ZuamSqN9eGBno_Rn6Wop1O6y_Zn2fk7X4HZKN56t7-g2-4buMwB3FDyb_qPV",
 						"type": "text"
 					}
 				],
@@ -60,19 +60,56 @@
 			"response": []
 		},
 		{
-			"name": "CREAR USUARIO",
+			"name": "CAMBIAR CONTRASEÑA",
 			"request": {
-				"method": "POST",
+				"method": "PUT",
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2MzIxMTA2NDA4LCJuYmYiOjE2MzYzMTc1MDYsImlhdCI6MTYzNjMxNzUwNiwibmljayI6ImRhdmlkcyIsImp0aSI6IjFlZGVkN2ZjLWJmZTgtNDYyYy04NDc0LWViMGJlMTEwYTMzYiJ9.qrpUsRlXkhHAObv9ChBrSXRG-jdxaxMKAXVYx5AX5DzNTwxUxLT-n7QRf1MVA9FN",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNjkwODEzOTA3MiwibmJmIjoxNjM2OTA0NTM5LCJpYXQiOjE2MzY5MDQ1MzksIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIwZjY4MjhkOS01YWRlLTRmN2EtYjkwYy1mNTJjM2EzOGFkNGMifQ.jJ2wE7D7AZFIN78PWVYmG3__Fi4i_vZHB12t9cRrrIlSN7UJN6aK8VViMsZNUXnG",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "\t\t {\r\n\t\t    \"apellido\": \"apellido usuario\",\r\n\t\t    \"image\": \"imagentest/img.png\",\r\n\t\t    \"idTipoDocumento\": 1,\r\n\t\t    \"nombreUsuario\": \"test\",\r\n\t\t    \"numeroDocumento\": \"1234554221\",\r\n\t\t    \"ultimaFechaLogin\": \"2020-11-07\",\r\n\t\t    \"numeroCelular\": \"8000000\",\r\n            \"contrasena\": \"eHh4\",\r\n\t\t    \"nombre\": \"nombre usuario\",\r\n\t\t    \"estado\": \"A\",\r\n\t\t    \"email\": \"prueba@asomunicipios.com\",\r\n\t\t    \"roles\": [\r\n\t\t        {\r\n\t\t            \"idRol\": 1\r\n\t\t        }\r\n\t\t    ],\r\n            \"tipoUsuario\": \"I\"\r\n\t\t}",
+					"raw": "{\r\n    \"administrador\": 0,\r\n    \"oldPass\": \"cHJ1ZWJh\",\r\n    \"newPass\": \"cHJ1ZWJhcw==\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/seguridad/changePass/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"seguridad",
+						"changePass",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREAR USUARIO INTERNO",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTk5NTA5NzQ1LCJuYmYiOjE2MzY1OTU5MDksImlhdCI6MTYzNjU5NTkwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjZiODBmMzY4LTBlZTYtNGMxMC1hYzllLTMwYjEzN2ZiNzc3NSJ9.iXa-0QFWvKLm2vMqwtHTUwHwOhRm8EXuKi8AxQZZ-zvRlX9ek4E-izG8mbIIrRii",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\t\t {\r\n\t\t    \"apellido\": \"apellido usuario\",\r\n\t\t    \"tipoDocumento\": \"CC\",\r\n\t\t    \"nombreUsuario\": \"admin\",\r\n\t\t    \"numeroDocumento\": \"1234554221\",\r\n\t\t    \"numeroCelular\": \"8000000\",\r\n            \"contrasena\": \"cHJ1ZWJh\",\r\n\t\t    \"nombre\": \"nombre usuario\",\r\n\t\t    \"email\": \"prueba@asomunicipios.com\",\r\n\t\t    \"roles\": [\r\n\t\t        {\r\n\t\t            \"idRol\": 1\r\n\t\t        }\r\n\t\t    ],\r\n            \"tipoUsuario\": \"I\"\r\n\t\t}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -96,13 +133,86 @@
 			"response": []
 		},
 		{
+			"name": "CREAR USUARIO EXTERNO",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTk5NTA5NzQ1LCJuYmYiOjE2MzY1OTU5MDksImlhdCI6MTYzNjU5NTkwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjZiODBmMzY4LTBlZTYtNGMxMC1hYzllLTMwYjEzN2ZiNzc3NSJ9.iXa-0QFWvKLm2vMqwtHTUwHwOhRm8EXuKi8AxQZZ-zvRlX9ek4E-izG8mbIIrRii",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\t\t {\r\n\t\t    \"apellido\": \"test apellido\",\r\n\t\t    \"tipoDocumento\": \"CC\",\r\n\t\t    \"nombreUsuario\": \"externo\",\r\n\t\t    \"numeroDocumento\": \"1285988663\",\r\n\t\t    \"numeroCelular\": \"8000000\",\r\n            \"contrasena\": \"cHJ1ZWJh\",\r\n\t\t    \"nombre\": \"test nombre\",\r\n\t\t    \"email\": \"prueba@asomunicipios.com\",\r\n\t\t    \"roles\": [\r\n\t\t        {\r\n\t\t            \"idRol\": 2\r\n\t\t        }\r\n\t\t    ],\r\n            \"tipoUsuario\": \"E\"\r\n\t\t}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/usuario/createUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"usuario",
+						"createUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ACTUALIZAR USUARIO",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2ODI4NTg2OTYxLCJuYmYiOjE2MzY4MjQ5ODYsImlhdCI6MTYzNjgyNDk4NiwibmljayI6ImRhdmlkcyIsImp0aSI6Ijc0NTcxNDU4LWU5ZmUtNDMyNi04YWFkLWZjZDhiYWQ1MTIxNCJ9.jiHDLDvxjO1U9Ea1axg4_osrPLMB1uYj_rbJLsbRuM9eqNkEjTSFdGU_Q9S0jdNe",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"numeroCelular\": \"1234567891\",\r\n    \"estado\": \"I\",\r\n    \"nombreUsuario\": \"davids\",\r\n    \"nombre\": \"David Steven\",\r\n    \"tipoDocumento\": \"CC\",\r\n    \"apellido\": \"Torres Figueroa\",\r\n    \"numeroDocumento\": \"1587411224\",\r\n    \"email\": \"prueba@prueba.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/usuario/updateUser/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"usuario",
+						"updateUser",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "OBTENER TODOS LOS USUARIOS",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTA5MzA5OTYwLCJuYmYiOjE2MzY1MDU3MDksImlhdCI6MTYzNjUwNTcwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjJjMTQ3MTA3LWFjYTctNDY3Ny04MzgyLWI5ZDNhYWViMjU5YyJ9.rzGp2dz4LEzijc0_4hijbhlBzu4w4TrOaZCvZkRnrlsCsPpaSxsQPPKh-AlkqAwq",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2ODI2OTA4NTk5LCJuYmYiOjE2MzY4MjMzMDgsImlhdCI6MTYzNjgyMzMwOCwibmljayI6ImRhdmlkcyIsImp0aSI6IjA0YzJjMGVlLTBhNmMtNDU2Mi1hMjQ0LTA2NzIzMjA4NmFjNiJ9.fE7j5-FlffSXQ1NXkXQ6GMnSu3Lo3Zk9V7DwS4CkSD-BlAgrOdxUDnFyQ19OvgtM",
 						"type": "text"
 					}
 				],
@@ -161,7 +271,7 @@
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTA5MzA5OTYwLCJuYmYiOjE2MzY1MDU3MDksImlhdCI6MTYzNjUwNTcwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjJjMTQ3MTA3LWFjYTctNDY3Ny04MzgyLWI5ZDNhYWViMjU5YyJ9.rzGp2dz4LEzijc0_4hijbhlBzu4w4TrOaZCvZkRnrlsCsPpaSxsQPPKh-AlkqAwq",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NzcxNjU1NzYxLCJuYmYiOjE2MzY3NjgwNTUsImlhdCI6MTYzNjc2ODA1NSwibmljayI6ImRhdmlkcyIsImp0aSI6ImMwODgwOWYzLTI5ZGQtNGZlMS1iMjA1LWQ3Mzc1MTJiNThhYiJ9.Yk1BGE7_5InuQS0r1ULPXtjW3j-MLxgOyVQe4lMmZ8T8g6OeifUbAECA4kYJx9Yy",
 						"type": "text"
 					},
 					{
@@ -181,6 +291,66 @@
 						"api-ssc",
 						"valorLista",
 						"getTiposDocumento"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OBTENER ROLES",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NzcxNjU1NzYxLCJuYmYiOjE2MzY3NjgwNTUsImlhdCI6MTYzNjc2ODA1NSwibmljayI6ImRhdmlkcyIsImp0aSI6ImMwODgwOWYzLTI5ZGQtNGZlMS1iMjA1LWQ3Mzc1MTJiNThhYiJ9.Yk1BGE7_5InuQS0r1ULPXtjW3j-MLxgOyVQe4lMmZ8T8g6OeifUbAECA4kYJx9Yy",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/rol/getRoles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"rol",
+						"getRoles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DESHABILITAR/HABILITAR USUARIO",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2ODI2OTA4NTk5LCJuYmYiOjE2MzY4MjMzMDgsImlhdCI6MTYzNjgyMzMwOCwibmljayI6ImRhdmlkcyIsImp0aSI6IjA0YzJjMGVlLTBhNmMtNDU2Mi1hMjQ0LTA2NzIzMjA4NmFjNiJ9.fE7j5-FlffSXQ1NXkXQ6GMnSu3Lo3Zk9V7DwS4CkSD-BlAgrOdxUDnFyQ19OvgtM",
+						"type": "text"
+					},
+					{
+						"key": "estado",
+						"value": "A",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api-ssc/usuario/disableUser/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api-ssc",
+						"usuario",
+						"disableUser",
+						"1"
 					]
 				}
 			},
