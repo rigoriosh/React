@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -11,6 +11,7 @@ import { RequireAuth } from '../auth/RequireAuth';
 import { Tramites } from '../pages/tramites/Tramites';
 import { AuthRouter } from './AuthRouter';
 import { TramitesCatastrales } from './TramitesCatastrales';
+import { getToken, initStore, textosInfoWarnig } from '../helpers/utils';
 
 function TransitionUp(props) {
     return <Slide {...props} direction="up" />;
@@ -20,9 +21,11 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 export const AppRouter = () => {
+    const { store, updateStore } = useContext(StoreContext);
     let location = useLocation();
     const navigate = useNavigate();
-    const { store, updateStore } = useContext(StoreContext);
+    const [timeSessionTkn, setTimeSessionTkn] = useState();
+    const [timeSessionUser, setTimeSessionUser] = useState(15);
     const {
         user:usuario,
         openBackDrop,
@@ -32,6 +35,43 @@ export const AppRouter = () => {
             severity
         },
      } = store;
+    useEffect(() => {
+        const store = JSON.parse(sessionStorage.getItem('store'))
+        if (store) {
+            updateStore(store)
+            setTimeSessionTkn(store.user.tiempoExpiracion)
+        }
+        return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    useEffect(() => {
+        const {user} = store;
+        setTimeout(() => {
+            if (user.isLogin) {
+                const timeInit = new Date(user.tiempoInicio);
+                const tiempoExpiracion = user.tiempoExpiracion;
+                const timeFin = new Date();
+                const timeDifference = timeFin - timeInit;
+                if(timeDifference >= tiempoExpiracion){
+                // solicitarNuevoToken
+                renewToken(user.user, user.pwd);
+                }
+                setTimeSessionTkn(timeDifference)
+                console.log("change timeSessionTkn", timeDifference)
+            }
+        }, 3000);
+        return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [timeSessionTkn])
+    
+    useEffect(() => {
+        console.log(store)
+        
+        return () => {}
+    }, [store])
+    
+    // const roles = usuario.infoUser.roles;
     useEffect(() => {
         if (usuario.isLogin) {
             updateStore({
@@ -60,24 +100,35 @@ export const AppRouter = () => {
     }
 
     const salir = () => {
+        updateStore(initStore);
         sessionStorage.clear();
         navigate("/");
-        updateStore({
-            user:{isLogin: false, user:'', token:''},
-            snackBar:{
-                openSnackBar: false,
-                messageSnackBar:'',
-                severity: "success"/*  | "error" | "warning" | "info" */,
-            },
-            openBackDrop:false,
-    });
     }
+
+    const renewToken = async(user, pwd) => {
+        const responseGetToken = await getToken(user, pwd);
+        if (!responseGetToken.tkn) {
+          updateStore({
+            ...store,
+            snackBar:{
+                openSnackBar: true,
+                messageSnackBar: responseGetToken.error.descripcion ? responseGetToken.error.descripcion : textosInfoWarnig.inconvenientesRenovarSesion,
+                severity: 'info'
+              },
+            openBackDrop: false
+          });
+          salir();
+        } else {
+          
+        }
+      }
+
     return (
         <div className="App" style={{}}>
             {
                 usuario.isLogin &&
                     <div style={{display:'flex', height:'25px', alignItems:'center', justifyContent:'end', padding:'0px 20px'}}>
-                        <p style={{marginRight:'20px'}}>Bievenido <span style={{fontWeight:'bold'}}>{usuario.user}</span></p>
+                        <p style={{marginRight:'20px'}}>Bievenido <span style={{fontWeight:'bold'}}>{usuario.infoUser.nombre}</span></p>
                         <button onClick={()=>salir()}>Salir</button>
                     </div>
             }

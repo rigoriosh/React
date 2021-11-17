@@ -1,8 +1,11 @@
+import { doGetToken } from "../api";
+
 export const initStore = {
     user:{
         isLogin:false,
         token:'',
         user:'',
+        pwd:''
       },
     openBackDrop:false,
     snackBar:{
@@ -22,6 +25,7 @@ export const textosInfoWarnig = {
   campoRequerido: '',
   falloComunicacion:'Estamos presentando inconvenientes en la comunicación, porfavor intentalo mas tarde',
   credencialesIncorrectas:'Credenciales incorrectas',
+  inconvenientesRenovarSesion: 'Se presentaron inconvenientes para renovar su sesión, debe registrarse nuevamente, gracias '
 }
 
 function utf8_encode (argString) { // eslint-disable-line camelcase
@@ -92,7 +96,7 @@ function utf8_encode (argString) { // eslint-disable-line camelcase
   }
 
 export const encript = (user, pwd) => {
-    const pswBase64 = btoa(utf8_encode(pwd));
+    const pswBase64 = pwdEncripted(pwd);
     const payload = {
         user: user,
         pwd: pswBase64
@@ -100,59 +104,33 @@ export const encript = (user, pwd) => {
     let payLoadBase64 = btoa(utf8_encode(JSON.stringify(payload)))
     payLoadBase64 = btoa(utf8_encode(payLoadBase64))
     return payLoadBase64
-    
 }
 
+export const pwdEncripted = (pwd) => {
+  return btoa(utf8_encode(pwd));
+}
 
+export const permits = [
+  {
+    valor: "MADM",
+    descripcionValor: "Módulo Administrador de Usuarios"
+  },
+  {
+    valor: "MRSC",
+    descripcionValor: "Modulo de Revisión de Solicitudes"
+  },
+  {
+    valor: "MDSC",
+    descripcionValor: "Módulo de creación solicitudes catastrales"
+  },
+  {
+    valor: "MCSC",
+    descripcionValor: "Modulo de Consulta de Solicitudes"
+  }
+]
 
-
-/* -------------------- */
-// import * as React from 'react';
-// import Button from '@mui/material/Button';
-// import Snackbar from '@mui/material/Snackbar';
-
-// export default function PositionedSnackbar() {
-//   const [state, setState] = React.useState({
-//     open: false,
-//     vertical: 'top',
-//     horizontal: 'center',
-//   });
-
-//   const { vertical, horizontal, open } = state;
-
-//   const handleClick = (newState) => () => {
-//     setState({ open: true, ...newState });
-//   };
-
-//   const handleClose = () => {
-//     setState({ ...state, open: false });
-//   };
-
-//   const buttons = (
-//     <React.Fragment>
-      
-//       <Button
-//         onClick={handleClick({
-//           vertical: 'top',
-//           horizontal: 'right',
-//         })}
-//       >
-//         Top-Right
-//       </Button>
-      
-//     </React.Fragment>
-//   );
-
-//   return (
-//     <div>
-//       {buttons}
-//       <Snackbar
-//         anchorOrigin={{ vertical, horizontal }}
-//         open={open}
-//         onClose={handleClose}
-//         message="I love snacks"
-//         key={vertical + horizontal}
-//       />
-//     </div>
-//   );
-// }
+export const getToken = async(user, pwd) => {
+  const headers = {data:encript(user, pwd)};
+  const responseGetToken = await doGetToken(headers);
+  return responseGetToken;
+}

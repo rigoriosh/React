@@ -5,6 +5,7 @@ const enviroment = {
     getToken: `${api}seguridad/getToken`,
     crearUsuarioExterno: `${api}usuario/createUser`,
     getTiposDocumento: `${api}valorLista/getTiposDocumento`,
+    loginUser: `${api}seguridad/loginUser`,
 }
 
 

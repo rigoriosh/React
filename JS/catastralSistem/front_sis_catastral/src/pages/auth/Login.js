@@ -1,59 +1,78 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { /* useParams, */ useNavigate } from "react-router-dom";
-import { doGetToken, getInfo } from '../../api';
+import { doGetToken, getInfo, getInfoGET } from '../../api';
 import { StoreContext } from '../../App';
 import enviroment from '../../helpers/enviroment';
-import { encript, textosInfoWarnig } from '../../helpers/utils';
+import { encript, getToken, textosInfoWarnig } from '../../helpers/utils';
 // import { Outlet } from 'react-router'
 
 export const Login = () => {
     let navigate = useNavigate();
     const { store, updateStore } = useContext(StoreContext);
     const { user:usuario } = store;
-    // const [form, setForm] = useState({user:'davids', pwd:'prueba'});
-    const [form, setForm] = useState({user:'1234567891', pwd:'1234rfr'});
+    const [form, setForm] = useState({user:'davids', pwd:'prueba'});
+    // const [form, setForm] = useState({user:'1234567891', pwd:'1234rfr'});
     
     const {user, pwd=''} = form;
 
+    useEffect(() => {
+        console.log(111111111)
+        return () => {}
+    }, [])
     const logIn = async() => {
         // console.log('login');
-        updateStore({
-            ...store,
-            openBackDrop: true
-        });
+        updateStore({ ...store, openBackDrop: true });
+        let responseGetToken = {} ;
         if(user !== '' || pwd !== '' ){
-            //TODO: realizar peticion al back
-            const headers = {data:encript(user, pwd)};
-            const responseGetToken = await getInfo(headers, enviroment.getToken, 'POST', {})
-            console.log({responseGetToken});
+            responseGetToken = await getToken(user, pwd);
             if (!responseGetToken.tkn) {
                         updateStore({
                             ...store,
                             snackBar:{
                                 openSnackBar: true,
-                                messageSnackBar: textosInfoWarnig.credencialesIncorrectas,
+                                messageSnackBar: responseGetToken.error.descripcion ? responseGetToken.error.descripcion : textosInfoWarnig.credencialesIncorrectas,
                                 severity: 'error'
                               },
-                            user:{
-                                ...usuario,
-                                isLogin: true,
-                                user,
-                                token: responseGetToken.token
-                            },
+                            openBackDrop: false
                         });
                         navigate("/home")
-            } else {
-                updateStore({
-                    ...store,
-                    user:{
-                        ...usuario,
-                        isLogin: true,
-                        user,
-                        token: responseGetToken.tkn,
-                        tiempoExpiracion: responseGetToken.tiempoExpiracion,
-                    },
-                });
-                navigate("/home");
+            } else {// recibio token ok
+                // realiza Login
+                const headers = {token: responseGetToken.tkn};
+                const responseLogin = await getInfoGET(headers, enviroment.loginUser, 'POST')
+                if (!responseLogin.resultado.usuario) {
+                    console.log(responseLogin);
+                    updateStore({
+                        ...store,
+                        openBackDrop: false,
+                        snackBar:{
+                            openSnackBar: true,
+                            messageSnackBar: textosInfoWarnig.falloComunicacion,
+                            severity: 'warning'
+                        },
+                    });
+                } else {
+                    updateStore({
+                        ...store,
+                        user:{
+                            ...usuario,
+                            isLogin: true,
+                            user,
+                            pwd,
+                            token: responseGetToken.tkn,
+                            tiempoExpiracion: responseGetToken.tiempoExpiracion,
+                            tiempoInicio: new Date(),
+                            infoUser: responseLogin.resultado.usuario
+                        },
+                        openBackDrop: false,
+                        snackBar:{
+                            openSnackBar: true,
+                            messageSnackBar: `Bienvenido ${responseLogin.resultado.usuario.nombre}`,
+                            severity: 'success'
+                        },
+                    });
+                    navigate("/");
+                }
             }
             
         }

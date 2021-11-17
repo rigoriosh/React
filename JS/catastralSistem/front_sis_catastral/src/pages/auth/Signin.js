@@ -21,7 +21,7 @@ import IconButton from '@mui/material/IconButton';
 import enviroment from '../../helpers/enviroment';
 import { getInfo, getInfoGET } from '../../api';
 import { StoreContext } from '../../App';
-import { textosInfoWarnig } from '../../helpers/utils';
+import { pwdEncripted, textosInfoWarnig } from '../../helpers/utils';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -149,16 +149,10 @@ export const Signin = () => {
     }
 
     const getTiposDocumento = async() => {
-        // const token = JSON.parse(sessionStorage.getItem('store')).user.token;
-        // TODO: validar si ya existen tipos de documentos si no pedirlos
-        debugger
-        const token = 'eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNjk3NjQ5NjM2MywibmJmIjoxNjM2OTcyODk2LCJpYXQiOjE2MzY5NzI4OTYsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiI0MWEwYjU4OC1iYjgyLTRmM2YtYmRmYS1jMDk0NTg1MDk5YzYifQ.Xt3F2vOWBuQ7wuQ0Ym3L-zdmRMPzw-I7nSk9fHME-fjLnQTC-GeGxNunS-PnXKv3';
-        const headers = {token, nombreDominio:'TIPO_DOCUMENTO'};
+        const token = '';
+        const headers = {token, /* nombreDominio:'TIPO_DOCUMENTO' */};
         const getTiposDocumento = await getInfoGET(headers, enviroment.getTiposDocumento)
         // let getTiposDocumento = {"resultado":{"dominios":[{"descripcionValor":"Cedula de ciudadanía","idValorLista":1,"valor":"CC","nombreLista":"TIPO_DOCUMENTO"},{"descripcionValor":"Cédula de extranjería","idValorLista":6,"valor":"CE","nombreLista":"TIPO_DOCUMENTO"},{"descripcionValor":"Pasaporte","idValorLista":7,"valor":"PA","nombreLista":"TIPO_DOCUMENTO"}]}}
-
-        console.log(getTiposDocumento)
-
         if (!getTiposDocumento.resultado) {
             updateStore({
                 ...store,
@@ -184,16 +178,13 @@ export const Signin = () => {
             setTiposDocumento(tiposDocumento);
             updateStore({ ...store, tiposDocumento, });
         }
-
-        // TODO: poblar los tipos de documentos
     }
 
 
     const crearUsuario = async() => {
         if (validateForm()) {
             updateStore({ ...store, openBackDrop:true, });
-            // const token = JSON.parse(sessionStorage.getItem('store')).user.token;
-            const token = 'eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNjk3OTU1MDYyNCwibmJmIjoxNjM2OTc1OTUwLCJpYXQiOjE2MzY5NzU5NTAsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiJiMDM1YjJkYS1lNGZjLTQ5NTctYjg5OC1mNTgxYTNlYWE5YTkifQ.oTe6-bM1TDl-CqzNUU_I1OIWjFKSQ38pzcriUfTZL1f8yt0sqIIsQKVyJCmb1vzj';
+            const token = '';
             const headers = {token, 'Content-Type': 'application/json'};
             const body = {
                 "nombreUsuario": form.numeroDocumento.value,
@@ -202,7 +193,7 @@ export const Signin = () => {
                 "tipoDocumento": form.tipoDocumento.value,
                 "numeroDocumento": form.numeroDocumento.value,
                 "numeroCelular": form.telefonoContacto.value,
-                "contrasena": form.pass.value,
+                "contrasena": pwdEncripted(form.pass.value),
                 "email": form.email.value,
                 "roles": [
                     {
@@ -211,14 +202,19 @@ export const Signin = () => {
                 ],
                 "tipoUsuario": "E"
             }
+            // const body = `nombreUsuario=${form.numeroDocumento.value}&nombre=${form.nombre.value}&apellido=${form.apellido.value}&tipoDocumento=${form.tipoDocumento.value}&numeroDocumento=${form.numeroDocumento.value}&numeroCelular=${form.telefonoContacto.value}&contrasena=${form.pass.value}&email=${form.email.value}&tipoUsuario:"E"&roles:[{"idRol": 2}]`;
             const crearUsuarioExterno = await getInfo(headers, enviroment.crearUsuarioExterno, 'POST', JSON.stringify(body))
-            console.log(crearUsuarioExterno);
+            // const crearUsuarioExterno = {resultado:{mensaje:'ok creado'}}
             if (!crearUsuarioExterno.resultado) {
                 updateStore({
                     ...store,
                     snackBar:{
                         openSnackBar: true,
-                        messageSnackBar: crearUsuarioExterno.error ? crearUsuarioExterno.error.descripcion : textosInfoWarnig.falloComunicacion,
+                        messageSnackBar: crearUsuarioExterno.error 
+                        ? crearUsuarioExterno.error.descripcion
+                            ?  crearUsuarioExterno.error.descripcion
+                            : crearUsuarioExterno.error
+                        : textosInfoWarnig.falloComunicacion,
                         severity: 'error'
                       },
                     openBackDrop:false,
@@ -229,10 +225,7 @@ export const Signin = () => {
                     messageSnackBar:crearUsuarioExterno.resultado.mensaje,
                     severity: 'success'
                 }, openBackDrop:false, });
-                setForm(initForm);
-                setOpenDialog({open:true, msg :`El usuario ha sido creado exitosamente.
-                Usuario: ${numeroDocumento.value}`, tittle:''})
-                
+                setOpenDialog({open:true, msg :`El usuario ha sido creado exitosamente.`, tittle:''})
             }
         }
     }
@@ -404,7 +397,7 @@ export const Signin = () => {
                         onChange={handleFormChange}
                         size="small"
                         margin="dense"
-                        // type="number"
+                        type="number"
                     />
                     {
                         telefonoContacto.messageValidate && 
@@ -553,13 +546,15 @@ export const Signin = () => {
                 <DialogTitle>{openDialog.tittle}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        {openDialog.msg}
+                        <p>{openDialog.msg}</p>
+                        <p style={{textAlign:'center',marginTop:'20px', fontWeight:'bold'}}>{`Usuario: ${numeroDocumento.value}`}</p>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={()=>{
                         setOpenDialog({...openDialog, open:false});
-                        // TODO: enviarlo a IngresarRegistrarse
+                        setForm(initForm);
+                        navigate("/");
                         }}>Ok</Button>
                 </DialogActions>
             </Dialog>
