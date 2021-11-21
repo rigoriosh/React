@@ -6,6 +6,8 @@ import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
 
+import '../styles/App.css'
+
 import { StoreContext } from '../App';
 import { RequireAuth } from '../auth/RequireAuth';
 import { Tramites } from '../pages/tramites/Tramites';
@@ -20,63 +22,74 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export const AppRouter = () => {
+export const AppRouter = ({props}) => {
     const { store, updateStore } = useContext(StoreContext);
     let location = useLocation();
     const navigate = useNavigate();
     const [timeSessionTkn, setTimeSessionTkn] = useState();
-    const [timeSessionUser, setTimeSessionUser] = useState(15);
-    const {
-        user:usuario,
-        openBackDrop,
-        snackBar:{
-            openSnackBar,
-            messageSnackBar,
-            severity
-        },
-     } = store;
+    const { user:usuario, openBackDrop, snackBar, timeInitSessionUser, minutesToEachSession} = store;
+
+    const { openSnackBar, messageSnackBar, severity} = snackBar;
+    
+
     useEffect(() => {
         const store = JSON.parse(sessionStorage.getItem('store'))
         if (store) {
-            updateStore(store)
-            setTimeSessionTkn(store.user.tiempoExpiracion)
+            updateStore({...store})
+            setTimeSessionTkn(store.user.tiempoExpiracion);
+
+            
         }
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
+    useEffect(() => { // monitorea tiempo del token
         const {user} = store;
         setTimeout(() => {
-            if (user.isLogin) {
+            if (user.isLogin) { // calcula el tiempo del token
                 const timeInit = new Date(user.tiempoInicio);
+                // const timeInitSession = new Date(user.tiempoInicio);
                 const tiempoExpiracion = user.tiempoExpiracion;
                 const timeFin = new Date();
                 const timeDifference = timeFin - timeInit;
-                if(timeDifference >= tiempoExpiracion){
+                if(timeDifference >= tiempoExpiracion){ // si vencio solicita nuevo token
                 // solicitarNuevoToken
                 renewToken(user.user, user.pwd);
                 }
                 setTimeSessionTkn(timeDifference)
-                console.log("change timeSessionTkn", timeDifference)
+                // console.log("change timeSessionTkn", timeDifference)
             }
-        }, 3000);
+        }, 600000);
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [timeSessionTkn])
-    
-    useEffect(() => {
-        console.log(store)
+    }, [store, timeSessionTkn])
+
+    useEffect(() => { // monitorea actividad del usuario
+        const {user} = store;
         
-        return () => {}
+        const intervalSessionUser = setInterval(() => {
+            if (user.isLogin) { // calcula el tiempo del usuario
+                const tiempoExpiracion = minutesToEachSession * 60 * 1000;
+                const timeFin = new Date();
+                const timeDifference = timeFin -  new Date(timeInitSessionUser);
+                if(timeDifference >= tiempoExpiracion){ // si vencio solicita nuevo usuario
+                    // cierra la sesion
+                    salir();
+                }
+            }
+        }, 60000);
+        return () => {
+            clearInterval(intervalSessionUser);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [store])
     
-    // const roles = usuario.infoUser.roles;
     useEffect(() => {
         if (usuario.isLogin) {
             updateStore({
                 ...store,
-                openBackDrop: false,
+                openBackDrop: false
             })
         }
         return () => {}
@@ -85,14 +98,16 @@ export const AppRouter = () => {
 
     useEffect(() => {
         const store = JSON.parse(sessionStorage.getItem('store'))
-        updateStore(store)
+        if (store) {
+            updateStore({...store, timeInitSessionUser: new Date()})
+        }
         return () => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location])
 
     const closeBackDrop = ()=>{
-        updateStore({...store, openBackDrop});
+        updateStore({...store, openBackDrop: false});
     }
 
     const closeSnackbar = ()=>{
@@ -114,14 +129,21 @@ export const AppRouter = () => {
                 openSnackBar: true,
                 messageSnackBar: responseGetToken.error.descripcion ? responseGetToken.error.descripcion : textosInfoWarnig.inconvenientesRenovarSesion,
                 severity: 'info'
-              },
-            openBackDrop: false
-          });
+            },
+            openBackDrop: false  });
           salir();
         } else {
-          
+            updateStore({
+                ...store,
+                user:{
+                    ...usuario,
+                    token: responseGetToken.tkn,
+                    tiempoExpiracion: responseGetToken.tiempoExpiracion,
+                    tiempoInicio: new Date(), // inicio Token
+                }
+            });
         }
-      }
+    }
 
     return (
         <div className="App" style={{}}>

@@ -1,7 +1,10 @@
 .App {
   text-align: center;
   /* height: 100vw; */
-  background-color: #61dafb !important;
+  background-image: url('../assets//Iconos/Textura_Fondo.png');
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position-x: -7px;
 }
 
 .App-logo {
@@ -39,5 +42,27 @@
   }
 }
 
+/* start styles login */
+.modalIngrearUserExt_inLogin{
+  height: 100vh;
+  background-color: transparent;
+  width: 25%;
+  margin-left: 35%;
+  padding-top: 8%;
+}
 
+.modalLogin{
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.sombra{
+  -webkit-box-shadow: -4px 6px 11px 5px rgba(0,0,0,0.37); 
+  box-shadow: -4px 6px 11px 5px rgba(0,0,0,0.37);
+}
+
+/* end styles login */
 

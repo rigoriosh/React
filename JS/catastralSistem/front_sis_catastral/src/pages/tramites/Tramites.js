@@ -5,15 +5,12 @@ import { permits } from '../../helpers/utils';
 
 export const Tramites = ({children}) => {
     let navigate = useNavigate();
-    const { store, updateStore} = useContext(StoreContext);
+    const { store/* , updateStore */} = useContext(StoreContext);
     useEffect(() => {
         console.log("in Tramites")
         return () => {}
     }, []);
     
-    // if (sessionStorage.getItem('store')) {
-    //     updateStore(JSON.parse(sessionStorage.getItem('store')))
-    // }
 
     const checkPermits = (permits, store1) => {
         const roles = store1.user.infoUser.roles;

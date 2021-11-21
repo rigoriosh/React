@@ -1,19 +1,22 @@
 import { doGetToken } from "../api";
 
 export const initStore = {
-    user:{
-        isLogin:false,
-        token:'',
-        user:'',
-        pwd:''
-      },
-    openBackDrop:false,
-    snackBar:{
-      openSnackBar: false,
-      messageSnackBar:'',
-      severity: "success"/*  | "error" | "warning" | "info" */,
+  timeInitSessionUser: new Date(), // inicio session
+  minutesToEachSession: 10,
+  user:{
+      isLogin:false,
+      token:'',
+      user:'',
+      pwd:''
     },
-    tiposDocumento:[],
+  openBackDrop:false,
+  snackBar:{
+    openSnackBar: false,
+    messageSnackBar:'',
+    tiempoExpiracion:'',
+    severity: "success"/*  | "error" | "warning" | "info" */,
+  },
+  tiposDocumento:[],
 };
 
 export const pathsRoutes = {
