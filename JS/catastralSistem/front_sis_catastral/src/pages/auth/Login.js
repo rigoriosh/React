@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { /* useParams, */ useNavigate } from "react-router-dom";
-import { doGetToken, getInfo, getInfoGET } from '../../api';
+import {  getInfoGET } from '../../api';
 import { StoreContext } from '../../App';
 import enviroment from '../../helpers/enviroment';
-import { encript, getToken, textosInfoWarnig } from '../../helpers/utils';
+import {  getToken, textosInfoWarnig } from '../../helpers/utils';
 // import { Outlet } from 'react-router'
+import Logo_Asomunicipios_ColorLetranegra from '../../assets/Iconos/Logo_Asomunicipios_ColorLetranegra.png'
 
 export const Login = () => {
     let navigate = useNavigate();
@@ -33,7 +34,7 @@ export const Login = () => {
                                 messageSnackBar: responseGetToken.error.descripcion ? responseGetToken.error.descripcion : textosInfoWarnig.credencialesIncorrectas,
                                 severity: 'error'
                               },
-                            openBackDrop: false
+                            openBackDrop: false,
                         });
                         navigate("/home")
             } else {// recibio token ok
@@ -42,6 +43,7 @@ export const Login = () => {
                 const responseLogin = await getInfoGET(headers, enviroment.loginUser, 'POST')
                 if (!responseLogin.resultado.usuario) {
                     console.log(responseLogin);
+                    debugger
                     updateStore({
                         ...store,
                         openBackDrop: false,
@@ -61,7 +63,8 @@ export const Login = () => {
                             pwd,
                             token: responseGetToken.tkn,
                             tiempoExpiracion: responseGetToken.tiempoExpiracion,
-                            tiempoInicio: new Date(),
+                            tiempoInicio: new Date(), // inicio Token
+                            
                             infoUser: responseLogin.resultado.usuario
                         },
                         openBackDrop: false,
@@ -78,18 +81,18 @@ export const Login = () => {
         }
     }
 
-    // console.log(form);
-
     return (
-        <div style={{paddingLeft:'40%', height:'100vh'}}>
-            {/* <Outlet/> */}
-            <h1>Registrarse</h1>
-            <label htmlFor="usuario">USUARIO</label><br />
-            <input type="text" name="usuario" id="usuario" value={user} onChange={({target:{value}})=>{setForm({...form,user:value})}}/><br />
-            <label htmlFor="contraseña">CONTRASEÑA</label><br />
-            <input type="text" name="contraseña" id="contraseña" value={pwd} onChange={({target:{value}})=>{setForm({...form, pwd:value})}}/><br /><br />
-            <button onClick={()=>logIn()}>Aceptar</button><br />
-            <button onClick={()=>{navigate("/")}}>Salir</button>
+        <div className="modalIngrearUserExt_inLogin">
+            <div className='modalLogin sombra' style={{backgroundColor:'white', padding:'20px 20px'}}>
+                <img src={Logo_Asomunicipios_ColorLetranegra} alt="" srcSet="" style={{width:'160px'}}/>
+                {/* divisor */}<div style={{width:'70%', height:'1px', backgroundColor:'rgb(128 128 128 / 50%)', margin:'5px'}}></div>
+                
+                <input type="text" name="usuario" id="usuario" value={user} onChange={({target:{value}})=>{setForm({...form,user:value})}}/><br />
+                <label htmlFor="contraseña">CONTRASEÑA</label><br />
+                <input type="text" name="contraseña" id="contraseña" value={pwd} onChange={({target:{value}})=>{setForm({...form, pwd:value})}}/><br /><br />
+                <button onClick={()=>logIn()}>Aceptar</button><br />
+                <button onClick={()=>{navigate("/")}}>Salir</button>
+            </div>
         </div>
     )
 }
