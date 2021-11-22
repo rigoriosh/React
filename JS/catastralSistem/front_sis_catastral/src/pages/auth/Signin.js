@@ -1,27 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { /* useParams, */ useNavigate } from "react-router-dom";
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-import Alert from '@mui/material/Alert';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import InputAdornment from '@mui/material/InputAdornment';
+import Logo_Asomunicipios_ColorLetranegra from '../../assets/Iconos/Logo_Asomunicipios_ColorLetranegra.png'
+import Salir_Icon from '../../assets/Iconos/Salir_Icon.png'
+import Registrese_NuevoUS_Icon from '../../assets/Iconos/Registrese_NuevoUS_Icon.png'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
 import Slide from '@mui/material/Slide';
 
-import IconButton from '@mui/material/IconButton';
 import enviroment from '../../helpers/enviroment';
 import { getInfo, getInfoGET } from '../../api';
 import { StoreContext } from '../../App';
-import { pwdEncripted, textosInfoWarnig } from '../../helpers/utils';
+import { emailRegex, pwdEncripted, stylesApp, textosInfoWarnig } from '../../helpers/utils';
+import { FieldTextWidtLabel } from '../../componets/FieldTextWidtLabel';
+import { FieldSelect } from '../../componets/FieldSelect';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -34,7 +28,7 @@ export const Signin = () => {
         nombre:{
             value:'',
             messageValidate:'',
-            label:'Nombre'
+            label:'Nombres'
         },
         apellido:{
             value:'',
@@ -42,25 +36,26 @@ export const Signin = () => {
             label:'Apellido'
         },
         tipoDocumento:{
-            value:'seleccione',
+            // value:'seleccione',
+            value:'',
             messageValidate:'',
             label:'Tipo de documento'
         },
         numeroDocumento:{
             value:'',
             messageValidate:'',
-            label:'Numero de documento'
+            label:'Número de documento'
         },
-        departamento:{
-            value:'',
-            messageValidate:'',
-            label:'Departamento'
-        },
-        municipio:{
-            value:'',
-            messageValidate:'',
-            label:'Municipio'
-        },
+        // departamento:{
+        //     value:'',
+        //     messageValidate:'',
+        //     label:'Departamento'
+        // },
+        // municipio:{
+        //     value:'',
+        //     messageValidate:'',
+        //     label:'Municipio'
+        // },
         direccionResidencia:{
             value:'',
             messageValidate:'',
@@ -74,7 +69,7 @@ export const Signin = () => {
         telefonoContacto:{
             value:'',
             messageValidate:'',
-            label:'Teléfono de contacto'
+            label:'Número de Teléfono'
         },
         email:{
             value:'',
@@ -99,12 +94,12 @@ export const Signin = () => {
     }
     const [form, setForm] = useState(initForm);
     const [tiposDocumento, setTiposDocumento] = useState([
-        {
-            descripcionValor: 'Seleccione ...',
-            idValorLista: 1,
-            valor: 'seleccione',
-            nombreLista: 'seleccione'
-        },
+        // {
+        //     descripcionValor: 'Seleccione ...',
+        //     idValorLista: 1,
+        //     valor: 'seleccione',
+        //     nombreLista: 'seleccione'
+        // },
         {
             descripcionValor: 'Cedula de ciudadanía',
             idValorLista: 1,
@@ -138,10 +133,9 @@ export const Signin = () => {
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    const handleFormChange = ({target:{name, value}}) => {
-        console.log(name, value)
+    const handleFormChange = ({name, value}) => {
         if ((name === 'numeroDocumento' && value.length < 11)
-            || (name !== 'numeroDocumento' && name !== 'telefonoContacto' && value.length < 30)
+            || (name !== 'numeroDocumento' && name !== 'telefonoContacto' && value.length < 60)
             || (name === 'telefonoContacto' && value.length < 15) 
         ) {
             setForm({...form, [name]:{value, messageValidate:'', label: form[name].label}})
@@ -165,12 +159,12 @@ export const Signin = () => {
         } else {
             // ajusta tipos de documentos a ser renderizados
             const tiposDocumento = [
-                {
-                    descripcionValor: 'Seleccione ...',
-                    idValorLista: 1,
-                    valor: 'seleccione',
-                    nombreLista: 'seleccione'
-                }
+                // {
+                //     descripcionValor: 'Seleccione ...',
+                //     idValorLista: 1,
+                //     valor: 'seleccione',
+                //     nombreLista: 'seleccione'
+                // }
             ];
             getTiposDocumento.resultado.dominios.forEach(dominio => {
                 tiposDocumento.push(dominio);
@@ -225,315 +219,98 @@ export const Signin = () => {
                     messageSnackBar:crearUsuarioExterno.resultado.mensaje,
                     severity: 'success'
                 }, openBackDrop:false, });
-                setOpenDialog({open:true, msg :`El usuario ha sido creado exitosamente.`, tittle:''})
+                setOpenDialog({open:true, msg :textosInfoWarnig.creacionUsuario, tittle:''})
             }
         }
     }
 
     const validateForm = () => {
-        const formOk = true;
-        const keysForm = Object.keys(form);
+        let formOk = true;
+        let cloneForm = Object.assign({}, form);
+        const keysForm = Object.keys(cloneForm);
+        let mensaje = '';
+
+        if (!emailRegex.test(cloneForm.email.value)) {
+            cloneForm = {...cloneForm, email:{...cloneForm.email, messageValidate: textosInfoWarnig.formatEmailInvalido}}
+            mensaje = textosInfoWarnig.formatEmailInvalido; 
+            formOk = false;
+        }
+
+        if (!emailRegex.test(cloneForm.confirmaremail.value)) {
+            cloneForm = {...cloneForm, confirmaremail:{...cloneForm.confirmaremail, messageValidate: textosInfoWarnig.formatEmailInvalido}}
+            mensaje = textosInfoWarnig.formatEmailInvalido; 
+            formOk = false;
+        }
+
         keysForm.forEach(field => {
-            if (form) {
-                
+            if (cloneForm[field].value === '') {
+                cloneForm = {...cloneForm, [field]:{...cloneForm[field], messageValidate: textosInfoWarnig.campoRequerido}}
+                mensaje = textosInfoWarnig.camposRequerdios
+                formOk = false;
             } else {
-                
+                form[field].messageValidate = '';
             }
         });
+
+        
+        
+        if (!formOk) {
+            updateStore({
+                ...store,
+                snackBar:{
+                    openSnackBar: true,
+                    messageSnackBar: mensaje,
+                    severity: 'warning'
+                  },
+            });
+        }
+        setForm(cloneForm);
+
 
         return formOk;
     }
     return (
-        <div style={{display:'flex', alignItems:'center', flexDirection:'column', backgroundColor:'white', width:'50%', margin: '20px 0 20px 25%',
-                    borderRadius:'20px', padding:'10px 0', height:'92vh'}}>
-            <div style={{height:'100%', overflowY:'scroll'}}>
-                <div style={{display:'flex', flexDirection:'column'}}>
-                    <TextField
-                        fullWidth
-                        required
-                        id="nombre"
-                        label={nombre.label}
-                        error={nombre.messageValidate?true:false}
-                        name="nombre"
-                        // defaultValue="Hello World"
-                        value={nombre.value}
-                        onChange={handleFormChange}
-                        size="small"
-                        // margin="dense"
-                        variant="outlined"
-                    />
-                    {
-                        nombre.messageValidate && 
-                            <Alert severity="error" sx={{
-                                //   bgcolor: 'background.paper',
-                                boxShadow: 1,
-                                //   borderRadius: 1,
-                                p: '0 20px',
-                                minWidth: 300,
-                                fontSize:'12px'
-                                }}>{nombre.messageValidate}</Alert>
-                    }
-                    <TextField
-                        fullWidth
-                        required
-                        id="apellido"
-                        label={apellido.label}
-                        error={apellido.messageValidate?true:false}
-                        name="apellido"
-                        // defaultValue="Hello World"
-                        value={apellido.value}
-                        onChange={handleFormChange}
-                        size="small"
-                        margin="dense"
-                    />
-                    {
-                        apellido.messageValidate && 
-                            <Alert severity="error" sx={{
-                                //   bgcolor: 'background.paper',
-                                boxShadow: 1,
-                                //   borderRadius: 1,
-                                p: '0 20px',
-                                minWidth: 300,
-                                fontSize:'12px'
-                                }}>{apellido.messageValidate}</Alert>
-                    }
-                    <div style={{display:'flex'}}>
-                        <div>
-                            <TextField
-                                fullWidth
-                                required
-                                id="tipoDocumento"
-                                label={tipoDocumento.label}
-                                error={tipoDocumento.messageValidate?true:false}
-                                name="tipoDocumento"
-                                // defaultValue="Hello World"
-                                value={tipoDocumento.value}
-                                onChange={handleFormChange}
-                                size="small"
-                                select
-                                // helperText="Seleccione tipo de documento"
-                                margin="dense"
-                            >
-                                {tiposDocumento.map((option) => (
-                                    <MenuItem key={option.valor} value={option.valor}>
-                                    {option.descripcionValor}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                            {
-                                tipoDocumento.messageValidate && 
-                                    <Alert severity="error" sx={{
-                                        //   bgcolor: 'background.paper',
-                                        boxShadow: 1,
-                                        //   borderRadius: 1,
-                                        p: '0 20px',
-                                        minWidth: 300,
-                                        fontSize:'12px'
-                                        }}>{tipoDocumento.messageValidate}</Alert>
-                            }
-
-                        </div>
-                        <TextField
-                            fullWidth
-                            required
-                            id="numeroDocumento"
-                            label={numeroDocumento.label}
-                            error={numeroDocumento.messageValidate?true:false}
-                            name="numeroDocumento"
-                            type="number"
-                            max="10"
-                            // defaultValue="Hello World"
-                            value={numeroDocumento.value}
-                            onChange={handleFormChange}
-                            size="small"
-                            margin="dense"
-                        />
-                        {
-                        numeroDocumento.messageValidate && 
-                            <Alert severity="error" sx={{
-                                //   bgcolor: 'background.paper',
-                                boxShadow: 1,
-                                //   borderRadius: 1,
-                                p: '0 20px',
-                                minWidth: 300,
-                                fontSize:'12px'
-                                }}>{numeroDocumento.messageValidate}</Alert>
-                    }
+        <div className='pagePhader'>
+            <div className="modalIngrearUserExt_inLogin" style={{width:'35%', height:'90%'}}>
+                <div className='modalLogin sombra' style={{backgroundColor:'white', padding:'20px 20px'}} key={(e)=>console.log(e)}>
+                    <img src={Logo_Asomunicipios_ColorLetranegra} alt="" srcSet="" style={{width:'90px'}}/>
+                    {/* divisor */}<div style={{width:'70%', height:'0.5px', backgroundColor:stylesApp.gray1, margin:'10px'}}></div>
+                    <img onClick={()=>{}} src={Registrese_NuevoUS_Icon} alt="" style={{cursor:'pointer', width:'120px', alignSelf:'center'}}/>
+                    <FieldTextWidtLabel value={nombre.value} name="nombre" label={nombre.label} handleChange={(target)=>handleFormChange(target)} messageValidate={nombre.messageValidate}/>
+                    <FieldTextWidtLabel  value={apellido.value} name="apellido" label={apellido.label} handleChange={(target)=>handleFormChange(target)} messageValidate={apellido.messageValidate}/>
+                    <div style={{display:'flex', width:'100%'}}>
+                        <FieldSelect label={tipoDocumento.label} value={tipoDocumento.value} options={tiposDocumento} handleOnchange={(target)=>handleFormChange(target)}
+                            messageValidate={tipoDocumento.messageValidate}/>
+                        <FieldTextWidtLabel name="numeroDocumento" value={numeroDocumento.value} label={numeroDocumento.label} handleChange={(target)=>handleFormChange(target)}
+                         messageValidate={numeroDocumento.messageValidate} type='number' maxLength={20} styleOwn={{marginLeft:'10px'}}/>
                     </div>
-                    <TextField
-                        fullWidth
-                        required
-                        id="direccionResidencia"
-                        label={direccionResidencia.label}
-                        error={direccionResidencia.messageValidate?true:false}
-                        name="direccionResidencia"
-                        // defaultValue="Hello World"
-                        value={direccionResidencia.value}
-                        onChange={handleFormChange}
-                        size="small"
-                        margin="dense"
-                    />
-                    {
-                        direccionResidencia.messageValidate && 
-                            <Alert severity="error" sx={{
-                                //   bgcolor: 'background.paper',
-                                boxShadow: 1,
-                                //   borderRadius: 1,
-                                p: '0 20px',
-                                minWidth: 300,
-                                fontSize:'12px'
-                                }}>{direccionResidencia.messageValidate}</Alert>
-                    }
+                    <FieldTextWidtLabel name="direccionResidencia" value={direccionResidencia.value} label={direccionResidencia.label} handleChange={(target)=>handleFormChange(target)}
+                         messageValidate={direccionResidencia.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>
+
+                    <FieldTextWidtLabel name="telefonoContacto" value={telefonoContacto.value} label={telefonoContacto.label} handleChange={(target)=>handleFormChange(target)}
+                        messageValidate={telefonoContacto.messageValidate} type='number' maxLength={20} styleOwn={{marginLeft:'0px'}}/>
                     
-                    <TextField
-                        fullWidth
-                        required
-                        id="telefonoContacto"
-                        label={telefonoContacto.label}
-                        error={telefonoContacto.messageValidate?true:false}
-                        name="telefonoContacto"
-                        // defaultValue="Hello World"
-                        value={telefonoContacto.value}
-                        onChange={handleFormChange}
-                        size="small"
-                        margin="dense"
-                        type="number"
-                    />
-                    {
-                        telefonoContacto.messageValidate && 
-                            <Alert severity="error" sx={{
-                                //   bgcolor: 'background.paper',
-                                boxShadow: 1,
-                                //   borderRadius: 1,
-                                p: '0 20px',
-                                minWidth: 300,
-                                fontSize:'12px'
-                                }}>{telefonoContacto.messageValidate}</Alert>
-                    }
-                    <TextField
-                        fullWidth
-                        required
-                        id="email"
-                        label={email.label}
-                        error={email.messageValidate?true:false}
-                        name="email"
-                        // defaultValue="Hello World"
-                        value={email.value}
-                        onChange={handleFormChange}
-                        size="small"
-                        margin="dense"
-                    />
-                    {
-                        email.messageValidate && 
-                            <Alert severity="error" sx={{
-                                //   bgcolor: 'background.paper',
-                                boxShadow: 1,
-                                //   borderRadius: 1,
-                                p: '0 20px',
-                                minWidth: 300,
-                                fontSize:'12px'
-                                }}>{email.messageValidate}</Alert>
-                    }
-                    <TextField
-                        fullWidth
-                        required
-                        id="confirmaremail"
-                        label={confirmaremail.label}
-                        error={confirmaremail.messageValidate?true:false}
-                        name="confirmaremail"
-                        // defaultValue="Hello World"
-                        value={confirmaremail.value}
-                        onChange={handleFormChange}
-                        size="small"
-                        margin="dense"
-                    />
-                    {
-                        confirmaremail.messageValidate && 
-                            <Alert severity="error" sx={{
-                                //   bgcolor: 'background.paper',
-                                boxShadow: 1,
-                                //   borderRadius: 1,
-                                p: '0 20px',
-                                minWidth: 300,
-                                fontSize:'12px'
-                                }}>{confirmaremail.messageValidate}</Alert>
-                    }
-                    <FormControl sx={{ p:'10px 0'  }} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-password">{pass.label}</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-password"
-                            type={showPass ? 'text' :'password'}
-                            value={pass.value}
-                            onChange={handleFormChange}
-                            error={pass.messageValidate?true:false}
-                            name="pass"
-                            // label={pass.label}
-                            endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={()=>setShowPass(!showPass)}
-                                // onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                >
-                                {showPass ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                            }
-                            label="Password"
-                        />
-                        </FormControl>
-                    {
-                        pass.messageValidate && 
-                            <Alert severity="error" sx={{
-                                //   bgcolor: 'background.paper',
-                                boxShadow: 1,
-                                //   borderRadius: 1,
-                                p: '0 20px',
-                                minWidth: 300,
-                                fontSize:'12px'
-                                }}>{pass.messageValidate}</Alert>
-                    }
-                    <FormControl sx={{  }} variant="outlined" >
-                        <InputLabel htmlFor="outlined-adornment">{confPass.label}</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment"
-                            type={showPass ? 'text' :'password'}
-                            value={confPass.value}
-                            onChange={handleFormChange}
-                            error={confPass.messageValidate?true:false}
-                            name="confPass"
-                            // label={confPass.label}
-                            endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={()=>setShowPass(!showPass)}
-                                // onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                >
-                                {showPass ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                            }
-                            label="Password"
-                        />
-                        </FormControl>
-                    {
-                        confPass.messageValidate && 
-                            <Alert severity="error" sx={{
-                                //   bgcolor: 'background.paper',
-                                boxShadow: 1,
-                                //   borderRadius: 1,
-                                p: '0 20px',
-                                minWidth: 300,
-                                fontSize:'12px'
-                                }}>{confPass.messageValidate}</Alert>
-                    }
-                </div>
-                <div style={{display:'flex', width:'50%', justifyContent:'space-around', marginTop:'20px'}}>
-                    <button onClick={()=>crearUsuario()}>Crear</button>
-                    <button onClick={()=>{navigate("/");}}>Cancelar</button>
+                    <FieldTextWidtLabel name="email" value={email.value} label={email.label} handleChange={(target)=>handleFormChange(target)}
+                         messageValidate={email.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>
+
+                    <FieldTextWidtLabel name="confirmaremail" value={confirmaremail.value} label={confirmaremail.label} handleChange={(target)=>handleFormChange(target)}
+                         messageValidate={confirmaremail.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>
+                    
+                    <FieldTextWidtLabel name="pass" value={pass.value} label={pass.label} handleChange={(target)=>handleFormChange(target)}
+                         messageValidate={pass.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>
+
+                    <FieldTextWidtLabel name="confPass" value={confPass.value} label={confPass.label} handleChange={(target)=>handleFormChange(target)}
+                         messageValidate={confPass.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>
+
+                    <button onClick={()=>crearUsuario()} className='btnAceptar'>¡REGISTRARSE AHORA!</button>
+
+                    {/* <div style={{display:'flex'}} onClick={()=>{navigate("/")}}> */}
+                    <div style={{display:'flex'}} onClick={()=>{setOpenDialog({open:true, msg :textosInfoWarnig.cancelarRegistro, tittle:''})}}>
+                        <img src={Salir_Icon} alt="" style={{cursor:'pointer', width:'20px', alignSelf:'center'}}/>
+                        <p style={{alignSelf:'end', fontSize:'12px', margin:'5px 0',color:stylesApp.gray1, cursor:'pointer'}}>Salir</p>
+                    </div>
+                    {/* <button onClick={()=>logIn()}>Aceptar</button><br />
+                    <button onClick={()=>{navigate("/")}}>Salir</button> */}
                 </div>
             </div>
             <Dialog
@@ -547,17 +324,42 @@ export const Signin = () => {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
                         <p>{openDialog.msg}</p>
-                        <p style={{textAlign:'center',marginTop:'20px', fontWeight:'bold'}}>{`Usuario: ${numeroDocumento.value}`}</p>
+                        {
+                            openDialog.msg === textosInfoWarnig.creacionUsuario &&
+                            <p style={{textAlign:'center',marginTop:'20px', fontWeight:'bold'}}>{`Usuario: ${numeroDocumento.value}`}</p>
+                        }
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={()=>{
-                        setOpenDialog({...openDialog, open:false});
-                        setForm(initForm);
-                        navigate("/");
-                        }}>Ok</Button>
+                    {
+                        openDialog.msg === textosInfoWarnig.creacionUsuario
+                        ? <button onClick={()=>{
+                            setOpenDialog({...openDialog, open:false});
+                            setForm(initForm);
+                            navigate("/");
+                        }} className='btnAceptar'>OK</button>
+                        : <div>
+                            <button onClick={()=>{
+                                setOpenDialog({...openDialog, open:false});
+                                setForm(initForm);
+                                navigate("/");
+                            }} className='btnAceptar'>SI</button>
+                            <button onClick={()=>{
+                                setOpenDialog({...openDialog, open:false});
+                            }} className='btnAceptar'>NO</button>
+                        </div>
+                    }
+                    
                 </DialogActions>
             </Dialog>
         </div>
+        
+        //         <div style={{display:'flex', width:'50%', justifyContent:'space-around', marginTop:'20px'}}>
+        //             <button onClick={()=>crearUsuario()}>Crear</button>
+        //             <button onClick={()=>{navigate("/");}}>Cancelar</button>
+        //         </div>
+        //     </div>
+        //     
+        // </div>
     )
 }

@@ -7,6 +7,8 @@ import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
 
 import '../styles/App.css'
+import Logo_Asomunicipios_ColorLetrablanca from '../assets/Iconos/Logo_Asomunicipios_ColorLetrablanca.png'
+
 
 import { StoreContext } from '../App';
 import { RequireAuth } from '../auth/RequireAuth';
@@ -146,36 +148,53 @@ export const AppRouter = ({props}) => {
     }
 
     return (
-        <div className="App" style={{}}>
-            {
-                usuario.isLogin &&
-                    <div style={{display:'flex', height:'25px', alignItems:'center', justifyContent:'end', padding:'0px 20px'}}>
-                        <p style={{marginRight:'20px'}}>Bievenido <span style={{fontWeight:'bold'}}>{usuario.infoUser.nombre}</span></p>
-                        <button onClick={()=>salir()}>Salir</button>
-                    </div>
-            }
-            <Routes>
-                <Route path="*" element={
-                    <Tramites>
-                        <AuthRouter/>
-                    </Tramites>
-                }
-                />
-                {/* <Route path="*" element={<AuthRouter/>}>
-                    <Route index element={<Login/>} />
-                    <Route path="sigin" element={<Signin/>} />
-                </Route> */}
-                <Route
-                    path="/tramites/*"
-                    element={
-                    <RequireAuth>
-                        <TramitesCatastrales />
-                    </RequireAuth>
+        <div className="App pagePhader"  style={{}}>
+            <div className="panelFrontal">
+
+
+                <div style={{background:'brown'}}>
+                    <img onClick={()=>{navigate("/login");}} src={Logo_Asomunicipios_ColorLetrablanca} alt="" style={{cursor:'pointer', width:'120px'}}/>
+                    <p>TRÁMITES</p>
+                    <p>CATAS-</p>
+                    <p>TRALES</p>
+                    
+                    {
+                        usuario.isLogin &&
+                            <div style={{display:'flex', height:'25px', alignItems:'center', justifyContent:'end', padding:'0px 20px'}}>
+                                <p style={{marginRight:'20px'}}>Bievenido <span style={{fontWeight:'bold'}}>{usuario.infoUser.nombre}</span></p>
+                                <button onClick={()=>salir()}>Salir</button>
+                            </div>
                     }
-                />
-                {/* <Route path="/tramites/*" element={<TramitesCatastrales/>} /> */}
-                {/* <Route path="*" element={<NoMatch/>} /> */}
-            </Routes>
+
+                </div>
+
+
+
+                <div style={{width:'100%'}} className="******************pendiente******* "> 
+                    <Routes>
+                        <Route path="*" element={
+                            <Tramites>
+                                <AuthRouter/>
+                            </Tramites>
+                        }
+                        />
+                        {/* <Route path="*" element={<AuthRouter/>}>
+                            <Route index element={<Login/>} />
+                            <Route path="sigin" element={<Signin/>} />
+                        </Route> */}
+                        <Route
+                            path="/tramites/*"
+                            element={
+                            <RequireAuth>
+                                <TramitesCatastrales />
+                            </RequireAuth>
+                            }
+                        />
+                        {/* <Route path="/tramites/*" element={<TramitesCatastrales/>} /> */}
+                        {/* <Route path="*" element={<NoMatch/>} /> */}
+                    </Routes>
+                </div>
+            </div>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={openBackDrop} onClick={closeBackDrop} transitionDuration={10000}
@@ -184,7 +203,7 @@ export const AppRouter = ({props}) => {
             </Backdrop>
             <Snackbar
                 anchorOrigin={{ vertical:'top', horizontal:'right' }}
-                autoHideDuration={6000}
+                autoHideDuration={3500}
                 open={openSnackBar}
                 onClose={closeSnackbar}
                 TransitionComponent={TransitionUp}

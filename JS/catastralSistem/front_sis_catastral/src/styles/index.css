@@ -8,23 +8,29 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
 :root {
   --fondo: rgb(242, 242, 242);
   --ancho-contenedor: 100vw;
-  --color1: rgba(221, 221, 211, 0.3);
+  /* --grey1: rgba(128, 128, 128, 0.5); */
+  --grey1: rgba(150, 152, 154, 1);
+  --grey2: rgba(128, 128, 128, 0.9);
   --color2: rgba(67, 16, 195);
   --color3: rgba(89, 59, 221);
-  --verde: rgb(0, 160, 74);
+  --verde: rgb(0, 168, 89);
+  --verde2: rgb(168, 207, 69);
+  --azul1: rgb(12, 106, 145);
   --verdeHover: rgb(51, 104, 75);
   --blanco: rgb(255, 255, 255);
+  --fontFamilyApp: Verdana, 'Courier New', Courier, monospace
 }
 
 
 body {
   margin: 0;
   height: 96vh;
-  font-family: Verdana, 'Courier New', Courier, monospace;
+  font-family: var(--fontFamilyApp);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-image: url('../assets/Iconos/BackGroundAPP.png');
   /* background: linear-gradient(to bottom, #51dd58, #042805); */
+  
 }
 
 code {
@@ -56,3 +62,10 @@ h1, h2, h3, h4, h5{
 .css-1pysi21-MuiFormLabel-root-MuiInputLabel-root{
   font-size: 12px !important;
 }
+
+::placeholder {
+  color: rgb(128 128 128 / 50%);
+  font-size: 12px;
+  font-family: var(--fontFamilyApp);
+}
+

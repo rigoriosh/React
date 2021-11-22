@@ -23,7 +23,7 @@ export const Tramites = ({children}) => {
 
     if (store.user.isLogin) {
         return (
-            <div>
+            <div >
                 <h1>Tramites</h1>
 
                 {

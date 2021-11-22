@@ -25,10 +25,14 @@ export const pathsRoutes = {
 }
 
 export const textosInfoWarnig = {
-  campoRequerido: '',
   falloComunicacion:'Estamos presentando inconvenientes en la comunicación, porfavor intentalo mas tarde',
   credencialesIncorrectas:'Credenciales incorrectas',
-  inconvenientesRenovarSesion: 'Se presentaron inconvenientes para renovar su sesión, debe registrarse nuevamente, gracias '
+  inconvenientesRenovarSesion: 'Se presentaron inconvenientes para renovar su sesión, debe registrarse nuevamente, gracias ',
+  camposRequerdios:'Recuerda que todos los campos son obligatorios',
+  campoRequerido:'Este campo es requerido',
+  formatEmailInvalido:'Ingrese un email válido',
+  creacionUsuario:'El usuario ha sido creado exitosamente.',
+  cancelarRegistro: '¿Seguro que desea cancelar el registro?'
 }
 
 function utf8_encode (argString) { // eslint-disable-line camelcase
@@ -137,3 +141,9 @@ export const getToken = async(user, pwd) => {
   const responseGetToken = await doGetToken(headers);
   return responseGetToken;
 }
+
+export const stylesApp = {
+  gray1: 'rgb(128 128 128 / 50%)'
+}
+
+export const emailRegex = /^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,63}$/i;
