@@ -17,6 +17,8 @@ export const initStore = {
     severity: "success"/*  | "error" | "warning" | "info" */,
   },
   tiposDocumento:[],
+  dialogTool:{open:false, msg :'',tittle:'', response:false},
+
 };
 
 export const pathsRoutes = {
@@ -25,14 +27,16 @@ export const pathsRoutes = {
 }
 
 export const textosInfoWarnig = {
-  falloComunicacion:'Estamos presentando inconvenientes en la comunicación, porfavor intentalo mas tarde',
+  falloComunicacion:'Estamos presentando inconvenientes en la comunicación, porfavor intentalo mas tarde, gracias',
   credencialesIncorrectas:'Credenciales incorrectas',
   inconvenientesRenovarSesion: 'Se presentaron inconvenientes para renovar su sesión, debe registrarse nuevamente, gracias ',
   camposRequerdios:'Recuerda que todos los campos son obligatorios',
   campoRequerido:'Este campo es requerido',
   formatEmailInvalido:'Ingrese un email válido',
   creacionUsuario:'El usuario ha sido creado exitosamente.',
-  cancelarRegistro: '¿Seguro que desea cancelar el registro?'
+  cancelarRegistro: '¿Seguro que desea cancelar el registro?',
+  elimnarUsuario: '¿Seguro que desa eliminar el usuario?',
+  tiempoInactividad: '!Su sesion a finalizado por inactividad',
 }
 
 function utf8_encode (argString) { // eslint-disable-line camelcase
@@ -147,3 +151,17 @@ export const stylesApp = {
 }
 
 export const emailRegex = /^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,63}$/i;
+
+export const checkPermits = (permits, store1) => {
+  const roles = store1.user.infoUser.roles;
+  const Permisos = [];
+  roles.forEach(rol => rol.permisos.forEach(permiso => Permisos.push(permiso)));
+  const isOk = Permisos.filter(p => p.moduloDominio.valor === permits);
+  return isOk.length > 0
+  // const isOk = roles.filter(e => )
+}
+
+
+
+
+

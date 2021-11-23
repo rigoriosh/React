@@ -1,46 +1,74 @@
 import React, { useContext, useEffect } from 'react'
 import { /* useParams, */ useNavigate } from "react-router-dom";
 import { StoreContext } from '../../App';
-import { permits } from '../../helpers/utils';
+import { VerticalDivider } from '../../componets/VerticalDivider';
+import { checkPermits, permits } from '../../helpers/utils';
+
+import GestiondeUS_Icon from '../../assets/Iconos/GestiondeUS_Icon.png'
+import SeguimientoaTramite_Icon from '../../assets/Iconos/SeguimientoaTramite_Icon.png'
+import ConsultarTramite_Icon from '../../assets/Iconos/ConsultarTramite_Icon.png'
+import CrearTramite_Icon from '../../assets/Iconos/CrearTramite_Icon.png'
+
+
+
 
 export const Tramites = ({children}) => {
     let navigate = useNavigate();
-    const { store/* , updateStore */} = useContext(StoreContext);
+    const { store, /* updateStore */} = useContext(StoreContext);
     useEffect(() => {
         console.log("in Tramites")
         return () => {}
     }, []);
     
 
-    const checkPermits = (permits, store1) => {
-        const roles = store1.user.infoUser.roles;
-        const Permisos = [];
-        roles.forEach(rol => rol.permisos.forEach(permiso => Permisos.push(permiso)));
-        const isOk = Permisos.filter(p => p.moduloDominio.valor === permits);
-        return isOk.length > 0
-        // const isOk = roles.filter(e => )
-    }
-
     if (store.user.isLogin) {
         return (
-            <div >
-                <h1>Tramites</h1>
-
+            <div style={{display:'flex', justifyContent:'center'}}>
                 {
                     checkPermits(permits[0].valor, store) &&
-                    <button onClick={()=>{navigate("/tramites/gestionarUsuario");}}>Gestionar Usuario</button>
+                    <div style={{display:'flex', alignItems:'center'}}>
+                        <div style={{cursor:'pointer'}} onClick={()=>{ navigate("/tramites/gestionarUsuario");}}>
+                            <img src={GestiondeUS_Icon} alt="" style={{ width:'80px' }}/>
+                            <p style={{color:'white', fontWeight:'bold'}}>Gestión</p>
+                            <p style={{color:'white', fontWeight:'bold'}}>de Usuario</p>
+                        </div>
+                        <VerticalDivider m="0px 30px" height="30%"/>
+                    </div>
                 }
                 {
                     checkPermits(permits[1].valor, store) &&
-                    <button onClick={()=>{navigate("/tramites/seguimientoTramitre");}}>Seguimiento a Trámite</button>
+                    <div style={{display:'flex', alignItems:'center'}}>
+                        <div style={{cursor:'pointer'}} onClick={()=>{navigate("/tramites/seguimientoTramitre");}}>
+                        <img src={SeguimientoaTramite_Icon} alt="" style={{ width:'80px' }}/>
+                            <div>
+                                <p style={{color:'white', fontWeight:'bold'}}>Seguimiento a</p>
+                                <p style={{color:'white', fontWeight:'bold'}}>Trámite</p>
+                            </div>
+                        </div>
+                    </div>
                 }
                 {
                     checkPermits(permits[2].valor, store) &&
-                    <button onClick={()=>{navigate("/tramites/crear");}}>Crear trámite</button>
+                    <div style={{display:'flex', alignItems:'center'}}>
+                        <div style={{cursor:'pointer'}} onClick={()=>{navigate("/tramites/crear");}}>
+                            <img src={CrearTramite_Icon} alt="" style={{ width:'80px' }}/>
+                            <p style={{color:'white', fontWeight:'bold'}}>Crear</p>
+                            <p style={{color:'white', fontWeight:'bold'}}>Trámitre</p>
+                        </div>
+                        <VerticalDivider m="0px 30px" height="30%"/>
+                    </div>
                 }
                 {
                     checkPermits(permits[3].valor, store) &&
-                    <button onClick={()=>{navigate("/tramites/consultar");}}>Consultar trámite</button>
+                    <div style={{display:'flex', alignItems:'center'}}>
+                        <div style={{cursor:'pointer'}} onClick={()=>{navigate("/tramites/consultar");}}>
+                        <img src={ConsultarTramite_Icon} alt="" style={{ width:'80px' }}/>
+                            <div>
+                                <p style={{color:'white', fontWeight:'bold'}}>Consultar</p>
+                                <p style={{color:'white', fontWeight:'bold'}}>Trámite</p>
+                            </div>
+                        </div>
+                    </div>
                 }
             </div>
         )

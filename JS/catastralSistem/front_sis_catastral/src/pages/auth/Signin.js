@@ -17,7 +17,7 @@ import { emailRegex, pwdEncripted, stylesApp, textosInfoWarnig } from '../../hel
 import { FieldTextWidtLabel } from '../../componets/FieldTextWidtLabel';
 import { FieldSelect } from '../../componets/FieldSelect';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+export const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
@@ -173,7 +173,6 @@ export const Signin = () => {
             updateStore({ ...store, tiposDocumento, });
         }
     }
-
 
     const crearUsuario = async() => {
         if (validateForm()) {

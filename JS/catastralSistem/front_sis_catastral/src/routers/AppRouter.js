@@ -5,9 +5,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import MuiAlert from '@mui/material/Alert';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 import '../styles/App.css'
-import Logo_Asomunicipios_ColorLetrablanca from '../assets/Iconos/Logo_Asomunicipios_ColorLetrablanca.png'
 
 
 import { StoreContext } from '../App';
@@ -15,7 +19,9 @@ import { RequireAuth } from '../auth/RequireAuth';
 import { Tramites } from '../pages/tramites/Tramites';
 import { AuthRouter } from './AuthRouter';
 import { TramitesCatastrales } from './TramitesCatastrales';
-import { getToken, initStore, textosInfoWarnig } from '../helpers/utils';
+import { getToken, initStore, stylesApp, textosInfoWarnig } from '../helpers/utils';
+import { VerticalMenu } from '../componets/VerticalMenu';
+import { Transition } from '../pages/auth/Signin';
 
 function TransitionUp(props) {
     return <Slide {...props} direction="up" />;
@@ -29,8 +35,7 @@ export const AppRouter = ({props}) => {
     let location = useLocation();
     const navigate = useNavigate();
     const [timeSessionTkn, setTimeSessionTkn] = useState();
-    const { user:usuario, openBackDrop, snackBar, timeInitSessionUser, minutesToEachSession} = store;
-
+    const { user:usuario, openBackDrop, snackBar, timeInitSessionUser, minutesToEachSession, dialogTool={open:false}} = store;
     const { openSnackBar, messageSnackBar, severity} = snackBar;
     
 
@@ -77,7 +82,7 @@ export const AppRouter = ({props}) => {
                 const timeDifference = timeFin -  new Date(timeInitSessionUser);
                 if(timeDifference >= tiempoExpiracion){ // si vencio solicita nuevo usuario
                     // cierra la sesion
-                    salir();
+                    salir(textosInfoWarnig.tiempoInactividad);
                 }
             }
         }, 60000);
@@ -116,8 +121,13 @@ export const AppRouter = ({props}) => {
         updateStore({...store, snackBar:{openSnackBar: false, messageSnackBar:''}});
     }
 
-    const salir = () => {
-        updateStore(initStore);
+    const salir = (motivo='') => {
+        updateStore({...initStore, snackBar:{
+            openSnackBar: motivo !== '',
+            messageSnackBar: motivo !== '' ? motivo : '',
+            tiempoExpiracion:'',
+            severity: "info"/*  | "error" | "warning" | "info" */,
+          }});
         sessionStorage.clear();
         navigate("/");
     }
@@ -151,53 +161,39 @@ export const AppRouter = ({props}) => {
         <div className="App pagePhader"  style={{}}>
             <div className="panelFrontal">
 
+            {
+                usuario.isLogin &&
+                    <VerticalMenu salir={salir} usuario={usuario}/>
+            }
 
-                <div style={{background:'brown'}}>
-                    <img onClick={()=>{navigate("/login");}} src={Logo_Asomunicipios_ColorLetrablanca} alt="" style={{cursor:'pointer', width:'120px'}}/>
-                    <p>TRÁMITES</p>
-                    <p>CATAS-</p>
-                    <p>TRALES</p>
-                    
-                    {
-                        usuario.isLogin &&
-                            <div style={{display:'flex', height:'25px', alignItems:'center', justifyContent:'end', padding:'0px 20px'}}>
-                                <p style={{marginRight:'20px'}}>Bievenido <span style={{fontWeight:'bold'}}>{usuario.infoUser.nombre}</span></p>
-                                <button onClick={()=>salir()}>Salir</button>
-                            </div>
+            <div style={{width:'100%', alignSelf:'center'}} className="******************pendiente******* "> 
+                <Routes>
+                    <Route path="*" element={
+                        <Tramites>
+                            <AuthRouter/>
+                        </Tramites>
                     }
-
-                </div>
-
-
-
-                <div style={{width:'100%'}} className="******************pendiente******* "> 
-                    <Routes>
-                        <Route path="*" element={
-                            <Tramites>
-                                <AuthRouter/>
-                            </Tramites>
+                    />
+                    {/* <Route path="*" element={<AuthRouter/>}>
+                        <Route index element={<Login/>} />
+                        <Route path="sigin" element={<Signin/>} />
+                    </Route> */}
+                    <Route
+                        path="/tramites/*"
+                        element={
+                        <RequireAuth>
+                            <TramitesCatastrales />
+                        </RequireAuth>
                         }
-                        />
-                        {/* <Route path="*" element={<AuthRouter/>}>
-                            <Route index element={<Login/>} />
-                            <Route path="sigin" element={<Signin/>} />
-                        </Route> */}
-                        <Route
-                            path="/tramites/*"
-                            element={
-                            <RequireAuth>
-                                <TramitesCatastrales />
-                            </RequireAuth>
-                            }
-                        />
-                        {/* <Route path="/tramites/*" element={<TramitesCatastrales/>} /> */}
-                        {/* <Route path="*" element={<NoMatch/>} /> */}
-                    </Routes>
-                </div>
+                    />
+                    {/* <Route path="/tramites/*" element={<TramitesCatastrales/>} /> */}
+                    {/* <Route path="*" element={<NoMatch/>} /> */}
+                </Routes>
+            </div>
             </div>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={openBackDrop} onClick={closeBackDrop} transitionDuration={10000}
+                open={openBackDrop} onClick={closeBackDrop} 
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
@@ -214,6 +210,26 @@ export const AppRouter = ({props}) => {
                     {messageSnackBar}
                 </Alert>
             </Snackbar>
+            <Dialog
+                open={dialogTool.open}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={()=>updateStore({...store, dialogTool:{...dialogTool, open:false}})}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle>{dialogTool.tittle}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                        <p>{dialogTool.msg}</p>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                   <div>
+                        <button onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:true}})} className='btnAceptar'>SI</button>
+                        <button onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:false}})} className='btnAceptar'>NO</button>
+                    </div>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }

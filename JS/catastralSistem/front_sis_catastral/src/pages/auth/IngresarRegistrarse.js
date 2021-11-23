@@ -3,6 +3,7 @@ import { /* useParams, */ useNavigate } from "react-router-dom";
 import iconIngresar from '../../assets/Iconos/Ingresar_Icon.png'
 import registrarse from '../../assets/Iconos/Registrese_Icon.png'
 import { LogoAsomunicipiosPagInicio } from '../../componets/LogoAsomunicipiosPagInicio';
+import { VerticalDivider } from '../../componets/VerticalDivider';
 
 
 export const IngresarRegistrarse = () => {
@@ -20,7 +21,7 @@ export const IngresarRegistrarse = () => {
                 <div style={{}}>
                     <img onClick={()=>{navigate("/login");}} src={iconIngresar} alt="" style={{cursor:'pointer', width:'120px'}}/>
                 </div>
-                {/* Separador | */}<div style={{backgroundColor:'white', width:'1px', }}></div>
+                <VerticalDivider bgc='white' w="1px"/>
                 <div style={{}}>
                     <img onClick={()=>{navigate("/sigin");}} src={registrarse} alt="" style={{cursor:'pointer', width:'150px'}}/>
                 </div>
