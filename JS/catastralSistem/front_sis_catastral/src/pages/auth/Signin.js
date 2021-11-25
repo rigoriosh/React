@@ -196,7 +196,7 @@ export const Signin = () => {
                 "tipoUsuario": "E"
             }
             // const body = `nombreUsuario=${form.numeroDocumento.value}&nombre=${form.nombre.value}&apellido=${form.apellido.value}&tipoDocumento=${form.tipoDocumento.value}&numeroDocumento=${form.numeroDocumento.value}&numeroCelular=${form.telefonoContacto.value}&contrasena=${form.pass.value}&email=${form.email.value}&tipoUsuario:"E"&roles:[{"idRol": 2}]`;
-            const crearUsuarioExterno = await getInfo(headers, enviroment.crearUsuarioExterno, 'POST', JSON.stringify(body))
+            const crearUsuarioExterno = await getInfo(headers, enviroment.crearUsuario, 'POST', JSON.stringify(body))
             // const crearUsuarioExterno = {resultado:{mensaje:'ok creado'}}
             if (!crearUsuarioExterno.resultado) {
                 updateStore({
@@ -241,6 +241,18 @@ export const Signin = () => {
             formOk = false;
         }
 
+        if(cloneForm.email.value !== cloneForm.confirmaremail.value){
+            cloneForm = {...cloneForm, confirmaremail:{...cloneForm.confirmaremail, messageValidate: textosInfoWarnig.diferentesEmails}}
+            mensaje = textosInfoWarnig.diferentesEmails; 
+            formOk = false;
+        }
+
+        if(cloneForm.pass.value !== cloneForm.confPass.value){
+            cloneForm = {...cloneForm, confPass:{...cloneForm.confPass, messageValidate: textosInfoWarnig.diferentesPassWords}}
+            mensaje = textosInfoWarnig.diferentesPassWords; 
+            formOk = false;
+        }
+
         keysForm.forEach(field => {
             if (cloneForm[field].value === '') {
                 cloneForm = {...cloneForm, [field]:{...cloneForm[field], messageValidate: textosInfoWarnig.campoRequerido}}
@@ -271,7 +283,7 @@ export const Signin = () => {
     return (
         <div className='pagePhader'>
             <div className="modalIngrearUserExt_inLogin" style={{width:'35%', height:'90%'}}>
-                <div className='modalLogin sombra' style={{backgroundColor:'white', padding:'20px 20px'}} key={(e)=>console.log(e)}>
+                <div className='modalLogin sombra' style={{backgroundColor:'white', padding:'20px 20px'}} >
                     <img src={Logo_Asomunicipios_ColorLetranegra} alt="" srcSet="" style={{width:'90px'}}/>
                     {/* divisor */}<div style={{width:'70%', height:'0.5px', backgroundColor:stylesApp.gray1, margin:'10px'}}></div>
                     <img onClick={()=>{}} src={Registrese_NuevoUS_Icon} alt="" style={{cursor:'pointer', width:'120px', alignSelf:'center'}}/>
@@ -279,7 +291,7 @@ export const Signin = () => {
                     <FieldTextWidtLabel  value={apellido.value} name="apellido" label={apellido.label} handleChange={(target)=>handleFormChange(target)} messageValidate={apellido.messageValidate}/>
                     <div style={{display:'flex', width:'100%'}}>
                         <FieldSelect label={tipoDocumento.label} value={tipoDocumento.value} options={tiposDocumento} handleOnchange={(target)=>handleFormChange(target)}
-                            messageValidate={tipoDocumento.messageValidate}/>
+                            messageValidate={tipoDocumento.messageValidate} name={"tipoDocumento"}/>
                         <FieldTextWidtLabel name="numeroDocumento" value={numeroDocumento.value} label={numeroDocumento.label} handleChange={(target)=>handleFormChange(target)}
                          messageValidate={numeroDocumento.messageValidate} type='number' maxLength={20} styleOwn={{marginLeft:'10px'}}/>
                     </div>

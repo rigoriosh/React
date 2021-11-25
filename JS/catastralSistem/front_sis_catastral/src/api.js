@@ -25,7 +25,7 @@ export const doGetToken = async(headers ) => {
 export const getInfo = async(headers, url, method='POST', body) => {
   try {
     let myHeaders = new Headers();
-    myHeaders.append('token', '');
+    myHeaders.append('token', headers.token);
     myHeaders.append('Content-Type', 'application/json');
     // myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 

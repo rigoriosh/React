@@ -127,9 +127,14 @@ export const AppRouter = ({props}) => {
             messageSnackBar: motivo !== '' ? motivo : '',
             tiempoExpiracion:'',
             severity: "info"/*  | "error" | "warning" | "info" */,
-          }});
-        sessionStorage.clear();
-        navigate("/");
+          },
+          user: initStore.user,
+        });
+        setTimeout(() => {
+            sessionStorage.clear();
+            navigate("/");
+            console.log("end timesession")
+        }, 2000);
     }
 
     const renewToken = async(user, pwd) => {

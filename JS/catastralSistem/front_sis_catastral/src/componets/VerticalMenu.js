@@ -9,12 +9,17 @@ import CerrarSesion_Icon from '../assets/Iconos/CerrarSesion_Icon.png'
 import ConsultarTramite_Icon from '../assets/Iconos/ConsultarTramite_Icon.png'
 import CrearTramite_Icon from '../assets/Iconos/CrearTramite_Icon.png'
 import { StoreContext } from '../App'
-import { checkPermits, permits } from '../helpers/utils'
+import { checkPermits, initStore, permits } from '../helpers/utils'
 
 
 export const VerticalMenu = ({usuario, salir}) => {
-    const { store/* , updateStore */} = useContext(StoreContext);
+    const { store, updateStore} = useContext(StoreContext);
     let navigate = useNavigate();
+
+    const cerrar = () => {
+        updateStore(initStore)
+        salir();
+    }
     return (
         <div className="verticalMenu" >
             <img className="imgWidth" /* onClick={()=>{navigate("/login");}} */ 
@@ -60,7 +65,7 @@ export const VerticalMenu = ({usuario, salir}) => {
                 <p style={{fontSize:'14px'}}>{usuario.infoUser.nombre}</p>
                 <p className="fz12px">{usuario.infoUser.numeroDocumento}</p>
                 <div className="horizontalDivider"></div>
-                <div style={{display:'flex'}} onClick={()=>salir()}>
+                <div style={{display:'flex'}} onClick={()=>cerrar()}>
                     <img className="imgWidth" src={CerrarSesion_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
                     <p style={{alignSelf:'end', fontSize:'10px', margin:'5px 0 5px 5px', cursor:'pointer'}}>Cerrar sesión</p>
                 </div>

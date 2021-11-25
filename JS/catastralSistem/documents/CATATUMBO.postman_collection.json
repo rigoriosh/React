@@ -6,6 +6,360 @@
 	},
 	"item": [
 		{
+			"name": "SOLICITUD",
+			"item": [
+				{
+					"name": "PERSISTIR SOLICITUD",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/david/Downloads/Downloads.zip"
+								},
+								{
+									"key": "data",
+									"value": "{\n  \"numeroRadicado\": \"123456789\",\n  \"tipoSolicitante\": \"PR\",\n  \"idSolicitante\": {\n    \"idUsuario\": 1\n  },\n  \"tipoTramite\": \"MP\",\n  \"nombreTramite\": \"SC\",\n  \"municipioPredio\": \"05591\",\n  \"numeroPredial\": \"12345678932165498712396385274\",\n  \"matriculaInmobiliaria\": \"ABCDE12345\",\n  \"claseSuelo\": \"RU\",\n  \"propiedadHorizontal\": \"S\",\n  \"proyectoUrbanistico\": \"N\",\n  \"noEscrituraPublica\": \"ABCDEFG1234567\",\n  \"anioEscritura\": \"2015\",\n  \"notariaOtorgante\": \"NOTARIA 25 DE PRUEBA\",\n  \"municipioNotaria\": \"05591\",\n  \"objetoPeticion\": \"CDE\",\n  \"consideraMejora\": \"INC\",\n  \"diferenciaMayoEsta\": \"T\",\n  \"revisionBusca\": \"D\",\n  \"tipoInscripcion\": \"INP\",\n  \"motivoSolicitud\": \"OFAC\",\n  \"objetoRectificacion\": \"LQC\",\n  \"areaTerreno\": 20.4,\n  \"areaConstruccion\": 18.4,\n  \"avaluoTerreno\": 30.1,\n  \"avaluoConstruccion\": 120.4,\n  \"autoestimacionAvaluo\": 240000000,\n  \"razonSolicitud\": \"PORQUE VOY A ENTRAR EN UN PLEITO Y NECESITO TENER LA INFORMACION CLARA\",\n  \"titularesPredio\": [\n    {\n      \"numeroDocumento\": \"1234544112\",\n      \"tipoDocumento\": \"CC\",\n      \"nombre\": \"pepito\",\n      \"apellido\": \"perez\"\n    },\n    {\n      \"numeroDocumento\": \"9878655441\",\n      \"tipoDocumento\": \"CC\",\n      \"nombre\": \"anastacio\",\n      \"apellido\": \"galindo\"\n    }\n  ]\n}",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/createSolicitud",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"createSolicitud"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER TIPOS SOLICITUDES",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"type": "text"
+							},
+							{
+								"key": "valorConsultar",
+								"value": "MS",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getTiposSolicitud",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getTiposSolicitud"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER TIPOS DE TRAMITE",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getTiposTramite",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getTiposTramite"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER TIPOS SUELO",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getTiposSuelo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getTiposSuelo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER MUNICIPIOS CATATUMBO",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getMunicipiosCatatumbo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getMunicipiosCatatumbo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER DIFERENCIA MAYOR",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getDiferenciaMayor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getDiferenciaMayor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER REVISION BUSCA",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getRevisionBusca",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getRevisionBusca"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER MUNICIPIOS NOTARIA",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/valorLista/getCodigosDane",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"valorLista",
+								"getCodigosDane"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER MOTIVOS SOLICITUD",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getMotivoSolicitud",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getMotivoSolicitud"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER OBJETO PETICION",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getObjetoPeticion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getObjetoPeticion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER CONSIDERA MEJORA",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getConsideraMejora",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getConsideraMejora"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER OBJETO RECTIFICA",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getObjetoRectifica",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getObjetoRectifica"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "LOG IN",
 			"request": {
 				"method": "POST",
@@ -139,13 +493,13 @@
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NTk5NTA5NzQ1LCJuYmYiOjE2MzY1OTU5MDksImlhdCI6MTYzNjU5NTkwOSwibmljayI6ImRhdmlkcyIsImp0aSI6IjZiODBmMzY4LTBlZTYtNGMxMC1hYzllLTMwYjEzN2ZiNzc3NSJ9.iXa-0QFWvKLm2vMqwtHTUwHwOhRm8EXuKi8AxQZZ-zvRlX9ek4E-izG8mbIIrRii",
+						"value": "",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "\t\t {\r\n\t\t    \"apellido\": \"test apellido\",\r\n\t\t    \"tipoDocumento\": \"CC\",\r\n\t\t    \"nombreUsuario\": \"externo\",\r\n\t\t    \"numeroDocumento\": \"1285988663\",\r\n\t\t    \"numeroCelular\": \"8000000\",\r\n            \"contrasena\": \"cHJ1ZWJh\",\r\n\t\t    \"nombre\": \"test nombre\",\r\n\t\t    \"email\": \"prueba@asomunicipios.com\",\r\n\t\t    \"roles\": [\r\n\t\t        {\r\n\t\t            \"idRol\": 2\r\n\t\t        }\r\n\t\t    ],\r\n            \"tipoUsuario\": \"E\"\r\n\t\t}",
+					"raw": "\t\t {\r\n\t\t    \"apellido\": \"test apellido\",\r\n\t\t    \"tipoDocumento\": \"CC\",\r\n\t\t    \"nombreUsuario\": \"externo nuevo\",\r\n\t\t    \"numeroDocumento\": \"1285988664\",\r\n\t\t    \"numeroCelular\": \"8000000\",\r\n            \"contrasena\": \"cHJ1ZWJh\",\r\n\t\t    \"nombre\": \"test nombre\",\r\n\t\t    \"email\": \"prueba@asomunicipios.com\",\r\n\t\t    \"roles\": [\r\n\t\t        {\r\n\t\t            \"idRol\": 2\r\n\t\t        }\r\n\t\t    ],\r\n            \"tipoUsuario\": \"E\"\r\n\t\t}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -271,12 +625,7 @@
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJ0ZXN0QHRlc3QuY29tIiwiZXhwIjoxNjM2NzcxNjU1NzYxLCJuYmYiOjE2MzY3NjgwNTUsImlhdCI6MTYzNjc2ODA1NSwibmljayI6ImRhdmlkcyIsImp0aSI6ImMwODgwOWYzLTI5ZGQtNGZlMS1iMjA1LWQ3Mzc1MTJiNThhYiJ9.Yk1BGE7_5InuQS0r1ULPXtjW3j-MLxgOyVQe4lMmZ8T8g6OeifUbAECA4kYJx9Yy",
-						"type": "text"
-					},
-					{
-						"key": "nombreDominio",
-						"value": "TIPO_DOCUMENTO",
+						"value": "",
 						"type": "text"
 					}
 				],

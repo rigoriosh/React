@@ -6,8 +6,10 @@ import { pathsRoutes } from '../helpers/utils';
 import { ConsultarUsuarios } from '../pages/tramites/crearUsuario/ConsultarUsuarios';
 import { CrearUsuariosInterno } from '../pages/tramites/crearUsuario/CrearUsuariosInterno';
 import GestiondeUS_IconVerde from '../assets/Iconos/GestiondeUS_IconVerde.png'
-import GestiondeUS_Buscar_Icon from '../assets/Iconos/GestiondeUS_Buscar_Icon.png'
+// import GestiondeUS_Buscar_Icon from '../assets/Iconos/GestiondeUS_Buscar_Icon.png'
 import { GestionarUsuarios } from '../pages/tramites/crearUsuario/GestionarUsuarios';
+import GestiondeUS_CrearUs_Icon from '../assets/Iconos/GestiondeUS_CrearUs_Icon.png'
+
 
 
 export const GestionarUsuariosRoute = () => {
@@ -40,6 +42,10 @@ export const GestionarUsuariosRoute = () => {
                     <input type="text" name="" id="" style={{border:'none', borderBottom:'solid 1px gray'}}/>
                 </div> */}
                 <GestionarUsuarios />
+                <div  style={{display:'flex', justifyContent:'center', marginTop:'10px'}}>
+                    <img onClick={()=>{navigate("/tramites/gestionarUsuario/crearUsuario")}} className="imgWidth" src={GestiondeUS_CrearUs_Icon} alt="" style={{width:'20px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/>
+                    <p onClick={()=>{navigate("/tramites/gestionarUsuario/crearUsuario")}} className="color2 pointer">Crear Usuario</p>
+                </div>
                 {/* <button onClick={()=>{navigate("/tramites/gestionarUsuario/crearUsuario");}}>Crear usuario</button> */}
                 {/* <button onClick={()=>{navigate("/tramites/gestionarUsuario/consultarUsuarios");}}>Consultar usuario</button> */}
             </div>

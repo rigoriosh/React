@@ -7,7 +7,7 @@ export const initStore = {
       isLogin:false,
       token:'',
       user:'',
-      pwd:''
+      pwd:'',
     },
   openBackDrop:false,
   snackBar:{
@@ -37,6 +37,8 @@ export const textosInfoWarnig = {
   cancelarRegistro: '¿Seguro que desea cancelar el registro?',
   elimnarUsuario: '¿Seguro que desa eliminar el usuario?',
   tiempoInactividad: '!Su sesion a finalizado por inactividad',
+  diferentesEmails: 'Los email no coinciden',
+  diferentesPassWords: 'Las contraseñas no coinciden',
 }
 
 function utf8_encode (argString) { // eslint-disable-line camelcase

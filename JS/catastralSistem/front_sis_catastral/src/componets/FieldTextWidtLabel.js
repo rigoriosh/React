@@ -9,13 +9,13 @@ export const FieldTextWidtLabel = ({label='El label es requerido', handleChange=
         <div className="fieldTextWidtLabel" style={{...styleOwn }}> 
             <label htmlFor="usuario" className="labels">{label}</label>
             <div className="fieldText" style={{marginTop:'0px', border: messageValidate !== "" ? '1px solid red' : ''}}>
-                <input type={type} name={name} id="usuario" onChange={({target})=>{handleChange(target)}} value={value}
-                    className='styleInputtext' /* placeholder="Usuario" */ maxLength={maxLength} max={maxLength}
+                <input type={type} name={name} id={name} onChange={({target})=>{handleChange(target)}} value={value}
+                    className='styleInputtext' /* placeholder=={name}" */ maxLength={maxLength} max={maxLength}
                 />
             </div>
             {
                  messageValidate !== "" && 
-                <label htmlFor="usuario" className="labels" style={{color:'red'}}>{messageValidate}</label>
+                <label htmlFor={name} className="labels" style={{color:'red'}}>{messageValidate}</label>
             }
             {/* {
                 messageValidate !== "" && 

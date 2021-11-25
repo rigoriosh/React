@@ -111,7 +111,8 @@ export const GestionarUsuarios = () => {
         updateStore({
             ...store,
             snackBar:{ openSnackBar:true, messageSnackBar:textosInfoWarnig.falloComunicacion, severity:'warning', },
-            dialogTool:{open:false, msg :'',tittle:'', response:false}
+            dialogTool:{open:false, msg :'',tittle:'', response:false},
+            openBackDrop:false,
         });
     }
 

@@ -34,56 +34,59 @@ export const Login = () => {
         updateStore({ ...store, openBackDrop: true });
         let responseGetToken = {} ;
         if(user !== '' && pwd !== '' ){
-            responseGetToken = await getToken(user, pwd);
-            if (!responseGetToken.tkn) {
+            try {
+                responseGetToken = await getToken(user, pwd);
+                if (!responseGetToken.tkn) {
+                            updateStore({
+                                ...store,
+                                snackBar:{
+                                    openSnackBar: true,
+                                    messageSnackBar: responseGetToken.error.descripcion ? responseGetToken.error.descripcion : textosInfoWarnig.credencialesIncorrectas,
+                                    severity: 'error'
+                                  },
+                                openBackDrop: false,
+                            });
+                } else {// recibio token ok
+                    // realiza Login
+                    const headers = {token: responseGetToken.tkn};
+                    const responseLogin = await getInfoGET(headers, enviroment.loginUser, 'POST')
+                    if (!responseLogin.resultado.usuario) {
+                        console.log(responseLogin);
                         updateStore({
                             ...store,
+                            openBackDrop: false,
                             snackBar:{
                                 openSnackBar: true,
-                                messageSnackBar: responseGetToken.error.descripcion ? responseGetToken.error.descripcion : textosInfoWarnig.credencialesIncorrectas,
-                                severity: 'error'
-                              },
-                            openBackDrop: false,
+                                messageSnackBar: textosInfoWarnig.falloComunicacion,
+                                severity: 'warning'
+                            },
                         });
-            } else {// recibio token ok
-                // realiza Login
-                const headers = {token: responseGetToken.tkn};
-                const responseLogin = await getInfoGET(headers, enviroment.loginUser, 'POST')
-                if (!responseLogin.resultado.usuario) {
-                    console.log(responseLogin);
-                    debugger
-                    updateStore({
-                        ...store,
-                        openBackDrop: false,
-                        snackBar:{
-                            openSnackBar: true,
-                            messageSnackBar: textosInfoWarnig.falloComunicacion,
-                            severity: 'warning'
-                        },
-                    });
-                } else {
-                    updateStore({
-                        ...store,
-                        user:{
-                            ...usuario,
-                            isLogin: true,
-                            user,
-                            pwd,
-                            token: responseGetToken.tkn,
-                            tiempoExpiracion: responseGetToken.tiempoExpiracion,
-                            tiempoInicio: new Date(), // inicio Token
-                            
-                            infoUser: responseLogin.resultado.usuario
-                        },
-                        openBackDrop: false,
-                        snackBar:{
-                            openSnackBar: true,
-                            messageSnackBar: `Bienvenido ${responseLogin.resultado.usuario.nombre}`,
-                            severity: 'success'
-                        },
-                    });
-                    navigate("/");
+                    } else {
+                        updateStore({
+                            ...store,
+                            user:{
+                                ...usuario,
+                                isLogin: true,
+                                user,
+                                pwd,
+                                token: responseGetToken.tkn,
+                                tiempoExpiracion: responseGetToken.tiempoExpiracion,
+                                tiempoInicio: new Date(), // inicio Token
+                                
+                                infoUser: responseLogin.resultado.usuario
+                            },
+                            openBackDrop: false,
+                            snackBar:{
+                                openSnackBar: true,
+                                messageSnackBar: `Bienvenido ${responseLogin.resultado.usuario.nombre}`,
+                                severity: 'success'
+                            },
+                        });
+                        navigate("/");
+                    }
                 }
+            } catch (error) {
+                falloLaPeticion();
             }
         }else{
             updateStore({
@@ -95,6 +98,69 @@ export const Login = () => {
                   },
             });
         }
+    }
+
+    const falloLaPeticion = () => {
+        updateStore({
+            ...store,
+            openBackDrop:false,
+            snackBar:{ openSnackBar:true, messageSnackBar:textosInfoWarnig.falloComunicacion, severity:'warning', },
+            dialogTool:{open:false, msg :'',tittle:'', response:false}
+        });
+    }
+
+    const modoTest = () => {
+        updateStore({
+            ...store,
+            user:{
+                ...usuario,
+                isLogin: true,
+                user,
+                pwd,
+                token: 'responseGetToken.tkn',
+                tiempoExpiracion: 36000000,
+                tiempoInicio: new Date(), // inicio Token
+                
+                infoUser: {
+                    usuario:{
+                        nombre:'Rigo'
+                    },
+                    roles:[
+                        {
+                            permisos: [
+                                {
+                                    moduloDominio:{
+                                        valor:'MADM'
+                                    }
+                                },
+                                {
+                                    moduloDominio:{
+                                        valor:'MRSC'
+                                    }
+                                },
+                                {
+                                    moduloDominio:{
+                                        valor:'MDSC'
+                                    }
+                                },
+                                {
+                                    moduloDominio:{
+                                        valor:'MCSC'
+                                    }
+                                },
+                            ]
+                        }
+                    ]
+                }
+            },
+            openBackDrop: false,
+            snackBar:{
+                openSnackBar: true,
+                messageSnackBar: `Bienvenido Rigo`,
+                severity: 'success'
+            },
+        });
+        navigate("/");
     }
 
     return (
@@ -130,7 +196,7 @@ export const Login = () => {
 
                     {/* <p onClick={()=>console.log('pendiente lógica recuperar contraseña')} style={{alignSelf:'end', fontSize:'12px', margin:'5px 0',color:stylesApp.gray1, cursor:'pointer'}}>¿Olvido su contraseña?</p> */}
 
-                    <button onClick={()=>logIn()} className='btnAceptar'>ACEPTAR</button>
+                    <button onClick={()=>modoTest()/* logIn() */} className='btnAceptar'>ACEPTAR</button>
 
                     <div style={{display:'flex'}} onClick={()=>{navigate("/")}}>
                         <img src={Salir_Icon} alt="" style={{cursor:'pointer', width:'20px', alignSelf:'center'}}/>

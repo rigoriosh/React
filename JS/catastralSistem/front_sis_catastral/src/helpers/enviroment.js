@@ -5,12 +5,15 @@ const enviroment = {
     getToken: `${api}seguridad/getToken`,
     loginUser: `${api}seguridad/loginUser`,
 
-    crearUsuarioExterno: `${api}usuario/createUser`,
+    crearUsuario: `${api}usuario/createUser`,
     getUsers: `${api}usuario/getUsers`,
     disableUser: `${api}usuario/disableUser/`,
     deleteUser: `${api}usuario/deleteUser/`,
 
     getTiposDocumento: `${api}valorLista/getTiposDocumento`,
+
+    getTiposTramite: `${api}solicitudes/getTiposTramite`,
+    getTiposSolicitud: `${api}solicitudes/getTiposSolicitud`,
     
 }
 

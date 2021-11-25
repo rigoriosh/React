@@ -2,15 +2,16 @@ import React from 'react'
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-export const FieldSelect = ({label, value, handleOnchange, options, messageValidate}) => {
+export const FieldSelect = ({label, value, handleOnchange, options, messageValidate , name, styleOwn}) => {
     return (
-        <div className="fieldTextWidtLabel" style={{borderColor:'red'}}> 
+        <div className="fieldTextWidtLabel" style={{...styleOwn, borderColor:'red'}}> 
             <label htmlFor="usuario" className="labels">{label}</label>
             <Select
+                id={name}
                 error={messageValidate !== ""}
                 value={value}
                 onChange={({target})=>handleOnchange(target)}
-                name="tipoDocumento"
+                name={name}
                 displayEmpty
                 inputProps={{ 'aria-label': 'Without label' }}
                 >
@@ -22,7 +23,7 @@ export const FieldSelect = ({label, value, handleOnchange, options, messageValid
             </Select>
             {
                  messageValidate !== "" && 
-                <label htmlFor="usuario" className="labels" style={{color:'red'}}>{messageValidate}</label>
+                <label htmlFor={name} className="labels" style={{color:'red'}}>{messageValidate}</label>
             }
             
         </div>
