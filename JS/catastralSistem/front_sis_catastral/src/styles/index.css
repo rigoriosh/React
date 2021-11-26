@@ -78,7 +78,7 @@ h1, h2, h3, h4, h5{
   bottom: 0 !important;
   position: fixed !important;
   right: 0;
-  margin: 0 5px 5px 5px !important;
+  margin: 0 15px 5px 5px !important;
 }
 
 .css-1z4p5c-MuiDataGrid-root{
@@ -88,8 +88,14 @@ h1, h2, h3, h4, h5{
 .css-1s0hp0k-MuiDataGrid-columnHeadersInner{
   background-color: var(--grey1);
   color: var(--blanco);
+  /* height: 20px !important; */
 }
 
 .css-1jbbcbn-MuiDataGrid-columnHeaderTitle{
   font-weight: bold !important;
 }
+
+.css-okt5j6-MuiDataGrid-columnHeaders{
+  height: 20px !important;
+}
+

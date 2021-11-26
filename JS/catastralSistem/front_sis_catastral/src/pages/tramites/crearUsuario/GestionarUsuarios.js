@@ -19,6 +19,7 @@ export const GestionarUsuarios = () => {
     const [deleteUser, setDeleteUser] = useState(false);
 
     const [columns, setColumns] = useState([
+        { field: 'id', headerName:'ID', hide:true, },
         { field: 'nombre', headerName:'Nombres', flex:0.2, },
         { field: 'apellido', headerName:'Apellidos', flex:0.2, },
         { field: 'nombreUsuario', headerName: 'Usuario', flex:0.2, },

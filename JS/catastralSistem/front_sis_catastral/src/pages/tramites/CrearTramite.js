@@ -5,6 +5,21 @@ import enviroment from '../../helpers/enviroment'
 import { textosInfoWarnig } from '../../helpers/utils'
 import { FirstFormTramitre } from './formulariosTramite/FirstFormTramitre'
 
+export const constntesCrearTramites = {
+    notasFlotantes:{
+        nota1: `Para realizar correctamente este trámite debes adjuntar los
+                siguientes archivos al final del formulario:`,
+        nota2: `Copia de la cédula de ciudadania o documento de identidad del
+                propietario, poseedor, ocupante y/o apoderado.`,
+        nota3: `Cambio de propietario: Copia del título de dominio (Escritura
+                pública. Acto administrativo o sentencia) debidamente registrado.`,
+        nota4: `Cambio de poseedor u ocupante: Documentos que establezcan la
+                posesión u ocupación como constancias de pago de impuestos,
+                servicios públicos, contribuciones, valorización etc`,
+        nota5: `El cambio de nombre entre poseedores u ocupantes estará sujeto
+                al estudio de los documentos aportados por el solicitante.`
+    }
+}
 
 
 export const CrearTramite = () => {
@@ -51,7 +66,7 @@ export const CrearTramite = () => {
 
     }
 
-    const getTramitesSolicitudes = async() => {
+    const getTramitesSolicitudes = async() => { // pobla el campo Trámite y tipo de solicitante
         updateStore({...store, openBackDrop:true,});
         try {
             const headers = {token: store.user.token};
@@ -72,7 +87,7 @@ export const CrearTramite = () => {
         });
     }
 
-    const getTiposSolicitud = async(valorConsultar) => {
+    const getTiposSolicitud = async(valorConsultar) => { // pobla el campo Solicitud
         updateStore({...store, openBackDrop:true,});
         try {
             const headers = {token: store.user.token, valorConsultar};
@@ -101,7 +116,7 @@ export const CrearTramite = () => {
 
     
     return (
-        <div className="sombra" style={{backgroundColor:'white', width:'50%', padding:'5px', borderRadius:'10px'}}>
+        <div className="sombra" style={{backgroundColor:'white', width:'50%', padding:'5px', borderRadius:'10px', marginTop:'25px'}}>
             <div /* style={{marginTop:'5px'}} */ className="tituloTramite"><p>Nuevo trámitre</p></div>
             {
                 forms === 1 && <FirstFormTramitre handleFormChange={handleFormChange} tiposTramites={tiposTramites}

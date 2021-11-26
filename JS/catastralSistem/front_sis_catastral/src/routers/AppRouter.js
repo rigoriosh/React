@@ -35,7 +35,7 @@ export const AppRouter = ({props}) => {
     let location = useLocation();
     const navigate = useNavigate();
     const [timeSessionTkn, setTimeSessionTkn] = useState();
-    const { user:usuario, openBackDrop, snackBar, timeInitSessionUser, minutesToEachSession, dialogTool={open:false}} = store;
+    const { user:usuario, openBackDrop, snackBar, timeInitSessionUser, minutesToEachSession, dialogTool={open:false}, dialogInfo} = store;
     const { openSnackBar, messageSnackBar, severity} = snackBar;
     
 
@@ -221,19 +221,31 @@ export const AppRouter = ({props}) => {
                 keepMounted
                 onClose={()=>updateStore({...store, dialogTool:{...dialogTool, open:false}})}
                 aria-describedby="alert-dialog-slide-description"
+                
             >
-                <DialogTitle>{dialogTool.tittle}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-slide-description">
+                {
+                    dialogTool.tittle !== "" &&
+                    <DialogTitle sx={dialogTool.styles}>
+                        <div style={{display:'flex', justifyContent:'space-between'}}>
+                            {dialogTool.tittle} <span className="pointer"
+                            onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:false}})}>X</span>
+                        </div>
+                    </DialogTitle>
+                }
+                <DialogContent sx={dialogTool.styles}>
+                    <DialogContentText id="alert-dialog-slide-description" sx={dialogTool.textColor}>
                         <p>{dialogTool.msg}</p>
                     </DialogContentText>
                 </DialogContent>
-                <DialogActions>
-                   <div>
-                        <button onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:true}})} className='btnAceptar'>SI</button>
-                        <button onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:false}})} className='btnAceptar'>NO</button>
-                    </div>
-                </DialogActions>
+                {
+                    dialogTool.actions &&
+                    <DialogActions>
+                    <div>
+                            <button onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:true}})} className='btnAceptar'>SI</button>
+                            <button onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:false}})} className='btnAceptar'>NO</button>
+                        </div>
+                    </DialogActions>
+                }
             </Dialog>
         </div>
     )

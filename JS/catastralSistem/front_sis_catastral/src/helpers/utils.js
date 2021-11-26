@@ -17,7 +17,10 @@ export const initStore = {
     severity: "success"/*  | "error" | "warning" | "info" */,
   },
   tiposDocumento:[],
-  dialogTool:{open:false, msg :'',tittle:'', response:false},
+  dialogTool:{
+    open:false, msg :'',tittle:'', response:false, 
+    actions:true, styles:{}, textColor:{},
+  },
 
 };
 
@@ -163,7 +166,32 @@ export const checkPermits = (permits, store1) => {
   // const isOk = roles.filter(e => )
 }
 
-
+export const tiposDocumentoToTest = [
+  /* {
+      descripcionValor: 'Seleccione ...',
+      idValorLista: 0,
+      valor: 'Seleccione ...',
+      nombreLista: 'seleccione'
+  }, */
+  {
+      descripcionValor: 'Cedula de ciudadanía',
+      idValorLista: 1,
+      valor: 'CC',
+      nombreLista: 'TIPO_DOCUMENTO'
+  },
+  {
+      descripcionValor: 'Cédula de extranjería',
+      idValorLista: 6,
+      valor: 'CE',
+      nombreLista: 'TIPO_DOCUMENTO'
+  },
+  {
+      descripcionValor: 'Pasaporte',
+      idValorLista: 7,
+      valor: 'PA',
+      nombreLista: 'TIPO_DOCUMENTO'
+  },
+]
 
 
 
