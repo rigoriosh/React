@@ -15,7 +15,7 @@
 						"header": [
 							{
 								"key": "token",
-								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzczMTU0MzU2NiwibmJmIjoxNjM3NzI3OTQzLCJpYXQiOjE2Mzc3Mjc5NDMsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIyN2JmYTRiYy1mMGFmLTQ2YTgtOTM5Ni0zZTZmODIwYjA5MWQifQ.jXGJkY-T0BRoWXyVv3JdlvYVmO87aOs_Pi6r4WEipo-SiPs8-uQ272klQ7gAXUYD",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzgwMTUwNjU3MSwibmJmIjoxNjM3Nzk3OTA2LCJpYXQiOjE2Mzc3OTc5MDYsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiJlNGNjMDNlNC0zMzIxLTQ2YWYtYTA4Zi02YTBlNTNmNGJmMmUifQ.0ddV3mXFzSmzn5cn6CEGLwhNBWpmbqFotU6FmYF7brw4TNw71uuaeqQXcU3AnFiJ",
 								"type": "text"
 							}
 						],
@@ -25,19 +25,14 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/david/Downloads/Downloads.zip"
+									"src": "/C:/Users/david/Documents/Emprendimiento/CLIENTES_EXTERNOS/ASOMUNICIPIOS/Valores_Listas.xlsx"
 								},
 								{
 									"key": "data",
 									"value": "{\n  \"numeroRadicado\": \"123456789\",\n  \"tipoSolicitante\": \"PR\",\n  \"idSolicitante\": {\n    \"idUsuario\": 1\n  },\n  \"tipoTramite\": \"MP\",\n  \"nombreTramite\": \"SC\",\n  \"municipioPredio\": \"05591\",\n  \"numeroPredial\": \"12345678932165498712396385274\",\n  \"matriculaInmobiliaria\": \"ABCDE12345\",\n  \"claseSuelo\": \"RU\",\n  \"propiedadHorizontal\": \"S\",\n  \"proyectoUrbanistico\": \"N\",\n  \"noEscrituraPublica\": \"ABCDEFG1234567\",\n  \"anioEscritura\": \"2015\",\n  \"notariaOtorgante\": \"NOTARIA 25 DE PRUEBA\",\n  \"municipioNotaria\": \"05591\",\n  \"objetoPeticion\": \"CDE\",\n  \"consideraMejora\": \"INC\",\n  \"diferenciaMayoEsta\": \"T\",\n  \"revisionBusca\": \"D\",\n  \"tipoInscripcion\": \"INP\",\n  \"motivoSolicitud\": \"OFAC\",\n  \"objetoRectificacion\": \"LQC\",\n  \"areaTerreno\": 20.4,\n  \"areaConstruccion\": 18.4,\n  \"avaluoTerreno\": 30.1,\n  \"avaluoConstruccion\": 120.4,\n  \"autoestimacionAvaluo\": 240000000,\n  \"razonSolicitud\": \"PORQUE VOY A ENTRAR EN UN PLEITO Y NECESITO TENER LA INFORMACION CLARA\",\n  \"titularesPredio\": [\n    {\n      \"numeroDocumento\": \"1234544112\",\n      \"tipoDocumento\": \"CC\",\n      \"nombre\": \"pepito\",\n      \"apellido\": \"perez\"\n    },\n    {\n      \"numeroDocumento\": \"9878655441\",\n      \"tipoDocumento\": \"CC\",\n      \"nombre\": \"anastacio\",\n      \"apellido\": \"galindo\"\n    }\n  ]\n}",
 									"type": "text"
 								}
-							],
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							]
 						},
 						"url": {
 							"raw": "http://localhost:8080/api-ssc/solicitudes/createSolicitud",
@@ -50,6 +45,98 @@
 								"api-ssc",
 								"solicitudes",
 								"createSolicitud"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ACTUALIZAR ESTADO SOLICITUD",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzgwMTUwNjU3MSwibmJmIjoxNjM3Nzk3OTA2LCJpYXQiOjE2Mzc3OTc5MDYsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiJlNGNjMDNlNC0zMzIxLTQ2YWYtYTA4Zi02YTBlNTNmNGJmMmUifQ.0ddV3mXFzSmzn5cn6CEGLwhNBWpmbqFotU6FmYF7brw4TNw71uuaeqQXcU3AnFiJ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"estado\": \"ES2\",\r\n    \"observaciones\": \"Se validan los documentos y no se encuentra ningun problema\",\r\n    \"idSolicitud\": {\r\n        \"idSolicitud\": 41\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/updateEstadoSolicitud",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"updateEstadoSolicitud"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER SOLICITUDES PARA UN USUARIO (SE PUEDE USAR CON LOS USUARIOS 1,7,16,19 LOS DEMAS NO TIENEN DATA)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzgwMTUwNjU3MSwibmJmIjoxNjM3Nzk3OTA2LCJpYXQiOjE2Mzc3OTc5MDYsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiJlNGNjMDNlNC0zMzIxLTQ2YWYtYTA4Zi02YTBlNTNmNGJmMmUifQ.0ddV3mXFzSmzn5cn6CEGLwhNBWpmbqFotU6FmYF7brw4TNw71uuaeqQXcU3AnFiJ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getSolicitudesUsuario/19",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getSolicitudesUsuario",
+								"19"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER DETALLE SOLICITUD POR ID (PROBAR POR AHORA CON EL 41, PUEDE QUE HAYA PROBLEMA DE DATA CON OTROS ID)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzgwMTUwNjU3MSwibmJmIjoxNjM3Nzk3OTA2LCJpYXQiOjE2Mzc3OTc5MDYsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiJlNGNjMDNlNC0zMzIxLTQ2YWYtYTA4Zi02YTBlNTNmNGJmMmUifQ.0ddV3mXFzSmzn5cn6CEGLwhNBWpmbqFotU6FmYF7brw4TNw71uuaeqQXcU3AnFiJ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getDetalleSolicitud/41",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getDetalleSolicitud",
+								"41"
 							]
 						}
 					},
@@ -352,6 +439,60 @@
 								"api-ssc",
 								"solicitudes",
 								"getObjetoRectifica"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER TIPOS DE INSRIPCION",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzgwMTUwNjU3MSwibmJmIjoxNjM3Nzk3OTA2LCJpYXQiOjE2Mzc3OTc5MDYsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiJlNGNjMDNlNC0zMzIxLTQ2YWYtYTA4Zi02YTBlNTNmNGJmMmUifQ.0ddV3mXFzSmzn5cn6CEGLwhNBWpmbqFotU6FmYF7brw4TNw71uuaeqQXcU3AnFiJ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getTipoSolicitudIns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getTipoSolicitudIns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OBTENER ESTADOS SOLICITUD",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzgwMTUwNjU3MSwibmJmIjoxNjM3Nzk3OTA2LCJpYXQiOjE2Mzc3OTc5MDYsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiJlNGNjMDNlNC0zMzIxLTQ2YWYtYTA4Zi02YTBlNTNmNGJmMmUifQ.0ddV3mXFzSmzn5cn6CEGLwhNBWpmbqFotU6FmYF7brw4TNw71uuaeqQXcU3AnFiJ",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getEstadosSolicitud",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getEstadosSolicitud"
 							]
 						}
 					},

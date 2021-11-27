@@ -230,7 +230,9 @@ export const CrearUsuariosInterno = () => {
     return (
         <div style={{backgroundColor:'white', width:'60%', padding:'20px', borderRadius:'20px'}}>
             <img src={Logo_Asomunicipios_ColorLetranegra} alt="" srcSet="" style={{width:'90px'}}/>
-            {/* divisor */}<div style={{width:'70%', height:'0.5px', backgroundColor:stylesApp.gray1, margin:'10px'}}></div>
+            <div style={{display:'flex', justifyContent:'center'}}>
+                {/* divisor */}<div style={{width:'70%', height:'0.5px', backgroundColor:stylesApp.gray1, margin:'10px'}}></div>
+            </div>
             <img onClick={()=>{}} src={CrearUsuario_NuevoUS_Icon} alt="" style={{cursor:'pointer', width:'140px', alignSelf:'center'}}/>
             <FieldTextWidtLabel value={nombre.value} name="nombre" label={nombre.label} handleChange={(target)=>handleFormChange(target)} messageValidate={nombre.messageValidate}/>
             <FieldTextWidtLabel  value={apellido.value} name="apellido" label={apellido.label} handleChange={(target)=>handleFormChange(target)} messageValidate={apellido.messageValidate}/>

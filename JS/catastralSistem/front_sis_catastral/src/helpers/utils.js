@@ -44,6 +44,15 @@ export const textosInfoWarnig = {
   diferentesPassWords: 'Las contraseñas no coinciden',
 }
 
+export const constantesGlobales = {
+  tipoNotas:{
+    nota1:'nota1',
+    nota2:'nota2',
+    nota3:'nota3',
+    nota4:'nota4',
+  },
+}
+
 function utf8_encode (argString) { // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/utf8_encode/
     // original by: Webtoolkit.info (https://www.webtoolkit.info/)

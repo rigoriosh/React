@@ -19,9 +19,10 @@ import { RequireAuth } from '../auth/RequireAuth';
 import { Tramites } from '../pages/tramites/Tramites';
 import { AuthRouter } from './AuthRouter';
 import { TramitesCatastrales } from './TramitesCatastrales';
-import { getToken, initStore, stylesApp, textosInfoWarnig } from '../helpers/utils';
+import { constantesGlobales, getToken, initStore, stylesApp, textosInfoWarnig } from '../helpers/utils';
 import { VerticalMenu } from '../componets/VerticalMenu';
 import { Transition } from '../pages/auth/Signin';
+import { nota1 } from '../pages/tramites/formulariosTramite/mutacion/MutacionDePrimera';
 
 function TransitionUp(props) {
     return <Slide {...props} direction="up" />;
@@ -234,7 +235,12 @@ export const AppRouter = ({props}) => {
                 }
                 <DialogContent sx={dialogTool.styles}>
                     <DialogContentText id="alert-dialog-slide-description" sx={dialogTool.textColor}>
-                        <p>{dialogTool.msg}</p>
+                        {
+                            dialogTool.msg === constantesGlobales.tipoNotas.nota1 
+                                ? nota1()
+                                : <p>{dialogTool.msg}</p>
+
+                        }
                     </DialogContentText>
                 </DialogContent>
                 {

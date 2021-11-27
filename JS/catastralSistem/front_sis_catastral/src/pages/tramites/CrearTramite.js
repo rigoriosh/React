@@ -2,35 +2,55 @@ import React, { useContext, useEffect, useState } from 'react'
 import { getInfoGET } from '../../api'
 import { StoreContext } from '../../App'
 import enviroment from '../../helpers/enviroment'
-import { textosInfoWarnig } from '../../helpers/utils'
+import { constantesGlobales, textosInfoWarnig } from '../../helpers/utils'
 import { FirstFormTramitre } from './formulariosTramite/FirstFormTramitre'
+import { MutacionDePrimera } from './formulariosTramite/mutacion/MutacionDePrimera'
 
-export const constntesCrearTramites = {
-    notasFlotantes:{
+export const constantesCrearTramites = {
+    /* notasFlotantes:{
         nota1: `Para realizar correctamente este trámite debes adjuntar los
-                siguientes archivos al final del formulario:`,
+                siguientes archivos al final del formulario:\n
+
+                Copia de la cédula de ciudadania o documento de identidad del
+                propietario, poseedor, ocupante y/o apoderado.
+
+                Cambio de propietario: Copia del título de dominio (Escritura
+                pública. Acto administrativo o sentencia) debidamente registrado.
+
+                Cambio de poseedor u ocupante: Documentos que establezcan la
+                posesión u ocupación como constancias de pago de impuestos,
+                servicios públicos, contribuciones, valorización etc.
+
+                El cambio de nombre entre poseedores u ocupantes estará sujeto
+                al estudio de los documentos aportados por el solicitante.
+                `,
         nota2: `Copia de la cédula de ciudadania o documento de identidad del
                 propietario, poseedor, ocupante y/o apoderado.`,
         nota3: `Cambio de propietario: Copia del título de dominio (Escritura
                 pública. Acto administrativo o sentencia) debidamente registrado.`,
         nota4: `Cambio de poseedor u ocupante: Documentos que establezcan la
                 posesión u ocupación como constancias de pago de impuestos,
-                servicios públicos, contribuciones, valorización etc`,
+                servicios públicos, contribuciones, valorización etc.`,
         nota5: `El cambio de nombre entre poseedores u ocupantes estará sujeto
                 al estudio de los documentos aportados por el solicitante.`
-    }
+    } */
 }
 
+const initialStateCrearTramite = {
+    msgInfoFiles:'',
+}
 
 export const CrearTramite = () => {
 
-    const [forms, setForms] = useState(1);
     const { store, updateStore } = useContext(StoreContext);
+    const [stateCrearTramite, setStateCrearTramite] = useState(initialStateCrearTramite);
+    const [forms, setForms] = useState(2); // controla el paginado de los forms
     const [tiposTramites, setTiposTramites] = useState([]);
     const [tipoSolicitud, setTipoSolicitud] = useState([]);
     const [tiposSolicitante, setTiposSolicitudes] = useState([]);
+    const [tiposDeSuelo, setTiposDeSuelo] = useState([]);
+    const [municipios, setMunicipios] = useState([]);
     const [tramiteSeleccionado, setTramiteSeleccionado] = useState('');
-    const [titularesDeDerecho, setTitularesDeDerecho] = useState([]);
     const [formularioTramite, setFormularioTramite] = useState(
         {
             tipoTramite:{
@@ -53,6 +73,32 @@ export const CrearTramite = () => {
                 value:'',
                 validation:''
             },
+            titularesDeDerecho:[],
+            fichaCatastral:{
+                name:'fichaCatastral',
+                value:'',
+                validation:''
+            },
+            matricula:{
+                name:'matricula',
+                value:'',
+                validation:''
+            },
+            tipoDeSuelo:{
+                name:'tipoDeSuelo',
+                value:'',
+                validation:''
+            },
+            municipio:{
+                name:'municipio',
+                value:'',
+                validation:''
+            },
+            files:{
+                name:'files',
+                value:'',
+                validation:''
+            },
         }
     );
     const {tipoTramite, motivoSolicitud, tipoSolicitante}  = formularioTramite;
@@ -62,8 +108,9 @@ export const CrearTramite = () => {
         setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
     }
 
-    const avancePagina = () => {
-
+    const avancePagina = (formularioTotalOk, avanza) => {
+        console.log("avanzando pagina", formularioTotalOk)
+        setForms(avanza ? (forms + 1) : (forms - 1));
     }
 
     const getTramitesSolicitudes = async() => { // pobla el campo Trámite y tipo de solicitante
@@ -114,16 +161,43 @@ export const CrearTramite = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const openInfoFiles = () => {
+        updateStore({
+            ...store,
+            dialogTool:{
+                open:true, msg :constantesGlobales.tipoNotas.nota1,
+                tittle:'Nota', 
+                response:false, actions:false, 
+                styles:{backgroundColor: 'rgba(10,10,10,0.8)', color:'white'},
+                textColor:{color:'white'},
+            },
+        });
+    }
     
     return (
         <div className="sombra" style={{backgroundColor:'white', width:'50%', padding:'5px', borderRadius:'10px', marginTop:'25px'}}>
-            <div /* style={{marginTop:'5px'}} */ className="tituloTramite"><p>Nuevo trámitre</p></div>
+            <div /* style={{marginTop:'5px'}} */ className="tituloTramite"><p>Nuevo trámite</p></div>
             {
-                forms === 1 && <FirstFormTramitre handleFormChange={handleFormChange} tiposTramites={tiposTramites}
-                    tipoSolicitud={tipoSolicitud} tiposSolicitante={tiposSolicitante} avancePagina={avancePagina}
-                    formularioTramite={formularioTramite} setTitularesDeDerecho={setTitularesDeDerecho}
-                    titularesDeDerecho={titularesDeDerecho}
+                forms === 1 ? 
+                    <FirstFormTramitre 
+                        handleFormChange={handleFormChange}
+                        tiposTramites={tiposTramites}
+                        tipoSolicitud={tipoSolicitud}
+                        tiposSolicitante={tiposSolicitante}
+                        avancePagina={avancePagina}
+                        formularioTramite={formularioTramite}
+                        setFormularioTramite={setFormularioTramite}
+                        openInfoFiles={openInfoFiles}
                 />
+                : forms === 2 ?
+                    <MutacionDePrimera
+                        handleFormChange={handleFormChange}
+                        formularioTramite={formularioTramite}
+                        setFormularioTramite={setFormularioTramite}
+                        tiposDeSuelo={tiposDeSuelo}
+                        municipios={municipios}
+                    />
+                : <h1>ultimo</h1>
             }
             
 

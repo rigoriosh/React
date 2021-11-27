@@ -116,6 +116,11 @@
   color: var(--grey2);
 }
 
+.labels1 {
+  font-size: 13px;
+  color: var(--fondo);
+}
+
 
 .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
   width: 100%;
@@ -241,6 +246,12 @@
 .row{
   display: flex;
 }
+.aife{
+  align-items: flex-end;
+}
+.aicenter{
+  align-items: center;
+}  
 .tituloTramite{
   background-color: var(--grey1);
   color: var(--blanco);
@@ -267,4 +278,12 @@
 
 .pointer{
   cursor: pointer;
+}
+
+.nota{
+  background-color: rgba(0,0,0,.5);
+  border-radius: 20px;
+  padding: 10px;
+  font-size: 6px;
+  text-align: justify;
 }

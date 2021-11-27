@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { GrEdit } from "react-icons/gr";
 import { GrFormTrash } from "react-icons/gr";
+import { AiOutlinePaperClip } from "react-icons/ai";
 import { FieldSelect } from '../../../componets/FieldSelect'
 import { FieldTextWidtLabel } from '../../../componets/FieldTextWidtLabel'
 import Dialog from '@mui/material/Dialog';
@@ -16,7 +17,7 @@ import GestiondeUS_CrearUs_Icon from '../../../assets/Iconos/GestiondeUS_CrearUs
 import { getInfoGET } from '../../../api'
 import { StoreContext } from '../../../App'
 import enviroment from '../../../helpers/enviroment'
-import { textosInfoWarnig, tiposDocumentoToTest } from '../../../helpers/utils'
+import { constantesGlobales, textosInfoWarnig, tiposDocumentoToTest } from '../../../helpers/utils'
 import { Transition } from '../../auth/Signin';
 import { constntesCrearTramites } from '../CrearTramite';
 
@@ -60,11 +61,12 @@ const initialState = {
 }
 
 export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitud, tiposSolicitante, avancePagina,
-    formularioTramite, setTitularesDeDerecho, titularesDeDerecho}) => {
+    formularioTramite, setFormularioTramite, openInfoFiles}) => {
 
         const {store, updateStore} = useContext(StoreContext);
+        const {dialogTool} = store;
         const [openDialog, setOpenDialog] = useState(false);
-        const {tipoTramite, motivoSolicitud, tipoSolicitante, } = formularioTramite;
+        const {tipoTramite, motivoSolicitud, tipoSolicitante, razonSolicitud, titularesDeDerecho} = formularioTramite;
         const [tiposDocumento, setTiposDocumento] = useState([]);
 
         const [stateFirsFormTramite, setStateFirsFormTramite] = useState(initialState);
@@ -73,23 +75,6 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
         const [newTitularDerecho, setNewTitularDerecho] = useState(initForm);
 
         const [validaciones, setValidaciones] = useState({campo:'', msgValidacion:''});
-
-        const [btnTest, setBtnTest] = useState(false);
-        useEffect(() => {
-            if (btnTest) {
-                updateStore({
-                    ...store,
-                    dialogTool:{
-                        open:true, msg :constntesCrearTramites.notasFlotantes.nota1,
-                        tittle:'Nota', 
-                        response:false, actions:false, 
-                        styles:{backgroundColor: 'rgba(10,10,10,0.8)', color:'white'},
-                        textColor:{color:'white'},
-                    },
-                });
-            }
-            return () => {}
-        }, [btnTest])
 
         const agregarEditEliminarTitularDeDerecho = () => {
             let clonetitularesDeDerecho = [...titularesDeDerecho];
@@ -113,7 +98,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 }
             });
 
-            if (formularioOk) {
+            if (formularioOk || modoFormulario === constantes.tipoFormulario.eliminar) {
                 if (modoFormulario === constantes.tipoFormulario.nuevo) {
                     clonetitularesDeDerecho.push(
                         {
@@ -139,9 +124,10 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                         }
                     })
                 } else {
-
+                    console.log(formularioTramite)
                 }
-                setTitularesDeDerecho(clonetitularesDeDerecho);
+                setFormularioTramite({...formularioTramite, titularesDeDerecho: clonetitularesDeDerecho});
+                // setTitularesDeDerecho(clonetitularesDeDerecho);
                 setOpenDialog(false);
                 resetForm();
             }
@@ -217,6 +203,20 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
 
         useEffect(() => {
             // get Tipos documentos
+            setTimeout(() => {
+                updateStore({
+                    ...store,
+                    dialogTool:{
+                        open:true,
+                        msg :constantesGlobales.tipoNotas.nota1,
+                        tittle:'Nota', 
+                        response:false,
+                        actions:false, 
+                        styles:{backgroundColor: 'rgba(10,10,10,0.8)', color:'white'},
+                        textColor:{color:'white'},
+                    },
+                });
+            }, 1);
             if (store.tiposDocumento.length === 0) {
                 // getTiposDocumento();
                 setTiposDocumento(tiposDocumentoToTest);
@@ -258,9 +258,40 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 });
         }
 
-        const aliminarTitular = (titular) => {
-
+        const aliminarTitular = (titular, eliminar=false) => {
+            
+            if (eliminar) {
+                console.log(formularioTramite)
+                const updateTitulares = formularioTramite.titularesDeDerecho.filter(e => e.id !== stateFirsFormTramite.registroSeleccionado.id)
+                setFormularioTramite({...formularioTramite, titularesDeDerecho: updateTitulares});
+            } else {
+                setStateFirsFormTramite(
+                    {
+                        ...stateFirsFormTramite,
+                        modoFormulario: constantes.tipoFormulario.eliminar,
+                        registroSeleccionado: titular,
+                    });
+                updateStore({...store, dialogTool:{
+                    open:true, 
+                    msg: textosInfoWarnig.elimnarUsuario,
+                    tittle:'Confirmación',
+                    response:false,
+                    actions:true
+                }});
+            }
         }
+
+        useEffect(() => {
+            if (dialogTool.response) {
+                aliminarTitular(formularioTramite.registroSeleccionado, true);
+                updateStore({
+                    ...store,
+                    dialogTool:{open:false, msg :'',tittle:'', response:false}
+                });
+            }
+            return () => {}
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [dialogTool])
 
         const [columns, setColumns] = useState([
             { field: 'id', headerName:'ID', hide:true, },
@@ -274,11 +305,26 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 renderCell: ({row}) => [
                     <div style={{display:'flex', alignItems:'center'}}>
                         <GrEdit onClick={()=>{editarTitular(row)}} style={{width:'17px', height:'15px', cursor:'pointer'}}/>
-                        <GrFormTrash onClick={()=>{aliminarTitular(row)}} style={{width:'24px', height:'22px', cursor:'pointer'}}/>
+                        <GrFormTrash onClick={()=>{aliminarTitular(row, false)}} style={{width:'24px', height:'22px', cursor:'pointer'}}/>
                     </div>
                 ],
             },
         ]);
+
+        useEffect(() => {
+            console.log("validando formulario formularioTotalOk");
+            let validacion = false;
+            if (tipoTramite.value !== '' && motivoSolicitud.value !== '' &&
+             tipoSolicitante.value !== '' && razonSolicitud.value !== '' &&
+             titularesDeDerecho.length > 0) {
+                validacion = true;
+            }
+            setStateFirsFormTramite({...stateFirsFormTramite, formularioTotalOk: validacion});
+
+            return () => {
+            }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [tipoTramite, motivoSolicitud, tipoSolicitante, titularesDeDerecho, razonSolicitud])
 
     return (
         <div>
@@ -286,10 +332,18 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 <div className="decorationTitle bgc1"></div>
                 <p className="titulo color1">TRÁMITES CATASTRALES</p>
             </div>
-            <button onClick={()=>setBtnTest(!btnTest)}>TESTING</button>
             <div style={{margin:'10px 20px'}}>
-                <FieldSelect label={'Trámite'} value={tipoTramite.value} options={tiposTramites} 
-                    handleOnchange={(target)=>handleFormChange(target)} messageValidate={tipoTramite.validation} name={tipoTramite.name}/>
+                <div className="row aife">
+                    <FieldSelect
+                        label={'Trámite'}
+                        value={tipoTramite.value}
+                        options={tiposTramites} 
+                        handleOnchange={(target)=>handleFormChange(target)}
+                        messageValidate={tipoTramite.validation}
+                        name={tipoTramite.name}
+                    />
+                    <AiOutlinePaperClip className="pointer" onClick={()=>openInfoFiles()}/>
+                </div>
 
                 <FieldSelect label={'Solicitud'} value={motivoSolicitud.value} options={tipoSolicitud}  styleOwn={{marginTop:'5px'}}
                     handleOnchange={(target)=>handleFormChange(target)} messageValidate={motivoSolicitud.validation} name={motivoSolicitud.name}/>
@@ -313,17 +367,17 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 ? <p className="subTitulo" style={{marginBottom:'10px'}}>Recuerda, se requiere mínimo un titular</p>
                 : <div style={{ height: 'auto', width: '100%', }}>
                     <DataGrid
-                    columns={columns}
-                    rows={titularesDeDerecho}
-                    autoHeight
-                    density="compact"
-                    hideFooter={false}
-                    hideFooterSelectedRowCount
-                    pageSize={2}
-                    scrollbarSize={10}
-                    loading={titularesDeDerecho.length <= 0}
-                    // rowsPerPageOptions={titularesDeDerecho.length}
-                    key={Math.random()}
+                        columns={columns}
+                        rows={titularesDeDerecho}
+                        autoHeight
+                        density="compact"
+                        hideFooter={false}
+                        hideFooterSelectedRowCount
+                        pageSize={2}
+                        scrollbarSize={10}
+                        loading={titularesDeDerecho.length <= 0}
+                        // rowsPerPageOptions={titularesDeDerecho.length}
+                        key={Math.random()}
                     />
                 </div>
             }
@@ -334,10 +388,15 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 <p className="titulo color3">OTROS</p>
             </div>
 
-            <div style={{margin:'10px 20px'}}>
-                <textarea className="textArea" name="textarea" rows="10" cols="50" placeholder="Escriba en este campo las razones por las cuales esta generando la solicitud."></textarea>
+            <div style={{margin:'10px 20px'}} >
+                <div className="fieldTextWidtLabel labels">
+                    <p>Razones de la solicitud</p>
+                    <textarea onChange={({target})=>{
+                        setFormularioTramite({...formularioTramite, razonSolicitud:{...razonSolicitud, value:target.value}})
+                    }} className="textArea" name="textarea" rows="10" cols="50" placeholder="Escriba en este campo las razones por las cuales esta generando la solicitud."></textarea>
+                </div>
                 <div style={{display:'flex', justifyContent:'flex-end'}}>
-                    <p onClick={()=>{avancePagina()}} className={`${formularioTotalOk?'color1 pointer':'grey2'}  `}>Siguiente <span style={{fontWeight:'bold'}}>{'>'}</span> </p>
+                    <p onClick={()=>{avancePagina(formularioTotalOk, true)}} className={`${formularioTotalOk?'color1 pointer':'grey2'}  `}>Siguiente <span style={{fontWeight:'bold'}}>{'>'}</span> </p>
                     {/* <img onClick={()=>{avancePagina()}} className="imgWidth" src={PasodePagDer_Icon} alt="" style={{width:'12px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/> */}
                 </div>
             </div>
