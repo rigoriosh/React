@@ -3,12 +3,17 @@ import Alert from '@mui/material/Alert';
 
 
 export const FieldTextWidtLabel = ({label='El label es requerido', handleChange=()=>{}, name='',
-    messageValidate='', type='text', maxLength = 30, value, styleOwn, ph, required
+    messageValidate='', type='text', maxLength = 30, value, styleOwn, ph,
+    required, disabled, whitIconRight=false, whitIconLeft="",
 }) => {
     return (
         <div className="fieldTextWidtLabel" style={{...styleOwn }}> 
             <label htmlFor="usuario" className="labels">{label}</label>
             <div className="fieldText" style={{marginTop:'0px', border: messageValidate !== "" ? '1px solid red' : ''}}>
+                {
+                    whitIconLeft !== "" &&
+                    <p className="row">{whitIconLeft}</p>
+                }
                 <input
                     type={type}
                     name={name}
@@ -20,7 +25,12 @@ export const FieldTextWidtLabel = ({label='El label es requerido', handleChange=
                     max={maxLength}
                     placeholder={ph}
                     required={required}
+                    disabled={disabled}
                 />
+                {
+                    whitIconRight &&
+                    <p className="row">M<span style={{fontSize:'10px'}}>2</span></p>
+                }
             </div>
             {
                  messageValidate !== "" && 

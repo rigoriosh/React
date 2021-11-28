@@ -22,7 +22,7 @@ import { TramitesCatastrales } from './TramitesCatastrales';
 import { constantesGlobales, getToken, initStore, stylesApp, textosInfoWarnig } from '../helpers/utils';
 import { VerticalMenu } from '../componets/VerticalMenu';
 import { Transition } from '../pages/auth/Signin';
-import { nota1 } from '../pages/tramites/formulariosTramite/mutacion/MutacionDePrimera';
+import { msgInfo_MC_AEAC, msgInfo_MC_RAC, msgInfo_MO_MPHC, msgInfo_MP_CPP, msgInfo_MQ_INCP, msgInfo_MS_DDP, msgInfo_MS_EAP, msgInfo_MT_IRC, msgInfo_RE_ACN, msgInfo_RE_RAT, msgInfo_RE_RUD, msgInfo_SC_CIC, msgInfo_SC_SCC, msgInfo_SC_SCCE, msgInfo_SC_SCCPP, msgInfo_SC_SCFP, msgInfo_SC_SCNP, msgInfo_SC_SCPPC, msgInfo_SC_SNP, msgInfo_SC_SPCC } from '../pages/tramites/CrearTramite';
 
 function TransitionUp(props) {
     return <Slide {...props} direction="up" />;
@@ -236,9 +236,28 @@ export const AppRouter = ({props}) => {
                 <DialogContent sx={dialogTool.styles}>
                     <DialogContentText id="alert-dialog-slide-description" sx={dialogTool.textColor}>
                         {
-                            dialogTool.msg === constantesGlobales.tipoNotas.nota1 
-                                ? nota1()
-                                : <p>{dialogTool.msg}</p>
+
+                               dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_MP_CPP ? msgInfo_MP_CPP() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_MS_EAP ? msgInfo_MS_EAP() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_MS_DDP ? msgInfo_MS_DDP() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_MT_IRC ? msgInfo_MT_IRC() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_MC_AEAC ? msgInfo_MC_AEAC() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_MC_RAC ? msgInfo_MC_RAC() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_MQ_INCP ? msgInfo_MQ_INCP() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_RE_RUD ? msgInfo_RE_RUD() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_RE_RAT ? msgInfo_RE_RAT() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_RE_ACN ? msgInfo_RE_ACN() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_MO_MPHC ? msgInfo_MO_MPHC() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_SC_SCPPC ? msgInfo_SC_SCPPC() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_SC_SCC ? msgInfo_SC_SCC() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_SC_SCCE ? msgInfo_SC_SCCE() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_SC_SCFP ? msgInfo_SC_SCFP() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_SC_SCCPP ? msgInfo_SC_SCCPP() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_SC_SPCC ? msgInfo_SC_SPCC() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_SC_SCNP ? msgInfo_SC_SCNP() 
+                             : dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_SC_CIC ? msgInfo_SC_CIC()
+                             :  dialogTool.msg === constantesGlobales.tipoNotas.msgInfo_SC_SNP ? msgInfo_SC_SNP() 
+                             : <p>{dialogTool.msg}</p>
 
                         }
                     </DialogContentText>
@@ -246,7 +265,7 @@ export const AppRouter = ({props}) => {
                 {
                     dialogTool.actions &&
                     <DialogActions>
-                    <div>
+                        <div>
                             <button onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:true}})} className='btnAceptar'>SI</button>
                             <button onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:false}})} className='btnAceptar'>NO</button>
                         </div>

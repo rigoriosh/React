@@ -14,6 +14,9 @@ const enviroment = {
 
     getTiposTramite: `${api}solicitudes/getTiposTramite`,
     getTiposSolicitud: `${api}solicitudes/getTiposSolicitud`,
+    getTiposSuelo: `${api}solicitudes/getTiposSuelo`,
+    getMunicipiosCatatumbo: `${api}solicitudes/getMunicipiosCatatumbo`,
+    createSolicitud: `${api}solicitudes/createSolicitud`,
     
 }
 

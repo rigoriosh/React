@@ -44,6 +44,31 @@ export const getInfo = async(headers, url, method='POST', body) => {
   }
 }
 
+export const createSolitud = async(headers, url, method='POST', body) => {
+  try {
+    let formData = new FormData();
+    formData.append('file', body.file);
+    formData.append('data', body.data);
+    let myHeaders = new Headers();
+    myHeaders.append('token', headers.token);
+    // myHeaders.append('Content-Type', 'application/json');
+    // myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+
+    const init = {
+      method: method,
+      headers: myHeaders,
+      body:formData,
+      // mode: 'cors',
+      // cache: 'default'
+    };
+      const responseLogin = await fetch(url, init /* { method, headers, body, } */);
+      const dataResponse = await responseLogin.json();
+      return dataResponse
+  } catch (error) {
+      return error;
+  }
+}
+
 export const getInfoGET = async(headers, url, method = 'GET') => {
   try {
       const responseLogin = await fetch(url, { method, headers });

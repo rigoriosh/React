@@ -1,40 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { getInfoGET } from '../../api'
+import { createSolitud, getInfoGET } from '../../api'
 import { StoreContext } from '../../App'
+import { DialogMsgOk } from '../../componets/DialogMsgOk'
 import enviroment from '../../helpers/enviroment'
-import { constantesGlobales, textosInfoWarnig } from '../../helpers/utils'
+import { constantesGlobales, regExp10Num, regExp10Num2dec, textosInfoWarnig } from '../../helpers/utils'
 import { FirstFormTramitre } from './formulariosTramite/FirstFormTramitre'
-import { MutacionDePrimera } from './formulariosTramite/mutacion/MutacionDePrimera'
-
-export const constantesCrearTramites = {
-    /* notasFlotantes:{
-        nota1: `Para realizar correctamente este trámite debes adjuntar los
-                siguientes archivos al final del formulario:\n
-
-                Copia de la cédula de ciudadania o documento de identidad del
-                propietario, poseedor, ocupante y/o apoderado.
-
-                Cambio de propietario: Copia del título de dominio (Escritura
-                pública. Acto administrativo o sentencia) debidamente registrado.
-
-                Cambio de poseedor u ocupante: Documentos que establezcan la
-                posesión u ocupación como constancias de pago de impuestos,
-                servicios públicos, contribuciones, valorización etc.
-
-                El cambio de nombre entre poseedores u ocupantes estará sujeto
-                al estudio de los documentos aportados por el solicitante.
-                `,
-        nota2: `Copia de la cédula de ciudadania o documento de identidad del
-                propietario, poseedor, ocupante y/o apoderado.`,
-        nota3: `Cambio de propietario: Copia del título de dominio (Escritura
-                pública. Acto administrativo o sentencia) debidamente registrado.`,
-        nota4: `Cambio de poseedor u ocupante: Documentos que establezcan la
-                posesión u ocupación como constancias de pago de impuestos,
-                servicios públicos, contribuciones, valorización etc.`,
-        nota5: `El cambio de nombre entre poseedores u ocupantes estará sujeto
-                al estudio de los documentos aportados por el solicitante.`
-    } */
-}
+import { SecondFormTramitre } from './formulariosTramite/SecondFormTramitre'
 
 const initialStateCrearTramite = {
     msgInfoFiles:'',
@@ -44,12 +15,19 @@ export const CrearTramite = () => {
 
     const { store, updateStore } = useContext(StoreContext);
     const [stateCrearTramite, setStateCrearTramite] = useState(initialStateCrearTramite);
-    const [forms, setForms] = useState(2); // controla el paginado de los forms
+    const [forms, setForms] = useState(1); // controla el paginado de los forms
     const [tiposTramites, setTiposTramites] = useState([]);
     const [tipoSolicitud, setTipoSolicitud] = useState([]);
     const [tiposSolicitante, setTiposSolicitudes] = useState([]);
     const [tiposDeSuelo, setTiposDeSuelo] = useState([]);
     const [municipios, setMunicipios] = useState([]);
+    const [openDialog, setOpenDialog] = useState({
+        open:false,
+        tittle:'',
+        msg:'',
+        tipo:"OK",//"SI/NO"
+        response:false
+    });
     const [tramiteSeleccionado, setTramiteSeleccionado] = useState('');
     const [formularioTramite, setFormularioTramite] = useState(
         {
@@ -94,23 +72,160 @@ export const CrearTramite = () => {
                 value:'',
                 validation:''
             },
-            files:{
-                name:'files',
+            file:{
+                name:'file',
+                value:'',
+                validation:''
+            },
+            zip:{},
+            propiedadHorizontal:{
+                name:'propiedadHorizontal',
+                value:'',
+                validation:''
+            },
+            proyectoUrbanistico:{
+                name:'proyectoUrbanistico',
+                value:'',
+                validation:''
+            },
+            objetoPeticion:{
+                name:'objetoPeticion',
+                value:'',
+                validation:''
+            },
+            consideraMejora:{
+                name:'consideraMejora',
+                value:'',
+                validation:''
+            },
+            avaluoTerreno:{
+                name:'avaluoTerreno',
+                value:'',
+                validation:''
+            },
+            avaluoConstruccion:{
+                name:'avaluoConstruccion',
+                value:'',
+                validation:''
+            },
+            areaTerreno:{
+                name:'areaTerreno',
+                value:'',
+                validation:''
+            },
+            areaConstruccion:{
+                name:'areaConstruccion',
+                value:'',
+                validation:''
+            },
+            autoestimacionAvaluo:{
+                name:'autoestimacionAvaluo',
+                value:'',
+                validation:''
+            },
+            diferenciaMayoEsta:{
+                name:'diferenciaMayoEsta',
+                value:'',
+                validation:''
+            },
+            revisionBusca:{
+                name:'revisionBusca',
+                value:'',
+                validation:''
+            },
+            noEscrituraPublica:{
+                name:'noEscrituraPublica',
+                value:'',
+                validation:''
+            },
+            anioEscritura:{
+                name:'anioEscritura',
+                value:'',
+                validation:''
+            },
+            notariaOtorgante:{
+                name:'notariaOtorgante',
+                value:'',
+                validation:''
+            },
+            objetoRectificacion:{
+                name:'objetoRectificacion',
+                value:'',
+                validation:''
+            },
+            municipioNotaria:{
+                name:'municipioNotaria',
                 value:'',
                 validation:''
             },
         }
     );
-    const {tipoTramite, motivoSolicitud, tipoSolicitante}  = formularioTramite;
+    const {
+        notariaOtorgante,
+        anioEscritura,
+        tipoTramite,
+        motivoSolicitud,
+        tipoSolicitante,
+        razonSolicitud,
+        titularesDeDerecho,
+        fichaCatastral,
+        matricula,
+        tipoDeSuelo,
+        municipio,
+        file,
+        zip,
+        avaluoTerreno,
+        avaluoConstruccion,
+        areaTerreno,
+        areaConstruccion,
+        autoestimacionAvaluo,
+        noEscrituraPublica,
+    }  = formularioTramite;
     
     const handleFormChange = ({value, name}) => {
         console.log(value, name)
-        setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
+        if (name !== avaluoTerreno.name &&
+            name !== avaluoConstruccion.name &&
+            name !== areaTerreno.name &&
+            name !== areaConstruccion.name &&
+            name !== autoestimacionAvaluo.name &&
+            name !== noEscrituraPublica.name &&
+            name !== anioEscritura.name &&
+            name !== notariaOtorgante.name
+        ) {
+                setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
+        } else if(name === avaluoTerreno.name ||
+                name === avaluoConstruccion.name ||
+                name === areaTerreno.name ||
+                name === areaConstruccion.name
+        ){
+            if (regExp10Num2dec.test(value)) {  // valida tipo de dato numerico 10 digitos y dos decimales
+                setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
+            }
+        } else if(name === autoestimacionAvaluo.name){
+            if (regExp10Num.test(value)) {  // valida tipo de dato numerico 10 digitos
+                setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
+            }
+        } else if(name === noEscrituraPublica.name){
+            if (value.length < 21) {  // valida longitud de campo hasta 20 caracteres
+                setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
+            }
+        } else if(name === anioEscritura.name){
+            if (value.length < 15) {  // valida longitud de campo hasta 14 caracteres
+                setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
+            }
+        } else if(name === notariaOtorgante.name){
+            if (value.length < 51) {  // valida longitud de campo hasta 50 caracteres
+                setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
+            }
+        }
     }
 
     const avancePagina = (formularioTotalOk, avanza) => {
         console.log("avanzando pagina", formularioTotalOk)
-        setForms(avanza ? (forms + 1) : (forms - 1));
+        if (formularioTotalOk) {
+            setForms(avanza ? (forms + 1) : (forms - 1));
+        }
     }
 
     const getTramitesSolicitudes = async() => { // pobla el campo Trámite y tipo de solicitante
@@ -125,6 +240,31 @@ export const CrearTramite = () => {
             falloLaPeticion();
         }
     }
+
+    const getTiposDeSuelos = async()=>{
+        updateStore({...store, openBackDrop:true,});
+        try {
+            const headers = {token: store.user.token};
+            const response = await getInfoGET(headers, enviroment.getTiposSuelo);
+            setTiposDeSuelo(response.resultado.dominios);
+            updateStore({...store, openBackDrop:false,});
+        } catch (error) {
+            falloLaPeticion();
+        }
+    }
+
+    const getMunicipios = async()=>{
+        updateStore({...store, openBackDrop:true,});
+        try {
+            const headers = {token: store.user.token};
+            const response = await getInfoGET(headers, enviroment.getMunicipiosCatatumbo);
+            setMunicipios(response.resultado.dominios);
+            updateStore({...store, openBackDrop:false,});
+        } catch (error) {
+            falloLaPeticion();
+        }
+    }
+
     const falloLaPeticion = () => {
         updateStore({
             ...store,
@@ -152,11 +292,85 @@ export const CrearTramite = () => {
             getTiposSolicitud(tipoTramite.value);
         }
         return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tipoTramite])
+
+
+    const renderizarInfoSegunTipoTramite = () => {
+        console.log(22222222)
+        let msg = '', open = true;
+
+        if( tipoTramite.value === 'MO' && motivoSolicitud.value === 'MPHC' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_MO_MPHC;
+        }else if( tipoTramite.value === 'MP' && motivoSolicitud.value === 'CPP' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_MP_CPP;
+        }else if( tipoTramite.value === 'MS' && motivoSolicitud.value === 'EAP' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_MS_EAP;
+        }else if( tipoTramite.value === 'MS' && motivoSolicitud.value === 'DDP' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_MS_DDP;
+        }else if( tipoTramite.value === 'MT' && motivoSolicitud.value === 'IRC' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_MT_IRC;
+        }else if( tipoTramite.value === 'MC' && motivoSolicitud.value === 'AEAC' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_MC_AEAC;
+        }else if( tipoTramite.value === 'MC' && motivoSolicitud.value === 'RAC' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_MC_RAC;
+        }else if( tipoTramite.value === 'MQ' && motivoSolicitud.value === 'INCP' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_MQ_INCP;
+        }else if( tipoTramite.value === 'RE' && motivoSolicitud.value === 'RUD' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_RE_RUD;
+        }else if( tipoTramite.value === 'RE' && motivoSolicitud.value === 'RAT' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_RE_RAT;
+        }else if( tipoTramite.value === 'RE' && motivoSolicitud.value === 'ACN' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_RE_ACN;
+        }else if( tipoTramite.value === 'SC' && motivoSolicitud.value === 'SCPPC' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_SC_SCPPC;
+        }else if( tipoTramite.value === 'SC' && motivoSolicitud.value === 'SCC' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_SC_SCC;
+        }else if( tipoTramite.value === 'SC' && motivoSolicitud.value === 'SCCE' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_SC_SCCE;
+        }else if( tipoTramite.value === 'SC' && motivoSolicitud.value === 'SCFP' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_SC_SCFP;
+        }else if( tipoTramite.value === 'SC' && motivoSolicitud.value === 'SCCPP' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_SC_SCCPP;
+        }else if( tipoTramite.value === 'SC' && motivoSolicitud.value === 'SPCC' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_SC_SPCC;
+        }else if( tipoTramite.value === 'SC' && motivoSolicitud.value === 'SCNP' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_SC_SCNP;
+        }else if( tipoTramite.value === 'SC' && motivoSolicitud.value === 'CIC' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_SC_CIC;
+        }else if( tipoTramite.value === 'SC' && motivoSolicitud.value === 'SNP' ){
+            msg = constantesGlobales.tipoNotas.msgInfo_SC_SNP;
+        }else {
+            open = false;
+        }
+        setTimeout(() => {
+            updateStore({
+                ...store,
+                dialogTool:{
+                    open,
+                    msg,
+                    tittle:'Nota', 
+                    response:false,
+                    actions:false, 
+                    styles:{backgroundColor: 'rgba(10,10,10,0.8)', color:'white'},
+                    textColor:{color:'white'},
+                },
+            })
+            
+        }, 1500);
+    }
+    
+    useEffect(() => {
+        renderizarInfoSegunTipoTramite();
+        return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [motivoSolicitud])
 
     useEffect(() => {
         // consultar tipos de tramites y tipos de solicitudes
         getTramitesSolicitudes();
+        getTiposDeSuelos();
+        getMunicipios();
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -173,7 +387,88 @@ export const CrearTramite = () => {
             },
         });
     }
+
+    const ajusteTitularesDerecho = () => {
+        titularesDeDerecho.map(titular => delete titular.id);
+        return titularesDeDerecho;
+    }
     
+    const onSubmitFinal = async() => {
+        console.log(tiposTramites)
+        // const nombreTramite = tiposTramites.filter(tramite => tramite.valor === tipoTramite.value)[0].descripcionValor
+        const data = {
+            "numeroRadicado": "123456789",
+            "tipoSolicitante": tipoSolicitante.value,
+            "idSolicitante": {
+                "idUsuario": store.user.infoUser.idUsuario
+            },
+            "tipoTramite": tipoTramite.value,
+            "nombreTramite": tipoTramite.value,
+            "municipioPredio": municipio.value,
+            "numeroPredial": fichaCatastral.value,
+            "matriculaInmobiliaria": matricula.value,
+            "claseSuelo": tipoDeSuelo.value,
+            "propiedadHorizontal": "S",
+            "proyectoUrbanistico": "N",
+            "noEscrituraPublica": "ABCDEFG1234567",
+            "anioEscritura": "2015",
+            "notariaOtorgante": "NOTARIA 25 DE PRUEBA",
+            "municipioNotaria": "05591",
+            "objetoPeticion": "CDE",
+            "consideraMejora": "INC",
+            "diferenciaMayoEsta": "T",
+            "revisionBusca": "D",
+            "tipoInscripcion": "INP",
+            "motivoSolicitud": motivoSolicitud.value,
+            "objetoRectificacion": "LQC",
+            "areaTerreno": 20.4,
+            "areaConstruccion": 18.4,
+            "avaluoTerreno": 30.1,
+            "avaluoConstruccion": 120.4,
+            "autoestimacionAvaluo": 240000000,
+            "razonSolicitud": razonSolicitud.value,
+            "titularesPredio": ajusteTitularesDerecho()
+        }
+
+        console.log(data)
+        updateStore({...store, openBackDrop:true,});
+        try {
+            const headers = {token: store.user.token};
+            const body = {
+                file:zip,
+                data:JSON.stringify(data),
+            }
+            const response = await createSolitud(headers, enviroment.createSolicitud, 'POST', body);
+            let messageSnackBar = '', openSnackBar = true;
+            if(response.error){
+                messageSnackBar = response.error.descripcion ? response.error.descripcion : response.error
+
+            }else{
+                messageSnackBar = response.resultado.mensaje;
+                setOpenDialog({
+                    open:true,
+                    tittle:'¡Felicidades!',
+                    msg: textosInfoWarnig.tramiteExito,
+                    tipo:"OK",//"SI/NO"
+                    response:false
+                });
+                openSnackBar = false;
+            }
+            updateStore({
+                ...store,
+                openBackDrop:false,
+                snackBar:{
+                    openSnackBar,
+                    messageSnackBar,
+                    severity:'warning',
+                },
+            });
+        } catch (error) {
+            falloLaPeticion();
+        }
+
+    }
+
     return (
         <div className="sombra" style={{backgroundColor:'white', width:'50%', padding:'5px', borderRadius:'10px', marginTop:'25px'}}>
             <div /* style={{marginTop:'5px'}} */ className="tituloTramite"><p>Nuevo trámite</p></div>
@@ -190,17 +485,243 @@ export const CrearTramite = () => {
                         openInfoFiles={openInfoFiles}
                 />
                 : forms === 2 ?
-                    <MutacionDePrimera
+                    <SecondFormTramitre
                         handleFormChange={handleFormChange}
                         formularioTramite={formularioTramite}
-                        setFormularioTramite={setFormularioTramite}
                         tiposDeSuelo={tiposDeSuelo}
                         municipios={municipios}
+                        setFormularioTramite={setFormularioTramite}
+                        avancePagina={avancePagina}
+                        onSubmitFinal={onSubmitFinal}
                     />
                 : <h1>ultimo</h1>
             }
             
 
+            <DialogMsgOk openDialog={openDialog} setOpenDialog={setOpenDialog} />
+
         </div>
     )
 }
+
+  export const msgInfo_MO_MPHC = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+            <p className="labels1">Copia del reglamento de propiedad horizontal debidamente
+                registrado, así como, de las reformas, modificaciones,
+                aclaraciones y corrección de los títulos con sus respectivos
+                anexos, si los hay.</p><br />
+            <p className="labels1">Para realizar la solicitud de un trámite de una reforma, la
+                propiedad horizontal debe estar incorporada en la base predial
+                catastral.</p><br />
+            <p className="labels1">Si hay más de una escritura de reforma, o aclaraciones o
+                correcciones de los títulos, anexarlos en la solicitud.</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_MP_CPP = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+            <p className="labels1">Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Cambio de propietario: Copia del título de dominio (Escritura Pública. Acto administrativo o Sentencia) debidamente registrado.</p><br />
+            <p className="labels1">Cambio de poseedor u ocupante: Documentos que establezcan la posesión u ocupación como constancias de pago de impuestos, servicios públicos, contribuciones, valorización etc</p><br />
+            <p className="labels1">El cambio de nombre entre poseedores u ocupantes estará sujeto al estudio de los documentos aportados por el solicitante.</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_MS_EAP = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+            <p className="labels1"><span style={{fontWeight:'bold'}}>Para propiedad no horizontal:</span> Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Copia legible del título de dominio (Escritura Pública. Acto administrativo o Sentencia debidamente registrado, en donde conste el englobe y/o el desenglobe de los bienes inmuebles, así como las modificaciones, aclaraciones y corrección de los títulos con sus respectivos anexos, si las hay).</p><br />
+            <p className="labels1">Se debe adjuntar el plano de levantamiento planimétrico de acuerdo con las especificaciones técnicas establecidas en el artículo 11 del presente acto administrativo.
+                <span style={{fontWeight:'bold'}}>Para propiedad horizontal: </span> copia legible del título de dominio (Escritura Pública, Acto administrativo o Sentencia) debidamente registrado, que contenga el reglamento de propiedad horizontal, así como sus reformas, modificaciones, aclaraciones y corrección de los títulos con sus respectivos anexos, si las hay.</p><br />
+            <p className="labels1">Plano de localización y descripción del proyecto en formato dwg o shapefile ligado a las coordenadas del Sistema de Proyección cartográfica de Origen Único para Colombia, el cual debe contener la planta de cubiertas, con el número de pisos, aislamientos, alinderamiento del lote y debe tener solo dos niveles, uno con el lote y el otro con los polígonos de construcción en una sola línea, o copia del plano aprobado con la licencia per parte de la curaduría que, contenga los niveles citados.</p><br />
+            <p className="labels1">Archivo Excel con la relación de las unidades prediales a desenglobar con los siguientes datos: nomenclatura predio matriz, nomenclatura predios segregados, torre, apto, coeficiente copropiedad, círculo registral y matrícula inmobiliaria asignado por la oficina de registro respectiva.</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_MS_DDP = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+            <p className="labels1"><span style={{fontWeight:'bold'}}>Para propiedad no horizontal:</span> Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Copia legible del título de dominio (Escritura Pública. Acto administrativo o Sentencia debidamente registrado, en donde conste el englobe y/o el desenglobe de los bienes inmuebles, así como las modificaciones, aclaraciones y corrección de los títulos con sus respectivos anexos, si las hay).</p><br />
+            <p className="labels1">Se debe adjuntar el plano de levantamiento planimétrico de acuerdo con las especificaciones técnicas establecidas en el artículo 11 del presente acto administrativo.
+                <span style={{fontWeight:'bold'}}>Para propiedad horizontal: </span> copia legible del título de dominio (Escritura Pública, Acto administrativo o Sentencia) debidamente registrado, que contenga el reglamento de propiedad horizontal, así como sus reformas, modificaciones, aclaraciones y corrección de los títulos con sus respectivos anexos, si las hay.</p><br />
+            <p className="labels1">Plano del desarrollo urbanístico en medio magnético (formato dwg o dxf o shapefile), con cuadro de coordenadas referidas al sistema de proyección cartográfica de origen único para Colombia.
+                <span style={{fontWeight:'bold'}}>Para propiedad horizontal:</span> Copia legible del título de dominio (Escritura Pública, Acto administrativo o Sentencia) debidamente registrado, que contenga el reglamento de propiedad horizontal, así como sus reformas, modificaciones, aclaraciones y corrección de los títulos con sus respectivos anexos, si las hay.</p><br />
+            <p className="labels1">Plano de localización y descripción del proyecto en formato dwg o shapefile ligado a las coordenadas del Sistema de Proyección cartográfica de Origen Único para Colombia, el cual debe contener la planta de cubiertas, con el número de pisos, aislamientos, alinderamiento del lote y debe tener solo dos niveles, uno con el lote y el otro con los polígonos de construcción en una sola línea, o copia del plano aprobado con la licencia per parte de la curaduría que, contenga los niveles citados.</p><br />
+            <p className="labels1">Archivo Excel con la relación de las unidades prediales a desenglobar con los siguientes datos: nomenclatura predio matriz, nomenclatura predios segregados, torre, apto, coeficiente copropiedad, círculo registral y matrícula inmobiliaria asignado por la oficina de registro respectiva.</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_MT_IRC = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1"><span style={{fontWeight:'bold'}}>Para propiedad no horizontal:</span> Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Documento de certificación juramentada del área de la construcción, cuando se cuente con planos de la construcción se podrán aportar, los planos deben cumplir con las especificaciones técnicas definidas en el artículo 11 de la presente resolución.</p><br />
+            <p className="labels1">Para el caso de predios ubicados en municipios cuyo catastro no ha sido formado de conformidad con la ley 14 de 1983: Se requiere acreditar en la solicitud, la existencia y propiedad, y debe indicar el área y avalúo.</p><br />
+            <p className="labels1"><span style={{fontWeight:'bold'}}>Para propiedad horizontal:</span> Copia de la escritura del reglamento de Propiedad Horizontal y sus modificaciones o adiciones debidamente registradas, incluyendo planos protocolizados de localización y planos arquitectónicos por tipo de construcción, en escala original aprobado por planeación o curaduría urbana.</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_MC_AEAC = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">En la declaración de autoestimación del avalúo catastral, podrá presentar el avalúo comercial, planos, certificaciones de autoridades administrativas, aerofotografías, escrituras públicas y otros documentos que demuestren los cambios físicos, valorización o cambios de uso en el predio.</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_MC_RAC = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">En la petición se debe indicar claramente la vigencia para la cual se solicita la revisión de avalúo y manifestar los motivos de inconformidad.</p><br />
+            <p className="labels1">Anexar los documentos que demuestren que el avalúo no se ajusta a las características y condiciones del predio, en cuanto a linderos, área, uso, clases de terreno o naturaleza de la construcción, condiciones; ubicación, vías de acceso, clase de terreno y naturaleza de la construcción, condiciones locales del mercado inmobiliario y demás informaciones pertinentes.</p><br />
+            <p className="labels1"><span style={{fontWeight:'bold'}}>El propietario, poseedor u ocupante podrá presentar documentos como:</span> Para cambios físicos: Escritura pública que indique la segregación o agregación de áreas, por contratos o certificados de la Alcaldía Municipal sobre nuevas construcciones, demoliciones o deterioros.</p><br />
+            <p className="labels1"><span style={{fontWeight:'bold'}}>Valorización:</span> Mediante certificaciones de la Alcaldía Municipal o de la autoridad que haya adelantado la obra correspondiente.</p><br />
+            <p className="labels1">Cambios de uso: Mediante certificados de entidades financieras o de la Alcaldía Municipal o de la Cámara de comercio, y otros.</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_MQ_INCP = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Copia legible del título de dominio (Escritura Pública, Acto administrativo o Sentencia) debidamente registrado del bien inmueble.</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_RE_RUD = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">En predios PH: Copia de la escritura del reglamento de Propiedad Horizontal y sus modificaciones o adiciones debidamente registradas, incluyendo planos protocolizados de localización y planos arquitectónicos por tipo de construcción, en escala original aprobado por planeación o curaduría urbana.</p><br />
+            <p className="labels1">Para predio No PH: Para modificación del destino económico: Copia del acto administrativo expedido por la autoridad competente aportando las pruebas que permitan sustentar la solicitud. (Aplica para predios con destino de interés histórico, cultural o arquitectónico). Para predios con otro destino económico, cualquier medio probatorio que permita sustentar el tipo de solicitud, se debe tener en cuenta la actividad predominante que se desarrolle en el predio.</p><br />
+            <p className="labels1"></p><br />
+        </div>
+    )
+  }
+  export const msgInfo_RE_RAT = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">Copia legible del título de dominio (Escritura Pública, Acto administrativo o Sentencia) debidamente registrado, que contenga el reglamento de propiedad horizontal, así como sus reformas, modificaciones, aclaraciones y corrección de los títulos con sus respectivos anexos, si las hay.</p><br />
+            <p className="labels1">Plano de localización y descripción del proyecto en formato dwg o shapefile ligado a las coordenadas del Sistema de Proyección cartográfica de Origen Único para Colombia, el cual debe contener la planta de cubiertas, con el número de pisos, aislamientos, alinderamiento del lote y debe tener solo dos niveles, uno con el lote y el otro con los polígonos de construcción en una sola línea, o copia del plano aprobado con la licencia per parte de la curaduría que, contenga los niveles citados.</p><br />
+            <p className="labels1">Archivo Excel con la relación de las unidades prediales a desenglobar con los siguientes datos: nomenclatura predio matriz, nomenclatura predios segregados, torre, apto, coeficiente copropiedad, círculo registral y matrícula inmobiliaria asignado por la oficina de registro respectiva.</p><br />
+            <p className="labels1"></p><br />
+        </div>
+    )
+  }
+  export const msgInfo_RE_ACN = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">Predios urbanos: Copia legible del documento mediante el cual La Oficina de Planeación Municipal asigna o corrige la nomenclatura del predio.</p><br />
+            <p className="labels1">En caso de predios rurales, copia de escritura pública debidamente registrada donde figure el cambio de la nomenclatura</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_SC_SCPPC = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Recibo del impuesto predial o certificado de libertad y tradición</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_SC_SCC = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Recibo del impuesto predial o certificado de libertad y tradición</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_SC_SCCE = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Recibo del impuesto predial o certificado de libertad y tradición</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_SC_SCFP = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Recibo del impuesto predial o certificado de libertad y tradición</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_SC_SCCPP = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Recibo del impuesto predial o certificado de libertad y tradición</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_SC_SPCC = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Recibo del impuesto predial o certificado de libertad y tradición</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_SC_SCNP = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Recibo del impuesto predial o certificado de libertad y tradición</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_SC_CIC = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+        </div>
+    )
+  }
+  export const msgInfo_SC_SNP = () => {
+    return (
+        <div>
+            <p className="labels1" style={{fontWeight:'bold'}}>¡Recuerda que debes adjuntar todos los archivos para que el trámite sea exitoso!</p> <br />
+
+            <p className="labels1">Copia de la cédula de ciudadanía o documento de identidad del propietario, poseedor, ocupante y/o apoderado.</p><br />
+            <p className="labels1">Recibo del impuesto predial o certificado de libertad y tradición</p><br />
+        </div>
+    )
+  }

@@ -2,7 +2,7 @@ import { doGetToken } from "../api";
 
 export const initStore = {
   timeInitSessionUser: new Date(), // inicio session
-  minutesToEachSession: 10,
+  minutesToEachSession: 100,
   user:{
       isLogin:false,
       token:'',
@@ -18,7 +18,7 @@ export const initStore = {
   },
   tiposDocumento:[],
   dialogTool:{
-    open:false, msg :'',tittle:'', response:false, 
+    open:false, msg :'', tittle:'', response:false, 
     actions:true, styles:{}, textColor:{},
   },
 
@@ -42,14 +42,31 @@ export const textosInfoWarnig = {
   tiempoInactividad: '!Su sesion a finalizado por inactividad',
   diferentesEmails: 'Los email no coinciden',
   diferentesPassWords: 'Las contraseñas no coinciden',
+  tramiteExito:'Su trámite a sido realizado exitosamente.'
 }
 
 export const constantesGlobales = {
   tipoNotas:{
-    nota1:'nota1',
-    nota2:'nota2',
-    nota3:'nota3',
-    nota4:'nota4',
+    msgInfo_MP_CPP:'msgInfo_MP_CPP',
+    msgInfo_MS_EAP:'msgInfo_MS_EAP',
+    msgInfo_MS_DDP:'msgInfo_MS_DDP',
+    msgInfo_MT_IRC:'msgInfo_MT_IRC',
+    msgInfo_MC_AEAC:'msgInfo_MC_AEAC',
+    msgInfo_MC_RAC:'msgInfo_MC_RAC',
+    msgInfo_MQ_INCP:'msgInfo_MQ_INCP',
+    msgInfo_RE_RUD:'msgInfo_RE_RUD',
+    msgInfo_RE_RAT:'msgInfo_RE_RAT',
+    msgInfo_RE_ACN:'msgInfo_RE_ACN',
+    msgInfo_MO_MPHC:'msgInfo_MO_MPHC',
+    msgInfo_SC_SCPPC:'msgInfo_SC_SCPPC',
+    msgInfo_SC_SCC:'msgInfo_SC_SCC',
+    msgInfo_SC_SCCE:'msgInfo_SC_SCCE',
+    msgInfo_SC_SCFP:'msgInfo_SC_SCFP',
+    msgInfo_SC_SCCPP:'msgInfo_SC_SCCPP',
+    msgInfo_SC_SPCC:'msgInfo_SC_SPCC',
+    msgInfo_SC_SCNP:'msgInfo_SC_SCNP',
+    msgInfo_SC_CIC:'msgInfo_SC_CIC',
+    msgInfo_SC_SNP:'msgInfo_SC_SNP',
   },
 }
 
@@ -200,7 +217,10 @@ export const tiposDocumentoToTest = [
       valor: 'PA',
       nombreLista: 'TIPO_DOCUMENTO'
   },
-]
+];
+
+export const regExp10Num2dec = new RegExp(/^(\d{1,10})(\.\d{1,2})?$/);
+export const regExp10Num = new RegExp(/^(\d{1,10})$/);
 
 
 

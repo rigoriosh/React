@@ -57,13 +57,13 @@
 						"header": [
 							{
 								"key": "token",
-								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzgwMTUwNjU3MSwibmJmIjoxNjM3Nzk3OTA2LCJpYXQiOjE2Mzc3OTc5MDYsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiJlNGNjMDNlNC0zMzIxLTQ2YWYtYTA4Zi02YTBlNTNmNGJmMmUifQ.0ddV3mXFzSmzn5cn6CEGLwhNBWpmbqFotU6FmYF7brw4TNw71uuaeqQXcU3AnFiJ",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzk4ODcyMDI2NywibmJmIjoxNjM3OTg1MTIwLCJpYXQiOjE2Mzc5ODUxMjAsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiIwYWMwOTk4OS1kOGIxLTRkYjAtYTQ2Yi1kNmFhMmNiYjAzZWEifQ.ofJagMSUXCJSFRAz_pXxEC7wp5hmWqZbHESbyQ4Lu3fn2Seop5XdXoccUmggxF8w",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"estado\": \"ES2\",\r\n    \"observaciones\": \"Se validan los documentos y no se encuentra ningun problema\",\r\n    \"idSolicitud\": {\r\n        \"idSolicitud\": 41\r\n    }\r\n}",
+							"raw": "{\r\n    \"estado\": \"ES2\",\r\n    \"observaciones\": \"Se validan los documentos y no se encuentra ningun problema\",\r\n    \"idSolicitud\": {\r\n        \"idSolicitud\": 44\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -136,6 +136,34 @@
 								"api-ssc",
 								"solicitudes",
 								"getDetalleSolicitud",
+								"41"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DESCARGA ARCHIVO SOLICITUD (LA SOLICITUD DEBE TENER EL ARCHIVO GUARDADO LOCALMENTE SI NO NO FUNCIONA)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJwcnVlYmFAcHJ1ZWJhLmNvbSIsImV4cCI6MTYzNzk4NTg3MjI2OSwibmJmIjoxNjM3OTgyMjcyLCJpYXQiOjE2Mzc5ODIyNzIsIm5pY2siOiJkYXZpZHMiLCJqdGkiOiI4YzZiMTE2ZS02NzQyLTQ3NzgtYWE3Zi04NTM3MzU3MTAwNTQifQ.fw9Vmy1pG9XKySh3miLEBSEg_THzypl2A--e926IWWCyieorNQqasGPbFYCL1uFm",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api-ssc/solicitudes/getArchivoSolicitud/41",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api-ssc",
+								"solicitudes",
+								"getArchivoSolicitud",
 								"41"
 							]
 						}
