@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { /* useParams, */ useNavigate } from "react-router-dom";
 import { createSolitud, getInfoGET } from '../../api'
 import { StoreContext } from '../../App'
 import { DialogMsgOk } from '../../componets/DialogMsgOk'
@@ -14,6 +15,7 @@ const initialStateCrearTramite = {
 export const CrearTramite = () => {
 
     const { store, updateStore } = useContext(StoreContext);
+    let navigate = useNavigate();
     const [stateCrearTramite, setStateCrearTramite] = useState(initialStateCrearTramite);
     const [forms, setForms] = useState(1); // controla el paginado de los forms
     const [tiposTramites, setTiposTramites] = useState([]);
@@ -169,27 +171,29 @@ export const CrearTramite = () => {
             ConsideraQueLaDiferenciaMayorEstaEn:[],
             LaRevisionBusca:[],
             MunicipioDeLaNotaria:[],
+            prediosAsociados:[],
         }
     );
     const {
-        notariaOtorgante,
         anioEscritura,
-        tipoTramite,
-        motivoSolicitud,
-        tipoSolicitante,
-        razonSolicitud,
-        titularesDeDerecho,
-        fichaCatastral,
-        matricula,
-        tipoDeSuelo,
-        municipio,
-        zip,
         avaluoTerreno,
         avaluoConstruccion,
         areaTerreno,
         areaConstruccion,
         autoestimacionAvaluo,
+        fichaCatastral,
         noEscrituraPublica,
+        notariaOtorgante,
+        motivoSolicitud,
+        matricula,
+        municipio,
+        prediosAsociados,
+        tipoTramite,
+        tipoSolicitante,
+        titularesDeDerecho,
+        tipoDeSuelo,
+        razonSolicitud,
+        zip,
     }  = formularioTramite;
     
     const handleFormChange = ({value, name}) => {
@@ -210,7 +214,15 @@ export const CrearTramite = () => {
                 name === areaConstruccion.name
         ){
             if (regExp10Num2dec.test(value)) {  // valida tipo de dato numerico 10 digitos y dos decimales
-                setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
+                setFormularioTramite(
+                    {
+                        ...formularioTramite,
+                        [name]: {
+                            ...formularioTramite[name],
+                            value
+                        }
+                    }
+                );
             }
         } else if(name === autoestimacionAvaluo.name){
             if (regExp10Num.test(value)) {  // valida tipo de dato numerico 10 digitos
@@ -243,11 +255,15 @@ export const CrearTramite = () => {
         try {
             const headers = {token: store.user.token};
             const response = await getInfoGET(headers, enviroment.getTiposTramite);
-            setTiposSolicitudes(response.resultado.tiposSolicitantes);
-            setTiposTramites(response.resultado.tiposTramite);
-            updateStore({...store, openBackDrop:false,});
+            if (response.error) {
+                falloLaPeticion(response.error);
+            } else {
+                setTiposSolicitudes(response.resultado.tiposSolicitantes);
+                setTiposTramites(response.resultado.tiposTramite);
+                updateStore({...store, openBackDrop:false,});
+            }
         } catch (error) {
-            falloLaPeticion();
+            falloLaPeticion(error);
         }
     }
 
@@ -256,10 +272,14 @@ export const CrearTramite = () => {
         try {
             const headers = {token: store.user.token};
             const response = await getInfoGET(headers, enviroment.getTiposSuelo);
-            setTiposDeSuelo(response.resultado.dominios);
-            updateStore({...store, openBackDrop:false,});
+            if (response.error) {
+                falloLaPeticion(response.error);
+            } else {
+                setTiposDeSuelo(response.resultado.dominios);
+                updateStore({...store, openBackDrop:false,});
+            }
         } catch (error) {
-            falloLaPeticion();
+            falloLaPeticion(error);
         }
     }
 
@@ -268,10 +288,14 @@ export const CrearTramite = () => {
         try {
             const headers = {token: store.user.token};
             const response = await getInfoGET(headers, enviroment.getMunicipiosCatatumbo);
-            setMunicipios(response.resultado.dominios);
-            updateStore({...store, openBackDrop:false,});
+            if (response.error) {
+                falloLaPeticion(response.error);
+            } else {
+                setMunicipios(response.resultado.dominios);
+                updateStore({...store, openBackDrop:false,});
+            }
         } catch (error) {
-            falloLaPeticion();
+            falloLaPeticion(error);
         }
     }
 
@@ -280,18 +304,24 @@ export const CrearTramite = () => {
         try {
             const headers = {token: store.user.token};
             const  response = await getInfoGET(headers, url);
-            updateStore({...store, openBackDrop:false,});
-            return response;
+            if (response.error) {
+                falloLaPeticion(response.error);
+            } else {
+                updateStore({...store, openBackDrop:false,});
+                return response;
+            }
         } catch (error) {
-            falloLaPeticion();
+            falloLaPeticion(error);
         }
     }
 
-    const falloLaPeticion = () => {
+    const falloLaPeticion = (error) => {
         updateStore({
             ...store,
             openBackDrop:false,
-            snackBar:{ openSnackBar:true, messageSnackBar:textosInfoWarnig.falloComunicacion, severity:'warning', },
+            snackBar:{
+                openSnackBar:true,
+                messageSnackBar: !error ? error.descripcion : textosInfoWarnig.falloComunicacion, severity:'warning', },
             dialogTool:{open:false, msg :'',tittle:'', response:false}
         });
     }
@@ -304,15 +334,152 @@ export const CrearTramite = () => {
             setTipoSolicitud(response.resultado.dominios);
             updateStore({...store, openBackDrop:false,});
         } catch (error) {
-            falloLaPeticion();
+            falloLaPeticion(error);
         }
+    }
+
+    const resetFormulario = () => {
+        setFormularioTramite(
+            {
+                ...formularioTramite,
+                tipoSolicitante:{
+                    name:'tipoSolicitante',
+                    value:'',
+                    validation:''
+                },
+                razonSolicitud:{
+                    name:'razonSolicitud',
+                    value:'',
+                    validation:''
+                },
+                fichaCatastral:{
+                    name:'fichaCatastral',
+                    value:'',
+                    validation:''
+                },
+                matricula:{
+                    name:'matricula',
+                    value:'',
+                    validation:''
+                },
+                tipoDeSuelo:{
+                    name:'tipoDeSuelo',
+                    value:'',
+                    validation:''
+                },
+                municipio:{
+                    name:'municipio',
+                    value:'',
+                    validation:''
+                },
+                file:{
+                    name:'file',
+                    value:'',
+                    validation:''
+                },
+                zip:{},
+                propiedadHorizontal:{
+                    name:'propiedadHorizontal',
+                    value:'',
+                    validation:''
+                },
+                proyectoUrbanistico:{
+                    name:'proyectoUrbanistico',
+                    value:'',
+                    validation:''
+                },
+                objetoPeticion:{
+                    name:'objetoPeticion',
+                    value:'',
+                    validation:''
+                },
+                consideraMejora:{
+                    name:'consideraMejora',
+                    value:'',
+                    validation:''
+                },
+                avaluoTerreno:{
+                    name:'avaluoTerreno',
+                    value:'',
+                    validation:''
+                },
+                avaluoConstruccion:{
+                    name:'avaluoConstruccion',
+                    value:'',
+                    validation:''
+                },
+                areaTerreno:{
+                    name:'areaTerreno',
+                    value:'',
+                    validation:''
+                },
+                areaConstruccion:{
+                    name:'areaConstruccion',
+                    value:'',
+                    validation:''
+                },
+                autoestimacionAvaluo:{
+                    name:'autoestimacionAvaluo',
+                    value:'',
+                    validation:''
+                },
+                diferenciaMayoEsta:{
+                    name:'diferenciaMayoEsta',
+                    value:'',
+                    validation:''
+                },
+                revisionBusca:{
+                    name:'revisionBusca',
+                    value:'',
+                    validation:''
+                },
+                noEscrituraPublica:{
+                    name:'noEscrituraPublica',
+                    value:'',
+                    validation:''
+                },
+                anioEscritura:{
+                    name:'anioEscritura',
+                    value:'',
+                    validation:''
+                },
+                notariaOtorgante:{
+                    name:'notariaOtorgante',
+                    value:'',
+                    validation:''
+                },
+                objetoRectificacion:{
+                    name:'objetoRectificacion',
+                    value:'',
+                    validation:''
+                },
+                municipioNotaria:{
+                    name:'municipioNotaria',
+                    value:'',
+                    validation:''
+                },
+                motivoDeLaSolicitud:{
+                    name:'motivoDeLaSolicitud',
+                    value:'',
+                    validation:''
+                },
+                titularesDeDerecho:[],
+                MotivosSolicitud:[],
+                ObjetosDeLaPeticion:[],
+                ConsideraUnaMejoraLaMutacion:[],
+                ConsideraQueLaDiferenciaMayorEstaEn:[],
+                LaRevisionBusca:[],
+                MunicipioDeLaNotaria:[],
+                prediosAsociados:[],
+            }
+        );
     }
 
     useEffect(() => {
         if (tipoTramite.value !== "") {
             console.log('useEffect', tipoTramite)
             getTiposSolicitud(tipoTramite.value);
-            setFormularioTramite({...formularioTramite, titularesDeDerecho:[]});
+            resetFormulario();
         }
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -385,7 +552,7 @@ export const CrearTramite = () => {
     
     useEffect(() => {
         renderizarInfoSegunTipoTramite();
-        setFormularioTramite({...formularioTramite, titularesDeDerecho:[]});
+        resetFormulario();
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [motivoSolicitud])
@@ -401,22 +568,27 @@ export const CrearTramite = () => {
     }, [])
 
     const poblarCamposSelect = async()=>{
-        const responseMotivosSolicitud = await getDataApi(enviroment.getMotivoSolicitud);
-        const responseObjetosDeLaPeticion = await getDataApi(enviroment.getObjetoPeticion);
-        const responseConsideraUnaMejoraLaMutacion = await getDataApi(enviroment.getConsideraMejora);
-        const responseConsideraQueLaDiferenciaMayorEstaEn = await getDataApi(enviroment.getDiferenciaMayor);
-        const responseLaRevisionBusca = await getDataApi(enviroment.getRevisionBusca);
-        const responseMunicipioDeLaNotaria = await getDataApi(enviroment.getCodigosDane);
-        
-        setFormularioTramite({
-            ...formularioTramite,
-            MotivosSolicitud: responseMotivosSolicitud.resultado.dominios,
-            ObjetosDeLaPeticion: responseObjetosDeLaPeticion.resultado.dominios,
-            ConsideraUnaMejoraLaMutacion: responseConsideraUnaMejoraLaMutacion.resultado.dominios,
-            ConsideraQueLaDiferenciaMayorEstaEn: responseConsideraQueLaDiferenciaMayorEstaEn.resultado.dominios,
-            LaRevisionBusca: responseLaRevisionBusca.resultado.dominios,
-            MunicipioDeLaNotaria: responseMunicipioDeLaNotaria.resultado.dominios,
-        });
+        try {
+            const responseMotivosSolicitud = await getDataApi(enviroment.getMotivoSolicitud);
+            const responseObjetosDeLaPeticion = await getDataApi(enviroment.getObjetoPeticion);
+            const responseConsideraUnaMejoraLaMutacion = await getDataApi(enviroment.getConsideraMejora);
+            const responseConsideraQueLaDiferenciaMayorEstaEn = await getDataApi(enviroment.getDiferenciaMayor);
+            const responseLaRevisionBusca = await getDataApi(enviroment.getRevisionBusca);
+            const responseMunicipioDeLaNotaria = await getDataApi(enviroment.getCodigosDane);
+            setFormularioTramite({
+                ...formularioTramite,
+                MotivosSolicitud: responseMotivosSolicitud.resultado.dominios,
+                ObjetosDeLaPeticion: responseObjetosDeLaPeticion.resultado.dominios,
+                ConsideraUnaMejoraLaMutacion: responseConsideraUnaMejoraLaMutacion.resultado.dominios,
+                ConsideraQueLaDiferenciaMayorEstaEn: responseConsideraQueLaDiferenciaMayorEstaEn.resultado.dominios,
+                LaRevisionBusca: responseLaRevisionBusca.resultado.dominios,
+                MunicipioDeLaNotaria: responseMunicipioDeLaNotaria.resultado.dominios,
+            });
+            
+        } catch (error) {
+            falloLaPeticion(error);
+            navigate("/");
+        }
 
     }
 
@@ -427,6 +599,14 @@ export const CrearTramite = () => {
     
     const onSubmitFinal = async() => {
         console.log(tiposTramites)
+        alert(`quedamos en: 
+        
+        - ajustar el JSON final para persistir tramite.
+        - verificar todas las validaciones de los formularios
+        - realizar pruebas con varios tramites
+
+        `);
+        debugger
         // const nombreTramite = tiposTramites.filter(tramite => tramite.valor === tipoTramite.value)[0].descripcionValor
         const data = {
             "numeroRadicado": "123456789",
@@ -502,7 +682,8 @@ export const CrearTramite = () => {
     }
 
     return (
-        <div className="sombra" style={{backgroundColor:'white', width:'50%', padding:'5px', borderRadius:'10px', marginTop:'25px'}}>
+        <div className="sombra" 
+        style={{backgroundColor:'white', width:'50%', padding:'5px 30px', borderRadius:'10px', marginTop:'25px'}}>
             <div /* style={{marginTop:'5px'}} */ className="tituloTramite"><p>Nuevo trámite</p></div>
             {
                 forms === 1 ? 

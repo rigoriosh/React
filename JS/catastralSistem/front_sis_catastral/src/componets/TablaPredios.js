@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
 import { DataGrid } from '@mui/x-data-grid';
-import { GrEdit } from "react-icons/gr";
-import { GrFormTrash } from "react-icons/gr";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Tooltip from '@mui/material/Tooltip';
 
 
 export const TablaPredios = ({registros, handleEvents}) => {
 
     const [columns, setColumns] = useState([
         { field: 'id', headerName:'ID', hide:true, },
-        { field: 'fichaCatastral', headerName:'Ficha catastral', flex:0.2, },
-        { field: 'matricula', headerName:'Matrícula', flex:0.2, },
+        { field: 'numeroPredial', headerName:'FICHA CATASTRAL', flex:0.2, },
+        { field: 'matriculaInmobiliaria', headerName:'MATRÍCULA', flex:0.2, },
         {
             field: '',
             // type: 'actions',
@@ -17,8 +18,18 @@ export const TablaPredios = ({registros, handleEvents}) => {
             width: 70,
             renderCell: ({row}) => [
                 <div style={{display:'flex', alignItems:'center'}}>
-                    <GrEdit onClick={()=>{handleEvents({row})}} style={{width:'17px', height:'15px', cursor:'pointer'}}/>
-                    <GrFormTrash onClick={()=>{handleEvents({row, eliminarYa:false})}} style={{width:'24px', height:'22px', cursor:'pointer'}}/>
+                    <Tooltip title="Modificar información del predio ">
+                        <EditIcon 
+                            onClick={()=>{handleEvents({action: 'edit', register: row})}}
+                            sx={{color:'green'}}
+                        />
+                    </Tooltip>
+                     <Tooltip title="Retirar predio ">
+                        <DeleteForeverIcon 
+                            onClick={()=>{handleEvents({action: 'delete', register: row, eliminarYa:false})}}
+                            sx={{color:'red'}}
+                        />
+                    </Tooltip>
                 </div>
             ],
         },
@@ -32,10 +43,10 @@ export const TablaPredios = ({registros, handleEvents}) => {
                 density="compact"
                 hideFooter={false}
                 hideFooterSelectedRowCount
-                pageSize={2}
+                pageSize={3}
                 // scrollbarSize={10}
                 loading={registros.length <= 0}
-                // rowsPerPageOptions={registros.length}
+                rowsPerPageOptions={[]}
                 key={Math.random()}
             />
     )

@@ -227,7 +227,7 @@ export const AppRouter = ({props}) => {
                 {
                     dialogTool.tittle !== "" &&
                     <DialogTitle sx={dialogTool.styles}>
-                        <div style={{display:'flex', justifyContent:'space-between'}}>
+                        <div style={{display:'flex', justifyContent:'space-between', color:'black', fontWeight:'bold', fontSize:'25px'}}>
                             {dialogTool.tittle} <span className="pointer"
                             onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:false}})}>X</span>
                         </div>

@@ -38,10 +38,12 @@ export const textosInfoWarnig = {
   formatEmailInvalido:'Ingrese un email válido',
   creacionUsuario:'El usuario ha sido creado exitosamente.',
   cancelarRegistro: '¿Seguro que desea cancelar el registro?',
-  elimnarUsuario: '¿Seguro que desa eliminar el usuario?',
-  tiempoInactividad: '!Su sesion a finalizado por inactividad',
-  diferentesEmails: 'Los email no coinciden',
+  elimnarUsuario: '¿Seguro que desea eliminar el usuario?',
+  elimnarPredio: '¿Seguro que desea eliminar el predio?',
+  tiempoInactividad: '!Su sesión a finalizado por inactividad',
+  diferentesEmails: 'Los correos electrónicos no coinciden',
   diferentesPassWords: 'Las contraseñas no coinciden',
+  sinPredios: '! Recuerda que se debe relacionar mínimo un inmueble ¡',
   tramiteExito:'Su trámite a sido realizado exitosamente.'
 }
 

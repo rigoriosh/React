@@ -9,6 +9,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Tooltip from '@mui/material/Tooltip';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 import { DataGrid } from '@mui/x-data-grid';
 
@@ -307,8 +311,18 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 width: 70,
                 renderCell: ({row}) => [
                     <div style={{display:'flex', alignItems:'center'}}>
-                        <GrEdit onClick={()=>{editarTitular(row)}} style={{width:'17px', height:'15px', cursor:'pointer'}}/>
-                        <GrFormTrash onClick={()=>{aliminarTitular(row, false)}} style={{width:'24px', height:'22px', cursor:'pointer'}}/>
+                        <Tooltip title="Modificar información del titular ">
+                            <EditIcon 
+                                onClick={()=>{editarTitular(row)}}
+                                sx={{color:'green'}}
+                            />
+                        </Tooltip>
+                        <Tooltip title="Retirar titular ">
+                            <DeleteForeverIcon 
+                                onClick={()=>{aliminarTitular(row, false)}}
+                                sx={{color:'red'}}
+                            />
+                        </Tooltip>
                     </div>
                 ],
             },
@@ -362,7 +376,12 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                         name={tipoTramite.name}
                         required={true}
                     />
-                    <AiOutlinePaperClip className="pointer" onClick={()=>renderizarInfoSegunTipoTramite()}/>
+                    <Tooltip title="Ver documentos requeridos">
+                        <AttachFileIcon className="pointer"
+                            onClick={()=>renderizarInfoSegunTipoTramite()}
+                            sx={{color:'blue'}}
+                        />
+                    </Tooltip>
                 </div>
 
                 <FieldSelect

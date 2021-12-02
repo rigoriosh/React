@@ -1,27 +1,36 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import IconButton from '@mui/material/IconButton';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Tooltip from '@mui/material/Tooltip';
 import Salir_Icon from '../../../assets/Iconos/Salir_Icon.png'
 import Rating from '@mui/material/Rating';
-import { ProyectoUrbanistico, SiNoOptions, stylesApp } from '../../../helpers/utils';
+import { ProyectoUrbanistico, SiNoOptions, stylesApp, textosInfoWarnig } from '../../../helpers/utils';
 import { FieldSelect } from '../../../componets/FieldSelect';
 import { FieldTextWidtLabel } from '../../../componets/FieldTextWidtLabel';
 import { TablaPredios } from '../../../componets/TablaPredios';
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+import { constantes } from './FirstFormTramitre';
+import { Transition } from '../../../componets/DialogMsgOk';
+import { StoreContext } from '../../../App';
 
 
 
 
 export const SecondFormTramitre = ({
     handleFormChange,
-    formularioTramite,
+    formularioTramite, setFormularioTramite,
     tiposDeSuelo,
     municipios,
-    setFormularioTramite,
     avancePagina,
     onSubmitFinal,
     renderizarInfoSegunTipoTramite
 }) => {
+
+    // const [openDialogFormAddPredio, setOpenDialogFormAddPredio] = useState(false);
 
     const {
         avaluoTerreno,
@@ -51,13 +60,42 @@ export const SecondFormTramitre = ({
         tipoTramite,
         propiedadHorizontal,
         proyectoUrbanistico,
+        prediosAsociados,
         revisionBusca,
         objetoPeticion,
         ObjetosDeLaPeticion,
         objetoRectificacion,
     } = formularioTramite;
 
+    const {store, updateStore} = useContext(StoreContext);
+    const {dialogTool} = store;
     const [addPredio, setAddPredio] = useState(false);
+    const [stateSecondFormTramite, setStateSecondFormTramite] = useState(
+        {
+            openDialogFormAddPredio: false,
+            modoFormularioAddPredio: constantes.tipoFormulario.nuevo, // editar, eliminar
+            predioSeleccionado: {},
+            formNewPredio:{
+                fichaCatastral:{
+                    name:'fichaCatastral',
+                    value:'',
+                    validacion:''
+                },
+                matricula:{
+                    name:'matricula',
+                    value:'',
+                    validacion:''
+                },
+            },
+            asociadosPredios:[],
+        }
+    );
+    const {
+        modoFormularioAddPredio,
+        predioSeleccionado,
+        formNewPredio,
+        openDialogFormAddPredio,
+    } = stateSecondFormTramite;
 
     const fileHandler = ({target}) => {
         if(target.files[0]){
@@ -74,10 +112,208 @@ export const SecondFormTramitre = ({
 
     }
 
+    const abrirFormPredioTitular = () => {
+        setStateSecondFormTramite(
+            {
+                ...stateSecondFormTramite,
+                modoFormularioAddPredio: constantes.tipoFormulario.nuevo,
+                predioSeleccionado: {},
+                openDialogFormAddPredio: true,
+                formNewPredio:{
+                    fichaCatastral:{...fichaCatastral, value:'', validacion:''},
+                    matricula:{...matricula, value:'', validacion:''}
+                }
+            });
+    }
+
+    const newPredio = () => {
+
+        let cloneAsociadosPredios = [...prediosAsociados];
+        console.log(cloneAsociadosPredios);
+        let openCLoseFormPredial = true;
+        let formularioOk = true;
+        if (modoFormularioAddPredio === constantes.tipoFormulario.nuevo) {
+            const key = Object.keys(formNewPredio);
+            let cloneformNewPredio = {...formNewPredio};
+            key.forEach(campo => {
+                if (cloneformNewPredio[campo].value === "") {
+                    cloneformNewPredio[campo].validacion = textosInfoWarnig.campoRequerido;
+                    formularioOk = false;
+                    
+                }else{
+                    cloneformNewPredio[campo].validacion = '';
+                }
+            });
+    
+            if (formularioOk) {
+                openCLoseFormPredial = false;
+                cloneAsociadosPredios.push(
+                    {   
+                        id:cloneAsociadosPredios.length,
+                        "numeroPredial":formNewPredio.fichaCatastral.value,
+                        "matriculaInmobiliaria":formNewPredio.matricula.value,
+                    }
+                );
+            } else {
+                updateStore({
+                    ...store,
+                    snackBar:{
+                        openSnackBar: true,
+                        messageSnackBar:textosInfoWarnig.camposRequerdios,
+                        severity: 'error'
+                    },
+                });
+            }
+            setFormularioTramite(
+                {
+                    ...formularioTramite,
+                    prediosAsociados:cloneAsociadosPredios,
+                }
+            );
+            setStateSecondFormTramite(
+                {
+                    ...stateSecondFormTramite,
+                    // asociadosPredios: cloneAsociadosPredios,
+                    formNewPredio: cloneformNewPredio,
+                    openDialogFormAddPredio: openCLoseFormPredial,
+                }
+            );
+            
+        } else if(modoFormularioAddPredio === constantes.tipoFormulario.editar){
+            editarPredio(predioSeleccionado);
+        }
+        
+    }
+
+    const handleActiosTablePredios = ({action, register}) => {
+        console.log(action, register)
+        if (action === "edit") {
+            // editarPredio(register);
+            setStateSecondFormTramite(
+                {
+                    ...stateSecondFormTramite,
+                    predioSeleccionado: register,
+                    modoFormularioAddPredio: constantes.tipoFormulario.editar,
+                    openDialogFormAddPredio: true,
+                    formNewPredio:{
+                        fichaCatastral:{...fichaCatastral, value:register.numeroPredial, validacion:''},
+                        matricula:{...matricula, value:register.matriculaInmobiliaria, validacion:''}
+                    }
+                }
+            );
+        } else if(action === "delete"){
+            setStateSecondFormTramite(
+                {
+                    ...stateSecondFormTramite,
+                    predioSeleccionado: register,
+                    modoFormularioAddPredio: constantes.tipoFormulario.eliminar,
+                    formNewPredio:{
+                        fichaCatastral:{...fichaCatastral, value:register.numeroPredial, validacion:''},
+                        matricula:{...matricula, value:register.matriculaInmobiliaria, validacion:''}
+                    }
+                }
+            );
+            eliminarPredio(register);
+        }
+    }
+
+    useEffect(() => {
+        if (dialogTool.response) {
+            eliminarPredio(predioSeleccionado, true);
+            updateStore({
+                ...store,
+                dialogTool:{open:false, msg :'',tittle:'', response:false}
+            });
+        }
+        return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dialogTool])
+
+    const editarPredio = (predio) => {
+        const updateAsociadosPredios = prediosAsociados.map(prediotoUpdate => {
+            if (prediotoUpdate.id === predio.id) {
+                return {
+                    ...prediotoUpdate,
+                    numeroPredial:formNewPredio.fichaCatastral.value,
+                    matriculaInmobiliaria:formNewPredio.matricula.value,
+                }
+            } else {
+                return prediotoUpdate;
+            }
+        });
+        setFormularioTramite(
+            {
+                ...formularioTramite,
+                prediosAsociados:updateAsociadosPredios
+            }
+        );
+        setStateSecondFormTramite(
+            {
+                ...stateSecondFormTramite,
+                openDialogFormAddPredio: false,
+            }
+        );
+    }
+    const eliminarPredio = (predio, eliminar=false) => {
+        if (eliminar) {
+            console.log(formularioTramite)
+            const updatePredios = prediosAsociados.filter(e => e.id !== predio.id)
+            setFormularioTramite({...formularioTramite, prediosAsociados: updatePredios});
+        } else {
+            updateStore({
+                ...store,
+                dialogTool:{
+                    open:true, 
+                    msg: textosInfoWarnig.elimnarPredio,
+                    tittle:'Confirmación',
+                    response:false,
+                    actions:true,
+                }
+            });
+        }
+    }
+
+    const closeOpenDialogFormAddPredio = (closeOpen) => {
+        setStateSecondFormTramite(
+            {
+                ...stateSecondFormTramite,
+                openDialogFormAddPredio: closeOpen
+            }
+        )
+    }
+    const handleFieldsFormPredios = ({name, value}) => {
+        console.log(name, value);
+        setStateSecondFormTramite(
+            {
+                ...stateSecondFormTramite,
+                formNewPredio: {
+                    ...formNewPredio,
+                    [name]: {
+                        ...formNewPredio[name],
+                        value
+                    }
+                }
+            }
+        )
+    }
+
     const onSubmit = (e)=> {
         e.preventDefault();
         console.log('onSubmit')
-        onSubmitFinal();
+        if (prediosAsociados.length < 1) {
+            updateStore({
+                ...store,
+                dialogTool:{
+                    open:true, 
+                    msg: textosInfoWarnig.sinPredios,
+                    tittle:'Confirmación',
+                    response:false,
+                    actions:false,
+                }
+            });
+        } else {
+            onSubmitFinal();
+        }
         
     }
 
@@ -95,36 +331,50 @@ export const SecondFormTramitre = ({
                 <p className="titulo color1">DATOS DEL INMUEBLE</p>
             </div>
             {
-                (tipoTramite.value !== "MO" && motivoSolicitud.value !== "MPHC")  
-                
-                    ?   <div>
-                            <FieldTextWidtLabel
-                                label={'Ficha Catastral'}
-                                value={fichaCatastral.value} 
-                                name={fichaCatastral.name}
-                                messageValidate={fichaCatastral.validation}
-                                required={true}
-                                handleChange={(target)=>{handleFormChange(target)}}
-                            />
-                            <FieldTextWidtLabel
-                                label={'Matricula'}
-                                value={matricula.value} 
-                                name={matricula.name}
-                                messageValidate={matricula.validation}
-                                required={true}
-                                handleChange={(target)=>{handleFormChange(target)}}
-                            />
-                        </div>
-                    :   <div>
+                ((tipoTramite.value === "MO" && motivoSolicitud.value === "MPHC")
+                ||(tipoTramite.value === "MS" && motivoSolicitud.value === "EAP")
+                ||(tipoTramite.value === "MS" && motivoSolicitud.value === "DDP"))  
+                    ?  <div style={{marginBottom:'15px'}}>
+                            <div className="tituloBtnRight " >
+                                {
+                                    prediosAsociados.length < 1 &&
+                                    <label onClick={()=>abrirFormPredioTitular()} htmlFor="" className="pointer" 
+                                        style={{marginRight:'10px', color:'red', fontSize:'12px'}}>
+                                            {textosInfoWarnig.sinPredios} 
+                                    </label>
+                                }
+                                <Tooltip title="Agregar predio">
+                                    <AddBusinessIcon color="primary" className="pointer" onClick={()=>abrirFormPredioTitular()}/>
+                                </Tooltip>
+                            </div>
                             {
-                                addPredio 
-                                ? <TablaPredios registros={[]} handleEvents={(response)=>console.log(response)}/>
-                                :   <div className="tituloBtnCenter " >
-                                        <label onClick={()=>setAddPredio(true)} htmlFor="" className="pointer" style={{marginRight:'10px', color:'blue'}}>Agregar predios</label>
-                                        <AddBusinessIcon color="primary" onClick={()=>setAddPredio(true)}/>
-                                    </div>
+                                prediosAsociados.length > 0 && 
+                                <TablaPredios key="TablaAsociadosPredios"
+                                    registros={prediosAsociados}
+                                    handleEvents={(response)=>handleActiosTablePredios(response)}
+                                />
                             }
-                        </div>
+                            
+                        </div> 
+                    :  <div>
+                        <FieldTextWidtLabel
+                            label={'Ficha Catastral'}
+                            value={fichaCatastral.value} 
+                            name={fichaCatastral.name}
+                            messageValidate={fichaCatastral.validation}
+                            required={true}
+                            handleChange={(target)=>{handleFormChange(target)}}
+                        />
+                        <FieldTextWidtLabel
+                            label={'Matricula'}
+                            value={matricula.value} 
+                            name={matricula.name}
+                            messageValidate={matricula.validation}
+                            required={true}
+                            handleChange={(target)=>{handleFormChange(target)}}
+                        />
+                    </div> 
+                    
             }
             {/* Aplica para todos los formularios */}
             <div style={{display:'flex', width:'100%'}}>
@@ -423,8 +673,8 @@ export const SecondFormTramitre = ({
 
 
             {/* Aplica para todos los formularios */}
-            <div className="row contenTitulo" style={{marginTop:'10px', justifyContent:'space-between'}}>
-                <div className="row contenTitulo">
+            <div className="row contenTitulo" style={{marginBottom:'10px', marginTop:'10px' ,justifyContent:'space-between'}}>
+                <div className="row ">
                     <div className="decorationTitle bgc3"></div>
                     <p className="titulo color3">OTROS</p>
                 </div>
@@ -472,7 +722,46 @@ export const SecondFormTramitre = ({
                     <p style={{alignSelf:'end', fontSize:'12px', margin:'5px 0',color:stylesApp.gray1, cursor:'pointer'}}>Volver atrás</p>
                 </div>
             </div>
-            
+            <Dialog
+                open={openDialogFormAddPredio}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={()=>closeOpenDialogFormAddPredio(false)}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle>{`${modoFormularioAddPredio === constantes.tipoFormulario.nuevo ? "Agregar" : "Editar"} predio`}</DialogTitle>
+                <DialogContent>
+               <DialogContentText id="alert-dialog-slide-description">
+                        <div style={{margin:'10px 20px'}}>
+                                <FieldTextWidtLabel 
+                                    value={formNewPredio.fichaCatastral.value}
+                                    name="fichaCatastral"
+                                    label={'Ficha catastra'} 
+                                    handleChange={(target)=>handleFieldsFormPredios(target)} 
+                                    messageValidate={formNewPredio.fichaCatastral.validacion}/>
+                                <FieldTextWidtLabel 
+                                    value={formNewPredio.matricula.value}
+                                    name="matricula"
+                                    label={'Matrícula'}
+                                    handleChange={(target)=>handleFieldsFormPredios(target)} 
+                                    messageValidate={formNewPredio.matricula.validacion}
+                                    styleOwn={{width:'400px'}}/>
+                        </div>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                            <button onClick={()=>{
+                                newPredio();
+                            }} className='btnAceptar'>{`${modoFormularioAddPredio === constantes.tipoFormulario.nuevo ? 'Agregar': 'Editar'} predio`}</button>
+                            <button onClick={()=>{
+                                // resetForm();
+                                closeOpenDialogFormAddPredio(false);
+                            }} className='btnAceptar'>Cancelar</button>
+                    </div>
+                    
+                </DialogActions>
+            </Dialog>
         </form>
     )
 }
