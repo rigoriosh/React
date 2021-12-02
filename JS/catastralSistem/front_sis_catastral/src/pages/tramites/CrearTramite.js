@@ -51,7 +51,6 @@ export const CrearTramite = () => {
                 value:'',
                 validation:''
             },
-            titularesDeDerecho:[],
             fichaCatastral:{
                 name:'fichaCatastral',
                 value:'',
@@ -158,6 +157,18 @@ export const CrearTramite = () => {
                 value:'',
                 validation:''
             },
+            motivoDeLaSolicitud:{
+                name:'motivoDeLaSolicitud',
+                value:'',
+                validation:''
+            },
+            titularesDeDerecho:[],
+            MotivosSolicitud:[],
+            ObjetosDeLaPeticion:[],
+            ConsideraUnaMejoraLaMutacion:[],
+            ConsideraQueLaDiferenciaMayorEstaEn:[],
+            LaRevisionBusca:[],
+            MunicipioDeLaNotaria:[],
         }
     );
     const {
@@ -172,7 +183,6 @@ export const CrearTramite = () => {
         matricula,
         tipoDeSuelo,
         municipio,
-        file,
         zip,
         avaluoTerreno,
         avaluoConstruccion,
@@ -211,7 +221,7 @@ export const CrearTramite = () => {
                 setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
             }
         } else if(name === anioEscritura.name){
-            if (value.length < 15) {  // valida longitud de campo hasta 14 caracteres
+            if (value.length < 4) {  // valida longitud de campo hasta 4 caracteres
                 setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
             }
         } else if(name === notariaOtorgante.name){
@@ -265,6 +275,18 @@ export const CrearTramite = () => {
         }
     }
 
+    const getDataApi = async(url)=>{
+        updateStore({...store, openBackDrop:true,});
+        try {
+            const headers = {token: store.user.token};
+            const  response = await getInfoGET(headers, url);
+            updateStore({...store, openBackDrop:false,});
+            return response;
+        } catch (error) {
+            falloLaPeticion();
+        }
+    }
+
     const falloLaPeticion = () => {
         updateStore({
             ...store,
@@ -290,6 +312,7 @@ export const CrearTramite = () => {
         if (tipoTramite.value !== "") {
             console.log('useEffect', tipoTramite)
             getTiposSolicitud(tipoTramite.value);
+            setFormularioTramite({...formularioTramite, titularesDeDerecho:[]});
         }
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -357,11 +380,12 @@ export const CrearTramite = () => {
                 },
             })
             
-        }, 1500);
+        }, 10);
     }
     
     useEffect(() => {
         renderizarInfoSegunTipoTramite();
+        setFormularioTramite({...formularioTramite, titularesDeDerecho:[]});
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [motivoSolicitud])
@@ -371,21 +395,29 @@ export const CrearTramite = () => {
         getTramitesSolicitudes();
         getTiposDeSuelos();
         getMunicipios();
+        poblarCamposSelect();
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const openInfoFiles = () => {
-        updateStore({
-            ...store,
-            dialogTool:{
-                open:true, msg :constantesGlobales.tipoNotas.nota1,
-                tittle:'Nota', 
-                response:false, actions:false, 
-                styles:{backgroundColor: 'rgba(10,10,10,0.8)', color:'white'},
-                textColor:{color:'white'},
-            },
+    const poblarCamposSelect = async()=>{
+        const responseMotivosSolicitud = await getDataApi(enviroment.getMotivoSolicitud);
+        const responseObjetosDeLaPeticion = await getDataApi(enviroment.getObjetoPeticion);
+        const responseConsideraUnaMejoraLaMutacion = await getDataApi(enviroment.getConsideraMejora);
+        const responseConsideraQueLaDiferenciaMayorEstaEn = await getDataApi(enviroment.getDiferenciaMayor);
+        const responseLaRevisionBusca = await getDataApi(enviroment.getRevisionBusca);
+        const responseMunicipioDeLaNotaria = await getDataApi(enviroment.getCodigosDane);
+        
+        setFormularioTramite({
+            ...formularioTramite,
+            MotivosSolicitud: responseMotivosSolicitud.resultado.dominios,
+            ObjetosDeLaPeticion: responseObjetosDeLaPeticion.resultado.dominios,
+            ConsideraUnaMejoraLaMutacion: responseConsideraUnaMejoraLaMutacion.resultado.dominios,
+            ConsideraQueLaDiferenciaMayorEstaEn: responseConsideraQueLaDiferenciaMayorEstaEn.resultado.dominios,
+            LaRevisionBusca: responseLaRevisionBusca.resultado.dominios,
+            MunicipioDeLaNotaria: responseMunicipioDeLaNotaria.resultado.dominios,
         });
+
     }
 
     const ajusteTitularesDerecho = () => {
@@ -482,7 +514,7 @@ export const CrearTramite = () => {
                         avancePagina={avancePagina}
                         formularioTramite={formularioTramite}
                         setFormularioTramite={setFormularioTramite}
-                        openInfoFiles={openInfoFiles}
+                        renderizarInfoSegunTipoTramite={renderizarInfoSegunTipoTramite}
                 />
                 : forms === 2 ?
                     <SecondFormTramitre
@@ -493,6 +525,7 @@ export const CrearTramite = () => {
                         setFormularioTramite={setFormularioTramite}
                         avancePagina={avancePagina}
                         onSubmitFinal={onSubmitFinal}
+                        renderizarInfoSegunTipoTramite={renderizarInfoSegunTipoTramite}
                     />
                 : <h1>ultimo</h1>
             }

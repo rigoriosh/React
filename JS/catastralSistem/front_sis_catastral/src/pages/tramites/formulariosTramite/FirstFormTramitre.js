@@ -62,7 +62,7 @@ const initialState = {
 }
 
 export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitud, tiposSolicitante, avancePagina,
-    formularioTramite, setFormularioTramite, openInfoFiles}) => {
+    formularioTramite, setFormularioTramite, openInfoFiles, renderizarInfoSegunTipoTramite}) => {
 
         const {store, updateStore} = useContext(StoreContext);
         const {dialogTool} = store;
@@ -282,6 +282,8 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
             }
         }
 
+        
+
         useEffect(() => {
             if (dialogTool.response) {
                 aliminarTitular(formularioTramite.registroSeleccionado, true);
@@ -360,7 +362,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                         name={tipoTramite.name}
                         required={true}
                     />
-                    <AiOutlinePaperClip className="pointer" onClick={()=>openInfoFiles()}/>
+                    <AiOutlinePaperClip className="pointer" onClick={()=>renderizarInfoSegunTipoTramite()}/>
                 </div>
 
                 <FieldSelect

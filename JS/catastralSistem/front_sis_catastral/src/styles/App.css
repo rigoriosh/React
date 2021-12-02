@@ -206,6 +206,13 @@
   align-self: center;
 }
 
+.tituloBtnCenter{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
 .subTitulo{
   font-weight: 100;
   font-size: 12px;

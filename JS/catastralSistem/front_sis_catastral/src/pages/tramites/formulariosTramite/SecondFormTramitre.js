@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import IconButton from '@mui/material/IconButton';
 import Salir_Icon from '../../../assets/Iconos/Salir_Icon.png'
-import { stylesApp } from '../../../helpers/utils';
+import Rating from '@mui/material/Rating';
+import { ProyectoUrbanistico, SiNoOptions, stylesApp } from '../../../helpers/utils';
 import { FieldSelect } from '../../../componets/FieldSelect';
 import { FieldTextWidtLabel } from '../../../componets/FieldTextWidtLabel';
+import { TablaPredios } from '../../../componets/TablaPredios';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 
 
 
@@ -17,45 +20,57 @@ export const SecondFormTramitre = ({
     setFormularioTramite,
     avancePagina,
     onSubmitFinal,
+    renderizarInfoSegunTipoTramite
 }) => {
 
     const {
-        fichaCatastral,
-        matricula,
-        tipoDeSuelo,
-        municipio,
-        file,
-        tipoTramite,
-        propiedadHorizontal,
-        motivoSolicitud,
-        proyectoUrbanistico,
-        objetoPeticion,
-        consideraMejora,
         avaluoTerreno,
         avaluoConstruccion,
+        anioEscritura,
         areaTerreno,
         areaConstruccion,
         autoestimacionAvaluo,
+        consideraMejora,
+        ConsideraUnaMejoraLaMutacion,
+        ConsideraQueLaDiferenciaMayorEstaEn,
         diferenciaMayoEsta,
-        revisionBusca,
-        noEscrituraPublica,
-        anioEscritura,
-        notariaOtorgante,
-        objetoRectificacion,
+        EspecificacionDelTramiteSolicitado,
+        fichaCatastral,
+        file,
+        LaRevisionBusca,
+        matricula,
+        municipio,
+        motivoSolicitud,
         municipioNotaria,
+        MunicipioDeLaNotaria,
+        motivoDeLaSolicitud,
+        MotivosSolicitud,
+        noEscrituraPublica,
+        notariaOtorgante,
+        tipoDeSuelo,
+        tipoTramite,
+        propiedadHorizontal,
+        proyectoUrbanistico,
+        revisionBusca,
+        objetoPeticion,
+        ObjetosDeLaPeticion,
+        objetoRectificacion,
     } = formularioTramite;
 
+    const [addPredio, setAddPredio] = useState(false);
 
     const fileHandler = ({target}) => {
-        setFormularioTramite({
-            ...formularioTramite,
-            zip:target.files[0],
-            file: {
-                name:'file',
-                value:target.files[0].name,
-                validation:''
-            }
-        })
+        if(target.files[0]){
+            setFormularioTramite({
+                ...formularioTramite,
+                zip:target.files[0],
+                file: {
+                    name:'file',
+                    value:target.files[0].name,
+                    validation:''
+                }
+            });
+        }
 
     }
 
@@ -66,6 +81,12 @@ export const SecondFormTramitre = ({
         
     }
 
+    useEffect(() => {
+        console.log(11111111)
+        return () => {
+            console.log('bay SecondForm')
+        }
+    }, [])
 
     return (
         <form onSubmit={onSubmit}>
@@ -73,23 +94,39 @@ export const SecondFormTramitre = ({
                 <div className="decorationTitle bgc1"></div>
                 <p className="titulo color1">DATOS DEL INMUEBLE</p>
             </div>
+            {
+                (tipoTramite.value !== "MO" && motivoSolicitud.value !== "MPHC")  
+                
+                    ?   <div>
+                            <FieldTextWidtLabel
+                                label={'Ficha Catastral'}
+                                value={fichaCatastral.value} 
+                                name={fichaCatastral.name}
+                                messageValidate={fichaCatastral.validation}
+                                required={true}
+                                handleChange={(target)=>{handleFormChange(target)}}
+                            />
+                            <FieldTextWidtLabel
+                                label={'Matricula'}
+                                value={matricula.value} 
+                                name={matricula.name}
+                                messageValidate={matricula.validation}
+                                required={true}
+                                handleChange={(target)=>{handleFormChange(target)}}
+                            />
+                        </div>
+                    :   <div>
+                            {
+                                addPredio 
+                                ? <TablaPredios registros={[]} handleEvents={(response)=>console.log(response)}/>
+                                :   <div className="tituloBtnCenter " >
+                                        <label onClick={()=>setAddPredio(true)} htmlFor="" className="pointer" style={{marginRight:'10px', color:'blue'}}>Agregar predios</label>
+                                        <AddBusinessIcon color="primary" onClick={()=>setAddPredio(true)}/>
+                                    </div>
+                            }
+                        </div>
+            }
             {/* Aplica para todos los formularios */}
-            <FieldTextWidtLabel
-                label={'Ficha Catastral'}
-                value={fichaCatastral.value} 
-                name={fichaCatastral.name}
-                messageValidate={fichaCatastral.validation}
-                required={true}
-                handleChange={(target)=>{handleFormChange(target)}}
-            />
-            <FieldTextWidtLabel
-                label={'Matricula'}
-                value={matricula.value} 
-                name={matricula.name}
-                messageValidate={matricula.validation}
-                required={true}
-                handleChange={(target)=>{handleFormChange(target)}}
-            />
             <div style={{display:'flex', width:'100%'}}>
                 <FieldSelect
                     label={'Tipo de suelo'}
@@ -121,7 +158,7 @@ export const SecondFormTramitre = ({
                     <FieldSelect
                         label={'Propiedad horizontal'}
                         value={propiedadHorizontal.value}
-                        options={[]} 
+                        options={SiNoOptions} 
                         handleOnchange={(target)=>{handleFormChange(target)}} 
                         messageValidate={propiedadHorizontal.validation}
                         name={propiedadHorizontal.name}
@@ -133,7 +170,7 @@ export const SecondFormTramitre = ({
                         <FieldSelect
                             label={'Proyecto Urbanistico'}
                             value={proyectoUrbanistico.value}
-                            options={[]} 
+                            options={ProyectoUrbanistico} 
                             handleOnchange={(target)=>{handleFormChange(target)}} 
                             messageValidate={proyectoUrbanistico.validation}
                             name={proyectoUrbanistico.name}
@@ -149,7 +186,7 @@ export const SecondFormTramitre = ({
                     <FieldSelect
                         label={'Objeto de la Petición'}
                         value={objetoPeticion.value}
-                        options={[]} 
+                        options={ObjetosDeLaPeticion} 
                         handleOnchange={(target)=>{handleFormChange(target)}} 
                         messageValidate={objetoPeticion.validation}
                         name={objetoPeticion.name}
@@ -160,7 +197,7 @@ export const SecondFormTramitre = ({
                     <FieldSelect
                         label={'¿Considera una mejora la mutación?'}
                         value={consideraMejora.value}
-                        options={[]} 
+                        options={ConsideraUnaMejoraLaMutacion} 
                         handleOnchange={(target)=>{handleFormChange(target)}} 
                         messageValidate={consideraMejora.validation}
                         name={consideraMejora.name}
@@ -245,7 +282,7 @@ export const SecondFormTramitre = ({
                     <FieldSelect
                         label={'Considera que la diferencia mayor esta en'}
                         value={diferenciaMayoEsta.value}
-                        options={[]} 
+                        options={ConsideraQueLaDiferenciaMayorEstaEn} 
                         handleOnchange={(target)=>{handleFormChange(target)}} 
                         messageValidate={diferenciaMayoEsta.validation}
                         name={diferenciaMayoEsta.name}
@@ -255,7 +292,7 @@ export const SecondFormTramitre = ({
                     <FieldSelect
                         label={'La revisión busca'}
                         value={revisionBusca.value}
-                        options={[]} 
+                        options={LaRevisionBusca} 
                         handleOnchange={(target)=>{handleFormChange(target)}} 
                         messageValidate={revisionBusca.validation}
                         name={revisionBusca.name}
@@ -300,7 +337,7 @@ export const SecondFormTramitre = ({
                         <FieldSelect
                             label={'Municipio de la Notaria'}
                             value={municipioNotaria.value}
-                            options={[]} 
+                            options={MunicipioDeLaNotaria} 
                             handleOnchange={(target)=>{handleFormChange(target)}} 
                             messageValidate={municipioNotaria.validation}
                             name={municipioNotaria.name}
@@ -327,11 +364,11 @@ export const SecondFormTramitre = ({
                         />
                         <FieldSelect
                             label={'Motivo de la Solicitud'}
-                            value={diferenciaMayoEsta.value}
-                            options={[]} 
+                            value={motivoDeLaSolicitud.value}
+                            options={MotivosSolicitud} 
                             handleOnchange={(target)=>{handleFormChange(target)}} 
-                            messageValidate={diferenciaMayoEsta.validation}
-                            name={diferenciaMayoEsta.name}
+                            messageValidate={motivoDeLaSolicitud.validation}
+                            name={motivoDeLaSolicitud.name}
                             styleOwn={{width:'100%', marginLeft: '10px'}}
                             required={true}
                         />
@@ -346,11 +383,11 @@ export const SecondFormTramitre = ({
                    { motivoSolicitud.value === "RAT" &&
                     <FieldSelect
                         label={'Motivo de la Solicitud'}
-                        value={objetoRectificacion.value}
-                        options={[]} 
+                        value={motivoDeLaSolicitud.value}
+                        options={MotivosSolicitud} 
                         handleOnchange={(target)=>{handleFormChange(target)}} 
-                        messageValidate={objetoRectificacion.validation}
-                        name={objetoRectificacion.name}
+                        messageValidate={motivoDeLaSolicitud.validation}
+                        name={motivoDeLaSolicitud.name}
                         styleOwn={{width:'100%', marginRight:'10px'}}
                         required={true}
                     />}
@@ -373,20 +410,15 @@ export const SecondFormTramitre = ({
 
                 <FieldSelect
                     label={'Motivo de la Solicitud'}
-                    value={diferenciaMayoEsta.value}
-                    options={[]} 
+                    value={motivoDeLaSolicitud.value}
+                    options={MotivosSolicitud} 
                     handleOnchange={(target)=>{handleFormChange(target)}} 
-                    messageValidate={diferenciaMayoEsta.validation}
-                    name={diferenciaMayoEsta.name}
+                    messageValidate={motivoDeLaSolicitud.validation}
+                    name={motivoDeLaSolicitud.name}
                     styleOwn={{width:'100%', marginTop:'5px' /* marginLeft: '10px' */}}
                     required={true}
                 />
             }
-
-
-
-
-
 
 
 
@@ -401,10 +433,22 @@ export const SecondFormTramitre = ({
                         onChange={(e)=>fileHandler(e)} style={{display:'none'}}
                     />
                     <label htmlFor="file" className="row aicenter">
-                        <p className="labels pointer">Adjuntar archvio</p>
-                        <IconButton id='file' color="primary" aria-label="upload picture" component="span">
-                            <AttachFileIcon />
-                        </IconButton>
+
+                        <p className="labels pointer btnAceptar" style={{color:'white'}}>Adjuntar archvio</p>
+                            <Rating
+                                sx={{color:'gray', cursor:'default'}}
+                                name="hover-feedback"
+                                value={1}
+                                max={1}
+                                precision={0.5}
+                                onChange={(event, newValue) => {
+                                }}
+                                onChangeActive={(event, newHover) => {
+                                    renderizarInfoSegunTipoTramite()
+                                }}
+                                icon={<AttachFileIcon style={{ opacity: 1 }} fontSize="inherit" />}
+                                emptyIcon={<AttachFileIcon style={{ opacity: 1 }} fontSize="inherit" />}
+                            />
                     </label>
                 </div>
             </div>

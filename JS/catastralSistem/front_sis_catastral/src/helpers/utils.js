@@ -222,5 +222,27 @@ export const tiposDocumentoToTest = [
 export const regExp10Num2dec = new RegExp(/^(\d{1,10})(\.\d{1,2})?$/);
 export const regExp10Num = new RegExp(/^(\d{1,10})$/);
 
+export const SiNoOptions = [
+  {
+    valor:'S',
+    descripcionValor:'Si'
+  },
+  {
+    valor:'N',
+    descripcionValor:'No'
+  },
+]
+
+export const ProyectoUrbanistico = [
+  {
+    valor:'S',
+    descripcionValor:'Si'
+  },
+  {
+    valor:'N',
+    descripcionValor:'No'
+  },
+]
+
 
 

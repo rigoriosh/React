@@ -196,7 +196,7 @@ export const Login = () => {
 
                     {/* <p onClick={()=>console.log('pendiente lógica recuperar contraseña')} style={{alignSelf:'end', fontSize:'12px', margin:'5px 0',color:stylesApp.gray1, cursor:'pointer'}}>¿Olvido su contraseña?</p> */}
 
-                    <button onClick={()=>modoTest()/* logIn() */} className='btnAceptar'>ACEPTAR</button>
+                    <button onClick={()=>/* modoTest() */logIn()} className='btnAceptar'>ACEPTAR</button>
 
                     <div style={{display:'flex'}} onClick={()=>{navigate("/")}}>
                         <img src={Salir_Icon} alt="" style={{cursor:'pointer', width:'20px', alignSelf:'center'}}/>
