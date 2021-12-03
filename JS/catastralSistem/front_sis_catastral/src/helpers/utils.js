@@ -35,16 +35,17 @@ export const textosInfoWarnig = {
   inconvenientesRenovarSesion: 'Se presentaron inconvenientes para renovar su sesión, debe registrarse nuevamente, gracias ',
   camposRequerdios:'Recuerda que todos los campos son obligatorios',
   campoRequerido:'Este campo es requerido',
-  formatEmailInvalido:'Ingrese un email válido',
+  formatEmailInvalido:'Ingrese un correo electrónico válido',
   creacionUsuario:'El usuario ha sido creado exitosamente.',
-  cancelarRegistro: '¿Seguro que desea cancelar el registro?',
-  elimnarUsuario: '¿Seguro que desea eliminar el usuario?',
-  elimnarPredio: '¿Seguro que desea eliminar el predio?',
+  cancelarRegistro: '¿Séguro que desea cancelar el registro?',
+  elimnarUsuario: '¿Séguro que desea eliminar el usuario?',
+  elimnarPredio: '¿Séguro que desea eliminar el predio?',
   tiempoInactividad: '!Su sesión a finalizado por inactividad',
   diferentesEmails: 'Los correos electrónicos no coinciden',
   diferentesPassWords: 'Las contraseñas no coinciden',
   sinPredios: '! Recuerda que se debe relacionar mínimo un inmueble ¡',
-  tramiteExito:'Su trámite a sido realizado exitosamente.'
+  tramiteExito:'Su trámite ha sido realizado exitosamente.',
+  tamanioCampo:`!El campo 'Ficha catastral o número predial' debe ser de 20 o 30 carácteres ¡`
 }
 
 export const constantesGlobales = {

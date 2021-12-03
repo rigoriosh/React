@@ -454,14 +454,15 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                         name="textarea"
                         rows="10"
                         cols="50"
-                        placeholder="Escriba en este campo las razones por las cuales esta generando la solicitud."
+                        placeholder="Escriba en este campo las razones por las cuales está generando la solicitud."
                         required={true}
+                        value={razonSolicitud.value}
                     >
                     </textarea>
                 </div>
                 <div style={{display:'flex', justifyContent:'flex-end'}}>
                     <button type="submit" style={{border:'none', background:'transparent'}}>
-                        <p onClick={()=>{avancePagina(true/* formularioTotalOk */, true)}} className={`${formularioTotalOk?'color1 pointer':'grey2'}  `}>Siguiente <span style={{fontWeight:'bold'}}>{'>'}</span> </p>
+                        <p onClick={()=>{avancePagina(formularioTotalOk, true)}} className={`${formularioTotalOk?'color1 pointer':'grey2'}  `}>Siguiente <span style={{fontWeight:'bold'}}>{'>'}</span> </p>
                     </button>
                     {/* <img onClick={()=>{avancePagina()}} className="imgWidth" src={PasodePagDer_Icon} alt="" style={{width:'12px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/> */}
                 </div>

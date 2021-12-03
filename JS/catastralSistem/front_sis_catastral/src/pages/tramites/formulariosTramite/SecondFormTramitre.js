@@ -65,6 +65,9 @@ export const SecondFormTramitre = ({
         objetoPeticion,
         ObjetosDeLaPeticion,
         objetoRectificacion,
+        TiposInscripcion,
+        tipoInscripcion,
+        ObjetosRectificacion,
     } = formularioTramite;
 
     const {store, updateStore} = useContext(StoreContext);
@@ -139,7 +142,9 @@ export const SecondFormTramitre = ({
                 if (cloneformNewPredio[campo].value === "") {
                     cloneformNewPredio[campo].validacion = textosInfoWarnig.campoRequerido;
                     formularioOk = false;
-                    
+                }else if(cloneformNewPredio.fichaCatastral.value.length !== 20 && cloneformNewPredio.fichaCatastral.value.length !== 30){
+                    cloneformNewPredio.fichaCatastral.validacion = textosInfoWarnig.tamanioCampo;
+                    formularioOk = false;
                 }else{
                     cloneformNewPredio[campo].validacion = '';
                 }
@@ -230,29 +235,42 @@ export const SecondFormTramitre = ({
     }, [dialogTool])
 
     const editarPredio = (predio) => {
-        const updateAsociadosPredios = prediosAsociados.map(prediotoUpdate => {
-            if (prediotoUpdate.id === predio.id) {
-                return {
-                    ...prediotoUpdate,
-                    numeroPredial:formNewPredio.fichaCatastral.value,
-                    matriculaInmobiliaria:formNewPredio.matricula.value,
+        let cloneformNewPredio = {...formNewPredio};
+        if (cloneformNewPredio.fichaCatastral.value.length !== 20 && cloneformNewPredio.fichaCatastral.value.length !== 30) {
+            cloneformNewPredio.fichaCatastral.validacion = textosInfoWarnig.tamanioCampo;
+            setStateSecondFormTramite(
+                {
+                    ...stateSecondFormTramite,
+                    // asociadosPredios: cloneAsociadosPredios,
+                    formNewPredio: cloneformNewPredio,
+                    // openDialogFormAddPredio: openCLoseFormPredial,
                 }
-            } else {
-                return prediotoUpdate;
-            }
-        });
-        setFormularioTramite(
-            {
-                ...formularioTramite,
-                prediosAsociados:updateAsociadosPredios
-            }
-        );
-        setStateSecondFormTramite(
-            {
-                ...stateSecondFormTramite,
-                openDialogFormAddPredio: false,
-            }
-        );
+            );
+        } else {
+            const updateAsociadosPredios = prediosAsociados.map(prediotoUpdate => {
+                if (prediotoUpdate.id === predio.id) {
+                    return {
+                        ...prediotoUpdate,
+                        numeroPredial:formNewPredio.fichaCatastral.value,
+                        matriculaInmobiliaria:formNewPredio.matricula.value,
+                    }
+                } else {
+                    return prediotoUpdate;
+                }
+            });
+            setFormularioTramite(
+                {
+                    ...formularioTramite,
+                    prediosAsociados:updateAsociadosPredios
+                }
+            );
+            setStateSecondFormTramite(
+                {
+                    ...stateSecondFormTramite,
+                    openDialogFormAddPredio: false,
+                }
+            );
+        }
     }
     const eliminarPredio = (predio, eliminar=false) => {
         if (eliminar) {
@@ -290,7 +308,8 @@ export const SecondFormTramitre = ({
                     ...formNewPredio,
                     [name]: {
                         ...formNewPredio[name],
-                        value
+                        value,
+                        validacion:'',
                     }
                 }
             }
@@ -331,51 +350,59 @@ export const SecondFormTramitre = ({
                 <p className="titulo color1">DATOS DEL INMUEBLE</p>
             </div>
             {
-                ((tipoTramite.value === "MO" && motivoSolicitud.value === "MPHC")
-                ||(tipoTramite.value === "MS" && motivoSolicitud.value === "EAP")
-                ||(tipoTramite.value === "MS" && motivoSolicitud.value === "DDP"))  
-                    ?  <div style={{marginBottom:'15px'}}>
-                            <div className="tituloBtnRight " >
-                                {
-                                    prediosAsociados.length < 1 &&
-                                    <label onClick={()=>abrirFormPredioTitular()} htmlFor="" className="pointer" 
-                                        style={{marginRight:'10px', color:'red', fontSize:'12px'}}>
-                                            {textosInfoWarnig.sinPredios} 
-                                    </label>
-                                }
-                                <Tooltip title="Agregar predio">
-                                    <AddBusinessIcon color="primary" className="pointer" onClick={()=>abrirFormPredioTitular()}/>
-                                </Tooltip>
-                            </div>
-                            {
-                                prediosAsociados.length > 0 && 
-                                <TablaPredios key="TablaAsociadosPredios"
-                                    registros={prediosAsociados}
-                                    handleEvents={(response)=>handleActiosTablePredios(response)}
-                                />
-                            }
-                            
-                        </div> 
-                    :  <div>
-                        <FieldTextWidtLabel
-                            label={'Ficha Catastral'}
-                            value={fichaCatastral.value} 
-                            name={fichaCatastral.name}
-                            messageValidate={fichaCatastral.validation}
-                            required={true}
-                            handleChange={(target)=>{handleFormChange(target)}}
-                        />
-                        <FieldTextWidtLabel
-                            label={'Matricula'}
-                            value={matricula.value} 
-                            name={matricula.name}
-                            messageValidate={matricula.validation}
-                            required={true}
-                            handleChange={(target)=>{handleFormChange(target)}}
-                        />
-                    </div> 
+                  
+                  
                     
             }
+            <div style={{marginBottom:'15px'}}>
+                <div className="tituloBtnRight " >
+                    {
+                        prediosAsociados.length < 1 &&
+                        <label onClick={()=>abrirFormPredioTitular()} htmlFor="" className="pointer" 
+                            style={{marginRight:'10px', color:'red', fontSize:'12px'}}>
+                                {textosInfoWarnig.sinPredios} 
+                        </label>
+                    }
+                    {
+                        (((tipoTramite.value === "MO" && motivoSolicitud.value === "MPHC")
+                        ||(tipoTramite.value === "MS" && motivoSolicitud.value === "EAP")
+                        ||(tipoTramite.value === "MS" && motivoSolicitud.value === "DDP")) ||
+                            (((tipoTramite.value  !== "MO" && motivoSolicitud.value !== "MPHC")
+                            ||(tipoTramite.value !== "MS" && motivoSolicitud.value !== "EAP")
+                            ||(tipoTramite.value !== "MS" && motivoSolicitud.value !== "DDP"))&&prediosAsociados.length < 1
+                        )) &&
+                        <Tooltip title="Agregar predio">
+                            <AddBusinessIcon color="primary" className="pointer" onClick={()=>abrirFormPredioTitular()}/>
+                        </Tooltip>
+                    }
+                </div>
+                {
+                    prediosAsociados.length > 0 && 
+                    <TablaPredios key="TablaAsociadosPredios"
+                        registros={prediosAsociados}
+                        handleEvents={(response)=>handleActiosTablePredios(response)}
+                    />
+                }
+                
+            </div>
+            {/* <div>
+                <FieldTextWidtLabel
+                    label={'Ficha Catastral'}
+                    value={fichaCatastral.value} 
+                    name={fichaCatastral.name}
+                    messageValidate={fichaCatastral.validation}
+                    required={true}
+                    handleChange={(target)=>{handleFormChange(target)}}
+                />
+                <FieldTextWidtLabel
+                    label={'Matricula'}
+                    value={matricula.value} 
+                    name={matricula.name}
+                    messageValidate={matricula.validation}
+                    required={true}
+                    handleChange={(target)=>{handleFormChange(target)}}
+                />
+            </div>  */}
             {/* Aplica para todos los formularios */}
             <div style={{display:'flex', width:'100%'}}>
                 <FieldSelect
@@ -603,12 +630,12 @@ export const SecondFormTramitre = ({
                 <div>
                     <div className="row" style={{marginTop:'5px'}}>
                         <FieldSelect
-                            label={'Especificación del Trámite Solicitado'}
-                            value={diferenciaMayoEsta.value}
-                            options={[]} 
+                            label={'Tipo de inscripción'}
+                            value={tipoInscripcion.value}
+                            options={TiposInscripcion} 
                             handleOnchange={(target)=>{handleFormChange(target)}} 
-                            messageValidate={diferenciaMayoEsta.validation}
-                            name={diferenciaMayoEsta.name}
+                            messageValidate={tipoInscripcion.validation}
+                            name={tipoInscripcion.name}
                             styleOwn={{width:'100%',}}
                             required={true}
                         />
@@ -644,7 +671,7 @@ export const SecondFormTramitre = ({
                     <FieldSelect
                         label={'Objeto de Rectificación'}
                         value={objetoRectificacion.value}
-                        options={[]} 
+                        options={ObjetosRectificacion} 
                         handleOnchange={(target)=>{handleFormChange(target)}} 
                         messageValidate={objetoRectificacion.validation}
                         name={objetoRectificacion.name}
@@ -736,16 +763,21 @@ export const SecondFormTramitre = ({
                                 <FieldTextWidtLabel 
                                     value={formNewPredio.fichaCatastral.value}
                                     name="fichaCatastral"
-                                    label={'Ficha catastra'} 
+                                    label={'Ficha catastral o número predial'} 
                                     handleChange={(target)=>handleFieldsFormPredios(target)} 
-                                    messageValidate={formNewPredio.fichaCatastral.validacion}/>
+                                    messageValidate={formNewPredio.fichaCatastral.validacion}
+                                    maxLength={30}
+                                    showLengthCaracters={formNewPredio.fichaCatastral.validacion ? false : true}
+                                    />
                                 <FieldTextWidtLabel 
                                     value={formNewPredio.matricula.value}
                                     name="matricula"
                                     label={'Matrícula'}
                                     handleChange={(target)=>handleFieldsFormPredios(target)} 
                                     messageValidate={formNewPredio.matricula.validacion}
-                                    styleOwn={{width:'400px'}}/>
+                                    styleOwn={{width:'400px'}}
+                                    maxLength={20}
+                                    />
                         </div>
                     </DialogContentText>
                 </DialogContent>

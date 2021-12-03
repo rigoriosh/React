@@ -35,143 +35,191 @@ export const CrearTramite = () => {
         {
             tipoTramite:{
                 name:'tipoTramite',
+                // value:'MP',
+                value:'',
+                validation:''
+            },
+            tipoInscripcion:{
+                name:'tipoInscripcion',
+                // value:'INP',
                 value:'',
                 validation:''
             },
             motivoSolicitud:{
                 name:'motivoSolicitud',
+                // value:'CPP',
                 value:'',
                 validation:''
             },
             tipoSolicitante:{
                 name:'tipoSolicitante',
+                // value:'PR',
                 value:'',
                 validation:''
             },
             razonSolicitud:{
                 name:'razonSolicitud',
-                value:'',
-                validation:''
-            },
-            fichaCatastral:{
-                name:'fichaCatastral',
-                value:'',
-                validation:''
-            },
-            matricula:{
-                name:'matricula',
+                // value:'PORQUE VOY A ENTRAR EN UN PLEITO Y NECESITO TENER LA INFORMACION CLARA',
                 value:'',
                 validation:''
             },
             tipoDeSuelo:{
                 name:'tipoDeSuelo',
+                // value:'RU',
                 value:'',
                 validation:''
             },
             municipio:{
                 name:'municipio',
+                // value:'54385',
                 value:'',
                 validation:''
             },
             file:{
                 name:'file',
+                // value:'',
                 value:'',
                 validation:''
             },
             zip:{},
             propiedadHorizontal:{
                 name:'propiedadHorizontal',
+                // value:'S',
                 value:'',
                 validation:''
             },
             proyectoUrbanistico:{
                 name:'proyectoUrbanistico',
+                // value:'N',
                 value:'',
                 validation:''
             },
             objetoPeticion:{
                 name:'objetoPeticion',
+                // value:'CDE',
                 value:'',
                 validation:''
             },
             consideraMejora:{
                 name:'consideraMejora',
+                // value:'INC',
                 value:'',
                 validation:''
             },
             avaluoTerreno:{
                 name:'avaluoTerreno',
+                // value:30.1,
                 value:'',
                 validation:''
             },
             avaluoConstruccion:{
                 name:'avaluoConstruccion',
+                // value:120.4,
                 value:'',
                 validation:''
             },
             areaTerreno:{
                 name:'areaTerreno',
+                // value:20.4,
                 value:'',
                 validation:''
             },
             areaConstruccion:{
                 name:'areaConstruccion',
+                // value:18.4,
                 value:'',
                 validation:''
             },
             autoestimacionAvaluo:{
                 name:'autoestimacionAvaluo',
+                // value:240000000,
                 value:'',
                 validation:''
             },
             diferenciaMayoEsta:{
                 name:'diferenciaMayoEsta',
+                // value:'T',
                 value:'',
                 validation:''
             },
             revisionBusca:{
                 name:'revisionBusca',
+                // value:'D',
                 value:'',
                 validation:''
             },
             noEscrituraPublica:{
                 name:'noEscrituraPublica',
+                // value:'ABCDEFG1234567',
                 value:'',
                 validation:''
             },
             anioEscritura:{
                 name:'anioEscritura',
+                // value:'2015',
                 value:'',
                 validation:''
             },
             notariaOtorgante:{
                 name:'notariaOtorgante',
+                // value:'NOTARIA DE PRUEBA',
                 value:'',
                 validation:''
             },
             objetoRectificacion:{
                 name:'objetoRectificacion',
+                // value:'CDE',
                 value:'',
                 validation:''
             },
             municipioNotaria:{
                 name:'municipioNotaria',
+                // value:'54385',
                 value:'',
                 validation:''
             },
             motivoDeLaSolicitud:{
                 name:'motivoDeLaSolicitud',
+                // value:'OFAC',
                 value:'',
                 validation:''
             },
-            titularesDeDerecho:[],
+            titularesDeDerecho:[
+                /* {
+                    id:0,
+                    numeroDocumento:'132465',
+                    tipoDocumento:'CC',
+                    nombre:'nombreTest',
+                    apellido:'apellidoTtest'
+                },
+                {
+                    id:1,
+                    numeroDocumento:'79845132',
+                    tipoDocumento:'CC',
+                    nombre:'nombreTest1',
+                    apellido:'apellidoTtest1'
+                } */
+            ],
             MotivosSolicitud:[],
             ObjetosDeLaPeticion:[],
             ConsideraUnaMejoraLaMutacion:[],
             ConsideraQueLaDiferenciaMayorEstaEn:[],
             LaRevisionBusca:[],
             MunicipioDeLaNotaria:[],
-            prediosAsociados:[],
+            prediosAsociados:[
+                /* {
+                    id:0,
+                    numeroPredial:'12345678932165498712396385274',
+                    matriculaInmobiliaria:'ABCDE12345'
+                },
+                {
+                    id:1,
+                    numeroPredial:'98765432112345678996385274120',
+                    matriculaInmobiliaria:'123456ABCD'
+                }, */
+            ],
+            TiposInscripcion:[],
+            ObjetosRectificacion:[],
         }
     );
     const {
@@ -181,18 +229,14 @@ export const CrearTramite = () => {
         areaTerreno,
         areaConstruccion,
         autoestimacionAvaluo,
-        fichaCatastral,
         noEscrituraPublica,
         notariaOtorgante,
         motivoSolicitud,
-        matricula,
         municipio,
-        prediosAsociados,
         tipoTramite,
         tipoSolicitante,
         titularesDeDerecho,
         tipoDeSuelo,
-        razonSolicitud,
         zip,
     }  = formularioTramite;
     
@@ -233,7 +277,7 @@ export const CrearTramite = () => {
                 setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
             }
         } else if(name === anioEscritura.name){
-            if (value.length < 4) {  // valida longitud de campo hasta 4 caracteres
+            if (value.length < 5) {  // valida longitud de campo hasta 4 caracteres
                 setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
             }
         } else if(name === notariaOtorgante.name){
@@ -321,7 +365,7 @@ export const CrearTramite = () => {
             openBackDrop:false,
             snackBar:{
                 openSnackBar:true,
-                messageSnackBar: !error ? error.descripcion : textosInfoWarnig.falloComunicacion, severity:'warning', },
+                messageSnackBar: textosInfoWarnig.falloComunicacion, severity:'warning', },
             dialogTool:{open:false, msg :'',tittle:'', response:false}
         });
     }
@@ -344,6 +388,11 @@ export const CrearTramite = () => {
                 ...formularioTramite,
                 tipoSolicitante:{
                     name:'tipoSolicitante',
+                    value:'',
+                    validation:''
+                },
+                tipoInscripcion:{
+                    name:'tipoInscripcion',
                     value:'',
                     validation:''
                 },
@@ -463,14 +512,6 @@ export const CrearTramite = () => {
                     value:'',
                     validation:''
                 },
-                titularesDeDerecho:[],
-                MotivosSolicitud:[],
-                ObjetosDeLaPeticion:[],
-                ConsideraUnaMejoraLaMutacion:[],
-                ConsideraQueLaDiferenciaMayorEstaEn:[],
-                LaRevisionBusca:[],
-                MunicipioDeLaNotaria:[],
-                prediosAsociados:[],
             }
         );
     }
@@ -575,6 +616,8 @@ export const CrearTramite = () => {
             const responseConsideraQueLaDiferenciaMayorEstaEn = await getDataApi(enviroment.getDiferenciaMayor);
             const responseLaRevisionBusca = await getDataApi(enviroment.getRevisionBusca);
             const responseMunicipioDeLaNotaria = await getDataApi(enviroment.getCodigosDane);
+            const responseTiposInscripcion = await getDataApi(enviroment.getTipoSolicitudIns);
+            const responseObjetosRectificacion = await getDataApi(enviroment.getObjetoRectifica);
             setFormularioTramite({
                 ...formularioTramite,
                 MotivosSolicitud: responseMotivosSolicitud.resultado.dominios,
@@ -583,6 +626,9 @@ export const CrearTramite = () => {
                 ConsideraQueLaDiferenciaMayorEstaEn: responseConsideraQueLaDiferenciaMayorEstaEn.resultado.dominios,
                 LaRevisionBusca: responseLaRevisionBusca.resultado.dominios,
                 MunicipioDeLaNotaria: responseMunicipioDeLaNotaria.resultado.dominios,
+                TiposInscripcion:responseTiposInscripcion.resultado.dominios,
+                ObjetosRectificacion:responseObjetosRectificacion.resultado.dominios,
+
             });
             
         } catch (error) {
@@ -592,23 +638,103 @@ export const CrearTramite = () => {
 
     }
 
-    const ajusteTitularesDerecho = () => {
-        titularesDeDerecho.map(titular => delete titular.id);
-        return titularesDeDerecho;
+    const quitarIdDelRegistros_prediosAsociados = (data) => {
+        const cloneData = [];
+        data.forEach(({numeroPredial, matriculaInmobiliaria}) => {
+            cloneData.push(
+                { numeroPredial, matriculaInmobiliaria }
+            )
+        });
+        return cloneData;
+    }
+    const quitarIdDelRegistros_titularesPredio = (data) => {
+        const cloneData = [];
+        data.forEach(({nombre, apellido, tipoDocumento, numeroDocumento}) => {
+            cloneData.push(
+                { nombre, apellido, tipoDocumento, numeroDocumento }
+            )
+        });
+        return cloneData;
     }
     
     const onSubmitFinal = async() => {
         console.log(tiposTramites)
-        alert(`quedamos en: 
+        // alert(`quedamos en: 
         
-        - ajustar el JSON final para persistir tramite.
-        - verificar todas las validaciones de los formularios
-        - realizar pruebas con varios tramites
+        // - ajustar el JSON final para persistir tramite.
+        // - verificar todas las validaciones de los formularios
+        // - realizar pruebas con varios tramites
 
-        `);
-        debugger
+        // `);
         // const nombreTramite = tiposTramites.filter(tramite => tramite.valor === tipoTramite.value)[0].descripcionValor
         const data = {
+            "numeroRadicado": "123456789",
+            "tipoSolicitante": tipoSolicitante.value,
+            "idSolicitante": {
+              "idUsuario": store.user.infoUser.idUsuario
+            },
+            "tipoTramite": tipoTramite.value,
+            "nombreTramite": tipoTramite.value,
+            "municipioPredio": municipio.value,
+            "claseSuelo": tipoDeSuelo.value,
+            "propiedadHorizontal": formularioTramite.propiedadHorizontal.value,
+            "proyectoUrbanistico": formularioTramite.proyectoUrbanistico.value,
+            "noEscrituraPublica": formularioTramite.noEscrituraPublica.value,
+            "anioEscritura": formularioTramite.anioEscritura.value,
+            "notariaOtorgante": formularioTramite.notariaOtorgante.value,
+            "municipioNotaria": formularioTramite.municipioNotaria.value,
+            "objetoPeticion": formularioTramite.objetoPeticion.value,
+            "consideraMejora": formularioTramite.consideraMejora.value,
+            "diferenciaMayoEsta": formularioTramite.diferenciaMayoEsta.value,
+            "revisionBusca": formularioTramite.revisionBusca.value,
+            "tipoInscripcion": formularioTramite.tipoInscripcion.value,
+            "motivoSolicitud": formularioTramite.motivoSolicitud.value,
+            "objetoRectificacion": formularioTramite.objetoRectificacion.value,
+            "areaTerreno": formularioTramite.areaTerreno.value,
+            "areaConstruccion": formularioTramite.areaConstruccion.value,
+            "avaluoTerreno": formularioTramite.avaluoTerreno.value,
+            "avaluoConstruccion": formularioTramite.avaluoConstruccion.value,
+            "autoestimacionAvaluo": formularioTramite.autoestimacionAvaluo.value,
+            "razonSolicitud": formularioTramite.razonSolicitud.value,
+            "titularesPredio": quitarIdDelRegistros_titularesPredio(Object.assign([], titularesDeDerecho)),
+            "prediosAsociados": quitarIdDelRegistros_prediosAsociados(Object.assign([], formularioTramite.prediosAsociados))
+          }
+
+        /* 
+          const data = {
+            "areaTerreno": formularioTramite.areaTerreno.value ? formularioTramite.areaTerreno.value : 0.0,
+            "areaConstruccion": formularioTramite.areaConstruccion.value ? formularioTramite.areaConstruccion.value : 0.0,
+            "avaluoTerreno": formularioTramite.avaluoTerreno.value?formularioTramite.avaluoTerreno.value:0.0,
+            "avaluoConstruccion": formularioTramite.avaluoConstruccion.value?formularioTramite.avaluoConstruccion.value:0.0,
+            "autoestimacionAvaluo": formularioTramite.autoestimacionAvaluo.value?formularioTramite.autoestimacionAvaluo.value:0,
+            "anioEscritura": formularioTramite.anioEscritura.value ? formularioTramite.anioEscritura.value : '--',
+            "consideraMejora": formularioTramite.consideraMejora.value?formularioTramite.consideraMejora.value:'--',
+            "claseSuelo": tipoDeSuelo.value?tipoDeSuelo.value:'--',
+            "diferenciaMayoEsta": formularioTramite.diferenciaMayoEsta.value?formularioTramite.diferenciaMayoEsta.value:'--',
+            "idSolicitante": {
+                "idUsuario": store.user.infoUser.idUsuario
+            },
+            "municipioPredio": municipio.value,
+            "municipioNotaria": formularioTramite.municipioNotaria.value?formularioTramite.municipioNotaria.value:'--',
+            "motivoSolicitud": formularioTramite.motivoSolicitud.value?formularioTramite.motivoSolicitud.value:'--',
+            "numeroRadicado": "123456789",
+            "nombreTramite": tipoTramite.value,
+            "noEscrituraPublica": formularioTramite.noEscrituraPublica.value?formularioTramite.noEscrituraPublica.value:'--',
+            "notariaOtorgante": formularioTramite.notariaOtorgante.value?formularioTramite.notariaOtorgante.value:'--',
+            "revisionBusca": formularioTramite.revisionBusca.value?formularioTramite.revisionBusca.value:'--',
+            "razonSolicitud": formularioTramite.razonSolicitud.value,
+            "objetoRectificacion": formularioTramite.objetoRectificacion.value?formularioTramite.objetoRectificacion.value:'--',
+            "objetoPeticion": formularioTramite.objetoPeticion.value?formularioTramite.objetoPeticion.value:'--',
+            "propiedadHorizontal": formularioTramite.propiedadHorizontal.value?formularioTramite.propiedadHorizontal.value:'-',
+            "proyectoUrbanistico": formularioTramite.proyectoUrbanistico.value?formularioTramite.proyectoUrbanistico.value:'-',
+            "prediosAsociados": quitarIdDelRegistros_prediosAsociados(Object.assign([], formularioTramite.prediosAsociados)),
+            "tipoInscripcion": "INP",
+            "tipoSolicitante": tipoSolicitante.value,
+            "tipoTramite": tipoTramite.value,
+            "titularesPredio": quitarIdDelRegistros_titularesPredio(Object.assign([], titularesDeDerecho)),
+          }
+        */
+        /* const data = {
             "numeroRadicado": "123456789",
             "tipoSolicitante": tipoSolicitante.value,
             "idSolicitante": {
@@ -640,7 +766,9 @@ export const CrearTramite = () => {
             "autoestimacionAvaluo": 240000000,
             "razonSolicitud": razonSolicitud.value,
             "titularesPredio": ajusteTitularesDerecho()
-        }
+        } */
+
+        
 
         console.log(data)
         updateStore({...store, openBackDrop:true,});

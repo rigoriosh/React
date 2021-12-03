@@ -145,7 +145,7 @@ export const AppRouter = ({props}) => {
             ...store,
             snackBar:{
                 openSnackBar: true,
-                messageSnackBar: responseGetToken.error.descripcion ? responseGetToken.error.descripcion : textosInfoWarnig.inconvenientesRenovarSesion,
+                messageSnackBar: textosInfoWarnig.inconvenientesRenovarSesion,
                 severity: 'info'
             },
             openBackDrop: false  });
