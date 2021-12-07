@@ -5,6 +5,7 @@ import { StoreContext } from '../../App'
 import { DialogMsgOk } from '../../componets/DialogMsgOk'
 import enviroment from '../../helpers/enviroment'
 import { constantesGlobales, regExp10Num, regExp10Num2dec, textosInfoWarnig } from '../../helpers/utils'
+import { VerEstado } from './consultarTramites/VerEstado';
 import { FirstFormTramitre } from './formulariosTramite/FirstFormTramitre'
 import { SecondFormTramitre } from './formulariosTramite/SecondFormTramitre'
 
@@ -12,11 +13,10 @@ const initialStateCrearTramite = {
     msgInfoFiles:'',
 }
 
-export const CrearTramite = () => {
+export const CrearTramite = ({detalleTramite, modoTramite,}) => {
 
     const { store, updateStore } = useContext(StoreContext);
     let navigate = useNavigate();
-    const [stateCrearTramite, setStateCrearTramite] = useState(initialStateCrearTramite);
     const [forms, setForms] = useState(1); // controla el paginado de los forms
     const [tiposTramites, setTiposTramites] = useState([]);
     const [tipoSolicitud, setTipoSolicitud] = useState([]);
@@ -30,9 +30,9 @@ export const CrearTramite = () => {
         tipo:"OK",//"SI/NO"
         response:false
     });
-    const [tramiteSeleccionado, setTramiteSeleccionado] = useState('');
     const [formularioTramite, setFormularioTramite] = useState(
         {
+            modoTramite:'Nuevo',
             tipoTramite:{
                 name:'tipoTramite',
                 // value:'MP',
@@ -517,10 +517,12 @@ export const CrearTramite = () => {
     }
 
     useEffect(() => {
-        if (tipoTramite.value !== "") {
-            console.log('useEffect', tipoTramite)
-            getTiposSolicitud(tipoTramite.value);
-            resetFormulario();
+        debugger
+        if (!detalleTramite.idSolicitud) {
+            if (tipoTramite.value !== "") {
+                getTiposSolicitud(tipoTramite.value);
+                resetFormulario();
+            }
         }
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -592,22 +594,172 @@ export const CrearTramite = () => {
     }
     
     useEffect(() => {
-        renderizarInfoSegunTipoTramite();
-        resetFormulario();
+        debugger
+
+        if (!detalleTramite.idSolicitud) {
+            renderizarInfoSegunTipoTramite();
+            resetFormulario();
+        }
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [motivoSolicitud])
 
     useEffect(() => {
         // consultar tipos de tramites y tipos de solicitudes
-        getTramitesSolicitudes();
-        getTiposDeSuelos();
-        getMunicipios();
-        poblarCamposSelect();
+        debugger
+        if (modoTramite === "Detalle" || modoTramite === "Seguimiento") {
+            // poblar los campos del formularioTramite
+            cargarInfoDetalleTramite();
+        } else {
+            getTramitesSolicitudes();
+            getTiposDeSuelos();
+            getMunicipios();
+            poblarCamposSelect();
+        }
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const cargarInfoDetalleTramite = () => {
+        
+        setFormularioTramite(
+            {
+                ...formularioTramite,
+                modoTramite:'Detalle',
+                tipoTramite:{
+                    name:'tipoTramite',                    
+                    value: detalleTramite.tipoTramite,
+                    validation:''
+                },
+                tipoInscripcion:{
+                    name:'tipoInscripcion',                    
+                    value: detalleTramite.tipoInscripcion,
+                    validation:''
+                },
+                motivoSolicitud:{
+                    name:'motivoSolicitud',                    
+                    value: detalleTramite.motivoSolicitud,
+                    validation:''
+                },
+                tipoSolicitante:{
+                    name:'tipoSolicitante',                    
+                    value: detalleTramite.tipoSolicitante,
+                    validation:''
+                },
+                razonSolicitud:{
+                    name:'razonSolicitud',                    
+                    value: detalleTramite.razonSolicitud,
+                    validation:''
+                },
+                tipoDeSuelo:{
+                    name:'tipoDeSuelo',                    
+                    value: detalleTramite.claseSuelo,
+                    validation:''
+                },
+                municipio:{
+                    name:'municipio',                    
+                    value: detalleTramite.municipioPredio,
+                    validation:''
+                },
+                /* file:{
+                    name:'file',                    
+                    value: detalleTramite.,
+                    validation:''
+                },
+                zip:{}, */
+                propiedadHorizontal:{
+                    name:'propiedadHorizontal',                    
+                    value: detalleTramite.propiedadHorizontal,
+                    validation:''
+                },
+                proyectoUrbanistico:{
+                    name:'proyectoUrbanistico',                    
+                    value: detalleTramite.proyectoUrbanistico,
+                    validation:''
+                },
+                objetoPeticion:{
+                    name:'objetoPeticion',                    
+                    value: detalleTramite.objetoPeticion,
+                    validation:''
+                },
+                consideraMejora:{
+                    name:'consideraMejora',                    
+                    value: detalleTramite.consideraMejora,
+                    validation:''
+                },
+                avaluoTerreno:{
+                    name:'avaluoTerreno',                    
+                    value: detalleTramite.avaluoTerreno,
+                    validation:''
+                },
+                avaluoConstruccion:{
+                    name:'avaluoConstruccion',                    
+                    value: detalleTramite.avaluoConstruccion,
+                    validation:''
+                },
+                areaTerreno:{
+                    name:'areaTerreno',                    
+                    value: detalleTramite.areaTerreno,
+                    validation:''
+                },
+                areaConstruccion:{
+                    name:'areaConstruccion',                    
+                    value: detalleTramite.areaConstruccion,
+                    validation:''
+                },
+                autoestimacionAvaluo:{
+                    name:'autoestimacionAvaluo',                    
+                    value: detalleTramite.autoestimacionAvaluo,
+                    validation:''
+                },
+                diferenciaMayoEsta:{
+                    name:'diferenciaMayoEsta',                    
+                    value: detalleTramite.diferenciaMayoEsta,
+                    validation:''
+                },
+                revisionBusca:{
+                    name:'revisionBusca',                    
+                    value: detalleTramite.revisionBusca,
+                    validation:''
+                },
+                noEscrituraPublica:{
+                    name:'noEscrituraPublica',                    
+                    value: detalleTramite.noEscrituraPublica,
+                    validation:''
+                },
+                anioEscritura:{
+                    name:'anioEscritura',                    
+                    value: detalleTramite.anioEscritura,
+                    validation:''
+                },
+                notariaOtorgante:{
+                    name:'notariaOtorgante',                    
+                    value: detalleTramite.notariaOtorgante,
+                    validation:''
+                },
+                objetoRectificacion:{
+                    name:'objetoRectificacion',                    
+                    value: detalleTramite.objetoRectificacion,
+                    validation:''
+                },
+                municipioNotaria:{
+                    name:'municipioNotaria',                    
+                    value: detalleTramite.municipioNotaria,
+                    validation:''
+                },
+                motivoDeLaSolicitud:{
+                    name:'motivoDeLaSolicitud',                    
+                    value: detalleTramite.motivoSolicitud,
+                    validation:''
+                },
+                titularesDeDerecho: detalleTramite.titularesPredio,
+                prediosAsociados: detalleTramite.prediosAsociados,
+
+            }
+        );
+
+
+    }
     const poblarCamposSelect = async()=>{
         try {
             const responseMotivosSolicitud = await getDataApi(enviroment.getMotivoSolicitud);
@@ -771,6 +923,7 @@ export const CrearTramite = () => {
         
 
         console.log(data)
+        console.log(JSON.stringify(data))
         updateStore({...store, openBackDrop:true,});
         try {
             const headers = {token: store.user.token};
@@ -810,9 +963,20 @@ export const CrearTramite = () => {
     }
 
     return (
-        <div className="sombra" 
-        style={{backgroundColor:'white', width:'50%', padding:'5px 30px', borderRadius:'10px', marginTop:'25px'}}>
-            <div /* style={{marginTop:'5px'}} */ className="tituloTramite"><p>Nuevo trámite</p></div>
+        <div className={modoTramite === 'Nuevo' ? "sombra componentFather": ''} >
+            {
+                modoTramite === 'Nuevo'
+                ?
+                    <div /* style={{marginTop:'5px'}} */ className="tituloTramite"><p>Nuevo trámite</p></div>
+                :
+                    <p style={{
+                        textAlign:'end',
+                        fontWeight:'bold',
+                        color:'gray',
+                        position:'absolute',
+                        right:'35%'
+                    }}>{detalleTramite.numeroRadicado}</p>
+            }
             {
                 forms === 1 ? 
                     <FirstFormTramitre 
@@ -824,6 +988,10 @@ export const CrearTramite = () => {
                         formularioTramite={formularioTramite}
                         setFormularioTramite={setFormularioTramite}
                         renderizarInfoSegunTipoTramite={renderizarInfoSegunTipoTramite}
+                        setForms={setForms}
+                        detalleTramite={detalleTramite}
+                        cargarInfoDetalleTramite={cargarInfoDetalleTramite}
+                        modoTramite={modoTramite ? modoTramite : 'Nuevo'}
                 />
                 : forms === 2 ?
                     <SecondFormTramitre
@@ -835,11 +1003,19 @@ export const CrearTramite = () => {
                         avancePagina={avancePagina}
                         onSubmitFinal={onSubmitFinal}
                         renderizarInfoSegunTipoTramite={renderizarInfoSegunTipoTramite}
+                        setForms={setForms}
+                        modoTramite={modoTramite ? modoTramite : 'Nuevo'}
+                    />
+                : forms === "verEstado" ?
+                    <VerEstado
+                        setForms={setForms}
+                        detalleTramite={detalleTramite}
+                        formularioTramite={formularioTramite}
+                        modoTramite={modoTramite}
                     />
                 : <h1>ultimo</h1>
             }
             
-
             <DialogMsgOk openDialog={openDialog} setOpenDialog={setOpenDialog} />
 
         </div>

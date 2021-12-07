@@ -5,7 +5,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Tooltip from '@mui/material/Tooltip';
 
 
-export const TablaPredios = ({registros, handleEvents}) => {
+export const TablaPredios = ({registros, handleEvents, modoTramite}) => {
 
     const [columns, setColumns] = useState([
         { field: 'id', headerName:'ID', hide:true, },
@@ -14,6 +14,7 @@ export const TablaPredios = ({registros, handleEvents}) => {
         {
             field: '',
             // type: 'actions',
+            hide: (modoTramite === 'Detalle' || modoTramite === 'Seguimiento'),
             align:'center',
             width: 70,
             renderCell: ({row}) => [
@@ -41,7 +42,7 @@ export const TablaPredios = ({registros, handleEvents}) => {
                 rows={registros}
                 autoHeight
                 density="compact"
-                hideFooter={false}
+                hideFooter={(modoTramite === 'Detalle' && registros.length < 4)}
                 hideFooterSelectedRowCount
                 pageSize={3}
                 // scrollbarSize={10}

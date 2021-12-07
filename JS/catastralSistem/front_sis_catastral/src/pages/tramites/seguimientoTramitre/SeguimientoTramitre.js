@@ -1,9 +1,9 @@
 import React from 'react'
+import { ConsultarTramite } from '../consultarTramites/ConsultarTramite'
 
 export const SeguimientoTramitre = () => {
+    
     return (
-        <div style={{backgroundColor:'white', width:'50%'}}>
-            <h5>SeguimientoTramitre</h5>
-        </div>
+       <ConsultarTramite tipoTramite="Seguimiento"/>
     )
 }

@@ -75,9 +75,9 @@ h1, h2, h3, h4, h5{
 }
 
 .css-8c9wxy-MuiButtonBase-root-MuiFab-root{
-  bottom: 0 !important;
+  /* bottom: 0 !important; */
   position: fixed !important;
-  right: 0;
+  left: 168px;
   margin: 0 15px 5px 5px !important;
 }
 

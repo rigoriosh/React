@@ -21,7 +21,10 @@ const enviroment = {
     getTipoSolicitudIns:    `${api}solicitudes/getTipoSolicitudIns`,
     getConsideraMejora:     `${api}solicitudes/getConsideraMejora`,
     getDiferenciaMayor:     `${api}solicitudes/getDiferenciaMayor`,
-    getRevisionBusca:     `${api}solicitudes/getRevisionBusca`,
+    getRevisionBusca:       `${api}solicitudes/getRevisionBusca`,
+    getSolicitudesUsuario:  `${api}solicitudes/getSolicitudesUsuario`,
+    getDetalleSolicitud:    `${api}solicitudes/getDetalleSolicitud`,
+    
 }
 
 

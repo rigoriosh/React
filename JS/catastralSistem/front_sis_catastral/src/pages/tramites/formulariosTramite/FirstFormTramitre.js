@@ -1,7 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { GrEdit } from "react-icons/gr";
-import { GrFormTrash } from "react-icons/gr";
-import { AiOutlinePaperClip } from "react-icons/ai";
 import { FieldSelect } from '../../../componets/FieldSelect'
 import { FieldTextWidtLabel } from '../../../componets/FieldTextWidtLabel'
 import Dialog from '@mui/material/Dialog';
@@ -16,14 +13,12 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 import { DataGrid } from '@mui/x-data-grid';
 
-import PasodePagDer_Icon from '../../../assets/Iconos/PasodePagDer_Icon.png'
 import GestiondeUS_CrearUs_Icon from '../../../assets/Iconos/GestiondeUS_CrearUs_Icon.png'
 import { getInfoGET } from '../../../api'
 import { StoreContext } from '../../../App'
 import enviroment from '../../../helpers/enviroment'
-import { constantesGlobales, textosInfoWarnig, tiposDocumentoToTest } from '../../../helpers/utils'
+import { regExp10Num, textosInfoWarnig } from '../../../helpers/utils'
 import { Transition } from '../../auth/Signin';
-import { constntesCrearTramites } from '../CrearTramite';
 
 
 
@@ -66,20 +61,20 @@ const initialState = {
 }
 
 export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitud, tiposSolicitante, avancePagina,
-    formularioTramite, setFormularioTramite, openInfoFiles, renderizarInfoSegunTipoTramite}) => {
+    formularioTramite, setFormularioTramite, renderizarInfoSegunTipoTramite, setForms, detalleTramite, cargarInfoDetalleTramite,
+    modoTramite}) => {
 
         const {store, updateStore} = useContext(StoreContext);
         const {dialogTool} = store;
         const [openDialog, setOpenDialog] = useState(false);
-        const {tipoTramite, motivoSolicitud, tipoSolicitante, razonSolicitud, titularesDeDerecho} = formularioTramite;
+        const {tipoTramite, motivoSolicitud, tipoSolicitante, razonSolicitud, titularesDeDerecho,
+            } = formularioTramite;
         const [tiposDocumento, setTiposDocumento] = useState([]);
 
         const [stateFirsFormTramite, setStateFirsFormTramite] = useState(initialState);
         const {modoFormulario, registroSeleccionado, formularioTotalOk, validacionTitulares} = stateFirsFormTramite;
 
         const [newTitularDerecho, setNewTitularDerecho] = useState(initForm);
-
-        const [validaciones, setValidaciones] = useState({campo:'', msgValidacion:''});
 
         const agregarEditEliminarTitularDeDerecho = () => {
             let clonetitularesDeDerecho = [...titularesDeDerecho];
@@ -206,31 +201,6 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 });
         }
 
-        useEffect(() => {
-            // get Tipos documentos
-            // setTimeout(() => {
-            //     updateStore({
-            //         ...store,
-            //         dialogTool:{
-            //             open:true,
-            //             msg :constantesGlobales.tipoNotas.nota1,
-            //             tittle:'Nota', 
-            //             response:false,
-            //             actions:false, 
-            //             styles:{backgroundColor: 'rgba(10,10,10,0.8)', color:'white'},
-            //             textColor:{color:'white'},
-            //         },
-            //     });
-            // }, 1);
-            if (store.tiposDocumento.length === 0) {
-                getTiposDocumento();
-                // setTiposDocumento(tiposDocumentoToTest);
-            } else {
-                setTiposDocumento(store.tiposDocumento);
-            }
-            return () => {}
-        }, [])
-
         const editarTitular = (titular) => {
             setNewTitularDerecho({
                 nombres:{
@@ -286,19 +256,54 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
             }
         }
 
-        
+        useEffect(() => {
+
+            if (modoTramite === 'Nuevo') {
+                if (store.tiposDocumento.length === 0) {
+                    getTiposDocumento();
+                    // setTiposDocumento(tiposDocumentoToTest);
+                } else {
+                    setTiposDocumento(store.tiposDocumento);
+                }
+            }else{
+                cargarInfoDetalleTramite()
+                setTimeout(() => {
+                    // setFormularioTramite(
+                    //     {
+                    //         ...formularioTramite,
+                    //         modoTramite: 'Detalle',
+                    //     }
+                    // );
+                    updateStore({...store, openBackDrop:false,});
+                }, 1000);
+
+            }
+            return () => {}
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [])
 
         useEffect(() => {
-            if (dialogTool.response) {
-                aliminarTitular(formularioTramite.registroSeleccionado, true);
-                updateStore({
-                    ...store,
-                    dialogTool:{open:false, msg :'',tittle:'', response:false}
-                });
+            if (modoTramite === 'Nuevo') {
+                if (dialogTool.response) {
+                    aliminarTitular(formularioTramite.registroSeleccionado, true);
+                    updateStore({
+                        ...store,
+                        dialogTool:{open:false, msg :'',tittle:'', response:false}
+                    });
+                }
             }
             return () => {}
         // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [dialogTool])
+
+        useEffect(() => {
+            if (modoTramite === 'Nuevo') {
+                validateTotalForm();
+            }
+            return () => {
+            }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [tipoTramite, motivoSolicitud, tipoSolicitante, titularesDeDerecho, razonSolicitud]);
 
         const [columns, setColumns] = useState([
             { field: 'id', headerName:'ID', hide:true, },
@@ -307,6 +312,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
             {
                 field: 'Habilitar',
                 // type: 'actions',
+                hide: (modoTramite === 'Detalle'|| modoTramite === 'Seguimiento'),
                 align:'center',
                 width: 70,
                 renderCell: ({row}) => [
@@ -327,13 +333,6 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 ],
             },
         ]);
-
-        useEffect(() => {
-            validateTotalForm();
-            return () => {
-            }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [tipoTramite, motivoSolicitud, tipoSolicitante, titularesDeDerecho, razonSolicitud])
 
         const validateTotalForm = () => {
             console.log("validando formulario formularioTotalOk");
@@ -365,74 +364,130 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 <div className="decorationTitle bgc1"></div>
                 <p className="titulo color1">TRÁMITES CATASTRALES</p>
             </div>
-            <div style={{margin:'10px 20px'}}>
+            <div style={{margin:'10px 0px'}}>
                 <div className="row aife">
-                    <FieldSelect
-                        label={'Trámite'}
-                        value={tipoTramite.value}
-                        options={tiposTramites} 
-                        handleOnchange={(target)=>handleFormChange(target)}
-                        messageValidate={tipoTramite.validation}
-                        name={tipoTramite.name}
-                        required={true}
-                    />
-                    <Tooltip title="Ver documentos requeridos">
-                        <AttachFileIcon className="pointer"
-                            onClick={()=>renderizarInfoSegunTipoTramite()}
-                            sx={{color:'blue'}}
+                    {
+                        modoTramite === 'Nuevo'
+                        ?
+                            <FieldSelect
+                                label={'Trámite'}
+                                value={tipoTramite.value}
+                                options={tiposTramites} 
+                                handleOnchange={(target)=>handleFormChange(target)}
+                                messageValidate={tipoTramite.validation}
+                                name={tipoTramite.name}
+                                required={true}
+                            />
+                        :
+                        <FieldTextWidtLabel
+                            label={'Trámite'}
+                            value={tipoTramite.value} 
+                            name={tipoTramite.name}
+                            messageValidate={tipoTramite.validation}
+                            required={true}
+                            handleChange={(target)=>{handleFormChange(target)}}
+                            type="text"
+                            whitIconRight={false}
+                            disabled={true}
                         />
-                    </Tooltip>
+                    }
+                    {
+                        (modoTramite === 'Nuevo') &&
+                            <Tooltip title="Ver documentos requeridos">
+                                <AttachFileIcon className="pointer"
+                                    onClick={()=>renderizarInfoSegunTipoTramite()}
+                                    sx={{color:'blue'}}
+                                />
+                            </Tooltip>
+                    }
                 </div>
 
-                <FieldSelect
-                    label={'Solicitud'}
-                    value={motivoSolicitud.value}
-                    options={tipoSolicitud}
-                    styleOwn={{marginTop:'5px'}}
-                    handleOnchange={(target)=>handleFormChange(target)}
-                    messageValidate={motivoSolicitud.validation}
-                    name={motivoSolicitud.name}
-                    required={true}
-                />
+                {
+                    modoTramite === 'Nuevo'
+                    ?   
+                        <div>
+                            <FieldSelect
+                                label={'Solicitud'}
+                                value={motivoSolicitud.value}
+                                options={tipoSolicitud}
+                                styleOwn={{marginTop:'5px'}}
+                                handleOnchange={(target)=>handleFormChange(target)}
+                                messageValidate={motivoSolicitud.validation}
+                                name={motivoSolicitud.name}
+                                required={true}
+                            />
+                            <FieldSelect
+                                label={'Tipo de solicitante'}
+                                value={tipoSolicitante.value}
+                                options={tiposSolicitante}
+                                styleOwn={{marginTop:'5px'}}
+                                handleOnchange={(target)=>handleFormChange(target)}
+                                messageValidate={tipoSolicitante.validation}
+                                name={tipoSolicitante.name}
+                                required={true}
+                            />
+                        </div>
+                    :
+                        <div>
+                            <FieldTextWidtLabel
+                                label={'Solicitud'}
+                                value={motivoSolicitud.value} 
+                                name={motivoSolicitud.name}
+                                messageValidate={motivoSolicitud.validation}
+                                required={true}
+                                handleChange={(target)=>{handleFormChange(target)}}
+                                type="text"
+                                whitIconRight={false}
+                                disabled={true}
+                            />
+                            <FieldTextWidtLabel
+                                label={'Tipo de solicitante'}
+                                value={tipoSolicitante.value} 
+                                name={tipoSolicitante.name}
+                                messageValidate={tipoSolicitante.validation}
+                                required={true}
+                                handleChange={(target)=>{handleFormChange(target)}}
+                                type="text"
+                                whitIconRight={false}
+                                disabled={true}
+                            />
 
-                <FieldSelect
-                    label={'Tipo de solicitante'}
-                    value={tipoSolicitante.value}
-                    options={tiposSolicitante}
-                    styleOwn={{marginTop:'5px'}}
-                    handleOnchange={(target)=>handleFormChange(target)}
-                    messageValidate={tipoSolicitante.validation}
-                    name={tipoSolicitante.name}
-                    required={true}
-                />
+                        </div>
+                }
+
+                
 
             </div>
 
             <div className="row contenTitulo">
                 <div className="decorationTitle bgc2"></div>
                 <p className="titulo color2" style={{width:'65%'}}>TITULARES DE DERECHO</p>
-                <div style={{display:'flex', justifyContent:'flex-end'}}>
-                    <p onClick={()=>{abrirFormAgregarTitular()}} className="color2 pointer">Agregar titular</p>
-                    <img onClick={()=>{abrirFormAgregarTitular()}} className="imgWidth" src={GestiondeUS_CrearUs_Icon} alt="" style={{width:'20px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/>
-                </div>
+                {
+                    modoTramite === 'Nuevo' &&
+                        <div style={{display:'flex', justifyContent:'flex-end'}}>
+                            <p onClick={()=>{abrirFormAgregarTitular()}} className="color2 pointer">Agregar titular</p>
+                            <img onClick={()=>{abrirFormAgregarTitular()}} className="imgWidth" src={GestiondeUS_CrearUs_Icon} alt="" 
+                            style={{width:'20px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/>
+                        </div>
+                }
             </div>
 
             {
-                titularesDeDerecho.length < 1
-                ? <p className="subTitulo" style={{marginBottom:'10px', color: validacionTitulares ? 'red':''}}>Recuerda, se requiere mínimo un titular</p>
+                titularesDeDerecho.length < 1 
+                ? modoTramite === 'Nuevo' ? <p className="subTitulo" style={{marginBottom:'10px', color: validacionTitulares ? 'red':''}}>Recuerda, se requiere mínimo un titular</p>
+                    : ''
                 : <div style={{ height: 'auto', width: '100%', }}>
                     <DataGrid
                         columns={columns}
                         rows={titularesDeDerecho}
                         autoHeight
                         density="compact"
-                        hideFooter={false}
+                        hideFooter={((modoTramite === 'Detalle' || modoTramite === 'Seguimiento') && titularesDeDerecho.length < 3)}
                         hideFooterSelectedRowCount
                         pageSize={2}
                         // scrollbarSize={10}
-                        loading={titularesDeDerecho.length <= 0}
+                        loading={titularesDeDerecho.length <= 0 && modoTramite === 'Nuevo'}
                         // rowsPerPageOptions={titularesDeDerecho.length}
-                        key={Math.random()}
                     />
                 </div>
             }
@@ -443,7 +498,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 <p className="titulo color3">OTROS</p>
             </div>
 
-            <div style={{margin:'10px 20px'}} >
+            <div style={{margin:'10px 0px'}} >
                 <div className="fieldTextWidtLabel labels">
                     <p>Razones de la solicitud</p>
                     <textarea
@@ -457,12 +512,24 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                         placeholder="Escriba en este campo las razones por las cuales está generando la solicitud."
                         required={true}
                         value={razonSolicitud.value}
+                        disabled={modoTramite === 'Detalle' || modoTramite === 'Seguimiento'}
+                        maxLength={254}
                     >
                     </textarea>
                 </div>
                 <div style={{display:'flex', justifyContent:'flex-end'}}>
+                    { (modoTramite === 'Detalle' || modoTramite === 'Seguimiento') &&
+                        <button onClick={()=>setForms("verEstado")} type="button" style={{marginRight:'140px'}} className='btnAceptar'>
+                            {   modoTramite === 'Detalle'
+                                ? `VER ESTADO`
+                                : modoTramite === 'Seguimiento'
+                                    ? 'CAMBIAR ESTADO'
+                                    : ''
+                            }
+                        </button> }
                     <button type="submit" style={{border:'none', background:'transparent'}}>
-                        <p onClick={()=>{avancePagina(formularioTotalOk, true)}} className={`${formularioTotalOk?'color1 pointer':'grey2'}  `}>Siguiente <span style={{fontWeight:'bold'}}>{'>'}</span> </p>
+                        <p onClick={()=>{avancePagina( modoTramite === 'Nuevo' ? formularioTotalOk : true, true)}} 
+                            className={`${(formularioTotalOk || modoTramite === 'Detalle') ?'color1 pointer':'grey2'}  `}>Siguiente <span style={{fontWeight:'bold'}}>{'>'}</span> </p>
                     </button>
                     {/* <img onClick={()=>{avancePagina()}} className="imgWidth" src={PasodePagDer_Icon} alt="" style={{width:'12px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/> */}
                 </div>
@@ -477,19 +544,33 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 <DialogTitle>{'Agregar titular de derecho'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        <div style={{margin:'10px 20px'}}>
+                        <div style={{margin:'10px 0px'}}>
                             <div className="row">
-                                <FieldTextWidtLabel value={newTitularDerecho.nombres.value} name="nombres" label={'Nombres'} handleChange={({value})=>setNewTitularDerecho({...newTitularDerecho, nombres: {...newTitularDerecho.nombres,value}})} messageValidate={newTitularDerecho.nombres.validacion}/>
-                                <FieldTextWidtLabel  value={newTitularDerecho.apellidos.value} name="apellidos" label={'Apellidos'} handleChange={({value})=>setNewTitularDerecho({...newTitularDerecho, apellidos: {...newTitularDerecho.apellidos,value}})} messageValidate={newTitularDerecho.apellidos.validacion} styleOwn={{marginLeft:'10px'}}/>
+                                <FieldTextWidtLabel value={newTitularDerecho.nombres.value} name="nombres" label={'Nombres'}  maxLength={99}
+                                    handleChange={({value})=>{
+                                        if(value.length < 100) setNewTitularDerecho({...newTitularDerecho, nombres: {...newTitularDerecho.nombres,value}})
+                                    }} 
+                                    messageValidate={newTitularDerecho.nombres.validacion}
+                                />
+                                <FieldTextWidtLabel  value={newTitularDerecho.apellidos.value} name="apellidos" label={'Apellidos'} maxLength={99}
+                                    handleChange={({value})=>{
+                                        if(value.length < 100) setNewTitularDerecho({...newTitularDerecho, apellidos: {...newTitularDerecho.apellidos,value}})
+                                    }}
+                                    messageValidate={newTitularDerecho.apellidos.validacion} styleOwn={{marginLeft:'10px'}}
+                                />
                             </div>
                             <div style={{display:'flex', width:'100%'}}>
                                 <FieldSelect label={'Tipo de documento'} value={newTitularDerecho.tipoDeDocumento.value} options={tiposDocumento} 
-                                handleOnchange={({value})=>setNewTitularDerecho({...newTitularDerecho, tipoDeDocumento: {...newTitularDerecho.tipoDeDocumento, value}})} 
-                                messageValidate={newTitularDerecho.tipoDeDocumento.validacion} name={newTitularDerecho.tipoDeDocumento.name} styleOwn={{width:'50%'}}/>
+                                    handleOnchange={({value})=>setNewTitularDerecho({...newTitularDerecho, tipoDeDocumento: {...newTitularDerecho.tipoDeDocumento, value}})} 
+                                    messageValidate={newTitularDerecho.tipoDeDocumento.validacion} name={newTitularDerecho.tipoDeDocumento.name} styleOwn={{width:'50%'}}
+                                />
                                 
-                                <FieldTextWidtLabel name={"numeroDocumento"} value={newTitularDerecho.numeroDeDocumento.value} label={'Numero de documento'} 
-                                    handleChange={({value})=>setNewTitularDerecho({...newTitularDerecho, numeroDeDocumento: {...newTitularDerecho.numeroDeDocumento,value}})} 
-                                    messageValidate={newTitularDerecho.numeroDeDocumento.validacion} type='number' maxLength={20} styleOwn={{marginLeft:'10px'}}/>
+                                <FieldTextWidtLabel name={"numeroDocumento"} value={newTitularDerecho.numeroDeDocumento.value} label={'Numero de documento'} maxLength={10}
+                                    handleChange={({value})=>{
+                                        if(regExp10Num.test(value)||value.length < 10) setNewTitularDerecho({...newTitularDerecho, numeroDeDocumento: {...newTitularDerecho.numeroDeDocumento,value}})
+                                    }}
+                                    messageValidate={newTitularDerecho.numeroDeDocumento.validacion} type='number' tyleOwn={{marginLeft:'10px'}}
+                                />
 
                                 {/* <img onClick={()=>{}} className="imgWidth" src={GestiondeUS_Eliminar_Icon} alt="" style={{width:'20px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/> */}
                             </div>

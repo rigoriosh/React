@@ -16,6 +16,7 @@ import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import { constantes } from './FirstFormTramitre';
 import { Transition } from '../../../componets/DialogMsgOk';
 import { StoreContext } from '../../../App';
+import { ModeTramiteDetalle } from '../consultarTramites/ModeTramiteDetalle';
 
 
 
@@ -27,7 +28,9 @@ export const SecondFormTramitre = ({
     municipios,
     avancePagina,
     onSubmitFinal,
-    renderizarInfoSegunTipoTramite
+    renderizarInfoSegunTipoTramite,
+    setForms,
+    modoTramite,
 }) => {
 
     // const [openDialogFormAddPredio, setOpenDialogFormAddPredio] = useState(false);
@@ -43,7 +46,6 @@ export const SecondFormTramitre = ({
         ConsideraUnaMejoraLaMutacion,
         ConsideraQueLaDiferenciaMayorEstaEn,
         diferenciaMayoEsta,
-        EspecificacionDelTramiteSolicitado,
         fichaCatastral,
         file,
         LaRevisionBusca,
@@ -336,124 +338,165 @@ export const SecondFormTramitre = ({
         
     }
 
-    useEffect(() => {
-        console.log(11111111)
-        return () => {
-            console.log('bay SecondForm')
-        }
-    }, [])
-
     return (
         <form onSubmit={onSubmit}>
             <div className="row contenTitulo">
                 <div className="decorationTitle bgc1"></div>
                 <p className="titulo color1">DATOS DEL INMUEBLE</p>
             </div>
-            {
-                  
-                  
-                    
-            }
+           
             <div style={{marginBottom:'15px'}}>
-                <div className="tituloBtnRight " >
-                    {
-                        prediosAsociados.length < 1 &&
-                        <label onClick={()=>abrirFormPredioTitular()} htmlFor="" className="pointer" 
-                            style={{marginRight:'10px', color:'red', fontSize:'12px'}}>
-                                {textosInfoWarnig.sinPredios} 
-                        </label>
-                    }
-                    {
-                        (((tipoTramite.value === "MO" && motivoSolicitud.value === "MPHC")
-                        ||(tipoTramite.value === "MS" && motivoSolicitud.value === "EAP")
-                        ||(tipoTramite.value === "MS" && motivoSolicitud.value === "DDP")) ||
-                            (((tipoTramite.value  !== "MO" && motivoSolicitud.value !== "MPHC")
-                            ||(tipoTramite.value !== "MS" && motivoSolicitud.value !== "EAP")
-                            ||(tipoTramite.value !== "MS" && motivoSolicitud.value !== "DDP"))&&prediosAsociados.length < 1
-                        )) &&
-                        <Tooltip title="Agregar predio">
-                            <AddBusinessIcon color="primary" className="pointer" onClick={()=>abrirFormPredioTitular()}/>
-                        </Tooltip>
-                    }
-                </div>
+                {
+                    modoTramite === 'Nuevo' &&
+                        <div className="tituloBtnRight " >
+                            {
+                                prediosAsociados.length < 1 &&
+                                <label onClick={()=>abrirFormPredioTitular()} htmlFor="" className="pointer" 
+                                    style={{marginRight:'10px', color:'red', fontSize:'12px'}}>
+                                        {textosInfoWarnig.sinPredios} 
+                                </label>
+                            }
+                            {
+                                (((tipoTramite.value === "MO" && motivoSolicitud.value === "MPHC")
+                                ||(tipoTramite.value === "MS" && motivoSolicitud.value === "EAP")
+                                ||(tipoTramite.value === "MS" && motivoSolicitud.value === "DDP")) ||
+                                    (((tipoTramite.value  !== "MO" && motivoSolicitud.value !== "MPHC")
+                                    ||(tipoTramite.value !== "MS" && motivoSolicitud.value !== "EAP")
+                                    ||(tipoTramite.value !== "MS" && motivoSolicitud.value !== "DDP"))&&prediosAsociados.length < 1
+                                )) &&
+                                <Tooltip title="Agregar predio">
+                                    <AddBusinessIcon color="primary" className="pointer" onClick={()=>abrirFormPredioTitular()}/>
+                                </Tooltip>
+                            }
+                        </div>
+                }
                 {
                     prediosAsociados.length > 0 && 
                     <TablaPredios key="TablaAsociadosPredios"
                         registros={prediosAsociados}
                         handleEvents={(response)=>handleActiosTablePredios(response)}
+                        modoTramite={modoTramite ? modoTramite : 'Nuevo'}
                     />
                 }
                 
             </div>
-            {/* <div>
-                <FieldTextWidtLabel
-                    label={'Ficha Catastral'}
-                    value={fichaCatastral.value} 
-                    name={fichaCatastral.name}
-                    messageValidate={fichaCatastral.validation}
-                    required={true}
-                    handleChange={(target)=>{handleFormChange(target)}}
-                />
-                <FieldTextWidtLabel
-                    label={'Matricula'}
-                    value={matricula.value} 
-                    name={matricula.name}
-                    messageValidate={matricula.validation}
-                    required={true}
-                    handleChange={(target)=>{handleFormChange(target)}}
-                />
-            </div>  */}
+           
             {/* Aplica para todos los formularios */}
             <div style={{display:'flex', width:'100%'}}>
-                <FieldSelect
-                    label={'Tipo de suelo'}
-                    value={tipoDeSuelo.value}
-                    options={tiposDeSuelo} 
-                    handleOnchange={(target)=>{handleFormChange(target)}} 
-                    messageValidate={tipoDeSuelo.validation}
-                    name={tipoDeSuelo.name}
-                    styleOwn={{width:'50%'}}
-                    required={true}
-                />
-                
-                <FieldSelect
-                    label={'Municipio'}
-                    value={municipio.value}
-                    options={municipios} 
-                    handleOnchange={(target)=>{handleFormChange(target)}} 
-                    messageValidate={municipio.validation}
-                    name={municipio.name}
-                    styleOwn={{width:'50%', marginLeft:'10px'}}
-                    required={true}
-                />
+                {
+                    modoTramite === 'Nuevo'
+                    ?
+                        <div className="row" style={{width:'100%'}}>
+                            <FieldSelect
+                                label={'Tipo de suelo'}
+                                value={tipoDeSuelo.value}
+                                options={tiposDeSuelo} 
+                                handleOnchange={(target)=>{handleFormChange(target)}} 
+                                messageValidate={tipoDeSuelo.validation}
+                                name={tipoDeSuelo.name}
+                                styleOwn={{width:'50%'}}
+                                required={true}
+                            />
+                            
+                            <FieldSelect
+                                label={'Municipio'}
+                                value={municipio.value}
+                                options={municipios} 
+                                handleOnchange={(target)=>{handleFormChange(target)}} 
+                                messageValidate={municipio.validation}
+                                name={municipio.name}
+                                styleOwn={{width:'50%', marginLeft:'10px'}}
+                                required={true}
+                            />
+                        </div>
+                    :
+                        <div style={{width:'100%'}}>
+                            <FieldTextWidtLabel
+                                label={'Tipo de suelo'}
+                                value={tipoDeSuelo.value} 
+                                name={tipoDeSuelo.name}
+                                messageValidate={tipoDeSuelo.validation}
+                                required={true}
+                                handleChange={(target)=>{handleFormChange(target)}}
+                                type="text"
+                                whitIconRight={false}
+                                disabled={true}
+                            />
+                            <FieldTextWidtLabel
+                                label={'Municipio'}
+                                value={municipio.value} 
+                                name={municipio.name}
+                                messageValidate={municipio.validation}
+                                required={true}
+                                handleChange={(target)=>{handleFormChange(target)}}
+                                type="text"
+                                whitIconRight={false}
+                                disabled={true}
+                            />
+                        </div>
+                }
             </div>
             {/* Renderiza dependiendo del tipo de formulario */}
 
             {
                 (tipoTramite.value === "MS" || tipoTramite.value === "MT" || tipoTramite.value === "MO") &&
                 <div className="row" style={{marginTop:'5px'}}>
-                    <FieldSelect
-                        label={'Propiedad horizontal'}
-                        value={propiedadHorizontal.value}
-                        options={SiNoOptions} 
-                        handleOnchange={(target)=>{handleFormChange(target)}} 
-                        messageValidate={propiedadHorizontal.validation}
-                        name={propiedadHorizontal.name}
-                        styleOwn={{width:'50%'}}
-                        required={true}
-                    />
+                    {
+                        modoTramite === 'Nuevo'
+                            ? 
+                                <FieldSelect
+                                    label={'Propiedad horizontal'}
+                                    value={propiedadHorizontal.value}
+                                    options={SiNoOptions} 
+                                    handleOnchange={(target)=>{handleFormChange(target)}} 
+                                    messageValidate={propiedadHorizontal.validation}
+                                    name={propiedadHorizontal.name}
+                                    styleOwn={{width:'50%'}}
+                                    required={true}
+                                />
+                            :
+                            <FieldTextWidtLabel
+                                label={'Propiedad horizontal'}
+                                value={propiedadHorizontal.value} 
+                                name={propiedadHorizontal.name}
+                                messageValidate={propiedadHorizontal.validation}
+                                required={true}
+                                handleChange={(target)=>{handleFormChange(target)}}
+                                type="text"
+                                whitIconRight={false}
+                                disabled={true}
+                            />
+                    }
                     {
                         motivoSolicitud.value === "DDP" &&
-                        <FieldSelect
-                            label={'Proyecto Urbanistico'}
-                            value={proyectoUrbanistico.value}
-                            options={ProyectoUrbanistico} 
-                            handleOnchange={(target)=>{handleFormChange(target)}} 
-                            messageValidate={proyectoUrbanistico.validation}
-                            name={proyectoUrbanistico.name}
-                            styleOwn={{width:'50%', marginLeft:'10px',}}
-                            required={true}
-                        />
+                        <div>
+                            {
+                                modoTramite === 'Nuevo'
+                                    ?
+                                        <FieldSelect
+                                            label={'Proyecto Urbanistico'}
+                                            value={proyectoUrbanistico.value}
+                                            options={ProyectoUrbanistico} 
+                                            handleOnchange={(target)=>{handleFormChange(target)}} 
+                                            messageValidate={proyectoUrbanistico.validation}
+                                            name={proyectoUrbanistico.name}
+                                            styleOwn={{width:'50%', marginLeft:'10px',}}
+                                            required={true}
+                                        />
+                                    :
+                                    <FieldTextWidtLabel
+                                        label={'Proyecto Urbanistico'}
+                                        value={proyectoUrbanistico.value} 
+                                        name={proyectoUrbanistico.name}
+                                        messageValidate={proyectoUrbanistico.validation}
+                                        required={true}
+                                        handleChange={(target)=>{handleFormChange(target)}}
+                                        type="text"
+                                        whitIconRight={false}
+                                        disabled={true}
+                                />
+                            }
+                        </div>
                     }
                 </div>
             }   
@@ -627,7 +670,7 @@ export const SecondFormTramitre = ({
             }
             {
                 (tipoTramite.value === "MQ") &&
-                <div>
+                <div style={{width:'100%'}}>
                     <div className="row" style={{marginTop:'5px'}}>
                         <FieldSelect
                             label={'Tipo de inscripción'}
@@ -697,40 +740,49 @@ export const SecondFormTramitre = ({
                 />
             }
 
+            {
+                modoTramite === 'Detalle' && <ModeTramiteDetalle formularioTramite={formularioTramite} key="ModeTramiteDetalle"/>
+            }
 
 
             {/* Aplica para todos los formularios */}
-            <div className="row contenTitulo" style={{marginBottom:'10px', marginTop:'10px' ,justifyContent:'space-between'}}>
-                <div className="row ">
-                    <div className="decorationTitle bgc3"></div>
-                    <p className="titulo color3">OTROS</p>
+            {
+                ((modoTramite === 'Detalle' && file.value !== '')||(modoTramite === 'Nuevo')) &&
+                <div className="row contenTitulo" style={{marginBottom:'10px', marginTop:'10px' ,justifyContent:'space-between'}}>
+                    <div className="row ">
+                        <div className="decorationTitle bgc3"></div>
+                        <p className="titulo color3">OTROS</p>
+                    </div>
+                    <div style={{display:'flex', justifyContent:'flex-end'}}>
+                        <input type="file" name="file" id="file" accept=".zip, .rar" 
+                            onChange={(e)=>fileHandler(e)} style={{display:'none'}}
+                        />
+                        {
+                            modoTramite === 'Nuevo' &&
+                                <label htmlFor="file" className="row aicenter">
+                                    <p className="labels pointer btnAceptar" style={{color:'white'}}>Adjuntar archvio</p>
+                                        <Rating
+                                            sx={{color:'gray', cursor:'default'}}
+                                            name="hover-feedback"
+                                            value={1}
+                                            max={1}
+                                            precision={0.5}
+                                            onChange={(event, newValue) => {
+                                            }}
+                                            onChangeActive={(event, newHover) => {
+                                                renderizarInfoSegunTipoTramite()
+                                            }}
+                                            icon={<AttachFileIcon style={{ opacity: 1 }} fontSize="inherit" />}
+                                            emptyIcon={<AttachFileIcon style={{ opacity: 1 }} fontSize="inherit" />}
+                                        />
+                                </label>
+                        }
+                    </div>
                 </div>
-                <div style={{display:'flex', justifyContent:'flex-end'}}>
-                    <input type="file" name="file" id="file" accept=".zip, .rar" 
-                        onChange={(e)=>fileHandler(e)} style={{display:'none'}}
-                    />
-                    <label htmlFor="file" className="row aicenter">
-
-                        <p className="labels pointer btnAceptar" style={{color:'white'}}>Adjuntar archvio</p>
-                            <Rating
-                                sx={{color:'gray', cursor:'default'}}
-                                name="hover-feedback"
-                                value={1}
-                                max={1}
-                                precision={0.5}
-                                onChange={(event, newValue) => {
-                                }}
-                                onChangeActive={(event, newHover) => {
-                                    renderizarInfoSegunTipoTramite()
-                                }}
-                                icon={<AttachFileIcon style={{ opacity: 1 }} fontSize="inherit" />}
-                                emptyIcon={<AttachFileIcon style={{ opacity: 1 }} fontSize="inherit" />}
-                            />
-                    </label>
-                </div>
-            </div>
+            }
 
             <div>
+            { ((modoTramite === 'Nuevo') || (modoTramite === 'Detalle' && file.value !== '')) &&
                 <FieldTextWidtLabel
                     value={file.value}
                     ph="Adjunte en este campo los documentos solicitados en un archivo .ZIP o .RAR"
@@ -739,14 +791,25 @@ export const SecondFormTramitre = ({
                     messageValidate={file.validation}
                     // handleChange={({value})=>console.log(value)}
                     required={true}
-                    // disabled={true}
+                    disabled={modoTramite === 'Detalle' ? true : false}
                 />
-                <button type="submit"  className='btnAceptar'>CREAR TRÁMITE</button>
+                }
+                { modoTramite === 'Nuevo' && <button type="submit"  className='btnAceptar'>CREAR TRÁMITE</button> }
+                { (modoTramite === 'Detalle' || modoTramite === 'Seguimiento')
+                 && <button onClick={()=>setForms("verEstado")}
+                  type="button" className='btnAceptar'>
+                      {   modoTramite === 'Detalle'
+                                ? `VER ESTADO`
+                                : modoTramite === 'Seguimiento'
+                                    ? 'CAMBIAR ESTADO'
+                                    : ''
+                        }
+                      </button> }
                 <div style={{display:'flex', justifyContent:'center'}} 
                     onClick={()=>{avancePagina(true, false)}}
                     >
                     <img src={Salir_Icon} alt="" style={{cursor:'pointer', width:'20px', alignSelf:'center'}}/>
-                    <p style={{alignSelf:'end', fontSize:'12px', margin:'5px 0',color:stylesApp.gray1, cursor:'pointer'}}>Volver atrás</p>
+                    <p className="btnSalirRegresar">Volver atrás</p>
                 </div>
             </div>
             <Dialog

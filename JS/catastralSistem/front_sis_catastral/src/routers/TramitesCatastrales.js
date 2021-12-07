@@ -4,7 +4,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 
 import { NoMatch } from '../componets/NoMatch';
-import { ConsultarTramite } from '../pages/tramites/ConsultarTramite';
+import { ConsultarTramite } from '../pages/tramites/consultarTramites/ConsultarTramite';
 import { CrearTramite } from '../pages/tramites/CrearTramite';
 import { GestionarUsuariosRoute } from './GestionarUsuariosRoute';
 import { SeguimientoTramitre } from '../pages/tramites/seguimientoTramitre/SeguimientoTramitre';
@@ -38,7 +38,15 @@ export const TramitesCatastrales = () => {
             <Routes>
                 <Route index element={<Tramites/>} />
                 {/* <Route path="tramites" element={<Tramites/>} /> */}
-                <Route path="crear" element={<CrearTramite/>} />
+                <Route path="crear" element={
+                        <CrearTramite
+                            key={'CrearTramite'}
+                            detalleTramite={{}}
+                            modoTramite="Nuevo"
+                            tipoTramite="NuevoTramite"
+                        />
+                    }
+                />
                 <Route path="consultar" element={<ConsultarTramite/>} />
                 <Route path="gestionarUsuario/*" element={<GestionarUsuariosRoute/>} />
                 <Route path="seguimientoTramitre" element={<SeguimientoTramitre/>} />

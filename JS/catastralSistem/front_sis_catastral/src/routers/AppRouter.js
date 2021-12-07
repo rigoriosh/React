@@ -52,7 +52,7 @@ export const AppRouter = ({props}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => { // monitorea tiempo del token
+    /* useEffect(() => { // monitorea tiempo del token
         const {user} = store;
         setTimeout(() => {
             if (user.isLogin) { // calcula el tiempo del token
@@ -71,8 +71,8 @@ export const AppRouter = ({props}) => {
         }, 600000);
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [store, timeSessionTkn])
-
+    }, [store, timeSessionTkn]) */
+/* 
     useEffect(() => { // monitorea actividad del usuario
         const {user} = store;
         
@@ -92,7 +92,7 @@ export const AppRouter = ({props}) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [store])
-    
+     */
     useEffect(() => {
         if (usuario.isLogin) {
             updateStore({
