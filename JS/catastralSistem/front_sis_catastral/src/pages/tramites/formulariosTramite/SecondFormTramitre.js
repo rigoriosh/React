@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Tooltip from '@mui/material/Tooltip';
 import Salir_Icon from '../../../assets/Iconos/Salir_Icon.png'
 import Rating from '@mui/material/Rating';
-import { ProyectoUrbanistico, SiNoOptions, stylesApp, textosInfoWarnig } from '../../../helpers/utils';
+import { ProyectoUrbanistico, SiNoOptions, textosInfoWarnig } from '../../../helpers/utils';
 import { FieldSelect } from '../../../componets/FieldSelect';
 import { FieldTextWidtLabel } from '../../../componets/FieldTextWidtLabel';
 import { TablaPredios } from '../../../componets/TablaPredios';
@@ -17,9 +17,6 @@ import { constantes } from './FirstFormTramitre';
 import { Transition } from '../../../componets/DialogMsgOk';
 import { StoreContext } from '../../../App';
 import { ModeTramiteDetalle } from '../consultarTramites/ModeTramiteDetalle';
-
-
-
 
 export const SecondFormTramitre = ({
     handleFormChange,
@@ -74,7 +71,6 @@ export const SecondFormTramitre = ({
 
     const {store, updateStore} = useContext(StoreContext);
     const {dialogTool} = store;
-    const [addPredio, setAddPredio] = useState(false);
     const [stateSecondFormTramite, setStateSecondFormTramite] = useState(
         {
             openDialogFormAddPredio: false,
@@ -93,6 +89,7 @@ export const SecondFormTramitre = ({
                 },
             },
             asociadosPredios:[],
+            filtroMotivosSolicitud:[],
         }
     );
     const {
@@ -100,6 +97,7 @@ export const SecondFormTramitre = ({
         predioSeleccionado,
         formNewPredio,
         openDialogFormAddPredio,
+        filtroMotivosSolicitud,
     } = stateSecondFormTramite;
 
     const fileHandler = ({target}) => {
@@ -134,7 +132,6 @@ export const SecondFormTramitre = ({
     const newPredio = () => {
 
         let cloneAsociadosPredios = [...prediosAsociados];
-        console.log(cloneAsociadosPredios);
         let openCLoseFormPredial = true;
         let formularioOk = true;
         if (modoFormularioAddPredio === constantes.tipoFormulario.nuevo) {
@@ -193,7 +190,6 @@ export const SecondFormTramitre = ({
     }
 
     const handleActiosTablePredios = ({action, register}) => {
-        console.log(action, register)
         if (action === "edit") {
             // editarPredio(register);
             setStateSecondFormTramite(
@@ -223,18 +219,6 @@ export const SecondFormTramitre = ({
             eliminarPredio(register);
         }
     }
-
-    useEffect(() => {
-        if (dialogTool.response) {
-            eliminarPredio(predioSeleccionado, true);
-            updateStore({
-                ...store,
-                dialogTool:{open:false, msg :'',tittle:'', response:false}
-            });
-        }
-        return () => {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dialogTool])
 
     const editarPredio = (predio) => {
         let cloneformNewPredio = {...formNewPredio};
@@ -276,7 +260,6 @@ export const SecondFormTramitre = ({
     }
     const eliminarPredio = (predio, eliminar=false) => {
         if (eliminar) {
-            console.log(formularioTramite)
             const updatePredios = prediosAsociados.filter(e => e.id !== predio.id)
             setFormularioTramite({...formularioTramite, prediosAsociados: updatePredios});
         } else {
@@ -302,7 +285,6 @@ export const SecondFormTramitre = ({
         )
     }
     const handleFieldsFormPredios = ({name, value}) => {
-        console.log(name, value);
         setStateSecondFormTramite(
             {
                 ...stateSecondFormTramite,
@@ -320,7 +302,6 @@ export const SecondFormTramitre = ({
 
     const onSubmit = (e)=> {
         e.preventDefault();
-        console.log('onSubmit')
         if (prediosAsociados.length < 1) {
             updateStore({
                 ...store,
@@ -337,6 +318,47 @@ export const SecondFormTramitre = ({
         }
         
     }
+
+    
+    useEffect(() => {
+        if (dialogTool.response) {
+            eliminarPredio(predioSeleccionado, true);
+            updateStore({
+                ...store,
+                dialogTool:{open:false, msg :'',tittle:'', response:false}
+            });
+        }
+        return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dialogTool])
+
+    useEffect(() => {
+        if (tipoTramite.value === 'MQ' && motivoSolicitud.value === 'INCP') {
+            const motivos = [];
+            motivos.push(MotivosSolicitud[0]);
+            motivos.push(MotivosSolicitud[1]);
+            setStateSecondFormTramite({
+                ...stateSecondFormTramite,
+                filtroMotivosSolicitud:motivos
+            });
+        }else if (tipoTramite.value === "RE" && motivoSolicitud.value === "RAT") {
+            const motivos = [];
+            motivos.push(MotivosSolicitud[2]);
+            motivos.push(MotivosSolicitud[3]);
+            motivos.push(MotivosSolicitud[4]);
+            setStateSecondFormTramite({
+                ...stateSecondFormTramite,
+                filtroMotivosSolicitud:motivos
+            });
+        }else{
+            setStateSecondFormTramite({
+                ...stateSecondFormTramite,
+                filtroMotivosSolicitud:MotivosSolicitud
+            });
+        }
+        return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <form onSubmit={onSubmit}>
@@ -365,7 +387,7 @@ export const SecondFormTramitre = ({
                                     ||(tipoTramite.value !== "MS" && motivoSolicitud.value !== "DDP"))&&prediosAsociados.length < 1
                                 )) &&
                                 <Tooltip title="Agregar predio">
-                                    <AddBusinessIcon color="primary" className="pointer" onClick={()=>abrirFormPredioTitular()}/>
+                                    <AddBusinessIcon sx={{color:'gray'}} className="pointer" onClick={()=>abrirFormPredioTitular()}/>
                                 </Tooltip>
                             }
                         </div>
@@ -637,6 +659,8 @@ export const SecondFormTramitre = ({
                         <FieldTextWidtLabel
                             label={'Año de la Escritura'}
                             value={anioEscritura.value} 
+                            type={"number"}
+                            maxLength={4}
                             name={anioEscritura.name}
                             messageValidate={anioEscritura.validation}
                             required={true}
@@ -685,7 +709,7 @@ export const SecondFormTramitre = ({
                         <FieldSelect
                             label={'Motivo de la Solicitud'}
                             value={motivoDeLaSolicitud.value}
-                            options={MotivosSolicitud} 
+                            options={filtroMotivosSolicitud} 
                             handleOnchange={(target)=>{handleFormChange(target)}} 
                             messageValidate={motivoDeLaSolicitud.validation}
                             name={motivoDeLaSolicitud.name}
@@ -704,7 +728,7 @@ export const SecondFormTramitre = ({
                     <FieldSelect
                         label={'Motivo de la Solicitud'}
                         value={motivoDeLaSolicitud.value}
-                        options={MotivosSolicitud} 
+                        options={filtroMotivosSolicitud} 
                         handleOnchange={(target)=>{handleFormChange(target)}} 
                         messageValidate={motivoDeLaSolicitud.validation}
                         name={motivoDeLaSolicitud.name}
@@ -724,7 +748,7 @@ export const SecondFormTramitre = ({
                     
                 </div>
             }
-
+        {/*
             {
                 (tipoTramite.value === "SC" && (motivoSolicitud.value === "SCPPC") ) &&
 
@@ -735,19 +759,19 @@ export const SecondFormTramitre = ({
                     handleOnchange={(target)=>{handleFormChange(target)}} 
                     messageValidate={motivoDeLaSolicitud.validation}
                     name={motivoDeLaSolicitud.name}
-                    styleOwn={{width:'100%', marginTop:'5px' /* marginLeft: '10px' */}}
+                    styleOwn={{width:'100%', marginTop:'5px'}}
                     required={true}
                 />
             }
-
+        */}
             {
-                modoTramite === 'Detalle' && <ModeTramiteDetalle formularioTramite={formularioTramite} key="ModeTramiteDetalle"/>
+                modoTramite === 'Consulta' && <ModeTramiteDetalle formularioTramite={formularioTramite} key="ModeTramiteDetalle"/>
             }
 
 
             {/* Aplica para todos los formularios */}
             {
-                ((modoTramite === 'Detalle' && file.value !== '')||(modoTramite === 'Nuevo')) &&
+                ((modoTramite === 'Consulta' && file.value !== '')||(modoTramite === 'Nuevo')) &&
                 <div className="row contenTitulo" style={{marginBottom:'10px', marginTop:'10px' ,justifyContent:'space-between'}}>
                     <div className="row ">
                         <div className="decorationTitle bgc3"></div>
@@ -782,23 +806,22 @@ export const SecondFormTramitre = ({
             }
 
             <div>
-            { ((modoTramite === 'Nuevo') || (modoTramite === 'Detalle' && file.value !== '')) &&
+            { ((modoTramite === 'Nuevo') || (modoTramite === 'Consulta' && file.value !== '')) &&
                 <FieldTextWidtLabel
                     value={file.value}
                     ph="Adjunte en este campo los documentos solicitados en un archivo .ZIP o .RAR"
                     name={file.name}
                     label={''}
                     messageValidate={file.validation}
-                    // handleChange={({value})=>console.log(value)}
                     required={true}
-                    disabled={modoTramite === 'Detalle' ? true : false}
+                    disabled={modoTramite === 'Consulta' ? true : false}
                 />
                 }
                 { modoTramite === 'Nuevo' && <button type="submit"  className='btnAceptar'>CREAR TRÁMITE</button> }
-                { (modoTramite === 'Detalle' || modoTramite === 'Seguimiento')
+                { (modoTramite === 'Consulta' || modoTramite === 'Seguimiento')
                  && <button onClick={()=>setForms("verEstado")}
                   type="button" className='btnAceptar'>
-                      {   modoTramite === 'Detalle'
+                      {   modoTramite === 'Consulta'
                                 ? `VER ESTADO`
                                 : modoTramite === 'Seguimiento'
                                     ? 'CAMBIAR ESTADO'

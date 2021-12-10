@@ -2,7 +2,6 @@ import { doGetToken,  } from "../api";
 
 export const initStore = {
   timeInitSessionUser: new Date(), // inicio session
-  minutesToEachSession: 100,
   user:{
       isLogin:false,
       token:'',
@@ -18,8 +17,13 @@ export const initStore = {
   },
   tiposDocumento:[],
   dialogTool:{
-    open:false, msg :'', tittle:'', response:false, 
-    actions:true, styles:{}, textColor:{},
+    open:false,
+    msg :'',
+    tittle:'',
+    response:false,
+    actions:true,
+    styles:{},
+    textColor:{},
   },
 
 };
@@ -45,7 +49,9 @@ export const textosInfoWarnig = {
   diferentesPassWords: 'Las contraseñas no coinciden',
   sinPredios: '! Recuerda que se debe relacionar mínimo un inmueble ¡',
   tramiteExito:'Su trámite ha sido realizado exitosamente.',
-  tamanioCampo:`!El campo 'Ficha catastral o número predial' debe ser de 20 o 30 carácteres ¡`
+  cambioEstadoTramiteOk:'El cambio de estado ha sido realizado exitosamente.',
+  tamanioCampo:`!El campo 'Ficha catastral o número predial' debe ser de 20 o 30 carácteres ¡`,
+  recuperarPSW: 'Por favor comuniquese al correo comunicaciones@asomunicipios.gov.co, solicitando recuperación de contraseña y envie copia del documento de identidad',
 }
 
 export const constantesGlobales = {
@@ -184,7 +190,7 @@ export const stylesApp = {
   gray1: 'rgb(128 128 128 / 50%)'
 }
 
-export const emailRegex = /^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,63}$/i;
+export const emailRegex = /^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,63}$/i;
 
 export const checkPermits = (permits, store1) => {
   const roles = store1.user.infoUser.roles;

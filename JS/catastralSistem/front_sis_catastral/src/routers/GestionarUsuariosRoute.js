@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 
 import { NoMatch } from '../componets/NoMatch';
@@ -16,13 +16,6 @@ export const GestionarUsuariosRoute = () => {
     
     let location = useLocation();
     let navigate = useNavigate();
-
-    useEffect(() => {
-        // console.log("in GestionarUsuariosRoute")
-        // console.log(location);
-        
-        return () => {}
-    }, [/* location */]);
 
 
     if (location.pathname === pathsRoutes.gestionarUsuario) {
@@ -42,8 +35,9 @@ export const GestionarUsuariosRoute = () => {
                     <input type="text" name="" id="" style={{border:'none', borderBottom:'solid 1px gray'}}/>
                 </div> */}
                 <GestionarUsuarios />
-                <div  style={{display:'flex', justifyContent:'center', marginTop:'10px'}}>
-                    <img onClick={()=>{navigate("/tramites/gestionarUsuario/crearUsuario")}} className="imgWidth" src={GestiondeUS_CrearUs_Icon} alt="" style={{width:'20px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/>
+                <div  style={{display:'flex', justifyContent:'center', marginTop:'10px', alignItems:'center'}}>
+                    <img onClick={()=>{navigate("/tramites/gestionarUsuario/crearUsuario")}} className="imgWidth" src={GestiondeUS_CrearUs_Icon} alt=""
+                     style={{width:'40px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/>
                     <p onClick={()=>{navigate("/tramites/gestionarUsuario/crearUsuario")}} className="color2 pointer">Crear Usuario</p>
                 </div>
                 {/* <button onClick={()=>{navigate("/tramites/gestionarUsuario/crearUsuario");}}>Crear usuario</button> */}

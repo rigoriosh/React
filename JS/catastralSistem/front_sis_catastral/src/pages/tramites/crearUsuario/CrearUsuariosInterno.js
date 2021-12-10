@@ -228,8 +228,8 @@ export const CrearUsuariosInterno = () => {
     }, [])
 
     return (
-        <div style={{backgroundColor:'white', width:'60%', padding:'20px', borderRadius:'20px'}}>
-            <img src={Logo_Asomunicipios_ColorLetranegra} alt="" srcSet="" style={{width:'90px'}}/>
+        <div style={{backgroundColor:'white', width:'60%', padding:'20px 60px', borderRadius:'20px'}}>
+            <img src={Logo_Asomunicipios_ColorLetranegra} alt="" srcSet="" style={{width:'200px'}}/>
             <div style={{display:'flex', justifyContent:'center'}}>
                 {/* divisor */}<div style={{width:'70%', height:'0.5px', backgroundColor:stylesApp.gray1, margin:'10px'}}></div>
             </div>

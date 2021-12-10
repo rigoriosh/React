@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { /* useParams, */ useNavigate } from "react-router-dom";
 
 import Logo_Asomunicipios_ColorLetrablanca from '../assets/Iconos/Logo_Asomunicipios_ColorLetrablanca.png'
@@ -9,17 +9,52 @@ import CerrarSesion_Icon from '../assets/Iconos/CerrarSesion_Icon.png'
 import ConsultarTramite_Icon from '../assets/Iconos/ConsultarTramite_Icon.png'
 import CrearTramite_Icon from '../assets/Iconos/CrearTramite_Icon.png'
 import { StoreContext } from '../App'
-import { checkPermits, initStore, permits } from '../helpers/utils'
+import { checkPermits, initStore, permits, textosInfoWarnig } from '../helpers/utils'
 
 
-export const VerticalMenu = ({usuario, salir}) => {
+export const VerticalMenu = ({usuario, salir, renewToken}) => {
     const { store, updateStore} = useContext(StoreContext);
+    const { user, timeInitSessionUser, } = store;
+
     let navigate = useNavigate();
 
     const cerrar = () => {
         updateStore(initStore)
         salir();
     }
+
+    useEffect(() => {
+        // monitorea actividad del usuario
+        let intervalSessionUser;
+        intervalSessionUser = setInterval(() => {
+            const minutesToEachSession = 15;
+            if (user.isLogin) { // calcula el tiempo del usuario
+                const tiempoExpiracion = minutesToEachSession * 60 * 1000;
+                const timeFin = new Date();
+                const timeDifference = timeFin -  new Date(timeInitSessionUser);
+                if(timeDifference >= tiempoExpiracion){ // si vencio solicita nuevo usuario
+                    // cierra la sesion
+                    salir(textosInfoWarnig.tiempoInactividad);
+                }
+
+                // calcula el tiempo del token
+                const timeInit = new Date(user.tiempoInicio);
+                // const timeInitSession = new Date(user.tiempoInicio);
+                const tiempoExpiracionToken = user.tiempoExpiracion;
+                const timeFinToken = new Date();
+                const timeDifferenceToken = timeFinToken - timeInit;
+                if(timeDifferenceToken >= tiempoExpiracionToken){ // si vencio solicita nuevo token
+                // solicitarNuevoToken
+                    renewToken(user.user, user.pwd);
+                }
+            }
+        }, 600000);// cada 10 minutos 600000
+        
+        return () => {
+            clearInterval(intervalSessionUser);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return (
         <div className="verticalMenu" >
             <img className="imgWidth" /* onClick={()=>{navigate("/login");}} */ 

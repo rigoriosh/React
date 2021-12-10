@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { /* useParams, */ useNavigate } from "react-router-dom";
 import {  getInfoGET } from '../../api';
 import { StoreContext } from '../../App';
@@ -18,19 +18,12 @@ export const Login = () => {
     let navigate = useNavigate();
     const { store, updateStore } = useContext(StoreContext);
     const { user:usuario } = store;
-    // const [form, setForm] = useState({user:'', pwd:''});
     const [form, setForm] = useState({user:'davids', pwd:'prueba'});
     const {user, pwd=''} = form;
-    // const [form, setForm] = useState({user:'1234567891', pwd:'1234rfr'});
-    // const [form, setForm] = useState({user:'18129164', pwd:'12345'});
     const [seePass, setSeePass] = useState(false);
 
-    useEffect(() => {
-        console.log(111111111)
-        return () => {}
-    }, [])
-    const logIn = async() => {
-        // console.log('login');
+    const logIn = async(e) => {
+        e.preventDefault();
         updateStore({ ...store, openBackDrop: true });
         let responseGetToken = {} ;
         if(user !== '' && pwd !== '' ){
@@ -51,7 +44,6 @@ export const Login = () => {
                     const headers = {token: responseGetToken.tkn};
                     const responseLogin = await getInfoGET(headers, enviroment.loginUser, 'POST')
                     if (!responseLogin.resultado.usuario) {
-                        console.log(responseLogin);
                         updateStore({
                             ...store,
                             openBackDrop: false,
@@ -78,7 +70,7 @@ export const Login = () => {
                             openBackDrop: false,
                             snackBar:{
                                 openSnackBar: true,
-                                messageSnackBar: `Bienvenido ${responseLogin.resultado.usuario.nombre}`,
+                                messageSnackBar: `Bienvenida(o) ${responseLogin.resultado.usuario.nombre}`,
                                 severity: 'success'
                             },
                         });
@@ -109,6 +101,7 @@ export const Login = () => {
         });
     }
 
+    // eslint-disable-next-line no-unused-vars
     const modoTest = () => {
         updateStore({
             ...store,
@@ -166,7 +159,7 @@ export const Login = () => {
     return (
         <div className='pagePhader'>
             <div className="modalIngrearUserExt_inLogin">
-                <div className='modalLogin sombra' style={{backgroundColor:'white', padding:'20px 20px'}} key={(e)=>console.log(e)}>
+                <form onSubmit={(e)=>logIn(e)} className='modalLogin sombra' style={{backgroundColor:'white', padding:'20px 20px'}} >
                     <img src={Logo_Asomunicipios_ColorLetranegra} alt="" srcSet="" style={{width:'160px'}}/>
                     {/* divisor */}<div style={{width:'100%', height:'0.5px', backgroundColor:stylesApp.gray1, margin:'10px'}}></div>
                     <img src={Ingresar_Login_Icon} alt="" style={{width:'120px', alignSelf:'start'}}/>
@@ -194,16 +187,31 @@ export const Login = () => {
                         }
                     </div>
 
-                    {/* <p onClick={()=>console.log('pendiente lógica recuperar contraseña')} style={{alignSelf:'end', fontSize:'12px', margin:'5px 0',color:stylesApp.gray1, cursor:'pointer'}}>¿Olvido su contraseña?</p> */}
+                    <p onClick={()=>updateStore({
+                        ...store,
+                        snackBar:{ openSnackBar:true, messageSnackBar:textosInfoWarnig.recuperarPSW, severity:'info', },
+                        dialogTool:{
+                            open:true,
+                            msg :textosInfoWarnig.recuperarPSW,
+                            tittle:'Recuperar contraseña',
+                            response:false,
+                            actions:false,
+                            styles:{},
+                            textColor:{},
+                          },
+                    })}
+                    style={{alignSelf:'end', fontSize:'12px', margin:'5px 0',color:stylesApp.gray1, cursor:'pointer'}}>
+                        ¿Olvido su contraseña?
+                    </p>
 
-                    <button onClick={()=>/* modoTest() */logIn()} className='btnAceptar'>ACEPTAR</button>
+                    <button type='submit' /* onClick={()=>/* modoTest() *//* logIn() } */ className='btnAceptar'>ACEPTAR</button>
 
                     <div style={{display:'flex'}} onClick={()=>{navigate("/")}}>
                         <img src={Salir_Icon} alt="" style={{cursor:'pointer', width:'20px', alignSelf:'center'}}/>
                         <p style={{alignSelf:'end', fontSize:'12px', margin:'5px 0',color:stylesApp.gray1, cursor:'pointer'}}>Salir</p>
                     </div>
                     {/* <button onClick={()=>{navigate("/")}}>Salir</button> */}
-                </div>
+                </form>
             </div>
         </div>
     )

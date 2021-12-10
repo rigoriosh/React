@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
 
 import { NoMatch } from '../componets/NoMatch';
 import { ConsultarTramite } from '../pages/tramites/consultarTramites/ConsultarTramite';
@@ -12,13 +11,12 @@ import { Tramites } from '../pages/tramites/Tramites';
 import { pathsRoutes } from '../helpers/utils';
 import PasodePagIzq_Icon from '../assets/Iconos/PasodePagIzq_Icon.png'
 
-export const TramitesCatastrales = () => {
+export const TramitesCatastrales = ({salir}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [pathPrevius, setPathPrevius] = useState('/');
 
     useEffect(() => {
-        // console.log(location)
         let previusPath = location.pathname.split('/');
         previusPath.pop();
         previusPath = previusPath.join('/');
@@ -36,7 +34,7 @@ export const TramitesCatastrales = () => {
                     </Fab>
             }
             <Routes>
-                <Route index element={<Tramites/>} />
+                <Route index element={<Tramites salir={salir}/>} />
                 {/* <Route path="tramites" element={<Tramites/>} /> */}
                 <Route path="crear" element={
                         <CrearTramite

@@ -87,7 +87,7 @@ h1, h2, h3, h4, h5{
 
 .css-1s0hp0k-MuiDataGrid-columnHeadersInner{
   background-color: var(--grey1);
-  color: var(--blanco);
+  /* color: var(--blanco); */
   /* height: 20px !important; */
 }
 

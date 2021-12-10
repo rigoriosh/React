@@ -119,7 +119,6 @@ export const Signin = () => {
             nombreLista: 'TIPO_DOCUMENTO'
         },
       ])
-    const [showPass, setShowPass] = useState(false);
     const {nombre, apellido, tipoDocumento, numeroDocumento, /* departamento, municipio, */ direccionResidencia,
         /* numeroContacto, */ telefonoContacto, email, confirmaremail, pass, confPass} = form;
     const [openDialog, setOpenDialog] = useState({open:false, msg :'',tittle:''});
@@ -298,8 +297,11 @@ export const Signin = () => {
                     <FieldTextWidtLabel name="direccionResidencia" value={direccionResidencia.value} label={direccionResidencia.label} handleChange={(target)=>handleFormChange(target)}
                          messageValidate={direccionResidencia.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>
 
-                    <FieldTextWidtLabel name="telefonoContacto" value={telefonoContacto.value} label={telefonoContacto.label} handleChange={(target)=>handleFormChange(target)}
-                        messageValidate={telefonoContacto.messageValidate} type='number' maxLength={20} styleOwn={{marginLeft:'0px'}}/>
+                    <FieldTextWidtLabel name="telefonoContacto" value={telefonoContacto.value} label={telefonoContacto.label} 
+                        handleChange={(target)=>{
+                            if (target.value.length < 11) handleFormChange(target)
+                        }}
+                        messageValidate={telefonoContacto.messageValidate} type='number' maxLength={10} styleOwn={{marginLeft:'0px'}}/>
                     
                     <FieldTextWidtLabel name="email" value={email.value} label={email.label} handleChange={(target)=>handleFormChange(target)}
                          messageValidate={email.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>

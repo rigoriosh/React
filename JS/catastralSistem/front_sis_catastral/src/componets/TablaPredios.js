@@ -7,14 +7,14 @@ import Tooltip from '@mui/material/Tooltip';
 
 export const TablaPredios = ({registros, handleEvents, modoTramite}) => {
 
-    const [columns, setColumns] = useState([
+    const [columns, /* setColumns */] = useState([
         { field: 'id', headerName:'ID', hide:true, },
         { field: 'numeroPredial', headerName:'FICHA CATASTRAL', flex:0.2, },
         { field: 'matriculaInmobiliaria', headerName:'MATRÍCULA', flex:0.2, },
         {
             field: '',
             // type: 'actions',
-            hide: (modoTramite === 'Detalle' || modoTramite === 'Seguimiento'),
+            hide: (modoTramite === 'Consulta' || modoTramite === 'Seguimiento'),
             align:'center',
             width: 70,
             renderCell: ({row}) => [
@@ -28,7 +28,7 @@ export const TablaPredios = ({registros, handleEvents, modoTramite}) => {
                      <Tooltip title="Retirar predio ">
                         <DeleteForeverIcon 
                             onClick={()=>{handleEvents({action: 'delete', register: row, eliminarYa:false})}}
-                            sx={{color:'red'}}
+                            sx={{color:'gray'}}
                         />
                     </Tooltip>
                 </div>
@@ -42,7 +42,7 @@ export const TablaPredios = ({registros, handleEvents, modoTramite}) => {
                 rows={registros}
                 autoHeight
                 density="compact"
-                hideFooter={(modoTramite === 'Detalle' && registros.length < 4)}
+                hideFooter={((modoTramite === 'Consulta'||modoTramite === 'Seguimiento') && registros.length < 4)}
                 hideFooterSelectedRowCount
                 pageSize={3}
                 // scrollbarSize={10}

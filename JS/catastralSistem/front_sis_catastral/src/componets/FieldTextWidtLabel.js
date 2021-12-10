@@ -1,5 +1,4 @@
 import React from 'react'
-import Alert from '@mui/material/Alert';
 
 
 export const FieldTextWidtLabel = ({label='El label es requerido', handleChange=()=>{}, name='',

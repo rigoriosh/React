@@ -11,6 +11,7 @@ import SeguimientoaTramite_Icon from '../../../assets/Iconos/SeguimientoaTramite
 export const TablaTramites = ({getDetalleTramite, tipoTramite, registrosGetSolicitudesUsuario}) => {
 
 
+    // eslint-disable-next-line no-unused-vars
     const [columnsTablaConsultarTramite, setColumnsTablaConsultarTramite] = useState(
         [
             // { field: 'id', headerName:'ID', hide:true, },

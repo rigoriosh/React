@@ -151,7 +151,7 @@
 }
 
 .verticalMenu{
-  align-items: start;
+  align-items: flex-start;
   background-color: var(--negroMate);
   color: var(--blanco);
   display: flex;
@@ -181,7 +181,7 @@
 .logOut{
   display: flex;
   flex-direction: column;
-  align-items: end;
+  align-items: flex-end;
   width: 100%;
 }
 

@@ -1,19 +1,11 @@
 import enviroment from "./helpers/enviroment";
 
 export const doGetToken = async(headers ) => {
-    // const payload = `username=${String(username)}&password=${String(password)}`
-  // console.log(11111)
     try {
         const url_getToken = enviroment.getToken;
         const responseLogin = await fetch(url_getToken, {
             method:'POST',
             headers,
-            // : {
-            //   data,
-            //   // 'Accept':         "application/json, text/plain, */*",
-            //   // 'Content-Type':   "application/json",
-            // },
-            // body: JSON.stringify({ user, pass }),
           });
         const dataResponse = await responseLogin.json();
         return dataResponse
@@ -27,16 +19,13 @@ export const getInfo = async(headers, url, method='POST', body) => {
     let myHeaders = new Headers();
     myHeaders.append('token', headers.token);
     myHeaders.append('Content-Type', 'application/json');
-    // myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
     const init = {
-      method: 'POST',
+      method,
       headers: myHeaders,
       body,
-      // mode: 'cors',
-      // cache: 'default'
     };
-      const responseLogin = await fetch(url, init /* { method, headers, body, } */);
+      const responseLogin = await fetch(url, init);
       const dataResponse = await responseLogin.json();
       return dataResponse
   } catch (error) {
@@ -51,17 +40,13 @@ export const createSolitud = async(headers, url, method='POST', body) => {
     formData.append('data', body.data);
     let myHeaders = new Headers();
     myHeaders.append('token', headers.token);
-    // myHeaders.append('Content-Type', 'application/json');
-    // myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
     const init = {
       method: method,
       headers: myHeaders,
       body:formData,
-      // mode: 'cors',
-      // cache: 'default'
     };
-      const responseLogin = await fetch(url, init /* { method, headers, body, } */);
+      const responseLogin = await fetch(url, init );
       const dataResponse = await responseLogin.json();
       return dataResponse
   } catch (error) {
@@ -74,6 +59,25 @@ export const getInfoGET = async(headers, url, method = 'GET') => {
       const responseLogin = await fetch(url, { method, headers });
       const dataResponse = await responseLogin.json();
       return dataResponse
+  } catch (error) {
+      return error;
+  }
+}
+
+export const downloadFile = async(headers, url, method = 'GET') => {
+  try {
+    let myHeaders = new Headers();
+    myHeaders.append('token', headers.token);
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('responseType', 'arraybuffer');
+
+
+    const init = {
+      method,
+      headers: myHeaders,
+    };
+    const responseData = await fetch(url, init);
+    return responseData
   } catch (error) {
       return error;
   }

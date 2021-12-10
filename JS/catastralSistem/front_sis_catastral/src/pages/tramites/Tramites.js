@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext,  } from 'react'
 import { /* useParams, */ useNavigate } from "react-router-dom";
 import { StoreContext } from '../../App';
 import { VerticalDivider } from '../../componets/VerticalDivider';
-import { checkPermits, permits } from '../../helpers/utils';
+import { checkPermits, permits,  } from '../../helpers/utils';
 
 import GestiondeUS_Icon from '../../assets/Iconos/GestiondeUS_Icon.png'
 import SeguimientoaTramite_Icon from '../../assets/Iconos/SeguimientoaTramite_Icon.png'
@@ -12,13 +12,10 @@ import CrearTramite_Icon from '../../assets/Iconos/CrearTramite_Icon.png'
 
 
 
-export const Tramites = ({children}) => {
+export const Tramites = ({children, salir}) => {
     let navigate = useNavigate();
     const { store, updateStore} = useContext(StoreContext);
-    useEffect(() => {
-        console.log("in Tramites")
-        return () => {}
-    }, []);
+    
     
 
     if (store.user.isLogin) {
@@ -35,7 +32,7 @@ export const Tramites = ({children}) => {
                             <p style={{color:'white', fontWeight:'bold'}}>Gestión</p>
                             <p style={{color:'white', fontWeight:'bold'}}>de Usuario</p>
                         </div>
-                        <VerticalDivider m="0px 30px" height="30%"/>
+                        <VerticalDivider m="0px 30px" height="60%"/>
                     </div>
                 }
                 {
@@ -64,7 +61,7 @@ export const Tramites = ({children}) => {
                             <p style={{color:'white', fontWeight:'bold'}}>Crear</p>
                             <p style={{color:'white', fontWeight:'bold'}}>Trámitre</p>
                         </div>
-                        <VerticalDivider m="0px 30px" height="30%"/>
+                        <VerticalDivider m="0px 30px" height="60%"/>
                     </div>
                 }
                 {

@@ -18,11 +18,12 @@ export const GestionarUsuarios = () => {
     const {dialogTool} = store;
     const [deleteUser, setDeleteUser] = useState(false);
 
-    const [columns, setColumns] = useState([
+    const [columns, /* setColumns */] = useState([
         { field: 'id', headerName:'ID', hide:true, },
         { field: 'nombre', headerName:'Nombres', flex:0.2, },
         { field: 'apellido', headerName:'Apellidos', flex:0.2, },
         { field: 'nombreUsuario', headerName: 'Usuario', flex:0.2, },
+        { field: 'tipoUsuario', headerName: 'Tipo de usuario', flex:0.2, },
         {
             field: 'Habilitar',
             // type: 'actions',
@@ -37,7 +38,10 @@ export const GestionarUsuarios = () => {
             align:'center',
             width: 70,
             renderCell: ({row}) => [
-                <img onClick={()=>{setDeleteUser(true); eliminarUsuario(row); }} className="imgWidth" src={GestiondeUS_Eliminar_Icon} alt="" style={{width:'15px', cursor:'pointer'}}/>
+                <img onClick={()=>{
+                    setDeleteUser(true);
+                    eliminarUsuario(row);
+                }} className="imgWidth" src={GestiondeUS_Eliminar_Icon} alt="" style={{width:'15px', cursor:'pointer'}}/>
             ],
         },
     ]);
@@ -67,11 +71,10 @@ export const GestionarUsuarios = () => {
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
 
     const abilitarDesabilitarUsuario = async(row) => {
-        console.log(row);
         updateStore({ ...store, openBackDrop: true });
         try {
             const headers = {token: store.user.token, estado:row.estado === "A" ? "D" : "I"};
-            const response = await getInfoGET(headers, enviroment.disableUser + row.idUsusario, 'POST');
+            const response = await getInfoGET(headers, enviroment.disableUser + row.idUsuario, 'POST');
             if (response.resultado.mensaje.includes("exitosamente")) {
                 setRows([])
                 consultarUsuarios();
@@ -87,13 +90,29 @@ export const GestionarUsuarios = () => {
     const eliminarUsuario = async(row=usuarioSeleccionado, elimnar=false ) => {
         if (!elimnar) {
             setUsuarioSeleccionado(row);
-            updateStore({...store, dialogTool:{open:true, msg: textosInfoWarnig.elimnarUsuario, tittle:'Confirmación', response:false}})
+            updateStore({
+                ...store,
+                openBackDrop:false,
+                dialogTool:{
+                    open:true,
+                    msg: textosInfoWarnig.elimnarUsuario,
+                    tittle:'Confirmación',
+                    response:false,
+                    actions:true
+                },
+                snackBar:{
+                    openSnackBar: false,
+                    messageSnackBar:'',
+                    tiempoExpiracion:'',
+                    severity: "success"/*  | "error" | "warning" | "info" */,
+                },
+            })
         } else if(deleteUser){
             setDeleteUser(false);
             updateStore({ ...store, openBackDrop: true, dialogTool:{open:false, msg :'',tittle:'', response:false} });
             const headers = {token: store.user.token };
             try {
-                const response = await getInfoGET(headers, enviroment.deleteUser + usuarioSeleccionado.idUsusario, 'DELETE');
+                const response = await getInfoGET(headers, enviroment.deleteUser + usuarioSeleccionado.idUsuario, 'DELETE');
                 if (response.resultado.mensaje.includes("exitosamente")) {
                     setRows([])
                     consultarUsuarios();
@@ -131,7 +150,8 @@ export const GestionarUsuarios = () => {
                     rows.push(
                         {
                             id:item,
-                            ...user
+                            ...user,
+                            tipoUsuario: user.tipoUsuario === 'I' ? 'Interno' : 'Externo'
                         }
                     )
                 });

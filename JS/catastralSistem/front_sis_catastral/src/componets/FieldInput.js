@@ -84,10 +84,11 @@ export const FieldInput = ({
                             name="textarea"
                             rows={rowstextArea}
                             cols={colstextArea}
-                            placeholder="Escriba en este campo las razones por las cuales está generando la solicitud."
+                            placeholder={placeholder}
                             required={true}
                             value={value}
                             disabled={disabled}
+                            maxLength={maxLength}
                         >
                     </textarea>
                 }

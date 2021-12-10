@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, } from 'react'
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -19,7 +19,7 @@ import { RequireAuth } from '../auth/RequireAuth';
 import { Tramites } from '../pages/tramites/Tramites';
 import { AuthRouter } from './AuthRouter';
 import { TramitesCatastrales } from './TramitesCatastrales';
-import { constantesGlobales, getToken, initStore, stylesApp, textosInfoWarnig } from '../helpers/utils';
+import { constantesGlobales, getToken, initStore, textosInfoWarnig } from '../helpers/utils';
 import { VerticalMenu } from '../componets/VerticalMenu';
 import { Transition } from '../pages/auth/Signin';
 import { msgInfo_MC_AEAC, msgInfo_MC_RAC, msgInfo_MO_MPHC, msgInfo_MP_CPP, msgInfo_MQ_INCP, msgInfo_MS_DDP, msgInfo_MS_EAP, msgInfo_MT_IRC, msgInfo_RE_ACN, msgInfo_RE_RAT, msgInfo_RE_RUD, msgInfo_SC_CIC, msgInfo_SC_SCC, msgInfo_SC_SCCE, msgInfo_SC_SCCPP, msgInfo_SC_SCFP, msgInfo_SC_SCNP, msgInfo_SC_SCPPC, msgInfo_SC_SNP, msgInfo_SC_SPCC } from '../pages/tramites/CrearTramite';
@@ -35,20 +35,17 @@ export const AppRouter = ({props}) => {
     const { store, updateStore } = useContext(StoreContext);
     let location = useLocation();
     const navigate = useNavigate();
-    const [timeSessionTkn, setTimeSessionTkn] = useState();
-    const { user:usuario, openBackDrop, snackBar, timeInitSessionUser, minutesToEachSession, dialogTool={open:false}, dialogInfo} = store;
+    
+    const { user:usuario, openBackDrop, snackBar, /* timeInitSessionUser, minutesToEachSession, */ dialogTool={open:false}, } = store;
     const { openSnackBar, messageSnackBar, severity} = snackBar;
     
 
     useEffect(() => {
-        const store = JSON.parse(sessionStorage.getItem('store'))
+        const store = JSON.parse(sessionStorage.getItem('store'));
         if (store) {
             updateStore({...store})
-            setTimeSessionTkn(store.user.tiempoExpiracion);
-
-            
         }
-        return () => {}
+        
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -56,43 +53,14 @@ export const AppRouter = ({props}) => {
         const {user} = store;
         setTimeout(() => {
             if (user.isLogin) { // calcula el tiempo del token
-                const timeInit = new Date(user.tiempoInicio);
-                // const timeInitSession = new Date(user.tiempoInicio);
-                const tiempoExpiracion = user.tiempoExpiracion;
-                const timeFin = new Date();
-                const timeDifference = timeFin - timeInit;
-                if(timeDifference >= tiempoExpiracion){ // si vencio solicita nuevo token
-                // solicitarNuevoToken
-                renewToken(user.user, user.pwd);
-                }
-                setTimeSessionTkn(timeDifference)
-                // console.log("change timeSessionTkn", timeDifference)
+                
             }
         }, 600000);
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [store, timeSessionTkn]) */
-/* 
-    useEffect(() => { // monitorea actividad del usuario
-        const {user} = store;
-        
-        const intervalSessionUser = setInterval(() => {
-            if (user.isLogin) { // calcula el tiempo del usuario
-                const tiempoExpiracion = minutesToEachSession * 60 * 1000;
-                const timeFin = new Date();
-                const timeDifference = timeFin -  new Date(timeInitSessionUser);
-                if(timeDifference >= tiempoExpiracion){ // si vencio solicita nuevo usuario
-                    // cierra la sesion
-                    salir(textosInfoWarnig.tiempoInactividad);
-                }
-            }
-        }, 60000);
-        return () => {
-            clearInterval(intervalSessionUser);
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [store])
-     */
+
+    
     useEffect(() => {
         if (usuario.isLogin) {
             updateStore({
@@ -131,11 +99,9 @@ export const AppRouter = ({props}) => {
           },
           user: initStore.user,
         });
-        setTimeout(() => {
-            sessionStorage.clear();
-            navigate("/");
-            console.log("end timesession")
-        }, 2000);
+        navigate("/");
+        sessionStorage.clear();
+
     }
 
     const renewToken = async(user, pwd) => {
@@ -164,12 +130,12 @@ export const AppRouter = ({props}) => {
     }
 
     return (
-        <div className="App pagePhader"  style={{}}>
+        <div className="App pagePhader"  style={{backgroundPositionX: store.user.isLogin ? '151px': '-5px'}}>
             <div className="panelFrontal">
 
             {
                 usuario.isLogin &&
-                    <VerticalMenu salir={salir} usuario={usuario}/>
+                    <VerticalMenu salir={salir} renewToken={renewToken} usuario={usuario}/>
             }
 
             <div style={{width:'100%', alignSelf:'center'}} className="******************pendiente******* "> 
@@ -188,7 +154,7 @@ export const AppRouter = ({props}) => {
                         path="/tramites/*"
                         element={
                         <RequireAuth>
-                            <TramitesCatastrales />
+                            <TramitesCatastrales salir={salir}/>
                         </RequireAuth>
                         }
                     />
@@ -205,7 +171,7 @@ export const AppRouter = ({props}) => {
             </Backdrop>
             <Snackbar
                 anchorOrigin={{ vertical:'top', horizontal:'right' }}
-                autoHideDuration={3500}
+                autoHideDuration={5500}
                 open={openSnackBar}
                 onClose={closeSnackbar}
                 TransitionComponent={TransitionUp}

@@ -3,14 +3,14 @@ import { /* useParams, */ useNavigate } from "react-router-dom";
 
 import { StoreContext } from '../../../App';
 import enviroment from '../../../helpers/enviroment';
-import { dataTestDetalleTramite, textosInfoWarnig } from '../../../helpers/utils';
+import { textosInfoWarnig } from '../../../helpers/utils';
 
 import { getInfoGET } from '../../../api';
 import { TablaTramites } from './TablaTramites';
 import { CrearTramite } from '../CrearTramite';
 
 
-export const ConsultarTramite = ({tipoTramite}) => {
+export const ConsultarTramite = ({tipoTramite='Consulta'}) => {
     const { store, updateStore } = useContext(StoreContext);
     let navigate = useNavigate();
     // const [stateConsultarTramite, setStateConsultarTramite] = useState(initStateConsultarTramite);
@@ -20,16 +20,14 @@ export const ConsultarTramite = ({tipoTramite}) => {
     const [detalleTramite, setDetalleTramite] = useState({});
 
     useEffect(() => {
-        console.log('hello ConsultarTramite')
         updateStore({...store, openBackDrop:true,});
-        //getTramite();
-        getTramiteTest();
-        return () => {
-            console.log('bye ConsultarTramite')
-        }
+        getTramite();
+        //getTramiteTest();
+        
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    // eslint-disable-next-line no-unused-vars
     const getTramiteTest = () => {
         setTimeout(() => {
             poblarTablaTramites({
@@ -304,12 +302,10 @@ export const ConsultarTramite = ({tipoTramite}) => {
     }
 
     const poblarTablaTramites = (response) => {
-        console.log(response)
         const solicitudes = response.resultado.solicitudes;
         solicitudes.map((solicitud, item) => solicitud.id = item);
-        console.log(solicitudes)
         setRegistrosGetSolicitudesUsuario(solicitudes);
-        updateStore({...store, openBackDrop:false,});
+        updateStore({...store, openBackDrop:true,});
     }
 
     const falloLaPeticion = (error) => {
@@ -323,15 +319,10 @@ export const ConsultarTramite = ({tipoTramite}) => {
         });
     }
 
-    // const ShowDetalleTramite = (tramiteSeleccionado) => {
-    //     console.log(tramiteSeleccionado)
-    //     setTramiteSeleccionado(tramiteSeleccionado);
-    // }
-
     const getDetalleTramite = async({idSolicitud})=>{
         updateStore({...store, openBackDrop:true,});
-        fixDataDetalleTramite(dataTestDetalleTramite);
-        /* try {
+        //fixDataDetalleTramite(dataTestDetalleTramite);
+        try {
             const headers = {token: store.user.token};
             const  response = await getInfoGET(headers, enviroment.getDetalleSolicitud+'/'+idSolicitud);
             if (response.error) {
@@ -342,12 +333,10 @@ export const ConsultarTramite = ({tipoTramite}) => {
             }
         } catch (error) {
             falloLaPeticion(error);
-        } */
+        }
     }
 
     const fixDataDetalleTramite = (response) => {
-        console.log(JSON.stringify(response))
-        console.log(response.resultado.solicitud);
         const responseDetalleTramite = response.resultado.solicitud;
 
         const titularesPredio = response.resultado.solicitud.titularesPredio;
@@ -386,6 +375,7 @@ export const ConsultarTramite = ({tipoTramite}) => {
                         key={'CrearTramite'}
                         detalleTramite={detalleTramite}
                         modoTramite={tipoTramite}
+                        getDetalleTramite={getDetalleTramite}
                     />
             }
             

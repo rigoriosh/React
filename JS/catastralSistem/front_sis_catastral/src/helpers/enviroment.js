@@ -24,6 +24,9 @@ const enviroment = {
     getRevisionBusca:       `${api}solicitudes/getRevisionBusca`,
     getSolicitudesUsuario:  `${api}solicitudes/getSolicitudesUsuario`,
     getDetalleSolicitud:    `${api}solicitudes/getDetalleSolicitud`,
+    getEstadosSolicitud:    `${api}solicitudes/getEstadosSolicitud`,
+    updateEstadoSolicitud:  `${api}solicitudes/updateEstadoSolicitud`,
+    getArchivoSolicitud:    `${api}solicitudes/getArchivoSolicitud`,
     
 }
 

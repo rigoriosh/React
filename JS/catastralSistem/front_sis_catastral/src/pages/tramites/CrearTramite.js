@@ -9,11 +9,8 @@ import { VerEstado } from './consultarTramites/VerEstado';
 import { FirstFormTramitre } from './formulariosTramite/FirstFormTramitre'
 import { SecondFormTramitre } from './formulariosTramite/SecondFormTramitre'
 
-const initialStateCrearTramite = {
-    msgInfoFiles:'',
-}
 
-export const CrearTramite = ({detalleTramite, modoTramite,}) => {
+export const CrearTramite = ({detalleTramite, modoTramite, getDetalleTramite}) => {
 
     const { store, updateStore } = useContext(StoreContext);
     let navigate = useNavigate();
@@ -241,7 +238,6 @@ export const CrearTramite = ({detalleTramite, modoTramite,}) => {
     }  = formularioTramite;
     
     const handleFormChange = ({value, name}) => {
-        console.log(value, name)
         if (name !== avaluoTerreno.name &&
             name !== avaluoConstruccion.name &&
             name !== areaTerreno.name &&
@@ -288,7 +284,6 @@ export const CrearTramite = ({detalleTramite, modoTramite,}) => {
     }
 
     const avancePagina = (formularioTotalOk, avanza) => {
-        console.log("avanzando pagina", formularioTotalOk)
         if (formularioTotalOk) {
             setForms(avanza ? (forms + 1) : (forms - 1));
         }
@@ -517,7 +512,7 @@ export const CrearTramite = ({detalleTramite, modoTramite,}) => {
     }
 
     useEffect(() => {
-        debugger
+        // debugger
         if (!detalleTramite.idSolicitud) {
             if (tipoTramite.value !== "") {
                 getTiposSolicitud(tipoTramite.value);
@@ -530,7 +525,6 @@ export const CrearTramite = ({detalleTramite, modoTramite,}) => {
 
 
     const renderizarInfoSegunTipoTramite = () => {
-        console.log(22222222)
         let msg = '', open = true;
 
         if( tipoTramite.value === 'MO' && motivoSolicitud.value === 'MPHC' ){
@@ -594,7 +588,7 @@ export const CrearTramite = ({detalleTramite, modoTramite,}) => {
     }
     
     useEffect(() => {
-        debugger
+        // debugger
 
         if (!detalleTramite.idSolicitud) {
             renderizarInfoSegunTipoTramite();
@@ -606,8 +600,7 @@ export const CrearTramite = ({detalleTramite, modoTramite,}) => {
 
     useEffect(() => {
         // consultar tipos de tramites y tipos de solicitudes
-        debugger
-        if (modoTramite === "Detalle" || modoTramite === "Seguimiento") {
+        if (modoTramite === "Consulta" || modoTramite === "Seguimiento") {
             // poblar los campos del formularioTramite
             cargarInfoDetalleTramite();
         } else {
@@ -757,10 +750,10 @@ export const CrearTramite = ({detalleTramite, modoTramite,}) => {
 
             }
         );
-
-
+        updateStore({...store, openBackDrop:false,});
     }
     const poblarCamposSelect = async()=>{
+        updateStore({...store, openBackDrop:true,});
         try {
             const responseMotivosSolicitud = await getDataApi(enviroment.getMotivoSolicitud);
             const responseObjetosDeLaPeticion = await getDataApi(enviroment.getObjetoPeticion);
@@ -782,7 +775,7 @@ export const CrearTramite = ({detalleTramite, modoTramite,}) => {
                 ObjetosRectificacion:responseObjetosRectificacion.resultado.dominios,
 
             });
-            
+            updateStore({...store, openBackDrop:false,});
         } catch (error) {
             falloLaPeticion(error);
             navigate("/");
@@ -810,15 +803,6 @@ export const CrearTramite = ({detalleTramite, modoTramite,}) => {
     }
     
     const onSubmitFinal = async() => {
-        console.log(tiposTramites)
-        // alert(`quedamos en: 
-        
-        // - ajustar el JSON final para persistir tramite.
-        // - verificar todas las validaciones de los formularios
-        // - realizar pruebas con varios tramites
-
-        // `);
-        // const nombreTramite = tiposTramites.filter(tramite => tramite.valor === tipoTramite.value)[0].descripcionValor
         const data = {
             "numeroRadicado": "123456789",
             "tipoSolicitante": tipoSolicitante.value,
@@ -851,79 +835,6 @@ export const CrearTramite = ({detalleTramite, modoTramite,}) => {
             "titularesPredio": quitarIdDelRegistros_titularesPredio(Object.assign([], titularesDeDerecho)),
             "prediosAsociados": quitarIdDelRegistros_prediosAsociados(Object.assign([], formularioTramite.prediosAsociados))
           }
-
-        /* 
-          const data = {
-            "areaTerreno": formularioTramite.areaTerreno.value ? formularioTramite.areaTerreno.value : 0.0,
-            "areaConstruccion": formularioTramite.areaConstruccion.value ? formularioTramite.areaConstruccion.value : 0.0,
-            "avaluoTerreno": formularioTramite.avaluoTerreno.value?formularioTramite.avaluoTerreno.value:0.0,
-            "avaluoConstruccion": formularioTramite.avaluoConstruccion.value?formularioTramite.avaluoConstruccion.value:0.0,
-            "autoestimacionAvaluo": formularioTramite.autoestimacionAvaluo.value?formularioTramite.autoestimacionAvaluo.value:0,
-            "anioEscritura": formularioTramite.anioEscritura.value ? formularioTramite.anioEscritura.value : '--',
-            "consideraMejora": formularioTramite.consideraMejora.value?formularioTramite.consideraMejora.value:'--',
-            "claseSuelo": tipoDeSuelo.value?tipoDeSuelo.value:'--',
-            "diferenciaMayoEsta": formularioTramite.diferenciaMayoEsta.value?formularioTramite.diferenciaMayoEsta.value:'--',
-            "idSolicitante": {
-                "idUsuario": store.user.infoUser.idUsuario
-            },
-            "municipioPredio": municipio.value,
-            "municipioNotaria": formularioTramite.municipioNotaria.value?formularioTramite.municipioNotaria.value:'--',
-            "motivoSolicitud": formularioTramite.motivoSolicitud.value?formularioTramite.motivoSolicitud.value:'--',
-            "numeroRadicado": "123456789",
-            "nombreTramite": tipoTramite.value,
-            "noEscrituraPublica": formularioTramite.noEscrituraPublica.value?formularioTramite.noEscrituraPublica.value:'--',
-            "notariaOtorgante": formularioTramite.notariaOtorgante.value?formularioTramite.notariaOtorgante.value:'--',
-            "revisionBusca": formularioTramite.revisionBusca.value?formularioTramite.revisionBusca.value:'--',
-            "razonSolicitud": formularioTramite.razonSolicitud.value,
-            "objetoRectificacion": formularioTramite.objetoRectificacion.value?formularioTramite.objetoRectificacion.value:'--',
-            "objetoPeticion": formularioTramite.objetoPeticion.value?formularioTramite.objetoPeticion.value:'--',
-            "propiedadHorizontal": formularioTramite.propiedadHorizontal.value?formularioTramite.propiedadHorizontal.value:'-',
-            "proyectoUrbanistico": formularioTramite.proyectoUrbanistico.value?formularioTramite.proyectoUrbanistico.value:'-',
-            "prediosAsociados": quitarIdDelRegistros_prediosAsociados(Object.assign([], formularioTramite.prediosAsociados)),
-            "tipoInscripcion": "INP",
-            "tipoSolicitante": tipoSolicitante.value,
-            "tipoTramite": tipoTramite.value,
-            "titularesPredio": quitarIdDelRegistros_titularesPredio(Object.assign([], titularesDeDerecho)),
-          }
-        */
-        /* const data = {
-            "numeroRadicado": "123456789",
-            "tipoSolicitante": tipoSolicitante.value,
-            "idSolicitante": {
-                "idUsuario": store.user.infoUser.idUsuario
-            },
-            "tipoTramite": tipoTramite.value,
-            "nombreTramite": tipoTramite.value,
-            "municipioPredio": municipio.value,
-            "numeroPredial": fichaCatastral.value,
-            "matriculaInmobiliaria": matricula.value,
-            "claseSuelo": tipoDeSuelo.value,
-            "propiedadHorizontal": "S",
-            "proyectoUrbanistico": "N",
-            "noEscrituraPublica": "ABCDEFG1234567",
-            "anioEscritura": "2015",
-            "notariaOtorgante": "NOTARIA 25 DE PRUEBA",
-            "municipioNotaria": "05591",
-            "objetoPeticion": "CDE",
-            "consideraMejora": "INC",
-            "diferenciaMayoEsta": "T",
-            "revisionBusca": "D",
-            "tipoInscripcion": "INP",
-            "motivoSolicitud": motivoSolicitud.value,
-            "objetoRectificacion": "LQC",
-            "areaTerreno": 20.4,
-            "areaConstruccion": 18.4,
-            "avaluoTerreno": 30.1,
-            "avaluoConstruccion": 120.4,
-            "autoestimacionAvaluo": 240000000,
-            "razonSolicitud": razonSolicitud.value,
-            "titularesPredio": ajusteTitularesDerecho()
-        } */
-
-        
-
-        console.log(data)
-        console.log(JSON.stringify(data))
         updateStore({...store, openBackDrop:true,});
         try {
             const headers = {token: store.user.token};
@@ -1012,6 +923,7 @@ export const CrearTramite = ({detalleTramite, modoTramite,}) => {
                         detalleTramite={detalleTramite}
                         formularioTramite={formularioTramite}
                         modoTramite={modoTramite}
+                        getDetalleTramite={getDetalleTramite}
                     />
                 : <h1>ultimo</h1>
             }

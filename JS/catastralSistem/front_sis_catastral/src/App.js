@@ -15,8 +15,8 @@ export const App = () => {
 
  const updateStore = (data, updateSession=true)=>{
    if (data) {
-     setStore(data);
-    //  setStore({...data, user:{...data.user, timeInitSessionUser: new Date()}});
+    //  setStore(data);
+     setStore({...data, timeInitSessionUser: new Date()});
      sessionStorage.setItem('store', JSON.stringify(data))
    }
  }
