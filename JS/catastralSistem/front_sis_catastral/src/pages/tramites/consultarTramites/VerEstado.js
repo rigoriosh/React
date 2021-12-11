@@ -78,7 +78,7 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
             headerName:'Detalle',
             hide:'',
             align:'center',
-            width: 70,
+            width: 100,
             renderCell: ({row}) => [
                 <div style={{display:'flex', alignItems:'center'}}>
                     <Tooltip title="Modificar información del predio ">
@@ -271,7 +271,7 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
                 var url = window.URL.createObjectURL(blobResponse);
                 var a = document.createElement('a');
                 a.href = url;
-                a.download = "documentos.zip";
+                a.download = detalleTramite.numeroRadicado+'.zip';
                 document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
                 a.click();    
                 a.remove();  //afterwards we remove the element again   

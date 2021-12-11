@@ -8,7 +8,9 @@ export const FieldSelect = ({label, value, handleOnchange, options, messageValid
         <div className="fieldTextWidtLabel" 
         style={{...styleOwn, borderColor:'red'}}> 
             <label htmlFor="usuario" className="labels">{label}</label>
-            <Select
+            <select
+                style={{borderColor: (messageValidate !== "") ? 'red' : ''}}
+                className='inputSelect'
                 id={name}
                 error={messageValidate !== ""}
                 value={value}
@@ -19,11 +21,11 @@ export const FieldSelect = ({label, value, handleOnchange, options, messageValid
                 required={required}
                 >
                     {options.map((option) => (
-                        <MenuItem key={option.valor} value={option.valor}>
+                        <option  key={option.valor} value={option.valor}>
                         {option.descripcionValor}
-                        </MenuItem>
+                        </option>
                     ))}
-            </Select>
+            </select>
             {
                  messageValidate !== "" && 
                 <label htmlFor={name} className="labels" style={{color:'red'}}>{messageValidate}</label>

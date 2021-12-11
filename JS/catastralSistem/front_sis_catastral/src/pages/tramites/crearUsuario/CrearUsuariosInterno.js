@@ -13,6 +13,11 @@ import { FieldSelect } from '../../../componets/FieldSelect'
 import { FieldTextWidtLabel } from '../../../componets/FieldTextWidtLabel'
 import enviroment from '../../../helpers/enviroment'
 import { emailRegex, pwdEncripted, stylesApp, textosInfoWarnig } from '../../../helpers/utils'
+import Contraseña_Login_Icon from '../../../assets/Iconos/Contraseña_Login_Icon.png'
+import VerContraseña_Login_Icon from '../../../assets/Iconos/VerContraseña_Login_Icon.png'
+import GestiondeUS_NOHabilitado_Icon from '../../../assets/Iconos/GestiondeUS_NOHabilitado_Icon.png'
+
+
 
 import Logo_Asomunicipios_ColorLetranegra from '../../../assets/Iconos/Logo_Asomunicipios_ColorLetranegra.png'
 import CrearUsuario_NuevoUS_Icon from '../../../assets/Iconos/CrearUsuario_NuevoUS_Icon.png'
@@ -67,7 +72,13 @@ export const CrearUsuariosInterno = () => {
     const navigate = useNavigate();
     const [form, setForm] = useState(initForm);
     const {nombre, apellido, tipoDocumento, numeroDocumento, email, confirmaremail, pass, confPass} = form;
-    const [tiposDocumento, setTiposDocumento] = useState([]);
+    const [tiposDocumento, setTiposDocumento] = useState([
+        /* {
+            valor:'0',
+            descripcionValor:'descripcionValor'
+        } */
+    ]);
+    const [seePass, setSeePass] = useState(false);
 
     const [openDialog, setOpenDialog] = useState({open:false, msg :'',tittle:''});
 
@@ -88,12 +99,12 @@ export const CrearUsuariosInterno = () => {
         } else {
             // ajusta tipos de documentos a ser renderizados
             const tiposDocumento = [
-                // {
-                //     descripcionValor: 'Seleccione ...',
-                //     idValorLista: 1,
-                //     valor: 'seleccione',
-                //     nombreLista: 'seleccione'
-                // }
+                {
+                    descripcionValor: 'Seleccione...',
+                    idValorLista: 1,
+                    valor: '',
+                    nombreLista: 'seleccione'
+                }
             ];
             getTiposDocumento.resultado.dominios.forEach(dominio => {
                 tiposDocumento.push(dominio);
@@ -221,7 +232,18 @@ export const CrearUsuariosInterno = () => {
         if (store.tiposDocumento.length === 0) {
             getTiposDocumento();
         } else {
-            setTiposDocumento(store.tiposDocumento);
+            const tiposDocumento = [
+                {
+                    descripcionValor: 'Seleccione...',
+                    idValorLista: 1,
+                    valor: '',
+                    nombreLista: 'seleccione'
+                }
+            ];
+            store.tiposDocumento.forEach(dominio => {
+                tiposDocumento.push(dominio);
+            })
+            setTiposDocumento(tiposDocumento);
         }
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -249,11 +271,38 @@ export const CrearUsuariosInterno = () => {
             <FieldTextWidtLabel name="confirmaremail" value={confirmaremail.value} label={confirmaremail.label} handleChange={(target)=>handleFormChange(target)}
                     messageValidate={confirmaremail.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>
             
-            <FieldTextWidtLabel name="pass" value={pass.value} label={pass.label} handleChange={(target)=>handleFormChange(target)}
-                    messageValidate={pass.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>
+            {/* input contraseña */}
+            <div className="fieldText">
+                {/* Icono */} <img src={Contraseña_Login_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
+                {/* Separador | */}<div style={{backgroundColor:stylesApp.gray1, width:'2px', margin:'1px 5px'}}></div>
+                <input type={seePass ? "text" : 'password'} name="pass" id="contraseña" value={pass.value} onChange={({target})=>handleFormChange(target)} 
+                    maxLength='20' placeholder="Contraseña" className='styleInputtext'
+                /><br />
+                {
+                    seePass 
+                    ? <img onClick={()=>setSeePass(!seePass)} src={GestiondeUS_NOHabilitado_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
+                    : <img onClick={()=>setSeePass(!seePass)} src={VerContraseña_Login_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
+                }
+            </div>
+            {/* <FieldTextWidtLabel type="password" name="pass" value={pass.value} label={pass.label} handleChange={(target)=>handleFormChange(target)}
+                    messageValidate={pass.messageValidate} maxLength={50} styleOwn={{marginLeft:'0'}}/>
 
             <FieldTextWidtLabel name="confPass" value={confPass.value} label={confPass.label} handleChange={(target)=>handleFormChange(target)}
-                    messageValidate={confPass.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>
+                    messageValidate={confPass.messageValidate} type='password' maxLength={50} styleOwn={{marginLeft:'0'}}/> */}
+
+            {/* input contraseña */}
+            <div className="fieldText">
+                {/* Icono */} <img src={Contraseña_Login_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
+                {/* Separador | */}<div style={{backgroundColor:stylesApp.gray1, width:'2px', margin:'1px 5px'}}></div>
+                <input type={seePass ? "text" : 'password'} name="confPass" id="contraseña" value={confPass.value} onChange={({target})=>handleFormChange(target)} 
+                    maxLength='20' placeholder="Contraseña" className='styleInputtext'
+                /><br />
+                {
+                    seePass 
+                    ? <img onClick={()=>setSeePass(!seePass)} src={GestiondeUS_NOHabilitado_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
+                    : <img onClick={()=>setSeePass(!seePass)} src={VerContraseña_Login_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
+                }
+            </div>
 
             <button onClick={()=>crearUsuario()} className='btnAceptar'>CREAR USUARIO</button>
 

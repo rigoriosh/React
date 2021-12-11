@@ -24,12 +24,12 @@ export const TramitesCatastrales = ({salir}) => {
         return () => {}
     }, [location])
     return (
-        <div style={{display:'flex', flexDirection:'column', height:'100vh', justifyContent:'center', alignItems:'center' }}>
+        <div style={{display:'flex', flexDirection:'row', height:'100vh', justifyContent:'center', alignItems:'center' }}>
             {/* <h5>TramitesCatastrales</h5> */}
             {
                 location.pathname !== pathsRoutes.tramites &&
                     // <button onClick={()=>{navigate(pathPrevius)}}>Regresar</button>
-                    <Fab size="small" style={{backgroundColor:'rgb(168, 207, 69)'}} aria-label="add" onClick={()=>{navigate(pathPrevius)}}>
+                    <Fab size="small" style={{backgroundColor:'rgb(168, 207, 69)', position:'absolute', left:'140px'}} aria-label="add" onClick={()=>{navigate(pathPrevius)}}>
                         <img className="imgWidth" src={PasodePagIzq_Icon} alt="" style={{width:'15px'}}/>
                     </Fab>
             }

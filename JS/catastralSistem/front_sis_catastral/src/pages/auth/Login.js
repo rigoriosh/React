@@ -18,7 +18,8 @@ export const Login = () => {
     let navigate = useNavigate();
     const { store, updateStore } = useContext(StoreContext);
     const { user:usuario } = store;
-    const [form, setForm] = useState({user:'davids', pwd:'prueba'});
+    // const [form, setForm] = useState({user:'davids', pwd:'prueba'});
+    const [form, setForm] = useState({user:'', pwd:''});
     const {user, pwd=''} = form;
     const [seePass, setSeePass] = useState(false);
 

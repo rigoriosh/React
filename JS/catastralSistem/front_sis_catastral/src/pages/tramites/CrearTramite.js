@@ -10,13 +10,18 @@ import { FirstFormTramitre } from './formulariosTramite/FirstFormTramitre'
 import { SecondFormTramitre } from './formulariosTramite/SecondFormTramitre'
 
 
-export const CrearTramite = ({detalleTramite, modoTramite, getDetalleTramite}) => {
+export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}) => {
 
     const { store, updateStore } = useContext(StoreContext);
     let navigate = useNavigate();
     const [forms, setForms] = useState(1); // controla el paginado de los forms
     const [tiposTramites, setTiposTramites] = useState([]);
-    const [tipoSolicitud, setTipoSolicitud] = useState([]);
+    const [tipoSolicitud, setTipoSolicitud] = useState([
+        {
+            descripcionValor:'Seleccione...',
+            valor:''
+        }
+    ]);
     const [tiposSolicitante, setTiposSolicitudes] = useState([]);
     const [tiposDeSuelo, setTiposDeSuelo] = useState([]);
     const [municipios, setMunicipios] = useState([]);
@@ -297,13 +302,24 @@ export const CrearTramite = ({detalleTramite, modoTramite, getDetalleTramite}) =
             if (response.error) {
                 falloLaPeticion(response.error);
             } else {
-                setTiposSolicitudes(response.resultado.tiposSolicitantes);
-                setTiposTramites(response.resultado.tiposTramite);
+                setTiposSolicitudes(addPrimerOpcionSelect(response.resultado.tiposSolicitantes));
+                setTiposSolicitudes(addPrimerOpcionSelect(response.resultado.tiposSolicitantes));
+                setTiposTramites(addPrimerOpcionSelect(response.resultado.tiposTramite));
                 updateStore({...store, openBackDrop:false,});
             }
         } catch (error) {
             falloLaPeticion(error);
         }
+    }
+
+    const addPrimerOpcionSelect = (data) => {
+        if(data[0].descripcionValor !== 'Seleccione...'){
+            data.unshift({
+                descripcionValor:'Seleccione...',
+                valor:''
+            })
+        }
+        return data;
     }
 
     const getTiposDeSuelos = async()=>{
@@ -314,7 +330,7 @@ export const CrearTramite = ({detalleTramite, modoTramite, getDetalleTramite}) =
             if (response.error) {
                 falloLaPeticion(response.error);
             } else {
-                setTiposDeSuelo(response.resultado.dominios);
+                setTiposDeSuelo(addPrimerOpcionSelect(response.resultado.dominios));
                 updateStore({...store, openBackDrop:false,});
             }
         } catch (error) {
@@ -330,7 +346,7 @@ export const CrearTramite = ({detalleTramite, modoTramite, getDetalleTramite}) =
             if (response.error) {
                 falloLaPeticion(response.error);
             } else {
-                setMunicipios(response.resultado.dominios);
+                setMunicipios(addPrimerOpcionSelect(response.resultado.dominios));
                 updateStore({...store, openBackDrop:false,});
             }
         } catch (error) {
@@ -370,7 +386,7 @@ export const CrearTramite = ({detalleTramite, modoTramite, getDetalleTramite}) =
         try {
             const headers = {token: store.user.token, valorConsultar};
             const response = await getInfoGET(headers, enviroment.getTiposSolicitud);
-            setTipoSolicitud(response.resultado.dominios);
+            setTipoSolicitud(addPrimerOpcionSelect(response.resultado.dominios));
             updateStore({...store, openBackDrop:false,});
         } catch (error) {
             falloLaPeticion(error);
@@ -512,7 +528,6 @@ export const CrearTramite = ({detalleTramite, modoTramite, getDetalleTramite}) =
     }
 
     useEffect(() => {
-        // debugger
         if (!detalleTramite.idSolicitud) {
             if (tipoTramite.value !== "") {
                 getTiposSolicitud(tipoTramite.value);
@@ -765,14 +780,14 @@ export const CrearTramite = ({detalleTramite, modoTramite, getDetalleTramite}) =
             const responseObjetosRectificacion = await getDataApi(enviroment.getObjetoRectifica);
             setFormularioTramite({
                 ...formularioTramite,
-                MotivosSolicitud: responseMotivosSolicitud.resultado.dominios,
-                ObjetosDeLaPeticion: responseObjetosDeLaPeticion.resultado.dominios,
-                ConsideraUnaMejoraLaMutacion: responseConsideraUnaMejoraLaMutacion.resultado.dominios,
-                ConsideraQueLaDiferenciaMayorEstaEn: responseConsideraQueLaDiferenciaMayorEstaEn.resultado.dominios,
-                LaRevisionBusca: responseLaRevisionBusca.resultado.dominios,
-                MunicipioDeLaNotaria: responseMunicipioDeLaNotaria.resultado.dominios,
-                TiposInscripcion:responseTiposInscripcion.resultado.dominios,
-                ObjetosRectificacion:responseObjetosRectificacion.resultado.dominios,
+                MotivosSolicitud: addPrimerOpcionSelect( responseMotivosSolicitud.resultado.dominios),
+                ObjetosDeLaPeticion: addPrimerOpcionSelect( responseObjetosDeLaPeticion.resultado.dominios),
+                ConsideraUnaMejoraLaMutacion: addPrimerOpcionSelect( responseConsideraUnaMejoraLaMutacion.resultado.dominios),
+                ConsideraQueLaDiferenciaMayorEstaEn: addPrimerOpcionSelect( responseConsideraQueLaDiferenciaMayorEstaEn.resultado.dominios),
+                LaRevisionBusca: addPrimerOpcionSelect( responseLaRevisionBusca.resultado.dominios),
+                MunicipioDeLaNotaria: addPrimerOpcionSelect( responseMunicipioDeLaNotaria.resultado.dominios),
+                TiposInscripcion: addPrimerOpcionSelect(responseTiposInscripcion.resultado.dominios),
+                ObjetosRectificacion: addPrimerOpcionSelect(responseObjetosRectificacion.resultado.dominios),
 
             });
             updateStore({...store, openBackDrop:false,});
@@ -885,7 +900,8 @@ export const CrearTramite = ({detalleTramite, modoTramite, getDetalleTramite}) =
                         fontWeight:'bold',
                         color:'gray',
                         position:'absolute',
-                        right:'35%'
+                        left:'52%',
+                        // top:'265px'
                     }}>{detalleTramite.numeroRadicado}</p>
             }
             {
@@ -903,6 +919,7 @@ export const CrearTramite = ({detalleTramite, modoTramite, getDetalleTramite}) =
                         detalleTramite={detalleTramite}
                         cargarInfoDetalleTramite={cargarInfoDetalleTramite}
                         modoTramite={modoTramite ? modoTramite : 'Nuevo'}
+                        addPrimerOpcionSelect={addPrimerOpcionSelect}
                 />
                 : forms === 2 ?
                     <SecondFormTramitre

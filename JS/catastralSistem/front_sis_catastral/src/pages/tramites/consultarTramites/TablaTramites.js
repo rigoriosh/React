@@ -15,10 +15,42 @@ export const TablaTramites = ({getDetalleTramite, tipoTramite, registrosGetSolic
     const [columnsTablaConsultarTramite, setColumnsTablaConsultarTramite] = useState(
         [
             // { field: 'id', headerName:'ID', hide:true, },
-            { field: 'numeroRadicado', headerName:'N° de Solicitud',   flex:0.2, },
-            { field: 'nombreTramite',  headerName:'Nombre Trámite',    flex:0.2, },
-            { field: 'tipoTramite',    headerName:'Tipo de Solicitud', flex:0.2, },
-            { field: 'estado',         headerName:'Estado',            flex:0.2, },
+            { field: 'numeroRadicado', headerName:'N° de Solicitud',   flex:0.2,
+                renderCell: (params) => (
+                <Tooltip title={
+                    <strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.numeroRadicado}</strong>
+                }>
+                    <p>{params.row.numeroRadicado}</p>
+                </Tooltip>
+                ),
+             },
+            { field: 'nombreTramite',  headerName:'Nombre Trámite',    flex:0.2,
+            renderCell: (params) => (
+                <Tooltip title={
+                    <strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.nombreTramite}</strong>
+                }>
+                    <p>{params.row.nombreTramite}</p>
+                </Tooltip>
+                ),
+             },
+            { field: 'tipoTramite',    headerName:'Tipo de Solicitud', flex:0.2,
+            renderCell: (params) => (
+                <Tooltip title={
+                    <strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.tipoTramite}</strong>
+                }>
+                    <p>{params.row.tipoTramite}</p>
+                </Tooltip>
+                ),
+             },
+            { field: 'estado',         headerName:'Estado',            flex:0.2,
+            renderCell: (params) => (
+                <Tooltip title={
+                    <strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.estado}</strong>
+                }>
+                    <p>{params.row.estado}</p>
+                </Tooltip>
+                ),
+             },
             {
                 field: (tipoTramite === 'Consulta') ? 'Consultar' : 'Editar Solicitud',
                 // type: 'actions',

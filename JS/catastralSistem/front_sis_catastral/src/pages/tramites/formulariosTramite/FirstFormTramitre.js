@@ -62,7 +62,7 @@ const initialState = {
 
 export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitud, tiposSolicitante, avancePagina,
     formularioTramite, setFormularioTramite, renderizarInfoSegunTipoTramite, setForms, detalleTramite, cargarInfoDetalleTramite,
-    modoTramite}) => {
+    modoTramite, addPrimerOpcionSelect}) => {
 
         const {store, updateStore} = useContext(StoreContext);
         const {dialogTool} = store;
@@ -174,7 +174,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 // ajusta tipos de documentos a ser renderizados
                 const tiposDocumento = [
                     // {
-                    //     descripcionValor: 'Seleccione ...',
+                    //     descripcionValor: 'Seleccione...',
                     //     idValorLista: 1,
                     //     valor: 'seleccione',
                     //     nombreLista: 'seleccione'
@@ -183,7 +183,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 getTiposDocumento.resultado.dominios.forEach(dominio => {
                     tiposDocumento.push(dominio);
                 });
-                setTiposDocumento(tiposDocumento);
+                setTiposDocumento(addPrimerOpcionSelect(tiposDocumento));
                 updateStore({ ...store, tiposDocumento, });
             }
         }
@@ -259,7 +259,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                     getTiposDocumento();
                     // setTiposDocumento(tiposDocumentoToTest);
                 } else {
-                    setTiposDocumento(store.tiposDocumento);
+                    setTiposDocumento(addPrimerOpcionSelect(store.tiposDocumento));
                 }
             }else{
                 cargarInfoDetalleTramite()
@@ -561,16 +561,17 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                                 />
                             </div>
                             <div style={{display:'flex', width:'100%'}}>
-                                <FieldSelect label={'Tipo de documento'} value={newTitularDerecho.tipoDeDocumento.value} options={tiposDocumento} 
+                                <FieldSelect label={'Tipo de documento'} value={newTitularDerecho.tipoDeDocumento.value}
+                                    options={tiposDocumento} 
                                     handleOnchange={({value})=>setNewTitularDerecho({...newTitularDerecho, tipoDeDocumento: {...newTitularDerecho.tipoDeDocumento, value}})} 
-                                    messageValidate={newTitularDerecho.tipoDeDocumento.validacion} name={newTitularDerecho.tipoDeDocumento.name} styleOwn={{width:'50%'}}
+                                    messageValidate={newTitularDerecho.tipoDeDocumento.validacion} name={newTitularDerecho.tipoDeDocumento.name} styleOwn={{width:'100%'}}
                                 />
                                 
                                 <FieldTextWidtLabel name={"numeroDocumento"} value={newTitularDerecho.numeroDeDocumento.value} label={'Numero de documento'} maxLength={10}
                                     handleChange={({value})=>{
                                         if(regExp10Num.test(value)||value.length < 10) setNewTitularDerecho({...newTitularDerecho, numeroDeDocumento: {...newTitularDerecho.numeroDeDocumento,value}})
                                     }}
-                                    messageValidate={newTitularDerecho.numeroDeDocumento.validacion} type='number' styleOwn={{marginLeft:'10px'}}
+                                    messageValidate={newTitularDerecho.numeroDeDocumento.validacion} type='number' styleOwn={{marginLeft:'10px', width:'60%'}}
                                 />
 
                                 {/* <img onClick={()=>{}} className="imgWidth" src={GestiondeUS_Eliminar_Icon} alt="" style={{width:'20px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/> */}

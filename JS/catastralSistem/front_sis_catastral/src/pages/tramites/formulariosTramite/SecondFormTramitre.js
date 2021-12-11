@@ -491,7 +491,7 @@ export const SecondFormTramitre = ({
                     }
                     {
                         motivoSolicitud.value === "DDP" &&
-                        <div>
+                        <div style={{width:'50%', marginRight:'10px'}}>
                             {
                                 modoTramite === 'Nuevo'
                                     ?
@@ -502,7 +502,7 @@ export const SecondFormTramitre = ({
                                             handleOnchange={(target)=>{handleFormChange(target)}} 
                                             messageValidate={proyectoUrbanistico.validation}
                                             name={proyectoUrbanistico.name}
-                                            styleOwn={{width:'50%', marginLeft:'10px',}}
+                                            styleOwn={{width:'100%', marginLeft:'10px',}}
                                             required={true}
                                         />
                                     :

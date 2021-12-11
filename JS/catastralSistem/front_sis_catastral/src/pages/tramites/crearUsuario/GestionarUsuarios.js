@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { DataGrid } from '@mui/x-data-grid';
 
-import GestiondeUS_Eliminar_Icon from '../../../assets/Iconos/GestiondeUS_Eliminar_Icon.png'
+// import GestiondeUS_Eliminar_Icon from '../../../assets/Iconos/GestiondeUS_Eliminar_Icon.png'
 import GestiondeUS_NOHabilitado_Icon from '../../../assets/Iconos/GestiondeUS_NOHabilitado_Icon.png'
 import GestiondeUS_Habilitado_Icon from '../../../assets/Iconos/GestiondeUS_Habilitado_Icon.png'
 import { StoreContext } from '../../../App';
 import { getInfoGET } from '../../../api';
 import enviroment from '../../../helpers/enviroment';
 import { textosInfoWarnig } from '../../../helpers/utils';
+import { Tooltip } from '@mui/material';
 
 
 
@@ -18,62 +19,92 @@ export const GestionarUsuarios = () => {
     const {dialogTool} = store;
     const [deleteUser, setDeleteUser] = useState(false);
 
-    const [columns, /* setColumns */] = useState([
+    // eslint-disable-next-line no-unused-vars
+    const [columns, setColumns] = useState([
         { field: 'id', headerName:'ID', hide:true, },
-        { field: 'nombre', headerName:'Nombres', flex:0.2, },
-        { field: 'apellido', headerName:'Apellidos', flex:0.2, },
-        { field: 'nombreUsuario', headerName: 'Usuario', flex:0.2, },
-        { field: 'tipoUsuario', headerName: 'Tipo de usuario', flex:0.2, },
+        { field: 'nombre', headerName:'Nombres', flex:0.2,
+            renderCell: (params) => (
+                <Tooltip title={
+                    <strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.nombre}</strong>
+                }>
+                    <p>{params.row.nombre}</p>
+                </Tooltip>
+            )
+        },
+        { field: 'apellido', headerName:'Apellidos', flex:0.2,
+            renderCell: (params) => (
+                <Tooltip title={<strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.apellido}</strong>}>
+                    <p>{params.row.apellido}</p>
+                </Tooltip>
+            )
+        },
+        { field: 'nombreUsuario', headerName: 'Usuario', flex:0.2,
+            renderCell: (params) => (
+                <Tooltip title={<strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.nombreUsuario}</strong>}>
+                    <p>{params.row.nombreUsuario}</p>
+                </Tooltip>
+            )
+        },
+        { field: 'tipoUsuario', headerName: 'Tipo de usuario', flex:0.2,
+            renderCell: (params) => (
+                <Tooltip title={<strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.tipoUsuario}</strong>}>
+                    <p>{params.row.tipoUsuario}</p>
+                </Tooltip>
+            )
+        },
         {
             field: 'Habilitar',
             // type: 'actions',
             align:'center',
-            width: 70,
+            flex:0.2,
             renderCell: ({row}) => [
                 <img onClick={()=>{abilitarDesabilitarUsuario(row)}} className="imgWidth" src={row.estado === "A" ? GestiondeUS_Habilitado_Icon : GestiondeUS_NOHabilitado_Icon} alt="" style={{width:'15px', cursor:'pointer'}}/>
             ],
         },
-        {
+        /* {
             field: 'Eliminar',
             align:'center',
-            width: 70,
+            flex:0.2,
             renderCell: ({row}) => [
                 <img onClick={()=>{
                     setDeleteUser(true);
                     eliminarUsuario(row);
                 }} className="imgWidth" src={GestiondeUS_Eliminar_Icon} alt="" style={{width:'15px', cursor:'pointer'}}/>
             ],
-        },
+        }, */
     ]);
     const [rows, setRows] = useState([
-        // {
-        //     id: 0,
-        //     nombre: 'Damien',
-        //     apellido: '25apellido',
-        //     nombreUsuario: 'user123',
-        //     estado: "A",
-        //   },
-        // {
-        //     id: 1,
-        //     nombre: 'Nicolas',
-        //     apellido: '36apellido',
-        //     nombreUsuario: 'user123',
-        //     estado: "A",
-        // },
-        // {
-        //     id: 2,
-        //     nombre: 'Kate',
-        //     apellido: '19apellido',
-        //     nombreUsuario: 'user123',
-        //     estado: "D",
-        // },
+        /* {
+            id: 0,
+            tipoUsuario:'Interno',
+            nombre: 'Damien',
+            apellido: '25apellido',
+            nombreUsuario: 'user123',
+            estado: "A",
+          },
+        {
+            id: 1,
+            tipoUsuario:'Externo',
+            nombre: 'Nicolas',
+            apellido: '36apellido',
+            nombreUsuario: 'user123',
+            estado: "A",
+        },
+        {
+            id: 2,
+            tipoUsuario:'Interno',
+            nombre: 'Kate',
+            apellido: '19apellido',
+            nombreUsuario: 'user123',
+            estado: "D",
+        }, */
     ]);
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
 
     const abilitarDesabilitarUsuario = async(row) => {
         updateStore({ ...store, openBackDrop: true });
         try {
-            const headers = {token: store.user.token, estado:row.estado === "A" ? "D" : "I"};
+            const headers = {token: store.user.token, estado:row.estado === "A" ? "I" : "A"};
             const response = await getInfoGET(headers, enviroment.disableUser + row.idUsuario, 'POST');
             if (response.resultado.mensaje.includes("exitosamente")) {
                 setRows([])

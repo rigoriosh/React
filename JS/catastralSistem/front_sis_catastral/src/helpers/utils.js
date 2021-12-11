@@ -203,9 +203,9 @@ export const checkPermits = (permits, store1) => {
 
 export const tiposDocumentoToTest = [
   /* {
-      descripcionValor: 'Seleccione ...',
+      descripcionValor: 'Seleccione...',
       idValorLista: 0,
-      valor: 'Seleccione ...',
+      valor: 'Seleccione...',
       nombreLista: 'seleccione'
   }, */
   {
@@ -233,6 +233,10 @@ export const regExp10Num = new RegExp(/^(\d{1,10})$/);
 
 export const SiNoOptions = [
   {
+    valor:'',
+    descripcionValor:'Seleccione...'
+  },
+  {
     valor:'S',
     descripcionValor:'Si'
   },
@@ -243,6 +247,10 @@ export const SiNoOptions = [
 ]
 
 export const ProyectoUrbanistico = [
+  {
+    valor:'',
+    descripcionValor:'Seleccione...'
+  },
   {
     valor:'S',
     descripcionValor:'Si'

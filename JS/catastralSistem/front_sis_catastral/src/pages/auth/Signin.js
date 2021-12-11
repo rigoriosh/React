@@ -16,6 +16,9 @@ import { StoreContext } from '../../App';
 import { emailRegex, pwdEncripted, stylesApp, textosInfoWarnig } from '../../helpers/utils';
 import { FieldTextWidtLabel } from '../../componets/FieldTextWidtLabel';
 import { FieldSelect } from '../../componets/FieldSelect';
+import Contraseña_Login_Icon from '../../assets/Iconos/Contraseña_Login_Icon.png'
+import VerContraseña_Login_Icon from '../../assets/Iconos/VerContraseña_Login_Icon.png'
+import GestiondeUS_NOHabilitado_Icon from '../../assets/Iconos/GestiondeUS_NOHabilitado_Icon.png'
 
 export const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -24,6 +27,8 @@ export const Transition = React.forwardRef(function Transition(props, ref) {
 export const Signin = () => {
     const {store, updateStore} = useContext(StoreContext);
     const navigate = useNavigate();
+    const [seePass, setSeePass] = useState(false);
+
     const initForm = {
         nombre:{
             value:'',
@@ -95,7 +100,7 @@ export const Signin = () => {
     const [form, setForm] = useState(initForm);
     const [tiposDocumento, setTiposDocumento] = useState([
         // {
-        //     descripcionValor: 'Seleccione ...',
+        //     descripcionValor: 'Seleccione...',
         //     idValorLista: 1,
         //     valor: 'seleccione',
         //     nombreLista: 'seleccione'
@@ -158,12 +163,12 @@ export const Signin = () => {
         } else {
             // ajusta tipos de documentos a ser renderizados
             const tiposDocumento = [
-                // {
-                //     descripcionValor: 'Seleccione ...',
-                //     idValorLista: 1,
-                //     valor: 'seleccione',
-                //     nombreLista: 'seleccione'
-                // }
+                {
+                    descripcionValor: 'Seleccione...',
+                    idValorLista: 1,
+                    valor: '',
+                    nombreLista: 'seleccione'
+                }
             ];
             getTiposDocumento.resultado.dominios.forEach(dominio => {
                 tiposDocumento.push(dominio);
@@ -281,7 +286,7 @@ export const Signin = () => {
     }
     return (
         <div className='pagePhader'>
-            <div className="modalIngrearUserExt_inLogin" style={{width:'35%', height:'90%'}}>
+            <div className="modalIngrearUserExt_inLogin" style={{width:'35%'}}>
                 <div className='modalLogin sombra' style={{backgroundColor:'white', padding:'20px 20px'}} >
                     <img src={Logo_Asomunicipios_ColorLetranegra} alt="" srcSet="" style={{width:'90px'}}/>
                     {/* divisor */}<div style={{width:'70%', height:'0.5px', backgroundColor:stylesApp.gray1, margin:'10px'}}></div>
@@ -309,11 +314,37 @@ export const Signin = () => {
                     <FieldTextWidtLabel name="confirmaremail" value={confirmaremail.value} label={confirmaremail.label} handleChange={(target)=>handleFormChange(target)}
                          messageValidate={confirmaremail.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>
                     
-                    <FieldTextWidtLabel name="pass" value={pass.value} label={pass.label} handleChange={(target)=>handleFormChange(target)}
-                         messageValidate={pass.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>
+                    {/* <FieldTextWidtLabel name="pass" value={pass.value} label={pass.label} handleChange={(target)=>handleFormChange(target)}
+                         messageValidate={pass.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/> */}
+                         {/* input contraseña */}
+                    <div className="fieldText">
+                        {/* Icono */} <img src={Contraseña_Login_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
+                        {/* Separador | */}<div style={{backgroundColor:stylesApp.gray1, width:'2px', margin:'1px 5px'}}></div>
+                        <input type={seePass ? "text" : 'password'} name="pass" id="contraseña" value={pass.value} onChange={({target})=>handleFormChange(target)} 
+                            maxLength='20' placeholder="Contraseña" className='styleInputtext'
+                        /><br />
+                        {
+                            seePass 
+                            ? <img onClick={()=>setSeePass(!seePass)} src={GestiondeUS_NOHabilitado_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
+                            : <img onClick={()=>setSeePass(!seePass)} src={VerContraseña_Login_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
+                        }
+                    </div>
 
-                    <FieldTextWidtLabel name="confPass" value={confPass.value} label={confPass.label} handleChange={(target)=>handleFormChange(target)}
-                         messageValidate={confPass.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/>
+                    {/* <FieldTextWidtLabel name="confPass" value={confPass.value} label={confPass.label} handleChange={(target)=>handleFormChange(target)}
+                         messageValidate={confPass.messageValidate} type='text' maxLength={50} styleOwn={{marginLeft:'0'}}/> */}
+                    
+                    <div className="fieldText">
+                        {/* Icono */} <img src={Contraseña_Login_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
+                        {/* Separador | */}<div style={{backgroundColor:stylesApp.gray1, width:'2px', margin:'1px 5px'}}></div>
+                        <input type={seePass ? "text" : 'password'} name="confPass" id="contraseña" value={confPass.value} onChange={({target})=>handleFormChange(target)} 
+                            maxLength='20' placeholder="Contraseña" className='styleInputtext'
+                        /><br />
+                        {
+                            seePass 
+                            ? <img onClick={()=>setSeePass(!seePass)} src={GestiondeUS_NOHabilitado_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
+                            : <img onClick={()=>setSeePass(!seePass)} src={VerContraseña_Login_Icon} alt="" style={{cursor:'pointer', width:'15px', alignSelf:'center'}}/>
+                        }
+                    </div>
 
                     <button onClick={()=>crearUsuario()} className='btnAceptar'>¡REGISTRARSE AHORA!</button>
 

@@ -1,14 +1,20 @@
 import enviroment from "./helpers/enviroment";
 
 export const doGetToken = async(headers ) => {
-    try {
-        const url_getToken = enviroment.getToken;
-        const responseLogin = await fetch(url_getToken, {
-            method:'POST',
-            headers,
-          });
-        const dataResponse = await responseLogin.json();
-        return dataResponse
+  try {
+      const endHader = new Headers();
+      endHader.append('Access-Control-Allow-Origin', '*');
+      const keys = Object.keys(headers);
+      keys.forEach(k => {
+        endHader.append(k, '*');
+      });
+      const url_getToken = enviroment.getToken;
+      const responseLogin = await fetch(url_getToken, {
+          method:'POST',
+          headers,
+        });
+      const dataResponse = await responseLogin.json();
+      return dataResponse
     } catch (error) {
         return error;
     }

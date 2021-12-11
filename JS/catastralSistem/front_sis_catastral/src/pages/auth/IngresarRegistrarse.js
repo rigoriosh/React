@@ -9,7 +9,7 @@ import { VerticalDivider } from '../../componets/VerticalDivider';
 export const IngresarRegistrarse = () => {
     let navigate = useNavigate();
     return (
-        <div style={{height:'100vh', display:'flex', flexDirection:'column', paddingTop:'1%', alignItems:'center'}}>
+        <div style={{height:'100vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
             {/* <img src={LogoAsomunicipios_PagInicio} alt="" srcSet="" style={{width:'160px'}}/> */}
             <LogoAsomunicipiosPagInicio width={'160px'}/>
             <div style={{display:'flex', flexDirection:'column', alignItems:'flex-start'}}>
