@@ -311,7 +311,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 // type: 'actions',
                 hide: (modoTramite === 'Consulta'|| modoTramite === 'Seguimiento'),
                 align:'center',
-                width: 70,
+                flex:0.2,
                 renderCell: ({row}) => [
                     <div style={{display:'flex', alignItems:'center'}}>
                         <Tooltip title="Modificar información del titular ">

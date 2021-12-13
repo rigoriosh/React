@@ -52,6 +52,7 @@ export const textosInfoWarnig = {
   cambioEstadoTramiteOk:'El cambio de estado ha sido realizado exitosamente.',
   tamanioCampo:`!El campo 'Ficha catastral o número predial' debe ser de 20 o 30 carácteres ¡`,
   recuperarPSW: 'Por favor comuniquese al correo comunicaciones@asomunicipios.gov.co, solicitando recuperación de contraseña y envie copia del documento de identidad',
+  zipRar: '! Recuerda que los archivos, deben estar dentro de una carpeta comprimida con extensión .zip o .rar ¡',
 }
 
 export const constantesGlobales = {

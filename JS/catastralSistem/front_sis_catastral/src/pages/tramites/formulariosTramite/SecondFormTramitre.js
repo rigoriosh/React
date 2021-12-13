@@ -305,15 +305,22 @@ export const SecondFormTramitre = ({
         if (prediosAsociados.length < 1) {
             updateStore({
                 ...store,
-                dialogTool:{
-                    open:true, 
-                    msg: textosInfoWarnig.sinPredios,
-                    tittle:'Confirmación',
-                    response:false,
-                    actions:false,
-                }
+                snackBar:{
+                    openSnackBar: true,
+                    messageSnackBar:textosInfoWarnig.sinPredios,
+                    severity: "warning"/*  | "error" | "warning" | "info" */,
+                },
             });
-        } else {
+        } else if(file.value.split('.')[file.value.split('.').length-1].toLowerCase() !== 'zip' || file.value.split('.')[file.value.split('.').length-1].toLowerCase() !== 'rar'){
+            updateStore({
+                ...store,
+                snackBar:{
+                    openSnackBar: true,
+                    messageSnackBar:textosInfoWarnig.zipRar,
+                    severity: "warning"/*  | "error" | "warning" | "info" */,
+                },
+            });
+        }else {
             onSubmitFinal();
         }
         

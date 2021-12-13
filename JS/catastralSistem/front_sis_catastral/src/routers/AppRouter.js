@@ -138,7 +138,7 @@ export const AppRouter = ({props}) => {
                     <VerticalMenu salir={salir} renewToken={renewToken} usuario={usuario}/>
             }
 
-            <div style={{width:'100%', alignSelf:'center'}} className="******************pendiente******* "> 
+            <div style={{width:'100%', alignSelf:'center'}} > 
                 <Routes>
                     <Route path="*" element={
                         <Tramites>
