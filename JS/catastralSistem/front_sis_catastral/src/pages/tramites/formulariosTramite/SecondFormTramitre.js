@@ -302,6 +302,7 @@ export const SecondFormTramitre = ({
 
     const onSubmit = (e)=> {
         e.preventDefault();
+        const nombreArchivoAvalidar = formularioTramite.file.value;
         if (prediosAsociados.length < 1) {
             updateStore({
                 ...store,
@@ -311,7 +312,8 @@ export const SecondFormTramitre = ({
                     severity: "warning"/*  | "error" | "warning" | "info" */,
                 },
             });
-        } else if(file.value.split('.')[file.value.split('.').length-1].toLowerCase() !== 'zip' || file.value.split('.')[file.value.split('.').length-1].toLowerCase() !== 'rar'){
+        } else if(nombreArchivoAvalidar.split('.')[nombreArchivoAvalidar.split('.').length-1].toLowerCase() !== 'zip'
+        && nombreArchivoAvalidar.split('.')[nombreArchivoAvalidar.split('.').length-1].toLowerCase() !== 'rar'){
             updateStore({
                 ...store,
                 snackBar:{
