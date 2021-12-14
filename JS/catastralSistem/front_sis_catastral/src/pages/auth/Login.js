@@ -54,7 +54,18 @@ export const Login = () => {
                                 severity: 'warning'
                             },
                         });
-                    } else {
+                    } else if(responseLogin.resultado.usuario.estado === "I"){
+                        updateStore({
+                            ...store,
+                            openBackDrop: false,
+                            snackBar:{
+                                openSnackBar: true,
+                                messageSnackBar: `El usuario ${responseLogin.resultado.usuario.numeroDocumento}, está deshabilitado para ingresar al sistema, 
+                                porfavor comuniquese al correo comunicaciones@asomunicipios.gov.co`,
+                                severity: 'warning'
+                            },
+                        });
+                    }else {
                         updateStore({
                             ...store,
                             user:{

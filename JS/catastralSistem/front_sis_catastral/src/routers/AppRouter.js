@@ -171,7 +171,7 @@ export const AppRouter = ({props}) => {
             </Backdrop>
             <Snackbar
                 anchorOrigin={{ vertical:'top', horizontal:'right' }}
-                autoHideDuration={5500}
+                autoHideDuration={60000}
                 open={openSnackBar}
                 onClose={closeSnackbar}
                 TransitionComponent={TransitionUp}
