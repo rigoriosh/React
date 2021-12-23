@@ -313,7 +313,7 @@ export const SecondFormTramitre = ({
                 },
             });
         } else if(nombreArchivoAvalidar.split('.')[nombreArchivoAvalidar.split('.').length-1].toLowerCase() !== 'zip'
-        && nombreArchivoAvalidar.split('.')[nombreArchivoAvalidar.split('.').length-1].toLowerCase() !== 'rar'){
+        /* && nombreArchivoAvalidar.split('.')[nombreArchivoAvalidar.split('.').length-1].toLowerCase() !== 'rar' */){
             updateStore({
                 ...store,
                 snackBar:{
@@ -787,7 +787,8 @@ export const SecondFormTramitre = ({
                         <p className="titulo color3">OTROS</p>
                     </div>
                     <div style={{display:'flex', justifyContent:'flex-end'}}>
-                        <input type="file" name="file" id="file" accept=".zip, .rar" 
+                    {/* <input type="file" name="file" id="file" accept=".zip, .rar" */} 
+                        <input type="file" name="file" id="file" accept=".zip" 
                             onChange={(e)=>fileHandler(e)} style={{display:'none'}}
                         />
                         {
@@ -818,7 +819,7 @@ export const SecondFormTramitre = ({
             { ((modoTramite === 'Nuevo') || (modoTramite === 'Consulta' && file.value !== '')) &&
                 <FieldTextWidtLabel
                     value={file.value}
-                    ph="Adjunte en este campo los documentos solicitados en un archivo .ZIP o .RAR"
+                    ph="Adjunte en este campo los documentos solicitados en un archivo .ZIP"
                     name={file.name}
                     label={''}
                     messageValidate={file.validation}
