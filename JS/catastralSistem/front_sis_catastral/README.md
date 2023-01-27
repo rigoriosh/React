@@ -1,5 +1,13 @@
 # Getting Started with Create React App chance only to test commits
 
+comnados para hacer push
+- clonar el repo con git clone https://github.com/rigoriosh/React.git
+- dirigirse a la carpeta del proyecto a trabajar
+- hacer cambios necesarios
+- por cmd ejecutar => git commit -m "mensaje descriptivo"
+- git push
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
