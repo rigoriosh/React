@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 
 const CounterApp =({value})=>{
-    const [counter, setCounter] = useState(value)//inicia la variable counter en 0, lo angerior es el hook
+    const [counter, setCounter] = useState(value)//inicia la variable counter en 0, lo anterior es el hook
     const ad = (e)=>{        
         //setCounter(counter + 1)
         setCounter((counter)=> counter+ 1)//lo mismo q la linea anterior

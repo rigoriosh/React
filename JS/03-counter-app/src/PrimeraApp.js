@@ -2,9 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types'
 
 const PrimeraApp = ({saludo, otra='valor por defecto', ejNum, ejem2})=>{
+    const funTest = ()=>"testing";
+    const obj = {
+        valor1: "saludando",
+        valor2: 465
+    }
     
     return (
-        <>
+        <>  
+            <h5>{funTest()}</h5>
+            <code>{JSON.stringify(obj)}</code>
             <h1>{saludo}</h1>
             <p>{otra}</p>
             <p>{ejNum}</p>
