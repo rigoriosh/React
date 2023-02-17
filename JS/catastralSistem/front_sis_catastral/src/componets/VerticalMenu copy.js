@@ -9,54 +9,76 @@ import CerrarSesion_Icon from '../assets/Iconos/CerrarSesion_Icon.png'
 import ConsultarTramite_Icon from '../assets/Iconos/ConsultarTramite_Icon.png'
 import CrearTramite_Icon from '../assets/Iconos/CrearTramite_Icon.png'
 import { StoreContext } from '../App'
-import { checkPermits, initStore, permits, textosInfoWarnig } from '../helpers/utils'
+import { checkPermits, /* initStore, */ permits, textosInfoWarnig } from '../helpers/utils'
 
 
 export const VerticalMenu = ({usuario, salir, renewToken}) => {
-    const { store, updateStore} = useContext(StoreContext);
-    const { user, tiempoInicioSession, } = store;
+    const { store/* , updateStore, setStore */} = useContext(StoreContext);
+    // const { user } = store;
 
     let navigate = useNavigate();
 
     const cerrar = () => {
-        updateStore({...initStore, llama:"L22FVerticalMenu"})
-        salir();
+        // updateStore(initStore)
+        salir("Gracias, regresa pronto");
     }
 
     useEffect(() => {
         // monitorea actividad del usuario
         let intervalSessionUser;
         intervalSessionUser = setInterval(() => {
-            if (user.isLogin) { // calcula el tiempo del usuario
-                const tiempoExpiracion = user.tiempoExpiracion;
-                const currentTime = new Date().getTime();
-                const timeDifference = currentTime -  tiempoInicioSession;
-
-                /* console.log(`
-                    ////////////VerticalMenu//////////***********
-                    currentTime                         =   ${currentTime}
-                    tiempoExpiracion                    =   ${tiempoExpiracion}
-                    timeDifference                      =   ${timeDifference}
-                    timeDifference >= tiempoExpiracion  =   ${timeDifference >= tiempoExpiracion}
-                `)
-                console.log(store) */
-                if(timeDifference >= tiempoExpiracion){ // si vencio solicita nuevo usuario
-                    console.log("// cierra la sesion")
-                    navigate("/tramites")
-                    let cont = 0;
-                    const contInter = setInterval(() => {
-                        console.log(cont)
-                        cont++;
+            console.log("useEffect verticalMenu 111")
+            const minutesToEachSession = 15;
+            debugger
+            const sesionStore = JSON.parse(sessionStorage.getItem('store'));
+            if (sesionStore) {
+                const {user} = sesionStore;
+                /* if (!sesionStore) {
+                    console.log(11111111)
+                }else{2
+                    console.log(22222)
+                } */
+                console.log("store => ", store)
+                console.log("sesionStore => ", sesionStore)
+                if (user.isLogin && sesionStore) { // calcula el tiempo del usuario
+                    const tiempoExpiracion = user.tiempoExpiracion;
+                    const timeFin = new Date().getTime();
+                    const timeDifference = timeFin -  user.tiempoInicio;
+                    console.log(`
+                        tiempoExpiracion    = ${tiempoExpiracion}
+                        tiempoInicio        = ${user.tiempoInicio}
+                        timeFin             = ${timeFin} 
+                        timeDifference      = ${timeDifference}
+                    `)
+                    if(timeDifference >= tiempoExpiracion){ // si vencio solicita nuevo usuario
+                        debugger
+                        // cierra la sesion
+                        console.log("fin sessionnn")
                         salir(textosInfoWarnig.tiempoInactividad);
-                        if (cont === 2) {
-                            clearInterval(contInter);
-                        }
-                    }, 2000);
+                    }
+    
+                    // calcula el tiempo del token
+                    /* const timeInit = new Date(user.tiempoInicio);
+                    // const timeInitSession = new Date(user.tiempoInicio);
+                    const tiempoExpiracionToken = user.tiempoExpiracion;
+                    const timeFinToken = new Date();
+                    const timeDifferenceToken = timeFinToken - timeInit;
+                    if(timeDifferenceToken >= tiempoExpiracionToken){ // si vencio solicita nuevo token
+                        debugger
+                    // solicitarNuevoToken
+                        console.log("solicta nuevo token")
+                        renewToken(user.user, user.pwd);
+                    } */
+                }else{
+                    console.log(999999999999)
+                    salir(textosInfoWarnig.tiempoInactividad);
+                    clearInterval(intervalSessionUser);
                 }
-
-                
+            }else{
+                    salir(textosInfoWarnig.tiempoInactividad);
+                    clearInterval(intervalSessionUser);
             }
-        }, 60000);// cada 10 minutos 600000
+        }, 6000);// cada 10 minutos 600000
         
         return () => {
             clearInterval(intervalSessionUser);

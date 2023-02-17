@@ -106,7 +106,7 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
     }
 
     const getTiposEstado = async()=>{
-        updateStore({...store, openBackDrop:true,});
+        updateStore({...store, openBackDrop:true, llama:"L109FVerEstado"});
         try {
             const headers = {token: store.user.token};
             const response = await getInfoGET(headers, enviroment.getEstadosSolicitud);
@@ -117,7 +117,7 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
                     ...state,
                     tiposEstado: response.resultado.dominios,
                 });
-                updateStore({...store, openBackDrop:false,});
+                updateStore({...store, openBackDrop:false, llama:"L120FVerEstado"});
             }
         } catch (error) {
             falloLaPeticion(error);
@@ -132,7 +132,7 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
             snackBar:{
                 openSnackBar:true,
                 messageSnackBar: textosInfoWarnig.falloComunicacion, severity:'warning', },
-            dialogTool:{open:false, msg :'',tittle:'', response:false}
+            dialogTool:{open:false, msg :'',tittle:'', response:false}, llama:"L129FVerEstado"
         });
     }
 
@@ -158,7 +158,7 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
     }, [respuesta])
 
     const actualizarEstado = async() => {
-        updateStore({...store, openBackDrop:true,});
+        updateStore({...store, openBackDrop:true, llama:"L161FVerEstado"});
         try {
             const headers = {token: store.user.token};
             const body = {
@@ -185,7 +185,7 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
                         messageSnackBar:textosInfoWarnig.cambioEstadoTramiteOk,
                         tiempoExpiracion:'',
                         severity: "success"/*  | "error" | "warning" | "info" */,
-                      },
+                      }, llama:"L188FVerEstado"
                 });
                 getDetalleTramite({idSolicitud:detalleTramite.idSolicitud});
                 // navigate("/tramites")
@@ -260,7 +260,7 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
     }
 
     const descargarDocumentos = async() => {
-        updateStore({...store, openBackDrop:true,});
+        updateStore({...store, openBackDrop:true, llama:"L263FVerEstado"});
         try {
             const headers = {token: store.user.token};
             const response = await downloadFile(headers, enviroment.getArchivoSolicitud+'/'+detalleTramite.idSolicitud);
@@ -275,7 +275,7 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
                 document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
                 a.click();    
                 a.remove();  //afterwards we remove the element again   
-                updateStore({...store, openBackDrop:false,});
+                updateStore({...store, openBackDrop:false, llama:"L278FVerEstado"});
             }
         } catch (error) {
             falloLaPeticion(error);

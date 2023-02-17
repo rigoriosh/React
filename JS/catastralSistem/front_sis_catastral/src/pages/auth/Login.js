@@ -25,7 +25,7 @@ export const Login = () => {
 
     const logIn = async(e) => {
         e.preventDefault();
-        updateStore({ ...store, openBackDrop: true });
+        updateStore({ ...store, openBackDrop: true, llama:"L28FLogin" });
         let responseGetToken = {} ;
         if(user !== '' && pwd !== '' ){
             try {
@@ -38,7 +38,7 @@ export const Login = () => {
                                     messageSnackBar: responseGetToken.error.descripcion ? responseGetToken.error.descripcion : textosInfoWarnig.credencialesIncorrectas,
                                     severity: 'error'
                                   },
-                                openBackDrop: false,
+                                openBackDrop: false, llama:"L34FLogin"
                             });
                 } else {// recibio token ok
                     // realiza Login
@@ -52,7 +52,7 @@ export const Login = () => {
                                 openSnackBar: true,
                                 messageSnackBar: textosInfoWarnig.falloComunicacion,
                                 severity: 'warning'
-                            },
+                            }, llama:"L48FLogin"
                         });
                     } else if(responseLogin.resultado.usuario.estado === "I"){
                         updateStore({
@@ -64,19 +64,21 @@ export const Login = () => {
                                 porfavor comuniquese al correo comunicaciones@asomunicipios.gov.co`,
                                 severity: 'warning'
                             },
+                            llama:"L58FLogin"
                         });
                     }else {
                         updateStore({
                             ...store,
+                            tiempoInicioSession: new Date().getTime(), // inicio Session
+                            tiempoInicioToken: new Date().getTime(), // inicio Token
                             user:{
                                 ...usuario,
                                 isLogin: true,
                                 user,
                                 pwd,
                                 token: responseGetToken.tkn,
+                                // tiempoExpiracion: 36000,
                                 tiempoExpiracion: responseGetToken.tiempoExpiracion,
-                                tiempoInicio: new Date(), // inicio Token
-                                
                                 infoUser: responseLogin.resultado.usuario
                             },
                             openBackDrop: false,
@@ -85,6 +87,7 @@ export const Login = () => {
                                 messageSnackBar: `Bienvenida(o) ${responseLogin.resultado.usuario.nombre}`,
                                 severity: 'success'
                             },
+                            llama:"L70FLogin"
                         });
                         navigate("/");
                     }
@@ -100,6 +103,7 @@ export const Login = () => {
                     messageSnackBar: textosInfoWarnig.camposRequerdios,
                     severity: 'error'
                   },
+                  llama:"L100FLogin"
             });
         }
     }
@@ -109,7 +113,7 @@ export const Login = () => {
             ...store,
             openBackDrop:false,
             snackBar:{ openSnackBar:true, messageSnackBar:textosInfoWarnig.falloComunicacion, severity:'warning', },
-            dialogTool:{open:false, msg :'',tittle:'', response:false}
+            dialogTool:{open:false, msg :'',tittle:'', response:false}, llama:"L113FLogin"
         });
     }
 
@@ -117,15 +121,15 @@ export const Login = () => {
     const modoTest = () => {
         updateStore({
             ...store,
+            tiempoInicioSession: new Date().getTime(), // inicio Session
+            tiempoInicioToken: new Date().getTime(), // inicio Token
             user:{
                 ...usuario,
                 isLogin: true,
                 user,
                 pwd,
                 token: 'responseGetToken.tkn',
-                tiempoExpiracion: 36000000,
-                tiempoInicio: new Date(), // inicio Token
-                
+                tiempoExpiracion: 36000,
                 infoUser: {
                     usuario:{
                         nombre:'Rigo'
@@ -164,6 +168,7 @@ export const Login = () => {
                 messageSnackBar: `Bienvenido Rigo`,
                 severity: 'success'
             },
+            llama:"L123FLogin"
         });
         navigate("/");
     }
@@ -211,18 +216,19 @@ export const Login = () => {
                             styles:{},
                             textColor:{},
                           },
+                        llama:"L207FLogin"
                     })}
                     style={{alignSelf:'end', fontSize:'12px', margin:'5px 0',color:stylesApp.gray1, cursor:'pointer'}}>
                         ¿Olvido su contraseña?
                     </p>
 
-                    <button type='submit' /* onClick={()=>/* modoTest() *//* logIn() } */ className='btnAceptar'>ACEPTAR</button>
+                    <button type='submit' /* onClick={()=>modoTest() } */ className='btnAceptar'>ACEPTAR</button>
 
                     <div style={{display:'flex'}} onClick={()=>{navigate("/")}}>
                         <img src={Salir_Icon} alt="" style={{cursor:'pointer', width:'20px', alignSelf:'center'}}/>
                         <p style={{alignSelf:'end', fontSize:'12px', margin:'5px 0',color:stylesApp.gray1, cursor:'pointer'}}>Salir</p>
                     </div>
-                    {/* <button onClick={()=>{navigate("/")}}>Salir</button> */}
+                    <button onClick={()=>{navigate("/")}}>Salir</button>
                 </form>
             </div>
         </div>

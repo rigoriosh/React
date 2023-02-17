@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, /* useState, */ } from 'react'
-import { Routes, Route,/*  useLocation, */ useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, } from 'react'
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
@@ -33,17 +33,17 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 export const AppRouter = ({props}) => {
     const { store, updateStore } = useContext(StoreContext);
-    // let location = useLocation();
+    let location = useLocation();
     const navigate = useNavigate();
     
-    const { user:usuario, openBackDrop, snackBar, /* timeInitSessionUser, minutesToEachSession, */ dialogTool={open:false}, } = store;
+    const { user:usuario, openBackDrop, snackBar, dialogTool={open:false}, } = store;
     const { openSnackBar, messageSnackBar, severity} = snackBar;
     
-    // const [openBackDrop, setOpenBackDrop] = useState(false);
+
     useEffect(() => {
         const store = JSON.parse(sessionStorage.getItem('store'));
         if (store) {
-            updateStore({...store, llama:"L46FAppRouter"})
+            updateStore({...store})
         }
         
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,51 +61,57 @@ export const AppRouter = ({props}) => {
     }, [store, timeSessionTkn]) */
 
     
-    /* useEffect(() => {
+    useEffect(() => {
+        console.log("useEffect => usuario")
         if (usuario.isLogin) {
-            updateStore({ ...store, openBackDrop: false, llama:"L66FAppRouter"})
-            // setOpenBackDrop(false)
+            updateStore({
+                ...store,
+                openBackDrop: false
+            })
         }
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [usuario]) */
+    }, [usuario])
 
-    /* useEffect(() => {
+    useEffect(() => {
+        console.log("useEffect => location")
         const store = JSON.parse(sessionStorage.getItem('store'))
         if (store) {
-            updateStore({...store, timeInitSessionUser: new Date(), llama:"L76FAppRouter"})
+            updateStore({...store })
         }
         return () => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location]) */
+    }, [location])
 
     const closeBackDrop = ()=>{
-        updateStore({...store, openBackDrop: false, llama:"L84FAppRouter"});
-        // setOpenBackDrop(false)
-
+        updateStore({...store, openBackDrop: false});
     }
 
     const closeSnackbar = ()=>{
-        updateStore({...store, snackBar:{openSnackBar: false, messageSnackBar:'', llama:"L90FAppRouter"}});
+        updateStore({...store, snackBar:{openSnackBar: false, messageSnackBar:''}});
     }
 
     const salir = (motivo='') => {
-        // console.log("Saliiiirrrrr")
-        updateStore({...initStore, snackBar:{
-            openSnackBar: motivo !== '',
-            messageSnackBar: motivo !== '' ? motivo : '',
-            tiempoExpiracion:'',
-            severity: "info"/*  | "error" | "warning" | "info" */,
-          },
-          user: initStore.user, llama:"L95FAppRouter"
-        });
-        navigate("/");
-        sessionStorage.clear();
+        console.log("salir", motivo)
+        debugger
+        setTimeout(() => {
+            updateStore({...initStore, snackBar:{
+                openSnackBar: motivo !== '',
+                messageSnackBar: motivo !== '' ? motivo : '',
+                tiempoExpiracion:'',
+                severity: "info"/*  | "error" | "warning" | "info" */,
+              },
+            });
+            sessionStorage.clear();
+            
+        }, 2000);
+        navigate("/login");
 
     }
 
     const renewToken = async(user, pwd) => {
+        console.log("renewToken")
         const responseGetToken = await getToken(user, pwd);
         if (!responseGetToken.tkn) {
           updateStore({
@@ -114,9 +120,8 @@ export const AppRouter = ({props}) => {
                 openSnackBar: true,
                 messageSnackBar: textosInfoWarnig.inconvenientesRenovarSesion,
                 severity: 'info'
-            }, llama:"L111FAppRouter"/* ,
-            openBackDrop: false  */ });
-            closeBackDrop()
+            },
+            openBackDrop: false  });
           salir();
         } else {
             updateStore({
@@ -126,7 +131,7 @@ export const AppRouter = ({props}) => {
                     token: responseGetToken.tkn,
                     tiempoExpiracion: responseGetToken.tiempoExpiracion,
                     tiempoInicio: new Date(), // inicio Token
-                }, llama:"L122FAppRouter"
+                }
             });
         }
     }
@@ -156,7 +161,7 @@ export const AppRouter = ({props}) => {
                         path="/tramites/*"
                         element={
                         <RequireAuth>
-                            <TramitesCatastrales salir={salir} /* setOpenBackDrop={setOpenBackDrop} *//>
+                            <TramitesCatastrales salir={salir}/>
                         </RequireAuth>
                         }
                     />
@@ -188,7 +193,7 @@ export const AppRouter = ({props}) => {
                 open={dialogTool.open}
                 TransitionComponent={Transition}
                 keepMounted
-                onClose={()=>updateStore({...store, dialogTool:{...dialogTool, open:false}, llama:"L191FAppRouter"})}
+                onClose={()=>updateStore({...store, dialogTool:{...dialogTool, open:false}})}
                 aria-describedby="alert-dialog-slide-description"
                 
             >
@@ -197,7 +202,7 @@ export const AppRouter = ({props}) => {
                     <DialogTitle sx={dialogTool.styles}>
                         <div style={{display:'flex', justifyContent:'space-between', color:'black', fontWeight:'bold', fontSize:'25px'}}>
                             {dialogTool.tittle} <span className="pointer"
-                            onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:false}, llama:"L200FAppRouter"})}>X</span>
+                            onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:false}})}>X</span>
                         </div>
                     </DialogTitle>
                 }
@@ -234,8 +239,8 @@ export const AppRouter = ({props}) => {
                     dialogTool.actions &&
                     <DialogActions>
                         <div>
-                            <button onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:true}, llama:"L237FAppRouter"})} className='btnAceptar'>SI</button>
-                            <button onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:false}, llama:"L238FAppRouter"})} className='btnAceptar'>NO</button>
+                            <button onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:true}})} className='btnAceptar'>SI</button>
+                            <button onClick={()=>updateStore({...store, dialogTool:{...dialogTool, open:false, response:false}})} className='btnAceptar'>NO</button>
                         </div>
                     </DialogActions>
                 }

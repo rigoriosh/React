@@ -10,7 +10,7 @@ import { FirstFormTramitre } from './formulariosTramite/FirstFormTramitre'
 import { SecondFormTramitre } from './formulariosTramite/SecondFormTramitre'
 
 
-export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}) => {
+export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/* , setOpenBackDrop */}) => {
 
     const { store, updateStore } = useContext(StoreContext);
     let navigate = useNavigate();
@@ -243,6 +243,7 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
     }  = formularioTramite;
     
     const handleFormChange = ({value, name}) => {
+        console.log("value, name => ", value, name)
         if (name !== avaluoTerreno.name &&
             name !== avaluoConstruccion.name &&
             name !== areaTerreno.name &&
@@ -295,17 +296,19 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
     }
 
     const getTramitesSolicitudes = async() => { // pobla el campo Trámite y tipo de solicitante
-        updateStore({...store, openBackDrop:true,});
+        // setOpenBackDrop(true)
+        updateStore({...store, openBackDrop:true, llama:"L300FCrearTramite"});
         try {
             const headers = {token: store.user.token};
             const response = await getInfoGET(headers, enviroment.getTiposTramite);
             if (response.error) {
                 falloLaPeticion(response.error);
             } else {
-                setTiposSolicitudes(addPrimerOpcionSelect(response.resultado.tiposSolicitantes));
+                // setTiposSolicitudes(addPrimerOpcionSelect(response.resultado.tiposSolicitantes));
                 setTiposSolicitudes(addPrimerOpcionSelect(response.resultado.tiposSolicitantes));
                 setTiposTramites(addPrimerOpcionSelect(response.resultado.tiposTramite));
-                updateStore({...store, openBackDrop:false,});
+                // setOpenBackDrop(false)
+                updateStore({...store, openBackDrop:false, llama:"L311FCrearTramite"});
             }
         } catch (error) {
             falloLaPeticion(error);
@@ -323,7 +326,8 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
     }
 
     const getTiposDeSuelos = async()=>{
-        updateStore({...store, openBackDrop:true,});
+        // setOpenBackDrop(true)
+        updateStore({...store, openBackDrop:true, llama:"L330FCrearTramite"});
         try {
             const headers = {token: store.user.token};
             const response = await getInfoGET(headers, enviroment.getTiposSuelo);
@@ -331,7 +335,8 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
                 falloLaPeticion(response.error);
             } else {
                 setTiposDeSuelo(addPrimerOpcionSelect(response.resultado.dominios));
-                updateStore({...store, openBackDrop:false,});
+                // setOpenBackDrop(false)
+                updateStore({...store, openBackDrop:false, llama:"L339FCrearTramite"});
             }
         } catch (error) {
             falloLaPeticion(error);
@@ -339,7 +344,8 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
     }
 
     const getMunicipios = async()=>{
-        updateStore({...store, openBackDrop:true,});
+        // setOpenBackDrop(true)
+        updateStore({...store, openBackDrop:true, llama:"L348FCrearTramite"});
         try {
             const headers = {token: store.user.token};
             const response = await getInfoGET(headers, enviroment.getMunicipiosCatatumbo);
@@ -347,7 +353,8 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
                 falloLaPeticion(response.error);
             } else {
                 setMunicipios(addPrimerOpcionSelect(response.resultado.dominios));
-                updateStore({...store, openBackDrop:false,});
+                // setOpenBackDrop(false);
+                updateStore({...store, openBackDrop:false, llama:"L357FCrearTramite"});
             }
         } catch (error) {
             falloLaPeticion(error);
@@ -355,14 +362,16 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
     }
 
     const getDataApi = async(url)=>{
-        updateStore({...store, openBackDrop:true,});
+        // setOpenBackDrop(true);
+        updateStore({...store, openBackDrop:true, llama:"L366FCrearTramite"});
         try {
             const headers = {token: store.user.token};
             const  response = await getInfoGET(headers, url);
             if (response.error) {
                 falloLaPeticion(response.error);
             } else {
-                updateStore({...store, openBackDrop:false,});
+                // setOpenBackDrop(false)
+                // updateStore({...store, openBackDrop:false,});
                 return response;
             }
         } catch (error) {
@@ -371,23 +380,26 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
     }
 
     const falloLaPeticion = (error) => {
+        // setOpenBackDrop(false)
         updateStore({
             ...store,
-            openBackDrop:false,
+            // openBackDrop:false,
             snackBar:{
                 openSnackBar:true,
                 messageSnackBar: textosInfoWarnig.falloComunicacion, severity:'warning', },
-            dialogTool:{open:false, msg :'',tittle:'', response:false}
+            dialogTool:{open:false, msg :'',tittle:'', response:false}, llama:"L384FCrearTramite"
         });
     }
 
     const getTiposSolicitud = async(valorConsultar) => { // pobla el campo Solicitud
-        updateStore({...store, openBackDrop:true,});
+        updateStore({...store, openBackDrop:true, llama:"L395FCrearTramite"});
+        // setOpenBackDrop(true)
         try {
             const headers = {token: store.user.token, valorConsultar};
             const response = await getInfoGET(headers, enviroment.getTiposSolicitud);
             setTipoSolicitud(addPrimerOpcionSelect(response.resultado.dominios));
-            updateStore({...store, openBackDrop:false,});
+            updateStore({...store, openBackDrop:false, llama:"L401FCrearTramite"});
+            // setOpenBackDrop(false)
         } catch (error) {
             falloLaPeticion(error);
         }
@@ -596,7 +608,7 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
                     actions:false, 
                     styles:{backgroundColor: 'rgba(10,10,10,0.8)', color:'white'},
                     textColor:{color:'white'},
-                },
+                }, llama:"L601FCrearTramite"
             })
             
         }, 10);
@@ -765,10 +777,11 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
 
             }
         );
-        updateStore({...store, openBackDrop:false,});
+        updateStore({...store, openBackDrop:false, llama:"L780FCrearTramite"});
     }
     const poblarCamposSelect = async()=>{
-        updateStore({...store, openBackDrop:true,});
+        updateStore({...store, openBackDrop:true, llama:"L783FCrearTramite"});
+        // setOpenBackDrop(true)
         try {
             const responseMotivosSolicitud = await getDataApi(enviroment.getMotivoSolicitud);
             const responseObjetosDeLaPeticion = await getDataApi(enviroment.getObjetoPeticion);
@@ -790,7 +803,8 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
                 ObjetosRectificacion: addPrimerOpcionSelect(responseObjetosRectificacion.resultado.dominios),
 
             });
-            updateStore({...store, openBackDrop:false,});
+            updateStore({...store, openBackDrop:false, llama:"L806FCrearTramite"});
+            // setOpenBackDrop(false)
         } catch (error) {
             falloLaPeticion(error);
             navigate("/");
@@ -819,38 +833,41 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
     
     const onSubmitFinal = async() => {
         const data = {
-            "numeroRadicado": "123456789",
-            "tipoSolicitante": tipoSolicitante.value,
+            "anioEscritura": formularioTramite.anioEscritura.value===""?null:formularioTramite.anioEscritura.value,
+            "areaConstruccion": formularioTramite.areaConstruccion.value===""?null:formularioTramite.areaConstruccion.value,
+            "areaTerreno": formularioTramite.areaTerreno.value===""?null:formularioTramite.areaTerreno.value,
+            "autoestimacionAvaluo": formularioTramite.autoestimacionAvaluo.value===""?null:formularioTramite.autoestimacionAvaluo.value,
+            "avaluoConstruccion": formularioTramite.avaluoConstruccion.value===""?null:formularioTramite.avaluoConstruccion.value,
+            "avaluoTerreno": formularioTramite.avaluoTerreno.value===""?null:formularioTramite.avaluoTerreno.value,
+            "claseSuelo": tipoDeSuelo.value===""?null:tipoDeSuelo.value,
+            "consideraMejora": formularioTramite.consideraMejora.value===""?null:formularioTramite.consideraMejora.value,
+            "diferenciaMayoEsta": formularioTramite.diferenciaMayoEsta.value===""?null:formularioTramite.diferenciaMayoEsta.value,
             "idSolicitante": {
-              "idUsuario": store.user.infoUser.idUsuario
+              "idUsuario": store.user.infoUser.idUsuario===""?null:store.user.infoUser.idUsuario
             },
-            "tipoTramite": tipoTramite.value,
-            "nombreTramite": tipoTramite.value,
-            "municipioPredio": municipio.value,
-            "claseSuelo": tipoDeSuelo.value,
-            "propiedadHorizontal": formularioTramite.propiedadHorizontal.value,
-            "proyectoUrbanistico": formularioTramite.proyectoUrbanistico.value,
-            "noEscrituraPublica": formularioTramite.noEscrituraPublica.value,
-            "anioEscritura": formularioTramite.anioEscritura.value,
-            "notariaOtorgante": formularioTramite.notariaOtorgante.value,
-            "municipioNotaria": formularioTramite.municipioNotaria.value,
-            "objetoPeticion": formularioTramite.objetoPeticion.value,
-            "consideraMejora": formularioTramite.consideraMejora.value,
-            "diferenciaMayoEsta": formularioTramite.diferenciaMayoEsta.value,
-            "revisionBusca": formularioTramite.revisionBusca.value,
-            "tipoInscripcion": formularioTramite.tipoInscripcion.value,
-            "motivoSolicitud": formularioTramite.motivoSolicitud.value,
-            "objetoRectificacion": formularioTramite.objetoRectificacion.value,
-            "areaTerreno": formularioTramite.areaTerreno.value,
-            "areaConstruccion": formularioTramite.areaConstruccion.value,
-            "avaluoTerreno": formularioTramite.avaluoTerreno.value,
-            "avaluoConstruccion": formularioTramite.avaluoConstruccion.value,
-            "autoestimacionAvaluo": formularioTramite.autoestimacionAvaluo.value,
-            "razonSolicitud": formularioTramite.razonSolicitud.value,
+            "motivoSolicitud": formularioTramite.motivoSolicitud.value===""?null:formularioTramite.motivoSolicitud.value,
+            "municipioNotaria": formularioTramite.municipioNotaria.value===""?null:formularioTramite.municipioNotaria.value,
+            "municipioPredio": municipio.value===""?null:municipio.value,
+            "noEscrituraPublica": formularioTramite.noEscrituraPublica.value===""?null:formularioTramite.noEscrituraPublica.value,
+            "nombreTramite": motivoSolicitud.value===""?null:motivoSolicitud.value,
+            "notariaOtorgante": formularioTramite.notariaOtorgante.value===""?null:formularioTramite.notariaOtorgante.value,
+            "numeroRadicado": "123456789",
+            "objetoPeticion": formularioTramite.objetoPeticion.value===""?null:formularioTramite.objetoPeticion.value,
+            "objetoRectificacion": formularioTramite.objetoRectificacion.value===""?null:formularioTramite.objetoRectificacion.value,
+            "prediosAsociados": quitarIdDelRegistros_prediosAsociados(Object.assign([], formularioTramite.prediosAsociados)),
+            "propiedadHorizontal": formularioTramite.propiedadHorizontal.value===""?null:formularioTramite.propiedadHorizontal.value,
+            "proyectoUrbanistico": formularioTramite.proyectoUrbanistico.value===""?null:formularioTramite.proyectoUrbanistico.value,
+            "razonSolicitud": formularioTramite.razonSolicitud.value===""?null:formularioTramite.razonSolicitud.value,
+            "revisionBusca": formularioTramite.revisionBusca.value===""?null:formularioTramite.revisionBusca.value,
+            "tipoInscripcion": formularioTramite.tipoInscripcion.value===""?null:formularioTramite.tipoInscripcion.value,
+            "tipoSolicitante": tipoSolicitante.value===""?null:tipoSolicitante.value,
+            "tipoTramite": tipoTramite.value===""?null:tipoTramite.value,
             "titularesPredio": quitarIdDelRegistros_titularesPredio(Object.assign([], titularesDeDerecho)),
-            "prediosAsociados": quitarIdDelRegistros_prediosAsociados(Object.assign([], formularioTramite.prediosAsociados))
           }
-        updateStore({...store, openBackDrop:true,});
+        console.log("data => ", data)
+        console.log(JSON.stringify(data));
+        updateStore({...store, openBackDrop:true, llama:"L869FCrearTramite"});
+        // setOpenBackDrop(true)
         try {
             const headers = {token: store.user.token};
             const body = {
@@ -873,6 +890,7 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
                 });
                 openSnackBar = false;
             }
+            // setOpenBackDrop(false)
             updateStore({
                 ...store,
                 openBackDrop:false,
@@ -880,7 +898,7 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite}
                     openSnackBar,
                     messageSnackBar,
                     severity:'warning',
-                },
+                }, llama:"L894FCrearTramite"
             });
         } catch (error) {
             falloLaPeticion();

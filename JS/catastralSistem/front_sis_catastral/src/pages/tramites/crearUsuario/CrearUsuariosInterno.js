@@ -94,7 +94,7 @@ export const CrearUsuariosInterno = () => {
                     openSnackBar: true,
                     messageSnackBar:textosInfoWarnig.falloComunicacion,
                     severity: 'error'
-                  },
+                  }, llama:"L91FCrearUsuariosInterno"
             });
         } else {
             // ajusta tipos de documentos a ser renderizados
@@ -110,7 +110,7 @@ export const CrearUsuariosInterno = () => {
                 tiposDocumento.push(dominio);
             });
             setTiposDocumento(tiposDocumento);
-            updateStore({ ...store, tiposDocumento, });
+            updateStore({ ...store, tiposDocumento, openBackDrop:false, llama:"L113FCrearUsuarioInterno"});
         }
     }
 
@@ -170,7 +170,7 @@ export const CrearUsuariosInterno = () => {
                     openSnackBar: true,
                     messageSnackBar: mensaje,
                     severity: 'warning'
-                  },
+                  }, llama:"L167FCrearUsuarioInterno"
             });
         }
         setForm(cloneForm);
@@ -180,7 +180,7 @@ export const CrearUsuariosInterno = () => {
 
     const crearUsuario = async() => {
         if (validateForm()) {
-            updateStore({ ...store, openBackDrop:true, });
+            updateStore({ ...store, openBackDrop:true, llama:"L183FCrearUsuarioInterno"});
             const token = store.user.token;
             const headers = {token, 'Content-Type': 'application/json'};
             const body = {
@@ -214,14 +214,14 @@ export const CrearUsuariosInterno = () => {
                         : textosInfoWarnig.falloComunicacion,
                         severity: 'error'
                       },
-                    openBackDrop:false,
+                    openBackDrop:false, llama:"L206FCrearUsuarioInterno"
                 });
             } else {
                 updateStore({ ...store, snackBar:{
                     openSnackBar: true,
                     messageSnackBar:crearUsuarioInterno.resultado.mensaje,
                     severity: 'success'
-                }, openBackDrop:false, });
+                }, openBackDrop:false, llama:"L220FCrearUsuarioInterno"});
                 setOpenDialog({open:true, msg :textosInfoWarnig.creacionUsuario, tittle:''})
             }
         }
@@ -244,6 +244,7 @@ export const CrearUsuariosInterno = () => {
                 tiposDocumento.push(dominio);
             })
             setTiposDocumento(tiposDocumento);
+            updateStore({ ...store, openBackDrop:false, llama:"L247FCrearUsuarioInterno"});
         }
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps

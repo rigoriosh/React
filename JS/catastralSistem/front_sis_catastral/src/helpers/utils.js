@@ -1,7 +1,6 @@
 import { doGetToken,  } from "../api";
 
 export const initStore = {
-  timeInitSessionUser: new Date(), // inicio session
   user:{
       isLogin:false,
       token:'',
@@ -264,3 +263,8 @@ export const ProyectoUrbanistico = [
 
 
 export const dataTestDetalleTramite = {"resultado":{"solicitud":{"anioEscritura":"","areaConstruccion":null,"titularesPredio":[{"tipoDocumento":"CC","idTitular":177,"apellido":"BBBBB","numeroDocumento":"1111111111","idSolicitud":147,"nombre":"AAAAA"}],"estadosSolicitud":[{"estado":"Radicado","observaciones":"Creación de la solicitud","idSolicitud":147,"fechaEstado":1638878626851,"idEstadoSolicitud":101}],"diferenciaMayoEsta":"","areaTerreno":null,"objetoRectificacion":"","prediosAsociados":[{"matriculaInmobiliaria":"DDFGGGDGFGFGFDGFGFDG","idPredioAsociado":80,"numeroPredial":"FC1111111544524521452145454521","idSolicitud":147},{"matriculaInmobiliaria":"40214050","idPredioAsociado":81,"numeroPredial":"ficga1234CatasSDFSDF6GHJ656767","idSolicitud":147}],"municipioPredio":"LA PLAYA","idSolicitud":147,"municipioNotaria":"","avaluoTerreno":null,"notariaOtorgante":"","tipoInscripcion":"","nombreTramite":"Modificaciones","claseSuelo":"Urbano","noEscrituraPublica":"","tipoSolicitante":"Propietario","tipoTramite":"Modificaciones","motivoSolicitud":"Modificaciones en Propiedad Horizontal/Condominio","consideraMejora":"","revisionBusca":"","autoestimacionAvaluo":null,"objetoPeticion":"","razonSolicitud":"Donec rutrum congue leo eget malesuada. Nulla porttitor accumsan tincidunt. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor lectus nibhFGFGGFGFGFGFGFGFGGFGG FGFGGG F","idSolicitante":{"numeroCelular":"","image":"","estado":"","idUsuario":21,"roles":[],"nombreUsuario":"","nombre":"","tipoDocumento":"","ultimaFechaLogin":null,"apellido":"","fechaCreacion":1638737526987,"contrasena":"","tipoUsuario":"E","numeroDocumento":"","email":"df@sdf.sdf"},"propiedadHorizontal":"S","proyectoUrbanistico":" ","numeroRadicado":"RASOGC-147-7-12-2021","avaluoConstruccion":null}}}
+
+export const setTextPagTables = () => {
+  const AAA = document.getElementsByClassName("MuiTablePagination-selectLabel")
+  AAA.item(0).innerText = "Registros por página";
+}

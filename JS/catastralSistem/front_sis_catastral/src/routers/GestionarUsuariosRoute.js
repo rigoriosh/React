@@ -21,7 +21,7 @@ export const GestionarUsuariosRoute = () => {
     if (location.pathname === pathsRoutes.gestionarUsuario) {
 
         return (
-            <div style={{backgroundColor:'white', width:'60%', padding:'20px', borderRadius:'20px'}}>
+            <div style={{backgroundColor:'white', width:'100%', padding:'20px', borderRadius:'20px'}}>
                 <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
                     <img className="imgWidth" /* onClick={()=>{navigate("/login");}} */ 
                         src={GestiondeUS_IconVerde} alt="" style={{cursor:'pointer', alignSelf:'center', width:'70px'}}

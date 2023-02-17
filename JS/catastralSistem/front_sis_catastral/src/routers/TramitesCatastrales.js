@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+// import Typography from '@mui/material/Typography';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+// import Link from '@mui/material/Link';
 import Fab from '@mui/material/Fab';
 
 import { NoMatch } from '../componets/NoMatch';
@@ -11,10 +14,27 @@ import { Tramites } from '../pages/tramites/Tramites';
 import { pathsRoutes } from '../helpers/utils';
 import PasodePagIzq_Icon from '../assets/Iconos/PasodePagIzq_Icon.png'
 
-export const TramitesCatastrales = ({salir}) => {
+
+
+export const TramitesCatastrales = ({salir/* , setOpenBackDrop */}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [pathPrevius, setPathPrevius] = useState('/');
+
+    function handleClick(event) {
+        // event.preventDefault();
+        if (location.pathname.split("/")[location.pathname.split("/").length-1] !== event) {
+            // console.info('You clicked a breadcrumb. => ', event);
+            // console.log(location);
+            let go = `/${event}`;
+            let paths = location.pathname.split("/");
+            if (paths.length > 3) {
+                paths.pop();
+                go = paths.join('/');
+            }
+            navigate(go)
+        }
+      }
 
     useEffect(() => {
         let previusPath = location.pathname.split('/');
@@ -24,32 +44,55 @@ export const TramitesCatastrales = ({salir}) => {
         return () => {}
     }, [location])
     return (
-        <div style={{display:'flex', flexDirection:'row', height:'100vh', justifyContent:'center', alignItems:'center' }}>
-            {/* <h5>TramitesCatastrales</h5> */}
-            {
-                location.pathname !== pathsRoutes.tramites &&
-                    // <button onClick={()=>{navigate(pathPrevius)}}>Regresar</button>
-                    <Fab size="small" style={{backgroundColor:'rgb(168, 207, 69)', position:'absolute', left:'140px'}} aria-label="add" onClick={()=>{navigate(pathPrevius)}}>
-                        <img className="imgWidth" src={PasodePagIzq_Icon} alt="" style={{width:'15px'}}/>
-                    </Fab>
-            }
-            <Routes>
-                <Route index element={<Tramites salir={salir}/>} />
-                {/* <Route path="tramites" element={<Tramites/>} /> */}
-                <Route path="crear" element={
-                        <CrearTramite
-                            key={'CrearTramite'}
-                            detalleTramite={{}}
-                            modoTramite="Nuevo"
-                            tipoTramite="NuevoTramite"
-                        />
-                    }
-                />
-                <Route path="consultar" element={<ConsultarTramite/>} />
-                <Route path="gestionarUsuario/*" element={<GestionarUsuariosRoute/>} />
-                <Route path="seguimientoTramitre" element={<SeguimientoTramitre/>} />
-                <Route path="*" element={<NoMatch/>} />
-            </Routes>
+        <div style={{display:'flex', flexDirection:'column', height:'100vh', justifyContent:'center', alignItems:'center' }}>
+            {/* <pre>
+                {location.pathname}
+            </pre> */}
+            <div className='contTramistesCatas'>
+                {/* <div className={location.pathname.split("/").length > 2 ? 'alingLeft':''}> */}
+                {/* <div className={location.pathname.split("/").length > 2 ? '':''}> */}
+                {
+                    location.pathname.split("/").length > 2 &&
+                        <div role="presentation" /* onClick={handleClick} */ className='breadcrumb'>
+                            <Breadcrumbs aria-label="breadcrumb" color='white' key={"breadcrumb"}>
+                                {
+                                        location.pathname.split("/").map((path, i) =>
+                                            <p underline="hover" color="white" href={path} onClick={()=>handleClick(path)} style={{fontWeight:'bold', color:'white'}}
+                                            className={path !== location.pathname.split("/")[location.pathname.split("/").length-1] ? "pointer":""} key={path + i}>
+                                                {path}
+                                            </p>
+                                    )
+                                }                    
+                            </Breadcrumbs>
+                        </div>        
+                }
+
+                {
+                    location.pathname !== pathsRoutes.tramites &&
+                        // <button onClick={()=>{navigate(pathPrevius)}}>Regresar</button>
+                        <Fab size="small" style={{backgroundColor:'rgb(168, 207, 69)', position:'absolute', left:'140px'}} aria-label="add" onClick={()=>{navigate(pathPrevius)}}>
+                            <img className="imgWidth" src={PasodePagIzq_Icon} alt="" style={{width:'15px'}}/>
+                        </Fab>
+                }
+                <Routes>
+                    <Route index element={<Tramites salir={salir}/>} />
+                    {/* <Route path="tramites" element={<Tramites/>} /> */}
+                    <Route path="crear" element={
+                            <CrearTramite
+                                key={'CrearTramite'}
+                                detalleTramite={{}}
+                                modoTramite="Nuevo"
+                                tipoTramite="NuevoTramite"
+                                // setOpenBackDrop={setOpenBackDrop}
+                            />
+                        }
+                    />
+                    <Route path="consultar" element={<ConsultarTramite  /* setOpenBackDrop={setOpenBackDrop} *//>} />
+                    <Route path="gestionarUsuario/*" element={<GestionarUsuariosRoute/>} />
+                    <Route path="seguimientoTramitre" element={<SeguimientoTramitre /* setOpenBackDrop={setOpenBackDrop} *//>} />
+                    <Route path="*" element={<NoMatch/>} />
+                </Routes>
+            </div>
         </div>
     )
 }

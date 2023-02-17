@@ -102,7 +102,7 @@ export const GestionarUsuarios = () => {
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
 
     const abilitarDesabilitarUsuario = async(row) => {
-        updateStore({ ...store, openBackDrop: true });
+        updateStore({ ...store, openBackDrop: true, llama:"L105FGestionarUsuarios" });
         try {
             const headers = {token: store.user.token, estado:row.estado === "A" ? "I" : "A"};
             const response = await getInfoGET(headers, enviroment.disableUser + row.idUsuario, 'POST');
@@ -111,7 +111,8 @@ export const GestionarUsuarios = () => {
                 consultarUsuarios();
                 updateStore({
                     ...store,
-                    snackBar:{ openSnackBar:true, messageSnackBar: row.estado === "A" ? "El usuario ha sido deshabilitado ! " : "El usuario ha sido habilitado !", severity:'success', },
+                    snackBar:{ openSnackBar:true, messageSnackBar: row.estado === "A" ? "El usuario ha sido deshabilitado ! " : "El usuario ha sido habilitado !", severity:'success', }
+                    , llama:"L112FGestionarUsuarios"
                 });
             }
         } catch (error) {
@@ -136,11 +137,11 @@ export const GestionarUsuarios = () => {
                     messageSnackBar:'',
                     tiempoExpiracion:'',
                     severity: "success"/*  | "error" | "warning" | "info" */,
-                },
+                }, llama:"L125FGestionarUsuarios"
             })
         } else if(deleteUser){
             setDeleteUser(false);
-            updateStore({ ...store, openBackDrop: true, dialogTool:{open:false, msg :'',tittle:'', response:false} });
+            updateStore({ ...store, openBackDrop: true, dialogTool:{open:false, msg :'',tittle:'', response:false}, llama:"L144FGestionarUsuarios" });
             const headers = {token: store.user.token };
             try {
                 const response = await getInfoGET(headers, enviroment.deleteUser + usuarioSeleccionado.idUsuario, 'DELETE');
@@ -149,7 +150,7 @@ export const GestionarUsuarios = () => {
                     consultarUsuarios();
                     updateStore({
                         ...store,
-                        snackBar:{ openSnackBar:true, messageSnackBar: response.resultado.mensaje, severity:'success', },
+                        snackBar:{ openSnackBar:true, messageSnackBar: response.resultado.mensaje, severity:'success', }, llama:"L151FGestionarUsuarios"
                     });
                 }
             } catch (error) {
@@ -163,13 +164,13 @@ export const GestionarUsuarios = () => {
             ...store,
             snackBar:{ openSnackBar:true, messageSnackBar:textosInfoWarnig.falloComunicacion, severity:'warning', },
             dialogTool:{open:false, msg :'',tittle:'', response:false},
-            openBackDrop:false,
+            openBackDrop:false, llama:"L163FGestionarUsuarios"
         });
     }
 
     const consultarUsuarios = async() => {
         try {
-            updateStore({ ...store, openBackDrop: true });
+            updateStore({ ...store, openBackDrop: true, llama:"L173FGestionarUsuarios" });
             const headers = {token: store.user.token};
             const response = await getInfoGET(headers, enviroment.getUsers, 'GET');
             let messageSnackBar = '', severity = 'warning', openSnackBar = false;
@@ -193,7 +194,7 @@ export const GestionarUsuarios = () => {
             updateStore({
                 ...store,
                 snackBar:{ openSnackBar, messageSnackBar, severity, },
-                openBackDrop:false,
+                openBackDrop:false, llama:"L194FGestionarUsuarios"
             });
             setRows(rows)
         } catch (error) {
@@ -206,7 +207,7 @@ export const GestionarUsuarios = () => {
             eliminarUsuario(usuarioSeleccionado, true);
             updateStore({
                 ...store,
-                dialogTool:{open:false, msg :'',tittle:'', response:false}
+                dialogTool:{open:false, msg :'',tittle:'', response:false}, llama:"L208FGestionarUsuarios"
             });
         }
         return () => {}
@@ -214,10 +215,10 @@ export const GestionarUsuarios = () => {
     }, [dialogTool])
 
     useEffect(() => {
-        updateStore({ ...store, openBackDrop: true });
+        updateStore({ ...store, openBackDrop: true, llama:"L218FGestionarUsuarios" });
         consultarUsuarios();
         return () => {
-            updateStore({ ...store, dialogTool:{open:false, msg :'',tittle:'', response:false}, });
+            updateStore({ ...store, dialogTool:{open:false, msg :'',tittle:'', response:false}, llama:"L221FGestionarUsuarios"});
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

@@ -158,7 +158,7 @@ export const Signin = () => {
                     openSnackBar: true,
                     messageSnackBar:textosInfoWarnig.falloComunicacion,
                     severity: 'error'
-                  },
+                  }, llama:"L155FSigin"
             });
         } else {
             // ajusta tipos de documentos a ser renderizados
@@ -174,13 +174,13 @@ export const Signin = () => {
                 tiposDocumento.push(dominio);
             });
             setTiposDocumento(tiposDocumento);
-            updateStore({ ...store, tiposDocumento, });
+            updateStore({ ...store, tiposDocumento, llama:"L177FSigin"});
         }
     }
 
     const crearUsuario = async() => {
         if (validateForm()) {
-            updateStore({ ...store, openBackDrop:true, });
+            updateStore({ ...store, openBackDrop:true, llama:"L183FSigin"});
             const token = '';
             const headers = {token, 'Content-Type': 'application/json'};
             const body = {
@@ -214,14 +214,14 @@ export const Signin = () => {
                         : textosInfoWarnig.falloComunicacion,
                         severity: 'error'
                       },
-                    openBackDrop:false,
+                    openBackDrop:false, llama:"L206FSigin"
                 });
             } else {
                 updateStore({ ...store, snackBar:{
                     openSnackBar: true,
                     messageSnackBar:crearUsuarioExterno.resultado.mensaje,
                     severity: 'success'
-                }, openBackDrop:false, });
+                }, openBackDrop:false, llama:"L220FSigin" });
                 setOpenDialog({open:true, msg :textosInfoWarnig.creacionUsuario, tittle:''})
             }
         }
@@ -276,7 +276,7 @@ export const Signin = () => {
                     openSnackBar: true,
                     messageSnackBar: mensaje,
                     severity: 'warning'
-                  },
+                }, llama:"L273FSigin"
             });
         }
         setForm(cloneForm);

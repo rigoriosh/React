@@ -90,7 +90,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                             openSnackBar: true,
                             messageSnackBar:textosInfoWarnig.camposRequerdios,
                             severity: 'error'
-                        },
+                        }, llama:"L87FFirstFormTramite"
                     });
                 }else{
                     newTitularDerecho[campo].validacion = '';
@@ -168,7 +168,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                         openSnackBar: true,
                         messageSnackBar:textosInfoWarnig.falloComunicacion,
                         severity: 'error'
-                    },
+                    }, llama:"L165FFirstFormTramite"
                 });
             } else {
                 // ajusta tipos de documentos a ser renderizados
@@ -184,7 +184,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                     tiposDocumento.push(dominio);
                 });
                 setTiposDocumento(addPrimerOpcionSelect(tiposDocumento));
-                updateStore({ ...store, tiposDocumento, });
+                updateStore({ ...store, tiposDocumento, llama:"L187FFirstFormTramite"});
             }
         }
 
@@ -248,7 +248,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                     tittle:'Confirmación',
                     response:false,
                     actions:true
-                }});
+                }, llama:"L245FFirstFormTramite"});
             }
         }
 
@@ -270,7 +270,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                     //         modoTramite: 'Detalle',
                     //     }
                     // );
-                    updateStore({...store, openBackDrop:false,});
+                    updateStore({...store, openBackDrop:false, llama:"L273FFirstFormTramite"});
                 }, 1000);
 
             }
@@ -284,7 +284,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                     aliminarTitular(formularioTramite.registroSeleccionado, true);
                     updateStore({
                         ...store,
-                        dialogTool:{open:false, msg :'',tittle:'', response:false}
+                        dialogTool:{open:false, msg :'',tittle:'', response:false}, llama:"L285FFirstFormTramite"
                     });
                 }
             }

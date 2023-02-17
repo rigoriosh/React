@@ -165,7 +165,7 @@ export const SecondFormTramitre = ({
                         openSnackBar: true,
                         messageSnackBar:textosInfoWarnig.camposRequerdios,
                         severity: 'error'
-                    },
+                    }, llama:"L162FSecondFormTramite"
                 });
             }
             setFormularioTramite(
@@ -271,7 +271,7 @@ export const SecondFormTramitre = ({
                     tittle:'Confirmación',
                     response:false,
                     actions:true,
-                }
+                }, llama:"L266FSecondFormTramite"
             });
         }
     }
@@ -310,7 +310,7 @@ export const SecondFormTramitre = ({
                     openSnackBar: true,
                     messageSnackBar:textosInfoWarnig.sinPredios,
                     severity: "warning"/*  | "error" | "warning" | "info" */,
-                },
+                }, llama:"L307FSecondFormTramite"
             });
         } else if(nombreArchivoAvalidar.split('.')[nombreArchivoAvalidar.split('.').length-1].toLowerCase() !== 'zip'
         /* && nombreArchivoAvalidar.split('.')[nombreArchivoAvalidar.split('.').length-1].toLowerCase() !== 'rar' */){
@@ -320,7 +320,7 @@ export const SecondFormTramitre = ({
                     openSnackBar: true,
                     messageSnackBar:textosInfoWarnig.zipRar,
                     severity: "warning"/*  | "error" | "warning" | "info" */,
-                },
+                }, llama:"L317FSecondFormTramite"
             });
         }else {
             onSubmitFinal();
@@ -334,7 +334,7 @@ export const SecondFormTramitre = ({
             eliminarPredio(predioSeleccionado, true);
             updateStore({
                 ...store,
-                dialogTool:{open:false, msg :'',tittle:'', response:false}
+                dialogTool:{open:false, msg :'',tittle:'', response:false}, llama:"L335FSecondFormTramite"
             });
         }
         return () => {}

@@ -10,28 +10,76 @@ import { TablaTramites } from './TablaTramites';
 import { CrearTramite } from '../CrearTramite';
 
 
-export const ConsultarTramite = ({tipoTramite='Consulta'}) => {
+export const ConsultarTramite = ({tipoTramite='Consulta'/* , setOpenBackDrop */}) => {
     const { store, updateStore } = useContext(StoreContext);
     let navigate = useNavigate();
     // const [stateConsultarTramite, setStateConsultarTramite] = useState(initStateConsultarTramite);
     // const {registrosGetSolicitudesUsuario, tramiteSeleccionado} = stateConsultarTramite;
     const [registrosGetSolicitudesUsuario, setRegistrosGetSolicitudesUsuario] = useState([]);
+    const [paginado, setPaginado] = useState({})
     const [showDetalleTramite, setShowDetalleTramite] = useState(false);
     const [detalleTramite, setDetalleTramite] = useState({});
 
     useEffect(() => {
-        updateStore({...store, openBackDrop:true,});
-        getTramite();
-        //getTramiteTest();
-        
+        updateStore({...store, openBackDrop:true, llama:"L24FConsultarTramite"});
+        // setOpenBackDrop(true)
+        // setTimeout(() => {
+            getTramite(0,10);
+            // getTramiteTest();
+        // }, 3000);
+        console.log("ConsultaTramiteeeee")
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // eslint-disable-next-line no-unused-vars
     const getTramiteTest = () => {
+        console.log("getTramiteTest")
         setTimeout(() => {
             poblarTablaTramites({
                 "resultado": {
+                    "paginacion": {
+                        "paginaActual": 0,
+                        "totalPaginas": 21
+                    },
+                    "solicitudes": [
+                        {
+                            "estado": "Radicado",
+                            "nombreTramite": "Solicitud Certificado Catastral",
+                            "idSolicitud": 7,
+                            "numeroRadicado": "123456789",
+                            "tipoTramite": "Solicitudes / Certificados"
+                        },
+                        {
+                            "estado": "Radicado",
+                            "nombreTramite": "Solicitud Certificado Catastral",
+                            "idSolicitud": 8,
+                            "numeroRadicado": "123456789",
+                            "tipoTramite": "Solicitudes / Certificados"
+                        },
+                        {
+                            "estado": "Radicado",
+                            "nombreTramite": "Solicitud Certificado Catastral",
+                            "idSolicitud": 9,
+                            "numeroRadicado": "123456789",
+                            "tipoTramite": "Solicitudes / Certificados"
+                        },
+                        {
+                            "estado": "Radicado",
+                            "nombreTramite": "Solicitud Certificado Catastral",
+                            "idSolicitud": 10,
+                            "numeroRadicado": "123456789",
+                            "tipoTramite": "Solicitudes / Certificados"
+                        },
+                        {
+                            "estado": "Radicado",
+                            "nombreTramite": "Solicitud Certificado Catastral",
+                            "idSolicitud": 18,
+                            "numeroRadicado": "123456789",
+                            "tipoTramite": "Solicitudes / Certificados"
+                        }
+                    ]
+                }
+                /* "resultado": {
                     "solicitudes": [
                         {
                             "estado": "Radicado",
@@ -265,17 +313,21 @@ export const ConsultarTramite = ({tipoTramite='Consulta'}) => {
                             "tipoTramite": "Mutación de Primera"
                         }
                     ]
-                }
+                } */
             })
-        }, 100);
+        }, 1000);
     }
 
-    const getTramite = async() => {
-        updateStore({...store, openBackDrop:true,});
+    const getTramite = async(pag, tam) => {
+        // setOpenBackDrop(true)
+        // updateStore({...store, openBackDrop: false});
+        updateStore({...store, openBackDrop:true, llama:"L324FConsultaTramite"});
+        // setTimeout(() => {
+        // }, 1000);
         try {
             const headers = {token: store.user.token};
             const idUser = store.user.infoUser.idUsuario
-            const  response = await getInfoGET(headers, enviroment.getSolicitudesUsuario+'/'+idUser);
+            const  response = await getInfoGET(headers, enviroment.getSolicitudesUsuario+'/'+idUser+`?pag=${pag}&tam=${tam}`);
             if (response.error) {
                 falloLaPeticion(response.error);
                 navigate("/tramites")
@@ -283,13 +335,14 @@ export const ConsultarTramite = ({tipoTramite='Consulta'}) => {
                 if (response.resultado.solicitudes.length > 0) {
                     poblarTablaTramites(response);
                 } else {
+                    // setOpenBackDrop(false);
                     updateStore({
                         ...store,
                         openBackDrop:false,
                         snackBar:{
                             openSnackBar:true,
                             messageSnackBar: 'No tienes solicitudes creadas', severity:'info', },
-                        dialogTool:{open:false, msg :'',tittle:'', response:false}
+                        dialogTool:{open:false, msg :'',tittle:'', response:false}, llama:"L339FConsultarTramite"
                     });
                     navigate("/tramites");        
                 }
@@ -302,10 +355,12 @@ export const ConsultarTramite = ({tipoTramite='Consulta'}) => {
     }
 
     const poblarTablaTramites = (response) => {
-        const solicitudes = response.resultado.solicitudes;
+        console.log("poblarTablaTramites")
+        const solicitudes = [...registrosGetSolicitudesUsuario, ...response.resultado.solicitudes];
         solicitudes.map((solicitud, item) => solicitud.id = item);
         setRegistrosGetSolicitudesUsuario(solicitudes);
-        updateStore({...store, openBackDrop:true,});
+        setPaginado(response.resultado.paginacion);
+        updateStore({...store, openBackDrop: false,llama:"L364FConsultarTramite"});
     }
 
     const falloLaPeticion = (error) => {
@@ -315,12 +370,14 @@ export const ConsultarTramite = ({tipoTramite='Consulta'}) => {
             snackBar:{
                 openSnackBar:true,
                 messageSnackBar: textosInfoWarnig.falloComunicacion, severity:'warning', },
-            dialogTool:{open:false, msg :'',tittle:'', response:false}
+            dialogTool:{open:false, msg :'',tittle:'', response:false}, llama:"L370FConsultarTramite"
         });
+        // setOpenBackDrop(false)
     }
 
     const getDetalleTramite = async({idSolicitud})=>{
-        updateStore({...store, openBackDrop:true,});
+        updateStore({...store, openBackDrop:true, llama:"L382FConsultarTramite"});
+        // setOpenBackDrop(true)
         //fixDataDetalleTramite(dataTestDetalleTramite);
         try {
             const headers = {token: store.user.token};
@@ -369,7 +426,11 @@ export const ConsultarTramite = ({tipoTramite='Consulta'}) => {
                 ?   <TablaTramites
                         getDetalleTramite={getDetalleTramite}
                         registrosGetSolicitudesUsuario={registrosGetSolicitudesUsuario}
+                        setRegistrosGetSolicitudesUsuario={setRegistrosGetSolicitudesUsuario}
+                        paginado={paginado}
                         tipoTramite={tipoTramite}
+                        getTramite={getTramite}
+                        setPaginado={setPaginado}
                     />
                 :   <CrearTramite 
                         key={'CrearTramite'}

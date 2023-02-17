@@ -24,8 +24,9 @@ export const Tramites = ({children, salir}) => {
                 {
                     checkPermits(permits[0].valor, store) &&
                     <div style={{display:'flex', alignItems:'center'}}>
+                        <VerticalDivider m="0px 30px" height="60%"/>
                         <div style={{cursor:'pointer'}} onClick={()=>{ 
-                            updateStore({...store, openBackDrop:true,});
+                            updateStore({...store, openBackDrop:true, llama:"L29FTramites"});
                             navigate("/tramites/gestionarUsuario");
                             }}>
                             <img src={GestiondeUS_Icon} alt="" style={{ width:'80px' }}/>
@@ -39,8 +40,10 @@ export const Tramites = ({children, salir}) => {
                     checkPermits(permits[1].valor, store) &&
                     <div style={{display:'flex', alignItems:'center'}}>
                         <div style={{cursor:'pointer'}} onClick={()=>{
-                            updateStore({...store, openBackDrop:true,});
-                            navigate("/tramites/seguimientoTramitre");
+                            setTimeout(() => {
+                                updateStore({...store, openBackDrop:true, llama:"L44FTramites"});
+                                navigate("/tramites/seguimientoTramitre");
+                            }, 1000);
                             }}>
                         <img src={SeguimientoaTramite_Icon} alt="" style={{ width:'80px' }}/>
                             <div>
@@ -48,13 +51,14 @@ export const Tramites = ({children, salir}) => {
                                 <p style={{color:'white', fontWeight:'bold'}}>Trámite</p>
                             </div>
                         </div>
+                        <VerticalDivider m="0px 30px" height="60%"/>
                     </div>
                 }
                 {
                     checkPermits(permits[2].valor, store) &&
                     <div style={{display:'flex', alignItems:'center'}}>
                         <div style={{cursor:'pointer'}} onClick={()=>{
-                            updateStore({...store, openBackDrop:true,});
+                            updateStore({...store, llama:"L61FTramites"});
                             navigate("/tramites/crear");
                             }}>
                             <img src={CrearTramite_Icon} alt="" style={{ width:'80px' }}/>
@@ -68,7 +72,7 @@ export const Tramites = ({children, salir}) => {
                     checkPermits(permits[3].valor, store) &&
                     <div style={{display:'flex', alignItems:'center'}}>
                         <div style={{cursor:'pointer'}} onClick={()=>{
-                            updateStore({...store, openBackDrop:true,});
+                            updateStore({...store, openBackDrop:true, llama:"L75FTramites"});
                             navigate("/tramites/consultar");
                             }}>
                         <img src={ConsultarTramite_Icon} alt="" style={{ width:'80px' }}/>
