@@ -38,10 +38,10 @@ export const App = () => {
         sessionTime < 0   = ${sessionTime < 0}
     `)
     if (sessionTime <= 0) {
-      debugger
+      // //debugger
       try {
         responseGetToken = await getToken(data.user.user, data.user.pwd);
-        debugger
+        //debugger
         const newStore = {
           ...store,
           user:{
@@ -55,7 +55,7 @@ export const App = () => {
         sessionStorage.setItem('store', JSON.stringify(newStore))
         
       } catch (error) {
-        debugger
+        //debugger
         console.log(error)
         setStore({...data});
         sessionStorage.setItem('store', JSON.stringify(data))
@@ -65,7 +65,7 @@ export const App = () => {
         tiempoInicio: currentTime,
       }} */
     }else{
-      debugger
+      //debugger
       setStore({...data});
       sessionStorage.setItem('store', JSON.stringify(data))
     }

@@ -1,5 +1,5 @@
 // Pruebas en local
-// const api = 'http://localhost:3000/'; // local json Server
+// const api = 'http://localhost:3000/api-ssc/'; // local json Server
 const api = 'http://localhost:8080/api-ssc/'; // local
 // const api = 'http://198.199.80.174:8080/api-ssc/'; // produccion
 // const api = process.env.REACT_APP_API_URL;
@@ -11,8 +11,6 @@ const enviroment = {
     getUsers:               `${api}usuario/getUsers`,
     disableUser:            `${api}usuario/disableUser/`,
     deleteUser:             `${api}usuario/deleteUser/`,
-    getTiposDocumento:      `${api}valorLista/getTiposDocumento`,
-    getCodigosDane:         `${api}valorLista/getCodigosDane`,
     getTiposTramite:        `${api}solicitudes/getTiposTramite`,
     getTiposSolicitud:      `${api}solicitudes/getTiposSolicitud`,
     getTiposSuelo:          `${api}solicitudes/getTiposSuelo`,
@@ -31,7 +29,9 @@ const enviroment = {
     getEstadosSolicitud:    `${api}solicitudes/getEstadosSolicitud`,
     updateEstadoSolicitud:  `${api}solicitudes/updateEstadoSolicitud`,
     getArchivoSolicitud:    `${api}solicitudes/getArchivoSolicitud`,
-    getSolicitudId:         `${api}solicitudes/getSolicitudId`
+    getSolicitudId:         `${api}solicitudes/getSolicitudId`,
+    getTiposDocumento:      `${api}valorLista/getTiposDocumento`,
+    getCodigosDane:         `${api}valorLista/getCodigosDane`,
     
 }
 

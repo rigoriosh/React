@@ -62,7 +62,7 @@ export const AppRouter = ({props}) => {
 
     
     useEffect(() => {
-        console.log("useEffect => usuario")
+        // console.log("useEffect => usuario")
         if (usuario.isLogin) {
             updateStore({
                 ...store,
@@ -74,7 +74,7 @@ export const AppRouter = ({props}) => {
     }, [usuario])
 
     useEffect(() => {
-        console.log("useEffect => location")
+        // console.log("useEffect => location")
         const store = JSON.parse(sessionStorage.getItem('store'))
         if (store) {
             updateStore({...store })
@@ -93,8 +93,7 @@ export const AppRouter = ({props}) => {
     }
 
     const salir = (motivo='') => {
-        console.log("salir", motivo)
-        debugger
+        // console.log("salir", motivo)
         setTimeout(() => {
             updateStore({...initStore, snackBar:{
                 openSnackBar: motivo !== '',
@@ -111,7 +110,7 @@ export const AppRouter = ({props}) => {
     }
 
     const renewToken = async(user, pwd) => {
-        console.log("renewToken")
+        // console.log("renewToken")
         const responseGetToken = await getToken(user, pwd);
         if (!responseGetToken.tkn) {
           updateStore({

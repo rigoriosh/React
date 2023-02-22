@@ -128,9 +128,10 @@ export const Login = () => {
                 isLogin: true,
                 user,
                 pwd,
-                token: 'responseGetToken.tkn',
+                token: 'eyJhbGciOiJIUzM4NCJ9.eyJpc3MiOiJBc29tdW5pY2lwaW9zIiwic3ViIjoiQWNjZXNzVG9rZW4iLCJhdWQiOiJyaWdvcmlvc2hAZ21haWwuY29tIiwiZXhwIjoxNjc2OTk4OTgwNDUzLCJuYmYiOjE2NzY5OTUzODAsImlhdCI6MTY3Njk5NTM4MCwibmljayI6IjE4MTI5MTY0IiwianRpIjoiOTMwOWMwZDQtMWQyMC00MDIyLTgxM2UtNDk0MTRmYTUwNWYxIn0.AR40HHKMWE_GExXJfckQJi91D4EI0_3nM7hwKCbozT10dPJhzk1DL9lXK9Qqy34e',
                 tiempoExpiracion: 36000,
                 infoUser: {
+                    idUsuario:1,
                     usuario:{
                         nombre:'Rigo'
                     },

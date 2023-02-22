@@ -40,9 +40,10 @@ export const Tramites = ({children, salir}) => {
                     checkPermits(permits[1].valor, store) &&
                     <div style={{display:'flex', alignItems:'center'}}>
                         <div style={{cursor:'pointer'}} onClick={()=>{
+                            sessionStorage.removeItem('solicitudes')
                             setTimeout(() => {
-                                updateStore({...store, openBackDrop:true, llama:"L44FTramites"});
-                                navigate("/tramites/seguimientoTramitre");
+                                updateStore({...store, openBackDrop:true, detalleTramite:{},llama:"L44FTramites"});
+                                navigate("/tramites/seguimientoTramite");
                             }, 1000);
                             }}>
                         <img src={SeguimientoaTramite_Icon} alt="" style={{ width:'80px' }}/>
@@ -72,8 +73,9 @@ export const Tramites = ({children, salir}) => {
                     checkPermits(permits[3].valor, store) &&
                     <div style={{display:'flex', alignItems:'center'}}>
                         <div style={{cursor:'pointer'}} onClick={()=>{
-                            updateStore({...store, openBackDrop:true, llama:"L75FTramites"});
-                            navigate("/tramites/consultar");
+                            sessionStorage.removeItem('solicitudes')
+                            updateStore({...store, openBackDrop:true, detalleTramite:{},llama:"L75FTramites"});
+                            navigate("/tramites/consultaTramite");
                             }}>
                         <img src={ConsultarTramite_Icon} alt="" style={{ width:'80px' }}/>
                             <div>

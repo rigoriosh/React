@@ -21,7 +21,7 @@ export const App = () => {
     const tiempoInicioToken = store.tiempoInicioToken;
     const currentTime = new Date().getTime();
     let sessionTime = (tiempoExpiracion/2) - (currentTime - tiempoInicioToken)
-    console.log(`
+    /* console.log(`
       APP - updateDtore ////////////////////////
         tiempoExpiracion  = ${tiempoExpiracion}
         tiempoInicioToken      = ${tiempoInicioToken}
@@ -29,11 +29,11 @@ export const App = () => {
         sessionTime       = ${sessionTime}
         sessionTime < 0   = ${sessionTime <= 0}
     `)
-    console.log(data)
+    console.log(data) */
 
     let newData = {...data, tiempoInicioSession: new Date().getTime()}
     if (sessionTime <= 0 && data.user.user !== '' && data.user.pwd !== '') {
-      console.log("ACTUALIZAR TOKEN")
+      // console.log("ACTUALIZAR TOKEN")
       try {
         const responseGetToken = await getToken(data.user.user, data.user.pwd);
         newData = {
@@ -49,9 +49,8 @@ export const App = () => {
         console.error(error)
       }
     }
-
      setStore(newData);
-     sessionStorage.setItem('store', JSON.stringify(newData))
+     if (newData.user.isLogin) sessionStorage.setItem('store', JSON.stringify(newData))
    }
  }
  

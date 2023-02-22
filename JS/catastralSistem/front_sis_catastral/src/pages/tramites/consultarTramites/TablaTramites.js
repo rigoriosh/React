@@ -19,7 +19,7 @@ import enviroment from '../../../helpers/enviroment';
 
 
 export const TablaTramites = ({getDetalleTramite, tipoTramite, registrosGetSolicitudesUsuario, getTramite, paginado, setPaginado, setRegistrosGetSolicitudesUsuario}) => {
-    console.log("registrosGetSolicitudesUsuario => ", registrosGetSolicitudesUsuario);
+
     const { store, updateStore } = useContext(StoreContext);
 
     // eslint-disable-next-line no-unused-vars
@@ -105,17 +105,28 @@ export const TablaTramites = ({getDetalleTramite, tipoTramite, registrosGetSolic
 
     useEffect(() => {
         
-        /* setTimeout(() => {
-            setTextPagTables();
-        }, 5050); */
-        console.log(registrosGetSolicitudesUsuario)
+        const solicitudesSession = JSON.parse(sessionStorage.getItem('solicitudes'))
+        // console.log("solicitudesSession => ", solicitudesSession)
+        // console.log("registrosGetSolicitudesUsuario => ", solicitudesSession)
+        if (solicitudesSession) {
+            if (solicitudesSession.length < 2) {
+                setConsultando(false);
+                setConsTraId(solicitudesSession[0].idSolicitud)
+            }
+        }
       return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
-        console.log(55555)
-        console.log(registrosGetSolicitudesUsuario)
+        
+        /* console.log(`
+            paginado        => ${JSON.stringify(paginado)}
+            page            => ${page}
+            pageSize        => ${pageSize}
+            rowCountState   => ${rowCountState}
+
+        `); */
 
         setRowCountState(paginado.totalRegistros);
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,31 +134,22 @@ export const TablaTramites = ({getDetalleTramite, tipoTramite, registrosGetSolic
     
 
       useEffect(() => {
-        console.log("paginado => ", paginado)
+        /* console.log("paginado => ", paginado)
         console.log("page => ", page)
         console.log("pageSize => ", pageSize)
         console.log("paginaActual => ", paginaActual)
-        console.log(registrosGetSolicitudesUsuario)
+        console.log(registrosGetSolicitudesUsuario) */
 
         if (page > paginaActual) {
             getTramite(page, pageSize);
             setPaginaActual(page);
         }
-
-        /* if (page === paginaActual) {
-            setTimeout(() => {
-                updateStore({...store, openBackDrop:false, llama:"L139FTablaTramites"});
-            }, 1000);
-        } */
-        // setTimeout(() => {
-        //     setTextPagTables();
-        // }, 1000);
       return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [paginado, page])
 
     const consultaTramiteID = (e) => {
-        console.log(e);
+        // console.log(e);
         if (e==="query") {
             if (consTraId) {
                 paso2ConsultaTramiteID(consTraId);
@@ -155,29 +157,27 @@ export const TablaTramites = ({getDetalleTramite, tipoTramite, registrosGetSolic
         } else if (e==="noQuery") {
             setConsultando(true);
             setConsTraId('');
-            setRegistrosGetSolicitudesUsuario([]);
-            getTramite(0,10);
+            setPaginaActual(0);
+            // setRegistrosGetSolicitudesUsuario([]);
+            getTramite(0,10,"nuevaConsulta");
         } else {
             e.preventDefault();
             if (consTraId) {
-                console.log(`Realizar consulta pero primero =>
-                 - loading que no desaparece cuando ingresa al editar tramite y modifica el estado
-                 `);
                 paso2ConsultaTramiteID(consTraId)                
             }
         }
-        console.log("on submit", consTraId)
+        // console.log("on submit", consTraId)
     }
 
     const paso2ConsultaTramiteID = async(consTraId) => {
         setConsultando(false);
-        updateStore({...store, openBackDrop: true, llama:"L177FConsultarTramite"});
+        updateStore({...store, openBackDrop: true, llama:"L180FConsultarTramite"});
         let parametro2 = 'idSolicitud';
         let datoIn = consTraId;
         datoIn = datoIn.split('-')
         datoIn.includes('RASOGC')
         if(datoIn.includes('RASOGC'))parametro2='nRadicado';
-        console.log(parametro2);
+        // console.log(parametro2);
         const headers = {token: store.user.token};
         const response = await getInfoGET(headers, enviroment.getSolicitudId+`/?idUsuario=${store.user.infoUser.idUsuario}&${parametro2}=${consTraId}`);
         
@@ -186,7 +186,7 @@ export const TablaTramites = ({getDetalleTramite, tipoTramite, registrosGetSolic
         setRegistrosGetSolicitudesUsuario(solicitudes);
         setPaginado(response.resultado.paginacion);
         updateStore({...store, openBackDrop: false,llama:"L364FConsultarTramite"});
-        console.log(response);
+        // console.log(response);
     }
     
     return (
@@ -227,15 +227,19 @@ export const TablaTramites = ({getDetalleTramite, tipoTramite, registrosGetSolic
                
             
             <DataGrid
+                // key={"TablaTramites"}
                 rows={registrosGetSolicitudesUsuario}
                 rowCount={rowCountState}
                 pageSize={pageSize}
                 rowsPerPageOptions={[10 ]}
                 // loading={isLoading}
-                // pagination
-                // page={page}
+                pagination
+                page={page}
                 // paginationMode="server"
-                onPageChange={(newPage) => setPage(newPage)}
+                onPageChange={(newPage) => {
+                    // console.log("onPageChange => ", newPage);
+                    setPage(newPage)
+                }}
                 onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                 columns={columnsTablaConsultarTramite}
                 // initialState={initialState}
@@ -247,7 +251,7 @@ export const TablaTramites = ({getDetalleTramite, tipoTramite, registrosGetSolic
                 // pageSizeOptions
                 // scrollbarSize={10}
                 // loading={registrosGetSolicitudesUsuario.length <= 0}
-                // key={Math.random()}
+                key={Math.random()}
             />
         </div>
     )

@@ -28,8 +28,10 @@ export const initStore = {
 };
 
 export const pathsRoutes = {
+  tramites: '/tramites',
   gestionarUsuario: "/tramites/gestionarUsuario",
-  tramites: '/tramites'
+  seguimientoTramite: "/tramites/seguimientoTramite",
+  consultaTramite: "/tramites/consultaTramite"
 }
 
 export const textosInfoWarnig = {
@@ -267,4 +269,46 @@ export const dataTestDetalleTramite = {"resultado":{"solicitud":{"anioEscritura"
 export const setTextPagTables = () => {
   const AAA = document.getElementsByClassName("MuiTablePagination-selectLabel")
   AAA.item(0).innerText = "Registros por página";
+}
+
+export const ajusteDataTramite = (response) => {
+
+  const responseDetalleTramite = response.resultado.solicitud;
+  const titularesPredio = response.resultado.solicitud.titularesPredio;
+  titularesPredio.map((d,i) => d.id = i);
+  const estadosSolicitud = response.resultado.solicitud.estadosSolicitud;
+  const updateEstadosSolicitud = estadosSolicitud.map((d,i) => {
+      const fecha = new Date(d.fechaEstado)
+      return {
+          ...d,
+          id: i,
+          fechaEstado: fecha.getDate()+'/'+(fecha.getMonth() + 1)+'/'+fecha.getFullYear(),
+      }
+  });
+  const prediosAsociados = response.resultado.solicitud.prediosAsociados;
+  prediosAsociados.map((d,i) => d.id = i);
+  responseDetalleTramite.titularesPredio =  titularesPredio;
+  responseDetalleTramite.estadosSolicitud =  updateEstadosSolicitud;
+  responseDetalleTramite.prediosAsociados =  prediosAsociados;
+
+  return responseDetalleTramite
+}
+
+export const formarPath = (location, pathSelected) =>{   
+  let go="";
+  const arrayLocation = location.pathname.split("/");
+  let pathEndFinded=false
+  arrayLocation.forEach(e => {
+      if(!pathEndFinded){
+           if(e !== pathSelected){
+             e !=="" ? go+=`/${e}` : go+=``;
+           }else{
+             e!==""?go+=`/${e}`:go+=``;
+             pathEndFinded=true
+           }
+
+      }    
+  })
+  // console.log(go);
+  return go;
 }

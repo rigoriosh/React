@@ -1,39 +1,48 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { /* useParams, */ useNavigate } from "react-router-dom";
+import { /* useParams, */ useLocation, useNavigate } from "react-router-dom";
 
 import { StoreContext } from '../../../App';
 import enviroment from '../../../helpers/enviroment';
-import { textosInfoWarnig } from '../../../helpers/utils';
+import { ajusteDataTramite, textosInfoWarnig } from '../../../helpers/utils';
 
 import { getInfoGET } from '../../../api';
 import { TablaTramites } from './TablaTramites';
-import { CrearTramite } from '../CrearTramite';
+// import { CrearTramite } from '../CrearTramite';
 
 
-export const ConsultarTramite = ({tipoTramite='Consulta'/* , setOpenBackDrop */}) => {
+export const ConsultarTramite = ({tipoTramite/* , setOpenBackDrop */}) => {
     const { store, updateStore } = useContext(StoreContext);
+    let location = useLocation();
+    // console.log(location);
     let navigate = useNavigate();
     // const [stateConsultarTramite, setStateConsultarTramite] = useState(initStateConsultarTramite);
     // const {registrosGetSolicitudesUsuario, tramiteSeleccionado} = stateConsultarTramite;
     const [registrosGetSolicitudesUsuario, setRegistrosGetSolicitudesUsuario] = useState([]);
     const [paginado, setPaginado] = useState({})
-    const [showDetalleTramite, setShowDetalleTramite] = useState(false);
-    const [detalleTramite, setDetalleTramite] = useState({});
+    // const [showDetalleTramite, setShowDetalleTramite] = useState(false);
+    // const [detalleTramite, setDetalleTramite] = useState({});
 
     useEffect(() => {
-        updateStore({...store, openBackDrop:true, llama:"L24FConsultarTramite"});
-        // setOpenBackDrop(true)
-        // setTimeout(() => {
+        // updateStore({...store, openBackDrop:true, llama:"L24FConsultarTramite"});
+        const solicitudesSession = JSON.parse(sessionStorage.getItem('solicitudes'))
+        if (solicitudesSession) {
+            if (solicitudesSession.length > 0) {
+                setRegistrosGetSolicitudesUsuario(solicitudesSession);
+                updateStore({...store, openBackDrop: false, detalleTramite:{}, llama:"L32FConsultarTramite"});
+            }else{
+                getTramite(0,10);
+            }
+        }else{
             getTramite(0,10);
-            // getTramiteTest();
-        // }, 3000);
-        console.log("ConsultaTramiteeeee")
+        }
+        // getTramiteTest();
+        // console.log("ConsultaTramiteeeee")
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // eslint-disable-next-line no-unused-vars
     const getTramiteTest = () => {
-        console.log("getTramiteTest")
+        // console.log("getTramiteTest")
         setTimeout(() => {
             poblarTablaTramites({
                 "resultado": {
@@ -318,12 +327,10 @@ export const ConsultarTramite = ({tipoTramite='Consulta'/* , setOpenBackDrop */}
         }, 1000);
     }
 
-    const getTramite = async(pag, tam) => {
-        // setOpenBackDrop(true)
-        // updateStore({...store, openBackDrop: false});
-        updateStore({...store, openBackDrop:true, llama:"L324FConsultaTramite"});
-        // setTimeout(() => {
-        // }, 1000);
+    const getTramite = async(pag, tam, consulta) => {
+
+        updateStore({...store, openBackDrop:true, llama:"L332FConsultaTramite", detalleTramite:{}});
+        
         try {
             const headers = {token: store.user.token};
             const idUser = store.user.infoUser.idUsuario
@@ -333,11 +340,11 @@ export const ConsultarTramite = ({tipoTramite='Consulta'/* , setOpenBackDrop */}
                 navigate("/tramites")
             } else {
                 if (response.resultado.solicitudes.length > 0) {
-                    poblarTablaTramites(response);
+                    poblarTablaTramites(response,consulta);
                 } else {
                     // setOpenBackDrop(false);
                     updateStore({
-                        ...store,
+                        ...store, detalleTramite:{},
                         openBackDrop:false,
                         snackBar:{
                             openSnackBar:true,
@@ -354,13 +361,19 @@ export const ConsultarTramite = ({tipoTramite='Consulta'/* , setOpenBackDrop */}
         }
     }
 
-    const poblarTablaTramites = (response) => {
-        console.log("poblarTablaTramites")
-        const solicitudes = [...registrosGetSolicitudesUsuario, ...response.resultado.solicitudes];
+    const poblarTablaTramites = (response,consulta) => {
+        // console.log("poblarTablaTramites")
+        let solicitudes = [];
+        if (consulta) {
+            solicitudes = [...response.resultado.solicitudes];
+        } else {
+            solicitudes = [...registrosGetSolicitudesUsuario, ...response.resultado.solicitudes];
+        }
         solicitudes.map((solicitud, item) => solicitud.id = item);
         setRegistrosGetSolicitudesUsuario(solicitudes);
+        // sessionStorage.setItem('solicitudes', JSON.stringify(solicitudes))
         setPaginado(response.resultado.paginacion);
-        updateStore({...store, openBackDrop: false,llama:"L364FConsultarTramite"});
+        updateStore({...store, openBackDrop: false, detalleTramite:{}, llama:"L372FConsultarTramite"});
     }
 
     const falloLaPeticion = (error) => {
@@ -375,16 +388,24 @@ export const ConsultarTramite = ({tipoTramite='Consulta'/* , setOpenBackDrop */}
         // setOpenBackDrop(false)
     }
 
-    const getDetalleTramite = async({idSolicitud})=>{
-        updateStore({...store, openBackDrop:true, llama:"L382FConsultarTramite"});
-        // setOpenBackDrop(true)
-        //fixDataDetalleTramite(dataTestDetalleTramite);
+    const getDetalleTramite = async(row)=>{
+        
+        updateStore({
+            ...store,
+            openBackDrop:true,
+            snackBar:{
+                openSnackBar:false,
+                messageSnackBar: '', severity:'info'
+            },
+            llama:"L376FConsultarTramite"});
         try {
             const headers = {token: store.user.token};
-            const  response = await getInfoGET(headers, enviroment.getDetalleSolicitud+'/'+idSolicitud);
+            const  response = await getInfoGET(headers, enviroment.getDetalleSolicitud+'/'+row.idSolicitud);
             if (response.error) {
                 falloLaPeticion(response.error);
             } else {
+                //debugger
+                sessionStorage.setItem('solicitudes', JSON.stringify([row]))
                 fixDataDetalleTramite(response);
                 // return response;
             }
@@ -394,36 +415,41 @@ export const ConsultarTramite = ({tipoTramite='Consulta'/* , setOpenBackDrop */}
     }
 
     const fixDataDetalleTramite = (response) => {
-        const responseDetalleTramite = response.resultado.solicitud;
-
-        const titularesPredio = response.resultado.solicitud.titularesPredio;
-        titularesPredio.map((d,i) => d.id = i);
         
-        const estadosSolicitud = response.resultado.solicitud.estadosSolicitud;
-        const updateEstadosSolicitud = estadosSolicitud.map((d,i) => {
-            const fecha = new Date(d.fechaEstado)
-            return {
-                ...d,
-                id: i,
-                fechaEstado: fecha.getDate()+'/'+(fecha.getMonth() + 1)+'/'+fecha.getFullYear(),
+        const responseDetalleTramite = ajusteDataTramite(response)
+        // setDetalleTramite(responseDetalleTramite);
+        updateStore({
+            ...store,
+            detalleTramite:responseDetalleTramite,
+            modoTramite:tipoTramite,
+            // modoTramite:"Seguimiento",
+            // modoTramite:"Consulta",
+            llama:"L418FConsultarTramite",
+            openBackDrop:false,
+            snackBar:{
+                openSnackBar: false,
+                messageSnackBar: '',
+                severity: 'success'
             }
-        });
-        const prediosAsociados = response.resultado.solicitud.prediosAsociados;
-        prediosAsociados.map((d,i) => d.id = i);
+        })
+        // setShowDetalleTramite(true);
+        moverPagina();
         
-        responseDetalleTramite.titularesPredio =  titularesPredio;
-        responseDetalleTramite.estadosSolicitud =  updateEstadosSolicitud;
-        responseDetalleTramite.prediosAsociados =  prediosAsociados;
-        setDetalleTramite(responseDetalleTramite);
-        setShowDetalleTramite(true);
+    }
+
+    const moverPagina = () => {
+        let pathname = location.pathname;
+        pathname = pathname.split('/');
+        pathname=pathname[pathname.length-1]
+        pathname==='consultaTramite'
+            ? navigate("/tramites/consultaTramite/consulta")
+            : navigate("/tramites/seguimientoTramite/detalle")
     }
 
 
     return (
         <div className="sombra componentFather" >
-            {
-                !showDetalleTramite
-                ?   <TablaTramites
+            <TablaTramites
                         getDetalleTramite={getDetalleTramite}
                         registrosGetSolicitudesUsuario={registrosGetSolicitudesUsuario}
                         setRegistrosGetSolicitudesUsuario={setRegistrosGetSolicitudesUsuario}
@@ -432,13 +458,16 @@ export const ConsultarTramite = ({tipoTramite='Consulta'/* , setOpenBackDrop */}
                         getTramite={getTramite}
                         setPaginado={setPaginado}
                     />
-                :   <CrearTramite 
+            {/* {
+                !showDetalleTramite
+                   
+                   <CrearTramite 
                         key={'CrearTramite'}
                         detalleTramite={detalleTramite}
                         modoTramite={tipoTramite}
                         getDetalleTramite={getDetalleTramite}
                     />
-            }
+            } */}
             
         </div>
     )

@@ -6,13 +6,14 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Fab from '@mui/material/Fab';
 
 import { NoMatch } from '../componets/NoMatch';
-import { ConsultarTramite } from '../pages/tramites/consultarTramites/ConsultarTramite';
+// import { ConsultarTramite } from '../pages/tramites/consultarTramites/ConsultarTramite';
 import { CrearTramite } from '../pages/tramites/CrearTramite';
 import { GestionarUsuariosRoute } from './GestionarUsuariosRoute';
 import { SeguimientoTramitre } from '../pages/tramites/seguimientoTramitre/SeguimientoTramitre';
 import { Tramites } from '../pages/tramites/Tramites';
-import { pathsRoutes } from '../helpers/utils';
+import { formarPath, pathsRoutes } from '../helpers/utils';
 import PasodePagIzq_Icon from '../assets/Iconos/PasodePagIzq_Icon.png'
+import { ConsultaTramiteRoute } from '../pages/tramites/consultarTramites/ConsultaTramiteRoute';
 
 
 
@@ -20,21 +21,11 @@ export const TramitesCatastrales = ({salir/* , setOpenBackDrop */}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [pathPrevius, setPathPrevius] = useState('/');
-
-    function handleClick(event) {
-        // event.preventDefault();
-        if (location.pathname.split("/")[location.pathname.split("/").length-1] !== event) {
-            // console.info('You clicked a breadcrumb. => ', event);
-            // console.log(location);
-            let go = `/${event}`;
-            let paths = location.pathname.split("/");
-            if (paths.length > 3) {
-                paths.pop();
-                go = paths.join('/');
-            }
-            navigate(go)
-        }
-      }
+    // console.log("TramitesCatastrales L24");
+    
+    function handleClick(pathSelected) {
+        navigate(formarPath(location, pathSelected));
+    }
 
     useEffect(() => {
         let previusPath = location.pathname.split('/');
@@ -87,9 +78,11 @@ export const TramitesCatastrales = ({salir/* , setOpenBackDrop */}) => {
                             />
                         }
                     />
-                    <Route path="consultar" element={<ConsultarTramite  /* setOpenBackDrop={setOpenBackDrop} *//>} />
                     <Route path="gestionarUsuario/*" element={<GestionarUsuariosRoute/>} />
-                    <Route path="seguimientoTramitre" element={<SeguimientoTramitre /* setOpenBackDrop={setOpenBackDrop} *//>} />
+                    {/* <Route path="seguimientoTramite" element={<SeguimientoTramitre/>} /> */}
+                    <Route path="seguimientoTramite/*" element={<SeguimientoTramitre/>} />
+                    {/* <Route path="consultar" element={<ConsultarTramite/>} /> */}
+                    <Route path="consultaTramite/*" element={<ConsultaTramiteRoute/>} />
                     <Route path="*" element={<NoMatch/>} />
                 </Routes>
             </div>

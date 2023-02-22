@@ -61,7 +61,7 @@ const initialState = {
 }
 
 export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitud, tiposSolicitante, avancePagina,
-    formularioTramite, setFormularioTramite, renderizarInfoSegunTipoTramite, setForms, detalleTramite, cargarInfoDetalleTramite,
+    formularioTramite, setFormularioTramite, renderizarInfoSegunTipoTramite, setFormsAndlastForm, detalleTramite, cargarInfoDetalleTramite,
     modoTramite, addPrimerOpcionSelect}) => {
 
         const {store, updateStore} = useContext(StoreContext);
@@ -73,6 +73,12 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
 
         const [stateFirsFormTramite, setStateFirsFormTramite] = useState(initialState);
         const {modoFormulario, registroSeleccionado, formularioTotalOk, validacionTitulares} = stateFirsFormTramite;
+        /* console.log(`
+            modoFormulario => ${modoFormulario}
+            registroSeleccionado => ${JSON.stringify(registroSeleccionado)}
+            formularioTotalOk => ${formularioTotalOk}
+            validacionTitulares => ${validacionTitulares}
+        `); */
 
         const [newTitularDerecho, setNewTitularDerecho] = useState(initForm);
 
@@ -520,7 +526,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                 </div>
                 <div style={{display:'flex', justifyContent:'flex-end'}}>
                     { (modoTramite === 'Consulta' || modoTramite === 'Seguimiento') &&
-                        <button onClick={()=>setForms("verEstado")} type="button" style={{marginRight:'140px'}} className='btnAceptar'>
+                        <button onClick={()=>setFormsAndlastForm("verEstado")} type="button" style={{marginRight:'140px'}} className='btnAceptar'>
                             {   modoTramite === 'Consulta'
                                 ? `VER ESTADO`
                                 : modoTramite === 'Seguimiento'
@@ -530,7 +536,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                         </button> }
                     <button type="submit" style={{border:'none', background:'transparent'}}>
                         <p onClick={()=>{avancePagina( modoTramite === 'Nuevo' ? formularioTotalOk : true, true)}} 
-                            className={`${(formularioTotalOk || modoTramite === 'Consulta') ?'color1 pointer':'grey2'}  `}>Siguiente <span style={{fontWeight:'bold'}}>{'>'}</span> </p>
+                            className={`${(formularioTotalOk || modoTramite === 'Consulta' || modoTramite === 'Seguimiento') ?'color1 pointer':'grey2'}  `}>Siguiente <span style={{fontWeight:'bold'}}>{'>'}</span> </p>
                     </button>
                     {/* <img onClick={()=>{avancePagina()}} className="imgWidth" src={PasodePagDer_Icon} alt="" style={{width:'12px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/> */}
                 </div>

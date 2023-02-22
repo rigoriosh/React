@@ -17,7 +17,7 @@ export const GestionarUsuariosRoute = () => {
     let location = useLocation();
     let navigate = useNavigate();
 
-
+    // console.log(location.pathname);
     if (location.pathname === pathsRoutes.gestionarUsuario) {
 
         return (

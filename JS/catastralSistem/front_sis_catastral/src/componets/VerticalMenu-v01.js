@@ -27,50 +27,29 @@ export const VerticalMenu = ({usuario, salir, renewToken}) => {
         // monitorea actividad del usuario
         let intervalSessionUser;
         intervalSessionUser = setInterval(() => {
-            console.log("useEffect verticalMenu 111")
-            const minutesToEachSession = 15;
-            debugger
+            // console.log("useEffect verticalMenu 111")
             const sesionStore = JSON.parse(sessionStorage.getItem('store'));
             if (sesionStore) {
                 const {user} = sesionStore;
-                /* if (!sesionStore) {
-                    console.log(11111111)
-                }else{2
-                    console.log(22222)
-                } */
-                console.log("store => ", store)
-                console.log("sesionStore => ", sesionStore)
+                
+                // console.log("store => ", store)
+                // console.log("sesionStore => ", sesionStore)
                 if (user.isLogin && sesionStore) { // calcula el tiempo del usuario
                     const tiempoExpiracion = user.tiempoExpiracion;
                     const timeFin = new Date().getTime();
                     const timeDifference = timeFin -  user.tiempoInicio;
-                    console.log(`
+                    /* console.log(`
                         tiempoExpiracion    = ${tiempoExpiracion}
                         tiempoInicio        = ${user.tiempoInicio}
                         timeFin             = ${timeFin} 
                         timeDifference      = ${timeDifference}
-                    `)
+                    `) */
                     if(timeDifference >= tiempoExpiracion){ // si vencio solicita nuevo usuario
-                        debugger
                         // cierra la sesion
-                        console.log("fin sessionnn")
+                        // console.log("fin sessionnn")
                         salir(textosInfoWarnig.tiempoInactividad);
                     }
-    
-                    // calcula el tiempo del token
-                    /* const timeInit = new Date(user.tiempoInicio);
-                    // const timeInitSession = new Date(user.tiempoInicio);
-                    const tiempoExpiracionToken = user.tiempoExpiracion;
-                    const timeFinToken = new Date();
-                    const timeDifferenceToken = timeFinToken - timeInit;
-                    if(timeDifferenceToken >= tiempoExpiracionToken){ // si vencio solicita nuevo token
-                        debugger
-                    // solicitarNuevoToken
-                        console.log("solicta nuevo token")
-                        renewToken(user.user, user.pwd);
-                    } */
                 }else{
-                    console.log(999999999999)
                     salir(textosInfoWarnig.tiempoInactividad);
                     clearInterval(intervalSessionUser);
                 }
@@ -102,7 +81,7 @@ export const VerticalMenu = ({usuario, salir, renewToken}) => {
             }
             {
                 checkPermits(permits[1].valor, store) &&
-                    <div onClick={()=>{navigate("/tramites/seguimientoTramitre");}} style={{cursor:'pointer', display:'flex', alignItems:'center'}}>
+                    <div onClick={()=>{navigate("/tramites/seguimientoTramite");}} style={{cursor:'pointer', display:'flex', alignItems:'center'}}>
                         <img className="imgWidth" src={SeguimientoaTramite_Icon} alt="" style={{width:'30px'}}/>
                         <div>
                             <p className="fz12px">Seguimiento</p>

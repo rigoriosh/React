@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 
 import Salir_Icon from '../../../assets/Iconos/Salir_Icon.png'
 import { FieldInput } from '../../../componets/FieldInput'
-import { textosInfoWarnig } from '../../../helpers/utils'
+import { ajusteDataTramite, /* pathsRoutes, */ textosInfoWarnig } from '../../../helpers/utils'
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
@@ -18,10 +18,12 @@ import { FieldSelect } from '../../../componets/FieldSelect';
 import { StoreContext } from '../../../App';
 import { downloadFile, getInfo, getInfoGET } from '../../../api';
 import enviroment from '../../../helpers/enviroment';
+// import { useNavigate } from 'react-router-dom';
 
 
-export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTramite, getDetalleTramite}) => {
+export const VerEstado = ({setFormsAndlastForm, lastForm, detalleTramite, formularioTramite, modoTramite/* , getDetalleTramite */}) => {
     const { store, updateStore } = useContext(StoreContext);
+    // let navigate = useNavigate();
 
     const {estadosSolicitud} = detalleTramite;
 
@@ -116,6 +118,10 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
                 setState({
                     ...state,
                     tiposEstado: response.resultado.dominios,
+                    openDialogConfirmacionSiNo:{
+                        ...openDialogConfirmacionSiNo,
+                        respuesta:"No"
+                    }
                 });
                 updateStore({...store, openBackDrop:false, llama:"L120FVerEstado"});
             }
@@ -171,24 +177,42 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
             if (response.error) {
                 falloLaPeticion(response.error);
             } else {
-                setState({
+                /* setState({
                     ...state,
                     showBtnCambiarEstado:false,
                     openDialogConfirmacionSiNo:{
+                        ...openDialogConfirmacionSiNo,
                         respuesta:"No"
                     }
-                })
+                }) */
+                // setTimeout(() => {
                 updateStore({...store,
-                    openBackDrop:false,
+                    // detalleTramite:{},
+                    openBackDrop:true,
                     snackBar:{
                         openSnackBar: true,
                         messageSnackBar:textosInfoWarnig.cambioEstadoTramiteOk,
                         tiempoExpiracion:'',
                         severity: "success"/*  | "error" | "warning" | "info" */,
-                      }, llama:"L188FVerEstado"
+                    }, llama:"L188FVerEstado"
                 });
-                getDetalleTramite({idSolicitud:detalleTramite.idSolicitud});
-                // navigate("/tramites")
+                // }, 1000);
+                // getDetalleTramite({idSolicitud:detalleTramite.idSolicitud});
+                // navigate(pathsRoutes.seguimientoTramite)
+            const  response = await getInfoGET(headers, enviroment.getDetalleSolicitud+'/'+detalleTramite.estadosSolicitud[0].idSolicitud);
+            const responseDetalleTramite = ajusteDataTramite(response);
+            updateStore({
+                ...store,
+                detalleTramite:responseDetalleTramite,                
+                llama:"L206FVerEstado",
+                openBackDrop:false,
+                snackBar:{
+                    openSnackBar: false,
+                    messageSnackBar: '',
+                    severity: 'success'
+                }
+            })
+
             }
         } catch (error) {
             falloLaPeticion(error);
@@ -313,7 +337,7 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
                 pageSize={3}
                 // scrollbarSize={10}
                 loading={estadosSolicitud.length <= 0}
-                rowsPerPageOptions={[]}
+                rowsPerPageOptions={[3]}
                 key={Math.random()}
             />
 
@@ -328,7 +352,7 @@ export const VerEstado = ({setForms, detalleTramite, formularioTramite, modoTram
             }
 
             <div style={{display:'flex', justifyContent:'center', marginTop:'10px'}} 
-                onClick={()=>{setForms(2)}}
+                onClick={()=>{setFormsAndlastForm(lastForm)}}
                 >
                 <img src={Salir_Icon} alt="" style={{cursor:'pointer', width:'20px', alignSelf:'center'}}/>
                 <p className="btnSalirRegresar" style={{marginLeft:'10px'}}>Volver atrás</p>

@@ -10,11 +10,15 @@ import { FirstFormTramitre } from './formulariosTramite/FirstFormTramitre'
 import { SecondFormTramitre } from './formulariosTramite/SecondFormTramitre'
 
 
-export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/* , setOpenBackDrop */}) => {
+export const CrearTramiteCopy = () => {
 
     const { store, updateStore } = useContext(StoreContext);
+    const {detalleTramite={}, modoTramite} = store;
+    // console.log("detalleTramite => ", detalleTramite);
+    // console.log("modoTramite => ", modoTramite);
     let navigate = useNavigate();
     const [forms, setForms] = useState(1); // controla el paginado de los forms
+    const [lastForm, setLastForm] = useState(); // almacena el ultimo form para cuando regreser del ver estado
     const [tiposTramites, setTiposTramites] = useState([]);
     const [tipoSolicitud, setTipoSolicitud] = useState([
         {
@@ -289,9 +293,16 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
         }
     }
 
+    const setFormsAndlastForm = (loQueQuieroVer) => {
+        setLastForm(forms);
+        setForms(loQueQuieroVer);
+    }
+
     const avancePagina = (formularioTotalOk, avanza) => {
         if (formularioTotalOk) {
-            setForms(avanza ? (forms + 1) : (forms - 1));
+            // setLastForm(forms);
+            // setForms(avanza ? (forms + 1) : (forms - 1));
+            setFormsAndlastForm(avanza ? (forms + 1) : (forms - 1))
         }
     }
 
@@ -907,7 +918,8 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
     }
 
     return (
-        <div className={modoTramite === 'Nuevo' ? "sombra componentFather": ''} >
+        <div className={/* modoTramite === 'Nuevo' ?  */"sombra componentFather"/* : '' */} >
+            {/* <h1>CrearTramiteCopy</h1> */}
             {
                 modoTramite === 'Nuevo'
                 ?
@@ -933,7 +945,7 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
                         formularioTramite={formularioTramite}
                         setFormularioTramite={setFormularioTramite}
                         renderizarInfoSegunTipoTramite={renderizarInfoSegunTipoTramite}
-                        setForms={setForms}
+                        setFormsAndlastForm={setFormsAndlastForm}
                         detalleTramite={detalleTramite}
                         cargarInfoDetalleTramite={cargarInfoDetalleTramite}
                         modoTramite={modoTramite ? modoTramite : 'Nuevo'}
@@ -949,16 +961,17 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
                         avancePagina={avancePagina}
                         onSubmitFinal={onSubmitFinal}
                         renderizarInfoSegunTipoTramite={renderizarInfoSegunTipoTramite}
-                        setForms={setForms}
+                        setFormsAndlastForm={setFormsAndlastForm}
                         modoTramite={modoTramite ? modoTramite : 'Nuevo'}
                     />
                 : forms === "verEstado" ?
                     <VerEstado
-                        setForms={setForms}
+                        setFormsAndlastForm={setFormsAndlastForm}
+                        lastForm={lastForm}
                         detalleTramite={detalleTramite}
                         formularioTramite={formularioTramite}
                         modoTramite={modoTramite}
-                        getDetalleTramite={getDetalleTramite}
+                        // getDetalleTramite={"getDetalleTramite"}
                     />
                 : <h1>ultimo</h1>
             }

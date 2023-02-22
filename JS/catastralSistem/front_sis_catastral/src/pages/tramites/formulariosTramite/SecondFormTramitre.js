@@ -26,7 +26,7 @@ export const SecondFormTramitre = ({
     avancePagina,
     onSubmitFinal,
     renderizarInfoSegunTipoTramite,
-    setForms,
+    setFormsAndlastForm,
     modoTramite,
 }) => {
 
@@ -829,7 +829,7 @@ export const SecondFormTramitre = ({
                 }
                 { modoTramite === 'Nuevo' && <button type="submit"  className='btnAceptar'>CREAR TRÁMITE</button> }
                 { (modoTramite === 'Consulta' || modoTramite === 'Seguimiento')
-                 && <button onClick={()=>setForms("verEstado")}
+                 && <button onClick={()=>setFormsAndlastForm("verEstado")}
                   type="button" className='btnAceptar'>
                       {   modoTramite === 'Consulta'
                                 ? `VER ESTADO`

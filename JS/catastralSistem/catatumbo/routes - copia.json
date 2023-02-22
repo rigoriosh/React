@@ -1,0 +1,22 @@
+{
+    "/api-ssc/seguridad/getToken":"/getToken",
+    "/api-ssc/seguridad/loginUser":"/loginUser",
+    "/api-ssc/solicitudes/getSolicitudesUsuario/1?pag=0&tam=10":"/paginado",
+    "/api-ssc/solicitudes/getSolicitudId/?idUsuario=1&idSolicitud=179":"/getSolicitudId_179",
+    "/api-ssc/solicitudes/getDetalleSolicitud/179":"/getDetalleSolicitud",
+    "/api-ssc/solicitudes/getEstadosSolicitud":"/getEstadosSolicitud",
+    "/api-ssc/solicitudes/updateEstadoSolicitud":"/updateEstadoSolicitud",
+    "/api-ssc/solicitudes/getSolicitudId/?idUsuario=1&idSolicitud=120":"/getSolicitudId_120",
+    "/api-ssc/solicitudes/getTiposTramite":"/getTiposTramite",
+    "/api-ssc/solicitudes/getTiposSuelo":"/getTiposSuelo",
+    "/api-ssc/solicitudes/getMunicipiosCatatumbo":"/getMunicipiosCatatumbo",
+    "/api-ssc/solicitudes/getMotivoSolicitud":"/getMotivoSolicitud",
+    "/api-ssc/solicitudes/getObjetoPeticion":"/getObjetoPeticion",
+    "/api-ssc/solicitudes/getConsideraMejora":"/getConsideraMejora",
+    "/api-ssc/solicitudes/getDiferenciaMayor":"/getDiferenciaMayor",
+    "/api-ssc/solicitudes/getRevisionBusca":"/getRevisionBusca",
+    "/api-ssc/solicitudes/getTipoSolicitudIns":"/getTipoSolicitudIns",
+    "/api-ssc/solicitudes/getObjetoRectifica":"/getObjetoRectifica",
+    "/api-ssc/valorLista/getCodigosDane":"/getCodigosDane",
+    "/api-ssc/valorLista/getTiposDocumento":"/tiposDocumento"
+}

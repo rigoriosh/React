@@ -41,11 +41,11 @@ export const VerticalMenu = ({usuario, salir, renewToken}) => {
                 `)
                 console.log(store) */
                 if(timeDifference >= tiempoExpiracion){ // si vencio solicita nuevo usuario
-                    console.log("// cierra la sesion")
+                    // console.log("// cierra la sesion")
                     navigate("/tramites")
                     let cont = 0;
                     const contInter = setInterval(() => {
-                        console.log(cont)
+                        // console.log(cont)
                         cont++;
                         salir(textosInfoWarnig.tiempoInactividad);
                         if (cont === 2) {
@@ -56,7 +56,7 @@ export const VerticalMenu = ({usuario, salir, renewToken}) => {
 
                 
             }
-        }, 60000);// cada 10 minutos 600000
+        }, 600000);// cada 10 minutos 600000
         
         return () => {
             clearInterval(intervalSessionUser);
@@ -80,7 +80,7 @@ export const VerticalMenu = ({usuario, salir, renewToken}) => {
             }
             {
                 checkPermits(permits[1].valor, store) &&
-                    <div onClick={()=>{navigate("/tramites/seguimientoTramitre");}} style={{cursor:'pointer', display:'flex', alignItems:'center'}}>
+                    <div onClick={()=>{navigate("/tramites/seguimientoTramite");}} style={{cursor:'pointer', display:'flex', alignItems:'center'}}>
                         <img className="imgWidth" src={SeguimientoaTramite_Icon} alt="" style={{width:'30px'}}/>
                         <div>
                             <p className="fz12px">Seguimiento</p>

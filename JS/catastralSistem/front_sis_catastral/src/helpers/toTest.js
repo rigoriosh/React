@@ -411,3 +411,18 @@ export const getTiposSolicitudTest = {
     ],
   },
 };
+// ?idUsuario=1&idSolicitud=179
+export const getTramitePorId = {
+  resultado: {
+    paginacion: { totalRegistros: 1, paginaActual: 0, totalPaginas: 1 },
+    solicitudes: [
+      {
+        estado: "Asignado",
+        nombreTramite: "Modificaciones en Propiedad Horizontal/Condominio",
+        idSolicitud: 179,
+        numeroRadicado: "RASOGC-179-16-2-2023",
+        tipoTramite: "Modificaciones",
+      },
+    ],
+  },
+};

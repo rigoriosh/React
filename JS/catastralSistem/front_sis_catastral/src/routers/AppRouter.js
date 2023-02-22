@@ -87,7 +87,7 @@ export const AppRouter = ({props}) => {
     }
 
     const closeSnackbar = ()=>{
-        updateStore({...store, snackBar:{openSnackBar: false, messageSnackBar:'', llama:"L90FAppRouter"}});
+        updateStore({...store, snackBar:{openSnackBar: false, messageSnackBar:''}, llama:"L90FAppRouter"});
     }
 
     const salir = (motivo='') => {
