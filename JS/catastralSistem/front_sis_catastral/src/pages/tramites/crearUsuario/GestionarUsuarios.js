@@ -9,6 +9,7 @@ import { getInfoGET } from '../../../api';
 import enviroment from '../../../helpers/enviroment';
 import { textosInfoWarnig } from '../../../helpers/utils';
 import { Tooltip } from '@mui/material';
+import { getUsersTest } from '../../../helpers/toTest';
 
 
 
@@ -16,7 +17,7 @@ import { Tooltip } from '@mui/material';
 export const GestionarUsuarios = () => {
 
     const { store, updateStore } = useContext(StoreContext);
-    const {dialogTool} = store;
+    const {dialogTool, modeTest} = store;
     const [deleteUser, setDeleteUser] = useState(false);
 
     // eslint-disable-next-line no-unused-vars
@@ -171,8 +172,13 @@ export const GestionarUsuarios = () => {
     const consultarUsuarios = async() => {
         try {
             updateStore({ ...store, openBackDrop: true, llama:"L173FGestionarUsuarios" });
-            const headers = {token: store.user.token};
-            const response = await getInfoGET(headers, enviroment.getUsers, 'GET');
+            let response = {};
+            if (modeTest) {
+                response = getUsersTest;
+            } else {
+                const headers = {token: store.user.token};
+                response = await getInfoGET(headers, enviroment.getUsers, 'GET');
+            }
             let messageSnackBar = '', severity = 'warning', openSnackBar = false;
             const rows = [];
             if (response.resultado) {

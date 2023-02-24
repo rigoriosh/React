@@ -342,6 +342,12 @@ export const SecondFormTramitre = ({
     }, [dialogTool])
 
     useEffect(() => {
+        // se comentarea logica siguiente por peticio de lina, 22/02/2023
+        setStateSecondFormTramite({
+            ...stateSecondFormTramite,
+            filtroMotivosSolicitud:MotivosSolicitud
+        });
+        /* 
         if (tipoTramite.value === 'MQ' && motivoSolicitud.value === 'INCP') {
             const motivos = [];
             motivos.push(MotivosSolicitud[0]);
@@ -365,6 +371,7 @@ export const SecondFormTramitre = ({
                 filtroMotivosSolicitud:MotivosSolicitud
             });
         }
+         */
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

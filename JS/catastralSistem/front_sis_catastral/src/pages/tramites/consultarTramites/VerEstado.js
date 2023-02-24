@@ -18,11 +18,13 @@ import { FieldSelect } from '../../../componets/FieldSelect';
 import { StoreContext } from '../../../App';
 import { downloadFile, getInfo, getInfoGET } from '../../../api';
 import enviroment from '../../../helpers/enviroment';
+import { getEstadosSolicitudTest, getSolicitudId_179, updateEstadoSolicitudTest } from '../../../helpers/toTest';
 // import { useNavigate } from 'react-router-dom';
 
 
 export const VerEstado = ({setFormsAndlastForm, lastForm, detalleTramite, formularioTramite, modoTramite/* , getDetalleTramite */}) => {
     const { store, updateStore } = useContext(StoreContext);
+    const {modeTest} = store;
     // let navigate = useNavigate();
 
     const {estadosSolicitud} = detalleTramite;
@@ -110,8 +112,13 @@ export const VerEstado = ({setFormsAndlastForm, lastForm, detalleTramite, formul
     const getTiposEstado = async()=>{
         updateStore({...store, openBackDrop:true, llama:"L109FVerEstado"});
         try {
-            const headers = {token: store.user.token};
-            const response = await getInfoGET(headers, enviroment.getEstadosSolicitud);
+            let response={}
+            if (modeTest) {
+                response = getEstadosSolicitudTest;
+            } else {
+                const headers = {token: store.user.token};
+                response = await getInfoGET(headers, enviroment.getEstadosSolicitud);
+            }
             if (response.error) {
                 falloLaPeticion(response.error);
             } else {
@@ -166,14 +173,20 @@ export const VerEstado = ({setFormsAndlastForm, lastForm, detalleTramite, formul
     const actualizarEstado = async() => {
         updateStore({...store, openBackDrop:true, llama:"L161FVerEstado"});
         try {
+            let response = {};
             const headers = {token: store.user.token};
-            const body = {
-                "estado": estado.value,
-                "observaciones": observaciones.value,
-                "idSolicitud": detalleTramite.estadosSolicitud[0].idSolicitud
+            if (modeTest) {
+                response = updateEstadoSolicitudTest;
+            } else {
+                const body = {
+                    "estado": estado.value,
+                    "observaciones": observaciones.value,
+                    "idSolicitud": detalleTramite.estadosSolicitud[0].idSolicitud
+                }
+                response = await getInfo(headers, enviroment.updateEstadoSolicitud,
+                    "PUT", JSON.stringify(body));
             }
-            const response = await getInfo(headers, enviroment.updateEstadoSolicitud,
-                "PUT", JSON.stringify(body));
+
             if (response.error) {
                 falloLaPeticion(response.error);
             } else {
@@ -185,7 +198,6 @@ export const VerEstado = ({setFormsAndlastForm, lastForm, detalleTramite, formul
                         respuesta:"No"
                     }
                 }) */
-                // setTimeout(() => {
                 updateStore({...store,
                     // detalleTramite:{},
                     openBackDrop:true,
@@ -196,10 +208,14 @@ export const VerEstado = ({setFormsAndlastForm, lastForm, detalleTramite, formul
                         severity: "success"/*  | "error" | "warning" | "info" */,
                     }, llama:"L188FVerEstado"
                 });
-                // }, 1000);
                 // getDetalleTramite({idSolicitud:detalleTramite.idSolicitud});
                 // navigate(pathsRoutes.seguimientoTramite)
-            const  response = await getInfoGET(headers, enviroment.getDetalleSolicitud+'/'+detalleTramite.estadosSolicitud[0].idSolicitud);
+            let response={};
+            if (modeTest) {
+                response = getSolicitudId_179;
+            } else {
+                response = await getInfoGET(headers, enviroment.getDetalleSolicitud+'/'+detalleTramite.estadosSolicitud[0].idSolicitud);
+            }
             const responseDetalleTramite = ajusteDataTramite(response);
             updateStore({
                 ...store,

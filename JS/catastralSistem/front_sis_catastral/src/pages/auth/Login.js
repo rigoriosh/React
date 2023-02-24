@@ -12,12 +12,13 @@ import Contraseña_Login_Icon from '../../assets/Iconos/Contraseña_Login_Icon.p
 import GestiondeUS_NOHabilitado_Icon from '../../assets/Iconos/GestiondeUS_NOHabilitado_Icon.png'
 import VerContraseña_Login_Icon from '../../assets/Iconos/VerContraseña_Login_Icon.png'
 import Salir_Icon from '../../assets/Iconos/Salir_Icon.png'
+import { getTokenTest, loginUserTest } from '../../helpers/toTest';
 
 
 export const Login = () => {
     let navigate = useNavigate();
     const { store, updateStore } = useContext(StoreContext);
-    const { user:usuario } = store;
+    const { user:usuario, modeTest} = store;
     // const [form, setForm] = useState({user:'davids', pwd:'prueba'});
     const [form, setForm] = useState({user:'', pwd:''});
     const {user, pwd=''} = form;
@@ -29,7 +30,12 @@ export const Login = () => {
         let responseGetToken = {} ;
         if(user !== '' && pwd !== '' ){
             try {
-                responseGetToken = await getToken(user, pwd);
+                if (modeTest) {
+                    responseGetToken = getTokenTest;
+                } else {
+                    responseGetToken = await getToken(user, pwd);
+                }
+
                 if (!responseGetToken.tkn) {
                             updateStore({
                                 ...store,
@@ -42,8 +48,13 @@ export const Login = () => {
                             });
                 } else {// recibio token ok
                     // realiza Login
-                    const headers = {token: responseGetToken.tkn};
-                    const responseLogin = await getInfoGET(headers, enviroment.loginUser, 'POST')
+                    let responseLogin = {};
+                    if (modeTest) {
+                        responseLogin = loginUserTest;
+                    } else {
+                        const headers = {token: responseGetToken.tkn};
+                        responseLogin = await getInfoGET(headers, enviroment.loginUser, 'POST')
+                    }
                     if (!responseLogin.resultado.usuario) {
                         updateStore({
                             ...store,
@@ -223,7 +234,7 @@ export const Login = () => {
                         ¿Olvido su contraseña?
                     </p>
 
-                    <button type='submit' /* onClick={()=>modoTest() } */ className='btnAceptar'>ACEPTAR</button>
+                    <button type='submit' className='btnAceptar'>ACEPTAR</button>
 
                     <div style={{display:'flex'}} onClick={()=>{navigate("/")}}>
                         <img src={Salir_Icon} alt="" style={{cursor:'pointer', width:'20px', alignSelf:'center'}}/>

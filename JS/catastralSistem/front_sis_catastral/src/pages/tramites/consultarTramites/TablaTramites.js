@@ -15,13 +15,14 @@ import { useContext } from 'react';
 import { StoreContext } from '../../../App';
 import { FieldTextWidtLabel } from '../../../componets/FieldTextWidtLabel';
 import enviroment from '../../../helpers/enviroment';
+import { /* getSolicitudId_179, */ getSolicitudId_User_179 } from '../../../helpers/toTest';
 
 
 
 export const TablaTramites = ({getDetalleTramite, tipoTramite, registrosGetSolicitudesUsuario, getTramite, paginado, setPaginado, setRegistrosGetSolicitudesUsuario}) => {
 
     const { store, updateStore } = useContext(StoreContext);
-
+    const {modeTest} = store;
     // eslint-disable-next-line no-unused-vars
     const [columnsTablaConsultarTramite, setColumnsTablaConsultarTramite] = useState(
         [
@@ -179,8 +180,12 @@ export const TablaTramites = ({getDetalleTramite, tipoTramite, registrosGetSolic
         if(datoIn.includes('RASOGC'))parametro2='nRadicado';
         // console.log(parametro2);
         const headers = {token: store.user.token};
-        const response = await getInfoGET(headers, enviroment.getSolicitudId+`/?idUsuario=${store.user.infoUser.idUsuario}&${parametro2}=${consTraId}`);
-        
+        let response = {};
+        if (modeTest) {
+            response = getSolicitudId_User_179;
+        } else {
+            response = await getInfoGET(headers, enviroment.getSolicitudId+`/?idUsuario=${store.user.infoUser.idUsuario}&${parametro2}=${consTraId}`);
+        }        
         const solicitudes = [...response.resultado.solicitudes];
         solicitudes.map((solicitud, item) => solicitud.id = item);
         setRegistrosGetSolicitudesUsuario(solicitudes);

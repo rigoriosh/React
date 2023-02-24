@@ -7,11 +7,13 @@ import { ajusteDataTramite, textosInfoWarnig } from '../../../helpers/utils';
 
 import { getInfoGET } from '../../../api';
 import { TablaTramites } from './TablaTramites';
+import { getSolicitudId_179, paginadoTest } from '../../../helpers/toTest';
 // import { CrearTramite } from '../CrearTramite';
 
 
 export const ConsultarTramite = ({tipoTramite/* , setOpenBackDrop */}) => {
     const { store, updateStore } = useContext(StoreContext);
+    const {modeTest} = store;
     let location = useLocation();
     // console.log(location);
     let navigate = useNavigate();
@@ -334,7 +336,13 @@ export const ConsultarTramite = ({tipoTramite/* , setOpenBackDrop */}) => {
         try {
             const headers = {token: store.user.token};
             const idUser = store.user.infoUser.idUsuario
-            const  response = await getInfoGET(headers, enviroment.getSolicitudesUsuario+'/'+idUser+`?pag=${pag}&tam=${tam}`);
+            let  response = {};
+            if (modeTest) {
+                response = paginadoTest;
+            } else {
+                response = await getInfoGET(headers, enviroment.getSolicitudesUsuario+'/'+idUser+`?pag=${pag}&tam=${tam}`);
+            }
+            
             if (response.error) {
                 falloLaPeticion(response.error);
                 navigate("/tramites")
@@ -399,8 +407,13 @@ export const ConsultarTramite = ({tipoTramite/* , setOpenBackDrop */}) => {
             },
             llama:"L376FConsultarTramite"});
         try {
-            const headers = {token: store.user.token};
-            const  response = await getInfoGET(headers, enviroment.getDetalleSolicitud+'/'+row.idSolicitud);
+            let response = {};
+            if (modeTest) {
+                response = getSolicitudId_179;
+            } else {
+                const headers = {token: store.user.token};
+                response = await getInfoGET(headers, enviroment.getDetalleSolicitud+'/'+row.idSolicitud);
+            }
             if (response.error) {
                 falloLaPeticion(response.error);
             } else {

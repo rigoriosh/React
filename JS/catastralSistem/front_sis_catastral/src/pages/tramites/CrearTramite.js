@@ -845,7 +845,7 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
             "idSolicitante": {
               "idUsuario": store.user.infoUser.idUsuario===""?null:store.user.infoUser.idUsuario
             },
-            "motivoSolicitud": formularioTramite.motivoSolicitud.value===""?null:formularioTramite.motivoSolicitud.value,
+            "motivoSolicitud": formularioTramite.motivoDeLaSolicitud.value===""?null:formularioTramite.motivoDeLaSolicitud.value,
             "municipioNotaria": formularioTramite.municipioNotaria.value===""?null:formularioTramite.municipioNotaria.value,
             "municipioPredio": municipio.value===""?null:municipio.value,
             "noEscrituraPublica": formularioTramite.noEscrituraPublica.value===""?null:formularioTramite.noEscrituraPublica.value,

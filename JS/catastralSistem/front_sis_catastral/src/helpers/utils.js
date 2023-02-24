@@ -1,6 +1,7 @@
 import { doGetToken,  } from "../api";
 
 export const initStore = {
+  modeTest:false,
   user:{
       isLogin:false,
       token:'',

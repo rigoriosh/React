@@ -15,9 +15,7 @@ import { formarPath, pathsRoutes } from '../helpers/utils';
 import PasodePagIzq_Icon from '../assets/Iconos/PasodePagIzq_Icon.png'
 import { ConsultaTramiteRoute } from '../pages/tramites/consultarTramites/ConsultaTramiteRoute';
 
-
-
-export const TramitesCatastrales = ({salir/* , setOpenBackDrop */}) => {
+export const TramitesCatastrales = ({salir}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [pathPrevius, setPathPrevius] = useState('/');
@@ -36,15 +34,10 @@ export const TramitesCatastrales = ({salir/* , setOpenBackDrop */}) => {
     }, [location])
     return (
         <div style={{display:'flex', flexDirection:'column', height:'100vh', justifyContent:'center', alignItems:'center' }}>
-            {/* <pre>
-                {location.pathname}
-            </pre> */}
             <div className='contTramistesCatas'>
-                {/* <div className={location.pathname.split("/").length > 2 ? 'alingLeft':''}> */}
-                {/* <div className={location.pathname.split("/").length > 2 ? '':''}> */}
                 {
                     location.pathname.split("/").length > 2 &&
-                        <div role="presentation" /* onClick={handleClick} */ className='breadcrumb'>
+                        <div role="presentation"className='breadcrumb'>
                             <Breadcrumbs aria-label="breadcrumb" color='white' key={"breadcrumb"}>
                                 {
                                         location.pathname.split("/").map((path, i) =>
@@ -60,7 +53,6 @@ export const TramitesCatastrales = ({salir/* , setOpenBackDrop */}) => {
 
                 {
                     location.pathname !== pathsRoutes.tramites &&
-                        // <button onClick={()=>{navigate(pathPrevius)}}>Regresar</button>
                         <Fab size="small" style={{backgroundColor:'rgb(168, 207, 69)', position:'absolute', left:'140px'}} aria-label="add" onClick={()=>{navigate(pathPrevius)}}>
                             <img className="imgWidth" src={PasodePagIzq_Icon} alt="" style={{width:'15px'}}/>
                         </Fab>
