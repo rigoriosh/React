@@ -1,0 +1,443 @@
+@import "./index.css";
+
+#root {
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  /* padding: 2rem; */
+  /* text-align: center; */
+  width: 100%;
+  background-color: var(--backGr_1);
+  /* height: 100vh; */
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* ////////////////////////////////// */
+
+
+.App {
+  height: 100vh;
+}
+
+.datag{
+  background-color: azure;
+}
+
+.loginPage{
+  background-image: url('../assets/backLogin/Iphone6-7-8plus.png');  
+  text-align: center;
+  background-repeat: no-repeat;
+  /* background-position-x: -7px; */
+  background-size: contain;
+  background-position: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+/* .App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+} */
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* start styles login */
+.modalIngrearUserExt_inLogin{
+    background-color: transparent;
+    width: 80%;
+    max-width: 400px;
+    height: 250px;
+    margin-top: 75px;
+}
+
+.modalLogin{
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.sombra{
+  -webkit-box-shadow: -4px 6px 11px 5px rgba(0,0,0,0.37); 
+  box-shadow: -4px 6px 11px 5px rgba(0,0,0,0.37);
+}
+
+.pagePhader{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: overlay;
+  /* scrollbar-gutter: stable both-edges; */
+}
+
+.styleInputtext{
+  border: none;
+  width: 100%;
+  outline: none;
+  font-size: 12px;
+  font-family: var(--fontFamilyApp);
+}
+
+.btnAceptar{
+  cursor: pointer;
+  /* width: 90px; */
+  align-self: center;
+  background-color: var(--backGr_1);
+  border-radius: 20px;
+  border: none;
+  color: white;
+  font-size: 15px;
+  margin: 5px;
+  padding: 2px 15px;
+}
+
+.fieldText{
+  display: flex;
+  margin: 10px 0px 5px;
+  border: 1px solid var(--grey1);
+  border-radius: 10px;
+  padding: 0px 10px;
+  width: 100%;
+  height: 25px;
+  font-family: var(--fontFamilyApp);
+}
+.fieldTextWidtLabel{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.labels{
+  font-size: 9px;
+  color: var(--grey2);
+  font-weight: bold;
+}
+
+.labels1 {
+  font-size: 13px;
+  color: var(--fondo);
+}
+
+
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
+  width: 100%;
+  border-radius: 10px !important;
+  height: 25px !important;
+  outline: none !important;
+  text-align: initial !important;
+  font-size: 12px !important;
+}
+
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root:focus{
+  outline: none !important;
+  border: none;
+}
+
+
+.css-hlj6pa-MuiDialogActions-root{
+  justify-content: space-evenly !important;
+}
+
+.panelFrontal{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.verticalMenu{
+  align-items: flex-start;
+  background-color: var(--negroMate);
+  color: var(--blanco);
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  padding: 10px 5px 10px 10px;
+  position: absolute;
+  height: inherit;
+}
+
+.imgWidth{
+  width: 150px;
+}
+
+.titleTramites{
+  color: var(--verde2);
+  margin-top: 10px;
+  font-size: 20px;
+}
+.titleCatasTrales{
+  color: var(--verde);
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: -6px;
+}
+
+.logOut{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.horizontalDivider{
+  border: solid 0.1px #ffffff26;
+  width: 62%;
+  background-color: #ffffff3d;
+  margin: 2px 0;
+}
+
+.decorationTitle{
+  width: 23px;
+  height: auto;
+  border-radius: 15px 0px 0px 15px;
+  padding-left: 5px;
+}
+
+.titulo{
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  margin-left: 10px;
+  align-self: center;
+}
+
+.tituloBtnCenter{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.tituloBtnRight{
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  margin-bottom: 10px;
+}
+
+.subTitulo{
+  font-weight: 100;
+  font-size: 12px;
+  display: flex;
+  margin-left: 10px;
+  align-self: center;
+}
+
+.contenTitulo{
+  height: 28px;
+  margin-left: 2px;
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+
+.color1{
+  color: var(--verde);
+}
+
+.bgc1{
+  background-color: var(--verde);
+}
+
+.color2{
+  color: var(--verde2);
+}
+
+.bgc2{
+  background-color: var(--verde2);
+}
+
+.color3{
+  color: var(--azul1);
+}
+
+.bgc3{
+  background-color: var(--azul1);
+}
+
+.bgc4{
+  background-color: var(--grey2);
+}
+
+.row{
+  display: flex;
+}
+.aife{
+  align-items: flex-end;
+}
+.aicenter{
+  align-items: center;
+}  
+.tituloTramite{
+  background-color: var(--grey1);
+  color: var(--blanco);
+  width: 50%;
+  border-radius: 20px;
+  margin-left: 25%;
+  font-family: auto;
+  font-size: 17px;
+}
+
+.grey2{
+  color: var(--grey2);
+}
+
+.textArea{
+  margin: 0px;
+  width: 100%;
+  height: 84px;
+  outline: none;
+  border-radius: 11px;
+  resize: none;
+  padding: 10px;
+  font-size: 15px;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.nota{
+  background-color: rgba(0,0,0,.5);
+  border-radius: 20px;
+  padding: 10px;
+  font-size: 6px;
+  text-align: justify;
+}
+
+.componentFather{
+  background-color:white;
+  border-radius:10px;
+  /* margin-top:25px; */
+  margin-top:0px;
+  min-width: 850px;
+  padding:5px 30px;
+  /* width: auto; */
+}
+
+.btnSalirRegresar{
+  align-self: end;
+  font-size: 12px;
+  margin: 5px 0px;
+  color: var(--grey2);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.inputSelect{
+  width: 100%;
+  border-radius: 10px;
+  font-family: system-ui;
+  font-size: 15px;
+  padding: 0px 10px;
+}
+
+.breadcrumb{
+  background-color: #02a157;
+  /* width: fit-content; */
+  /* width: -moz-fit-content; */
+  border-radius: 10px;
+  /* width: 100%; */
+  /* padding: 0px 10px; */
+  /* margin-left: 298px; */
+  /* margin-left: 153px; */
+  align-self: start;
+}
+
+.alingLeft{
+  width: 100%;
+  margin-left: 50%;
+}
+
+.contTramistesCatas{
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  margin-left: 10%;
+}
+
+.bi_btn{
+  /* background-attachment: fixed; */
+  background-color: var(--verde);
+  background-image: url('../assets/Iconos/ConsultarTramite_Icon.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border-radius: 40px;
+  border-style: none;
+  color: var(--verde2);
+  cursor: pointer;
+  font-size: 12px;
+  height: 50px;
+  width: 50px;
+}
+
+
+@media (max-width: 1133px) {
+  .App{
+    /* background-image: none; */
+    width: 100%;
+  }
+}
+
+.MuiFormGroup-root {
+  justify-content: space-between;
+}

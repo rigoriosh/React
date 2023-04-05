@@ -1,4 +1,4 @@
-import React, { useContext,  } from 'react'
+import React, { useContext, useEffect,  } from 'react'
 import { /* useParams, */ useNavigate } from "react-router-dom";
 import { StoreContext } from '../../App';
 import { VerticalDivider } from '../../componets/VerticalDivider';
@@ -15,6 +15,13 @@ import CrearTramite_Icon from '../../assets/Iconos/CrearTramite_Icon.png'
 export const Tramites = ({children, salir}) => {
     let navigate = useNavigate();
     const { store, updateStore} = useContext(StoreContext);
+
+    useEffect(() => {
+        updateStore({...store, openBackDrop:false, llama:"L20FTramites"});
+      return () => {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+    
     
     
 
