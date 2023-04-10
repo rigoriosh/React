@@ -170,8 +170,19 @@
 }
 
 .labels1 {
-  font-size: 13px;
+  font-size: 20px;
   color: var(--fondo);
+  align-items: center;
+  justify-content: space-evenly;
+  margin-top: 10px;
+}
+
+p{
+  margin: 0;
+}
+
+.tac{
+  text-align: center;
 }
 
 
@@ -217,12 +228,12 @@
   width: 150px;
 }
 
-.titleTramites{
+.title1{
   color: var(--verde2);
   margin-top: 10px;
   font-size: 20px;
 }
-.titleCatasTrales{
+.title2{
   color: var(--verde);
   font-weight: bold;
   font-size: 20px;
@@ -288,7 +299,7 @@
 }
 
 .color1{
-  color: var(--verde);
+  color: var(--blanco);
 }
 
 .bgc1{
@@ -324,14 +335,14 @@
 .aicenter{
   align-items: center;
 }  
-.tituloTramite{
-  background-color: var(--grey1);
+.titulo3{
+  background-color: var(--azul1);
   color: var(--blanco);
-  width: 50%;
+  width: 100%;
   border-radius: 20px;
-  margin-left: 25%;
+  /* margin-left: 25%; */
   font-family: auto;
-  font-size: 17px;
+  font-size: 20px;
 }
 
 .grey2{
@@ -441,3 +452,4 @@
 .MuiFormGroup-root {
   justify-content: space-between;
 }
+

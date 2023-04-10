@@ -9,12 +9,12 @@ import { CrearProyecto } from '../creatProject/CrearProyecto';
 import { menu } from '../../helpers/constantes';
 
 
-const StyledFab = styled(Fab)({
+export const StyledFab = styled(Fab)({
   position: 'absolute',
   zIndex: 1,
   bottom: 10,
   left: 0,
-  right: 0,
+  right: 10,
   margin: '0 auto',
 });
 
@@ -31,7 +31,7 @@ export const HomePage = () => {
   }, [])
   
   return (
-    <Container sx={{mt:0, ml:0, p:0}}>
+    <Container sx={{mt:0, ml:0, p:0/* , backgroundColor:'red' */, /* height:'100%' */}}>
         <Navbar/>
         {
           menuSelected == menu.ListarProyectos
@@ -52,8 +52,8 @@ export const HomePage = () => {
           </StyledFab>
         }
         {
-          (subMenuSelected != "" && (menuSelected == menu.CrearProyecto)) &&
-          <StyledFab color="default" aria-label="add" 
+          (subMenuSelected != "" && (menuSelected == menu.CrearProyecto || menuSelected == menu.ListarProyectos)) &&
+          <StyledFab color="warning" aria-label="add" 
             onClick={()=>setStore({...store, subMenuSelected:""})}
           >
             <ArrowBackIcon />

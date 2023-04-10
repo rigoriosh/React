@@ -14,6 +14,8 @@ const initStore = {
   openBackop: false
 }
 
+const initLogin = {isLogin:false, user:""};
+
 function TransitionDown(props) {
   return <Slide {...props} direction="down" />;
 }
@@ -23,9 +25,7 @@ export const StoreContext = createContext(null);
 function App() {
   
   const [store, setStore] = useState(initStore);
-  const [login, setLogin] = useState({
-    isLogin:false
-  })
+  const [login, setLogin] = useState(initLogin)
   const{openBackop}=store;
   const closeBackDrop = () => {
     setStore({...store, openBackop:false})
@@ -33,8 +33,10 @@ function App() {
   const openBackDrop = () => {
     setStore({...store, openBackop:!openBackop});
   };
-  
-
+  const salir = () => {
+    setLogin(initLogin);
+    sessionStorage.clear();
+  };
 
   useEffect(() => {
     console.log("App");
@@ -42,15 +44,14 @@ function App() {
   }, [])
   
   return (
-    <StoreContext.Provider value={{store, setStore, login, setLogin}}>
+    <StoreContext.Provider value={{ salir, store, setStore, login, setLogin, openBackDrop } }>
       <SnackbarProvider maxSnack={3} TransitionComponent={TransitionDown}>
         <div className="App">
           {
             login.isLogin
             ? <HomePage/>
             : <LoginPage/>
-          }        
-          
+          }
         </div>
       </SnackbarProvider>
       <Backdrop

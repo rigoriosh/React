@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 // import { stylesApp } from '../../helpers/utils'
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material';
 import { Visibility, VisibilityOff} from '@mui/icons-material';
@@ -28,15 +28,25 @@ export const LoginPage = () => {
         }else{
             setStore({...store, openBackop: true});
             setTimeout(() => {
-                setLogin({isLogin:true})
-                sessionStorage.setItem("login",JSON.stringify({isLogin:true}))
-                enqueueSnackbar('Bienvenido',{variant});
+                const sesion = {isLogin:true, user}
+                sessionStorage.setItem("login",JSON.stringify(sesion))
+                setLogin(sesion)
+                enqueueSnackbar(`Bienvenido ${user}`,{variant});
             }, 1000);
         }
     }
 
+    const registrarLogIn = (sesion) => {
+        setLogin(sesion)
+    }
 
-
+    useEffect(() => {
+      console.log("LoginPage");
+      const sesion = JSON.parse(sessionStorage.getItem("login"))
+      sesion?registrarLogIn(sesion):"";
+      return () => {}
+    }, [])
+    
     return (
         <div className='loginPage pagePhader'>
             <div className="modalIngrearUserExt_inLogin">

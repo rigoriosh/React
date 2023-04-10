@@ -4,7 +4,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { StoreContext } from '../../App';
-import { Modal_1 } from '../../components/Modal_1';
+import { ListGeomProye } from './ListGeomProye';
+import { ConfirmationDialog } from '../../components/ConfirmationDialog';
+import { DialogContenTextProy } from '../../components/DialogContenTextProy';
 
 const registrosPrueba = [
     {
@@ -16,8 +18,26 @@ const registrosPrueba = [
         DESCRIPCION:"DESCRIPCION",
         OBSERVACIONES:"OBSERVACIONES",
         FECHA_CAPTURA:"01/04/2023",
-        FUNCIONARIO_SAE:"FUNCIONARIO_SAE",
+        FUNCIONARIO:"Luis Dias",
         FIRMA:"FIRMA",
+        longitud:33.5,
+        GEOMETRIAS:[
+            {
+                id:0,
+                typeGeometry:'Punto',
+                fecha: '05/04/2023'
+            },
+            {
+                id:1,
+                typeGeometry:'Punto',
+                fecha: '05/04/2023'
+            },
+            {
+                id:2,
+                typeGeometry:'Punto',
+                fecha: '05/04/2023'
+            }
+        ]
     },
     {
         id: 1,        
@@ -28,8 +48,26 @@ const registrosPrueba = [
         DESCRIPCION:"DESCRIPCION",
         OBSERVACIONES:"OBSERVACIONES",
         FECHA_CAPTURA:"21/03/2019",
-        FUNCIONARIO_SAE:"FUNCIONARIO_SAE",
+        FUNCIONARIO:"Ana Florez",
         FIRMA:"FIRMA",
+        longitud:120,
+        GEOMETRIAS:[
+            {
+                id:0,
+                typeGeometry:'Punto',
+                fecha: '05/04/2023'
+            },
+            {
+                id:1,
+                typeGeometry:'Linea',
+                fecha: '05/04/2023'
+            },
+            {
+                id:2,
+                typeGeometry:'Poligono',
+                fecha: '05/04/2023'
+            }
+        ]
     },
     {
         id: 2,        
@@ -40,16 +78,44 @@ const registrosPrueba = [
         DESCRIPCION:"DESCRIPCION",
         OBSERVACIONES:"OBSERVACIONES",
         FECHA_CAPTURA:"15/05/2021",
-        FUNCIONARIO_SAE:"FUNCIONARIO_SAE",
+        FUNCIONARIO:"Luisa Diaz",
         FIRMA:"FIRMA",
+        longitud:555,
+        GEOMETRIAS:[
+            {
+                id:0,
+                typeGeometry:'Poligono',
+                fecha: '05/04/2023'
+            },
+            {
+                id:1,
+                typeGeometry:'Poligono',
+                fecha: '05/04/2023'
+            },
+            {
+                id:2,
+                typeGeometry:'Poligono',
+                fecha: '05/04/2023'
+            }
+        ]
     },
     ];
 
 export const ListarProyectos = () => {
     const { store, setStore } = useContext(StoreContext);
-    const [openModal, setOpenModal] = useState(false);
-    const [projectSelected, setProjectSelected] = useState({});
+    const {subMenuSelected}=store;
+    const [projectSelected, setProjectSelected] = useState({proyecto:'',ID_PREDIO:''});
+    const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
 
+    const proyectSelected = (row, openModal) => {
+        console.log("row => ", row);
+        setProjectSelected(row);
+        if (openModal) {
+            setOpenConfirmationDialog(openModal)
+        }else{
+            setStore({...store, subMenuSelected:"proyectedSelected"})
+        }
+    }
     const columns = [
         { field: 'id', headerName:'ID', hide:false, maxWidth:50, minWidth:20},
         { field: 'proyecto', headerName:'Proyecto', flex:0.2,
@@ -70,58 +136,54 @@ export const ListarProyectos = () => {
         },    
         {
             field: 'Acciones',
-            // type: 'actions',
+            type: 'actions',
             align:'center',
             flex:0.2,
             renderCell: ({row}) => [
             <div key={row.id}>
-                <VisibilityIcon key={row.id+"see"} onClick={()=>{
-                    setProjectSelected(row);
-                    setOpenModal(true);
-                    }}/>
-                <DeleteForeverRoundedIcon key={row.id} onClick={()=>eliminarProyecto(row)}/>
+                <VisibilityIcon key={row.id+"see"} onClick={()=>proyectSelected(row,false)}/>
+                <DeleteForeverRoundedIcon key={row.id} onClick={()=>proyectSelected(row, true)}/>
             </div>
-                // <img onClick={()=>{abilitarDesabilitarUsuario(row)}} className="imgWidth" src={""} alt="" style={{width:'15px', cursor:'pointer'}}/>
             ],
         },    
     ];
     const [rows, setRows] = useState([]);
-    const verAtributos = (selected) => {
-        console.log(selected);
-    }
-    const eliminarProyecto = (selected) => {
+    
+    const eliminarProyecto = () => {
         setStore({...store, openBackop:true})
-        console.log(selected);
-        const newArray = rows.filter(r => r.id != selected.id)
+        console.log(projectSelected);
+        const newArray = rows.filter(r => r.id != projectSelected.id)
         // console.log(newArray);
         setTimeout(() => {
             setRows(newArray)
+            // actualizarProyectos()
             setStore({...store, openBackop:false})
         }, 2000);
     }
 
-    const handleOpenModal = () => {
-        setOpenModal(true);
-    };
+    const handleResponseConfirmation = (response)=>{
+        setOpenConfirmationDialog(false);
+        if(response)eliminarProyecto();
+    }
 
-    const closeModal = () => {
-        setOpenModal(false);
-    };
-    
-
+    const actualizarProyectos = ()=>{
+        console.log("....actualizarProyectos....");
+        setTimeout(() => {
+            setRows(registrosPrueba)
+            setStore({...store, openBackop:false})
+        }, 1000);
+    }
    useEffect(() => {
-     
-    setTimeout(() => {
-        setRows(registrosPrueba)
-        setStore({...store, openBackop:false})
-    }, 3000);
+     actualizarProyectos();
    
      return () => {}
    }, [])
+
    
   return (
-    <div style={{ height: 300, width: '100%', marginTop:'15px' }}>
-            
+    <div style={{ height: 300, width: 'auto', margin:'10px 5px 5px 5px' }}>
+        {
+            !subMenuSelected ?
             <DataGrid
                 className='datag'
                 columns={columns}
@@ -135,10 +197,16 @@ export const ListarProyectos = () => {
                 loading={rows.length <= 0}
                 disableColumnMenu
             />
-            {/* <Button variant="outlined" onClick={handleOpenModal}>
-                Open responsive dialog
-            </Button> */}
-            <Modal_1 open={openModal} closeModal={closeModal} data={projectSelected}/>
-        </div>
+            :   <ListGeomProye projectSelected={projectSelected}
+                    actualizarProyectos={actualizarProyectos}
+                />
+        }
+        <ConfirmationDialog
+            openConfirmationDialog={openConfirmationDialog}
+            setOpenConfirmationDialog={setOpenConfirmationDialog}
+            handleResponseConfirmation={handleResponseConfirmation}
+            dialogContenText={<DialogContenTextProy projectSelected={projectSelected}/>}
+        />
+    </div>
   )
 }

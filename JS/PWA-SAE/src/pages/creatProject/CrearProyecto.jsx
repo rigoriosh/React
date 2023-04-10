@@ -1,22 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { StoreContext } from '../../App';
-import { Box, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
-import { TabsPanel } from '../../components/TabsPanel';
 import { menu, tiposGeometrias } from '../../helpers/constantes';
 import { FormCrearGeom } from './FormCrearGeom';
 import { CapturaPunto } from './CapturaPunto';
 import { CapturaLinea } from './CapturaLinea';
 import { CapturaPoligono } from './CapturaPoligono';
+import { CapturaCoordenadas } from './CapturaCoordenadas';
 
 export const CrearProyecto = () => {
   const { store, setStore } = useContext(StoreContext);
   const {menuSelected, subMenuSelected}=store;
-  console.log("store => ", store);
+  const [geometriesCreated, setGeometriesCreated] = useState([]);
+  const [typeGeometry, setTypeGeometrySelected] = useState("")
+  const [nomProject, setNomProject] = useState("")  
 
-  const changeView = (subMenu) => {
-    console.log("subMenu => ", subMenu);
-    setStore({...store, menu:{...menu, subMenuSelected:subMenu}})
-  }
 
 
   useEffect(() => {
@@ -27,15 +24,30 @@ export const CrearProyecto = () => {
   
   return (
     <>
-      {
+    {
         subMenuSelected == ""
-        ? <FormCrearGeom /* changeView={changeView} *//>
-        :subMenuSelected == tiposGeometrias.Punto
-        ? <CapturaPunto /* changeView={changeView} *//>
-        :subMenuSelected == tiposGeometrias.Linea
-        ? <CapturaLinea /* changeView={changeView} *//>
-        : <CapturaPoligono /* changeView={changeView} *//>
+        ? <FormCrearGeom geometriesCreated={geometriesCreated} setGeometriesCreated={setGeometriesCreated}
+            nomProject={nomProject} setNomProject={setNomProject}
+            typeGeometry={typeGeometry} setTypeGeometrySelected={setTypeGeometrySelected}
+          />
+        : <CapturaCoordenadas geometriesCreated={geometriesCreated} setGeometriesCreated={setGeometriesCreated}
+            typeGeometry={typeGeometry}
+          />
       }
+      {/* {
+        subMenuSelected == ""
+        ? <FormCrearGeom geometriesCreated={geometriesCreated} setGeometriesCreated={setGeometriesCreated}
+            nomProject={nomProject} setNomProject={setNomProject}
+            typeGeometry={typeGeometry} setTypeGeometrySelected={setTypeGeometrySelected}
+          />
+        :subMenuSelected == tiposGeometrias.Punto
+        ? <CapturaPunto geometriesCreated={geometriesCreated} setGeometriesCreated={setGeometriesCreated}
+            typeGeometry={typeGeometry}
+          />
+        :subMenuSelected == tiposGeometrias.Linea
+        ? <CapturaLinea geometriesCreated={geometriesCreated} setGeometriesCreated={setGeometriesCreated}/>
+        : <CapturaPoligono geometriesCreated={geometriesCreated} setGeometriesCreated={setGeometriesCreated}/>
+      } */}
       
     </>
   )

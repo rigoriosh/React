@@ -69,3 +69,7 @@ button:focus-visible {
   }
 }
  */
+
+.css-8o0jdm-MuiContainer-root {
+  max-width: initial !important;
+}
