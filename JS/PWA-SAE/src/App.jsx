@@ -10,6 +10,7 @@ import { SnackbarProvider } from 'notistack'
 
 const initStore = {
   menuSelected: menu.Home,
+  // menuSelected: menu.CrearProyecto,
   subMenuSelected:"",
   openBackop: false
 }

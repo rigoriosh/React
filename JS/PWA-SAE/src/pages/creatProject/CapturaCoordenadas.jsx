@@ -6,6 +6,7 @@ import Punto from '../../assets/btnsIcons/Punto.png'
 import Line from '../../assets/btnsIcons/Linea.png'
 import Polygon from '../../assets/btnsIcons/Poligono.png'
 import { useSnackbar } from 'notistack';
+import { Map } from '../../components/map/Map';
 
 const initForm = {
   id:'',
@@ -15,8 +16,8 @@ const initForm = {
   FECHA_CAPTURA:'',
   FUNCIONARIO:'',
   FIRMA:'',
-  latitud:'',
-  longitud:'',
+  latitudPunto:'',
+  longitudPunto:'',
 }
 const initFormPolygon = {
   id:'',
@@ -27,15 +28,39 @@ const initFormPolygon = {
   FUNCIONARIO:'',
   FIRMA:'',
   id_inicio:'',
-  id_final:''  
+  id_final:'' ,
+  puntoInicial:{latitud:'',longitud:''},
+  puntoFinal:{latitud:'',longitud:''},
+  poligon:[],
+  latitudPunto:'',
+  longitudPunto:'',
 }
+const initFormLine = {
+  id:'',
+  ACOMPANANTE:'',
+  OBSERVACIONES:'',
+  DESCRIPCION:'',
+  FECHA_CAPTURA:'',
+  FUNCIONARIO:'',
+  FIRMA:'',
+  // id_inicio:'',
+  // id_final:'' ,
+  puntoInicial:{latitud:'',longitud:''},
+  puntoFinal:{latitud:'',longitud:''},
+  latitudPunto:'',
+  longitudPunto:'',
+}
+let interval;
 export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typeGeometry}) => {
   const { store, setStore } = useContext(StoreContext);
   const { enqueueSnackbar } = useSnackbar();
-  const [formulario, setFormulario] = useState(typeGeometry==tiposGeometrias.Poligono?initFormPolygon:initForm);
-  const { id, ACOMPANANTE, OBSERVACIONES, DESCRIPCION, FUNCIONARIO, FIRMA, id_inicio, id_final, latitud, longitud } = formulario;
+  const [formulario, setFormulario] = useState(
+    typeGeometry==tiposGeometrias.Poligono ? initFormPolygon 
+    : typeGeometry==tiposGeometrias.Linea ? initFormLine :initForm);
+  const { id, ACOMPANANTE, OBSERVACIONES, DESCRIPCION, FUNCIONARIO, FIRMA, id_inicio, id_final, latitudPunto,longitudPunto } = formulario;
   const [catchGeometries, setCatchGeometries] = useState(false)
-  const [startTracking, setStartTracking] = useState(false);
+  const [startTracking, setStartTracking] = useState("");
+  // const [catchPoligon, setCatchPoligon] = useState([]);
 
   const guardar = () => {
     console.log("guardar => ", formulario);
@@ -45,7 +70,7 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
       // id: generateUUID(),
       FECHA_CAPTURA:new Date().toLocaleDateString(),
       typeGeometry,
-      longitud:"pendiente"
+      longitud:"pendiente del como se calcula"
     }
     if (Object.keys(newGeometryCreated).filter(k => newGeometryCreated[k] == '').length>0) {
       const variant = "error" // variant could be success, error, warning, info, or default
@@ -64,40 +89,78 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
   }
   const capturarCoordenadas = () => {
     console.log("capturarCoordenadas => ", typeGeometry);
-    if (typeGeometry == tiposGeometrias.Punto) {
-      if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(yesSuccess, noSuccess);
-      }else{
-        const variant = "info" // variant could be success, error, warning, info, or default
-        enqueueSnackbar('Este dispositivo no cuenta con localizador',{variant});
-      }
-    } else {
-      
-    }
-    setCatchGeometries(true)
+    // setFormulario({...formulario, puntoInicial:{latitud:'',longitud:''}, puntoFinal:{latitud:'',longitud:''}});
+    setStartTracking("")
+    getMyCurrentPosition();
     
   }
 
-  const yesSuccess = (position)=>{
+  const getMyCurrentPosition = (start) =>{
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition((e)=>yesSuccess(e, start), noSuccess);
+    }else{
+      const variant = "info" // variant could be success, error, warning, info, or default
+      enqueueSnackbar('Este dispositivo no cuenta con localizador',{variant});
+    }
+  }
+
+  const yesSuccess = (position, start)=>{
+    console.log("position => ", position);
     const latitud = position.coords.latitude,
-        longitud = position.coords.longitude;
-    setFormulario({...formulario,latitud,longitud})
+          longitud = position.coords.longitude;
+    if (start == "startTracking") {
+      if (formulario.puntoInicial.latitud == '') {
+        setFormulario({...formulario, puntoInicial:{latitud,longitud}});        
+      }
+      if (typeGeometry==tiposGeometrias.Poligono) {
+        getContinusTraking();
+      }
+    } else if (start == "endTracking") {
+      setFormulario({...formulario, puntoFinal:{latitud,longitud}})  
+      // setFormulario({...formulario, puntoFinal:{latitud:latitud+0.009,longitud}})  
+    } else {
+      setFormulario({...formulario,latitudPunto:latitud,longitudPunto:longitud})
+    }
+          
+    setCatchGeometries(true)
+
+  }
+
+  const callbackTraking = (position) => {
+    console.log(position);
+    // setCatchPoligon([...catchPoligon,[position.coords.latitude+Math.random(),position.coords.longitude]])
+    let a = formulario.poligon;
+    a.push([position.coords.latitude,position.coords.longitude]);
+    console.log("a=>",a);
+    setFormulario({...formulario,poligon:a})
+
+  }
+
+  const getContinusTraking = ()=>{
+    interval = setInterval(() => {
+      console.log("tracking...", formulario);
+      navigator.geolocation.getCurrentPosition(callbackTraking, noSuccess);
+    }, 5000);
   }
 
   const noSuccess = (msg)=>{
     console.error(msg)
   }
 
-
   const iniciarRecorrido = (start) => {
-    if (start) {
-      console.log("iniciarRecorrido => ");
-      setStartTracking(true)
+    if (start == "startTracking") {
+      console.log("iniciarRecorrido => ", typeGeometry);
+      getMyCurrentPosition(start)
+    }else if(start == "endTracking"){
+      console.log("terminarRecorrido => ", typeGeometry);
+      getMyCurrentPosition(start)
+      clearInterval(interval)
     }else{
-      console.log("terminarRecorrido => ");
-      setStartTracking(false);
       setCatchGeometries(false)
     }
+    setStartTracking(start)
+    setTimeout(() => {
+    }, 4000);
     
   }
   return (
@@ -122,17 +185,23 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
         && catchGeometries)
         ?
           <>
-            <h3>Mapa</h3>
+            <Map currentLocation={{latitudPunto,longitudPunto}} startTracking={startTracking}
+              typeGeometry={typeGeometry} formulario={formulario}/>
             {
-              !startTracking
+              startTracking==""
               ?
-                <Button variant="contained" size="small" onClick={()=>iniciarRecorrido(true)}>
+                <Button variant="contained" size="small" onClick={()=>iniciarRecorrido("startTracking")}>
                   {'Iniciar recorrido'}
                 </Button>
-              :
-                <Button variant="contained" size="small" onClick={()=>iniciarRecorrido(false)}>
-                  {'Terminar recorrido'}
-                </Button>
+              : startTracking=="startTracking"
+                ?
+                  <Button variant="contained" size="small" onClick={()=>iniciarRecorrido("endTracking")}>
+                    {'Terminar recorrido'}
+                  </Button>
+                :
+                  <Button variant="contained" size="small" onClick={()=>iniciarRecorrido("RegresarForm")}>
+                    {'Regresar'}
+                  </Button>
             }
           </> 
         : 
@@ -185,12 +254,15 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
                 onChange={handleFields}/>
               <TextField id="FIRMA" name='FIRMA' value={FIRMA} label="Firmas" variant="outlined" fullWidth size='small' margin='dense' 
                 onChange={handleFields}/>
-              <div style={{display:'flex'}}>
-                <TextField id="latitud" name='latitud' value={latitud} label="Latitud" variant="outlined" fullWidth size='small' margin='dense' 
-                onChange={handleFields}/>
-                <TextField id="longitud" name='longitud' value={longitud} label="Longitud" variant="outlined" fullWidth size='small' margin='dense' 
-                onChange={handleFields}/>
-              </div>
+              {
+                typeGeometry == tiposGeometrias.Punto &&
+                <div style={{display:'flex'}}>
+                  <TextField id="latitudPunto" name='latitudPunto' value={latitudPunto} label="Latitud" variant="outlined" fullWidth size='small' margin='dense' 
+                  onChange={handleFields}/>
+                  <TextField id="longitudPunto" name='longitudPunto' value={longitudPunto} label="Longitud" variant="outlined" fullWidth size='small' margin='dense' 
+                  onChange={handleFields}/>
+                </div>
+              }
             </div>
 
             <div className='tac' /* style={{width:'100%', position:'absolute', bottom:'80px'}} */>
