@@ -7,6 +7,10 @@ import { StoreContext } from '../../App';
 import { ListGeomProye } from './ListGeomProye';
 import { ConfirmationDialog } from '../../components/ConfirmationDialog';
 import { DialogContenTextProy } from '../../components/DialogContenTextProy';
+import { deleteEndPoint, findAll } from '../../api/apis';
+import enviroment from '../../helpers/enviroment';
+import { useSnackbar } from 'notistack';
+import { menu } from '../../helpers/constantes';
 
 const registrosPrueba = [
     {
@@ -102,11 +106,15 @@ const registrosPrueba = [
     ];
 
 export const ListarProyectos = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const { store, setStore } = useContext(StoreContext);
     const {subMenuSelected}=store;
     const [projectSelected, setProjectSelected] = useState({proyecto:'',ID_PREDIO:''});
     const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
-
+    const [paginationModel, setPaginationModel] = useState({
+        pageSize: 10,
+        page: 0,
+      });
     const proyectSelected = (row, openModal) => {
         console.log("row => ", row);
         setProjectSelected(row);
@@ -118,19 +126,19 @@ export const ListarProyectos = () => {
     }
     const columns = [
         { field: 'id', headerName:'ID', hide:false, maxWidth:50, minWidth:20},
-        { field: 'proyecto', headerName:'Proyecto', flex:0.2,
+        { field: 'nombre', headerName:'Proyecto', flex:0.2,
             renderCell: (params) => (
                 <Tooltip title={
-                    <strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.proyecto}</strong>
+                    <strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.nombre}</strong>
                 }>
-                    <p>{params.row.proyecto}</p>
+                    <p>{params.row.nombre}</p>
                 </Tooltip>
             )
         },
         { field: 'FECHA_CAPTURA', headerName:'Fecha', flex:0.2,
             renderCell: (params) => (
-                <Tooltip title={<strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.FECHA_CAPTURA}</strong>}>
-                    <p>{params.row.FECHA_CAPTURA}</p>
+                <Tooltip title={<strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.fechaCreacion}</strong>}>
+                    <p>{params.row.fechaCreacion}</p>
                 </Tooltip>
             )
         },    
@@ -149,16 +157,21 @@ export const ListarProyectos = () => {
     ];
     const [rows, setRows] = useState([]);
     
-    const eliminarProyecto = () => {
+    const eliminarProyecto = async() => {
         setStore({...store, openBackop:true})
         console.log(projectSelected);
-        const newArray = rows.filter(r => r.id != projectSelected.id)
-        // console.log(newArray);
-        setTimeout(() => {
-            setRows(newArray)
-            // actualizarProyectos()
-            setStore({...store, openBackop:false})
-        }, 2000);
+        debugger
+        const responseDelete = await deleteEndPoint(enviroment.delete, projectSelected.id)
+        console.log(responseDelete);
+        actualizarProyectos()
+
+
+        // setTimeout(() => {
+        //     const newArray = rows.filter(r => r.id != projectSelected.id)
+        //     setRows(newArray)
+        //     // actualizarProyectos()
+        //     setStore({...store, openBackop:false})
+        // }, 2000);
     }
 
     const handleResponseConfirmation = (response)=>{
@@ -166,15 +179,30 @@ export const ListarProyectos = () => {
         if(response)eliminarProyecto();
     }
 
-    const actualizarProyectos = ()=>{
+    const actualizarProyectos = async()=>{
         console.log("....actualizarProyectos....");
-        setTimeout(() => {
+        debugger
+        const response = await findAll(enviroment.findAll);
+        console.log(response);
+        if (response.message == 'Failed to fetch' || response.message == "Unexpected end of JSON input") {
+            const variant = "warning" // variant could be success, error, warning, info, or default
+            enqueueSnackbar('Presentamos inconvenientes de red, intenta mas tarde o contacta con el administrador',{variant});
+            setStore({...store, menuSelected:menu.Home, subMenuSelected:'', openBackop:false})
+            console.error({response});
+        } else {
+            setRows(response)
+            setStore({...store, openBackop:false})
+        }
+
+        /* setTimeout(() => {
             setRows(registrosPrueba)
             setStore({...store, openBackop:false})
-        }, 1000);
+        }, 1000); */
     }
    useEffect(() => {
-     actualizarProyectos();
+    setTimeout(() => {
+        actualizarProyectos();
+    }, 1000);
    
      return () => {}
    }, [])
@@ -189,17 +217,29 @@ export const ListarProyectos = () => {
                 columns={columns}
                 rows={rows}
                 autoHeight
+                pageSizeOptions={[10]}
                 density="compact"
                 hideFooter={false}
                 hideFooterSelectedRowCount
-                pageSize={6}
-                scrollbarSize={10}
+                /* initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 10,
+                        page
+                      },
+                    },
+                  }} */
+                paginationModel={paginationModel}
+                onPaginationModelChange={setPaginationModel}
+                // pageSize={5}
+                // scrollbarSize={10}
                 loading={rows.length <= 0}
                 disableColumnMenu
+                paginationMode="client"
             />
             :   <ListGeomProye projectSelected={projectSelected}
-                    actualizarProyectos={actualizarProyectos}
-                />
+            actualizarProyectos={actualizarProyectos}
+        />
         }
         <ConfirmationDialog
             openConfirmationDialog={openConfirmationDialog}

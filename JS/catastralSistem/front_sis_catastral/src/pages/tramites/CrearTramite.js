@@ -11,7 +11,7 @@ import { SecondFormTramitre } from './formulariosTramite/SecondFormTramitre'
 
 
 export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/* , setOpenBackDrop */}) => {
-
+    // console.log("CrearTramite");
     const { store, updateStore } = useContext(StoreContext);
     let navigate = useNavigate();
     const [forms, setForms] = useState(1); // controla el paginado de los forms
@@ -50,6 +50,12 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
             motivoSolicitud:{
                 name:'motivoSolicitud',
                 // value:'CPP',
+                value:'',
+                validation:''
+            },
+            nombreTramite:{
+                name:'nombreTramite',
+                // value:'',
                 value:'',
                 validation:''
             },
@@ -179,13 +185,13 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
                 // value:'54385',
                 value:'',
                 validation:''
-            },
+            },/* 
             motivoDeLaSolicitud:{
                 name:'motivoDeLaSolicitud',
                 // value:'OFAC',
                 value:'',
                 validation:''
-            },
+            }, */
             titularesDeDerecho:[
                 /* {
                     id:0,
@@ -234,6 +240,7 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
         noEscrituraPublica,
         notariaOtorgante,
         motivoSolicitud,
+        nombreTramite,
         municipio,
         tipoTramite,
         tipoSolicitante,
@@ -254,21 +261,11 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
             name !== notariaOtorgante.name
         ) {
                 setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
-        } else if(name === avaluoTerreno.name ||
-                name === avaluoConstruccion.name ||
-                name === areaTerreno.name ||
+        } else if(name === avaluoTerreno.name || name === avaluoConstruccion.name || name === areaTerreno.name ||
                 name === areaConstruccion.name
         ){
             if (regExp10Num2dec.test(value)) {  // valida tipo de dato numerico 10 digitos y dos decimales
-                setFormularioTramite(
-                    {
-                        ...formularioTramite,
-                        [name]: {
-                            ...formularioTramite[name],
-                            value
-                        }
-                    }
-                );
+                setFormularioTramite({ ...formularioTramite, [name]: { ...formularioTramite[name], value}});
             }
         } else if(name === autoestimacionAvaluo.name){
             if (regExp10Num.test(value)) {  // valida tipo de dato numerico 10 digitos
@@ -290,6 +287,7 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
     }
 
     const avancePagina = (formularioTotalOk, avanza) => {
+        // debugger
         if (formularioTotalOk) {
             setForms(avanza ? (forms + 1) : (forms - 1));
         }
@@ -529,12 +527,12 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
                     name:'municipioNotaria',
                     value:'',
                     validation:''
-                },
+                },/* 
                 motivoDeLaSolicitud:{
                     name:'motivoDeLaSolicitud',
                     value:'',
                     validation:''
-                },
+                }, */
             }
         );
     }
@@ -615,17 +613,18 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
     }
     
     useEffect(() => {
-        // //debugger
+        // debugger
 
         if (!detalleTramite.idSolicitud) {
             renderizarInfoSegunTipoTramite();
-            resetFormulario();
+            // resetFormulario();
         }
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [motivoSolicitud])
 
     useEffect(() => {
+        // debugger
         // consultar tipos de tramites y tipos de solicitudes
         if (modoTramite === "Consulta" || modoTramite === "Seguimiento") {
             // poblar los campos del formularioTramite
@@ -641,7 +640,7 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
     }, [])
 
     const cargarInfoDetalleTramite = () => {
-        
+        // debugger
         setFormularioTramite(
             {
                 ...formularioTramite,
@@ -766,12 +765,12 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
                     name:'municipioNotaria',                    
                     value: detalleTramite.municipioNotaria,
                     validation:''
-                },
+                },/* 
                 motivoDeLaSolicitud:{
                     name:'motivoDeLaSolicitud',                    
                     value: detalleTramite.motivoSolicitud,
                     validation:''
-                },
+                }, */
                 titularesDeDerecho: detalleTramite.titularesPredio,
                 prediosAsociados: detalleTramite.prediosAsociados,
 
@@ -845,11 +844,13 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
             "idSolicitante": {
               "idUsuario": store.user.infoUser.idUsuario===""?null:store.user.infoUser.idUsuario
             },
-            "motivoSolicitud": formularioTramite.motivoDeLaSolicitud.value===""?null:formularioTramite.motivoDeLaSolicitud.value,
+            // "motivoSolicitud": formularioTramite.motivoDeLaSolicitud.value===""?null:formularioTramite.motivoDeLaSolicitud.value,
+            "motivoSolicitud": formularioTramite.motivoSolicitud.value===""?null:formularioTramite.motivoSolicitud.value,
             "municipioNotaria": formularioTramite.municipioNotaria.value===""?null:formularioTramite.municipioNotaria.value,
             "municipioPredio": municipio.value===""?null:municipio.value,
             "noEscrituraPublica": formularioTramite.noEscrituraPublica.value===""?null:formularioTramite.noEscrituraPublica.value,
-            "nombreTramite": motivoSolicitud.value===""?null:motivoSolicitud.value,
+            // "nombreTramite": motivoSolicitud.value===""?null:motivoSolicitud.value,
+            "nombreTramite": nombreTramite.value===""?null:nombreTramite.value,
             "notariaOtorgante": formularioTramite.notariaOtorgante.value===""?null:formularioTramite.notariaOtorgante.value,
             "numeroRadicado": "123456789",
             "objetoPeticion": formularioTramite.objetoPeticion.value===""?null:formularioTramite.objetoPeticion.value,
@@ -866,6 +867,7 @@ export const CrearTramite = ({detalleTramite={}, modoTramite, getDetalleTramite/
           }
         // console.log("data => ", data)
         // console.log(JSON.stringify(data));
+        // debugger
         updateStore({...store, openBackDrop:true, llama:"L869FCrearTramite"});
         // setOpenBackDrop(true)
         try {

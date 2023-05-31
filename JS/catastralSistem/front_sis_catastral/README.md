@@ -7,6 +7,7 @@ comnados para hacer push
 - por cmd ejecutar => git commit -m "mensaje descriptivo"
 - git push
 
+on this path [C:\wildfly-19.0.0.Final\bin] run [standalone.bat -b 0.0.0.0]
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

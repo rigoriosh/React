@@ -28,12 +28,6 @@ export const initStore = {
 
 };
 
-export const pathsRoutes = {
-  tramites: '/tramites',
-  gestionarUsuario: "/tramites/gestionarUsuario",
-  seguimientoTramite: "/tramites/seguimientoTramite",
-  consultaTramite: "/tramites/consultaTramite"
-}
 
 export const textosInfoWarnig = {
   falloComunicacion:'Estamos presentando inconvenientes en la comunicación, porfavor intentalo mas tarde, gracias',
@@ -51,30 +45,6 @@ export const textosInfoWarnig = {
   recuperarPSW: 'Por favor comuniquese al correo xxxxx@xxx.xx, solicitando recuperación de contraseña y envie copia del documento de identidad',
 }
 
-export const constantesGlobales = {
-  tipoNotas:{
-    msgInfo_MP_CPP:'msgInfo_MP_CPP',
-    msgInfo_MS_EAP:'msgInfo_MS_EAP',
-    msgInfo_MS_DDP:'msgInfo_MS_DDP',
-    msgInfo_MT_IRC:'msgInfo_MT_IRC',
-    msgInfo_MC_AEAC:'msgInfo_MC_AEAC',
-    msgInfo_MC_RAC:'msgInfo_MC_RAC',
-    msgInfo_MQ_INCP:'msgInfo_MQ_INCP',
-    msgInfo_RE_RUD:'msgInfo_RE_RUD',
-    msgInfo_RE_RAT:'msgInfo_RE_RAT',
-    msgInfo_RE_ACN:'msgInfo_RE_ACN',
-    msgInfo_MO_MPHC:'msgInfo_MO_MPHC',
-    msgInfo_SC_SCPPC:'msgInfo_SC_SCPPC',
-    msgInfo_SC_SCC:'msgInfo_SC_SCC',
-    msgInfo_SC_SCCE:'msgInfo_SC_SCCE',
-    msgInfo_SC_SCFP:'msgInfo_SC_SCFP',
-    msgInfo_SC_SCCPP:'msgInfo_SC_SCCPP',
-    msgInfo_SC_SPCC:'msgInfo_SC_SPCC',
-    msgInfo_SC_SCNP:'msgInfo_SC_SCNP',
-    msgInfo_SC_CIC:'msgInfo_SC_CIC',
-    msgInfo_SC_SNP:'msgInfo_SC_SNP',
-  },
-}
 
 function utf8_encode (argString) { // eslint-disable-line camelcase
     //  discuss at: https://locutus.io/php/utf8_encode/
@@ -278,3 +248,22 @@ export const  generateUUID = () => {
   });
   return uuid;
 }
+
+const gradosARadianes = (grados) => {
+  return grados * Math.PI / 180;
+};
+
+export const calcularDistanciaEntreDosCoordenadas = (lat1, lon1, lat2, lon2) => {
+  // Convertir todas las coordenadas a radianes
+  lat1 = gradosARadianes(lat1);
+  lon1 = gradosARadianes(lon1);
+  lat2 = gradosARadianes(lat2);
+  lon2 = gradosARadianes(lon2);
+  // Aplicar fórmula
+  const RADIO_TIERRA_EN_KILOMETROS = 6371;
+  let diferenciaEntreLongitudes = (lon2 - lon1);
+  let diferenciaEntreLatitudes = (lat2 - lat1);
+  let a = Math.pow(Math.sin(diferenciaEntreLatitudes / 2.0), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(diferenciaEntreLongitudes / 2.0), 2);
+  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return RADIO_TIERRA_EN_KILOMETROS * c;
+};

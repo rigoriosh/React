@@ -1,20 +1,26 @@
+import React, { useContext, useEffect, useState } from 'react'
+import { useSnackbar } from 'notistack';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 
-import React, { useContext, useState } from 'react'
 import { Modal_1 } from '../../components/Modal_1';
 import { StoreContext } from '../../App';
 import { Tooltip } from '@mui/material';
 import { ConfirmationDialog } from '../../components/ConfirmationDialog';
 import { DialogContenTextGeom } from '../../components/DialogContenTextGeom';
+import { deleteEndPoint, findAll } from '../../api/apis';
+import enviroment from '../../helpers/enviroment';
 
 export const ListGeomProye = ({projectSelected, actualizarProyectos}) => {
     const { store, setStore } = useContext(StoreContext);
+    const { enqueueSnackbar } = useSnackbar();
+
     console.log("projectSelected => ", projectSelected);
     const [geometriaSelected, setGeometriaSelected] = useState({ id:0,typeGeometry:'',fecha: ''});
     const [openModal, setOpenModal] = useState(false);
-    const [rows, setRows] = useState(projectSelected.GEOMETRIAS);
+    // const [rows, setRows] = useState(projectSelected.GEOMETRIAS);
+    const [rows, setRows] = useState([]);
     const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
 
 
@@ -33,16 +39,23 @@ export const ListGeomProye = ({projectSelected, actualizarProyectos}) => {
         }
     }
 
-    const eliminarGeometria = () => {
+    const eliminarGeometria = async() => {
         setStore({...store, openBackop:true})
         console.log(geometriaSelected);
-        const newArray = rows.filter(r => r.id != geometriaSelected.id)
+        const url = geometriaSelected.typeGeometry === "Punto" ? enviroment.deletePunto
+        : geometriaSelected.typeGeometry === "Linea" ? enviroment.DeleteLinea
+        : enviroment.DeletePoligono
+        debugger
+        const responseDelete = await deleteEndPoint(url, geometriaSelected.id)
+        console.log(responseDelete);
+        consultarGeomtrias();
         // console.log(newArray);
-        setTimeout(() => {
-            setRows(newArray)
-            setStore({...store, openBackop:false})
-            // actualizarProyectos()
-        }, 2000);
+        // setTimeout(() => {
+        //     const newArray = rows.filter(r => r.id != geometriaSelected.id)
+        //     setRows(newArray)
+        //     setStore({...store, openBackop:false})
+        //     // actualizarProyectos()
+        // }, 2000);
     }
     const handleResponseConfirmation = (response)=>{
         setOpenConfirmationDialog(false);
@@ -59,10 +72,10 @@ export const ListGeomProye = ({projectSelected, actualizarProyectos}) => {
                 </Tooltip>
             )
         },
-        { field: 'fecha', headerName:'Fecha', flex:0.2,
+        { field: 'fechaCreacion', headerName:'Fecha', flex:0.2,
             renderCell: (params) => (
-                <Tooltip title={<strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.fecha}</strong>}>
-                    <p>{params.row.fecha}</p>
+                <Tooltip title={<strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.fechaCreacion}</strong>}>
+                    <p>{params.row.fechaCreacion}</p>
                 </Tooltip>
             )
         },    
@@ -79,13 +92,105 @@ export const ListGeomProye = ({projectSelected, actualizarProyectos}) => {
             ],
         },    
     ];
+    const agregarTipo = (geometrias, typeGeometry) => {
+        const fixData = []
+        geometrias.forEach(el => {
+            fixData.push({...el, typeGeometry})
+        });
+        return fixData;
+    }
+    const consultarGeomtrias = async() => {
+        debugger
+        const responsePuntos = await findAll(enviroment.FindByIdProyecto, projectSelected.id)
+        console.log("responsePuntos => ", responsePuntos);
+        // let nuevosRegistros = [...rows]
+        let nuevosRegistros = []
+        if (responsePuntos.length > 0 && responsePuntos !== "Sin registros") {
+            let fixData = agregarTipo(responsePuntos, "Punto")
+            fixData = fixData.map(e => {return{...e, fechaCreacion:new Date(e.fechaCreacion).toLocaleDateString()}})
+            nuevosRegistros = [...fixData]
+            // setRows(nuevosRegistros)
+        }
+        debugger
+        const responseLineas = await findAll(enviroment.findByIdProyectoLinea, projectSelected.id)
+        console.log("responseLineas => ", responseLineas);
+        if (responseLineas.length > 0 && responseLineas !== "Sin registros") {
+            let fixData = agregarTipo(responseLineas, "Linea")
+            fixData = fixData.map(e => {return{...e, fechaCreacion:new Date(e.fechaCreacion).toLocaleDateString()}})
+            nuevosRegistros = [...nuevosRegistros, ...fixData]
+            // setRows(nuevosRegistros)
+        }
+        debugger
+        const responsePoligon = await findAll(enviroment.findByIdProyectoPoligono, projectSelected.id)
+        console.log("responsePoligon => ", responsePoligon);
+        if (responsePoligon.length > 0 && responsePoligon !== "Sin registros") {
+            let fixData = agregarTipo(responsePoligon, "Poligono")
+            fixData = fixData.map(e => {return{...e, fechaCreacion:new Date(e.fechaCreacion).toLocaleDateString()}})
+            nuevosRegistros = [...nuevosRegistros, ...fixData]
+        }
+        if (nuevosRegistros.length>0) {
+            setRows(nuevosRegistros)            
+            setStore({...store, openBackop:false})
+        }else{
+            const variant = "info" // variant could be success, error, warning, info, or default
+            enqueueSnackbar(`El proyecto "${projectSelected.nombre}" no presenta geometrías creadas`,{variant});
+            setStore({...store, subMenuSelected:""})
+        }
+
+        /*  
+        debugger
+        const responsePuntos = await findAll(enviroment.FindByIdProyecto, projectSelected.id)
+        console.log("responsePuntos => ", responsePuntos);
+        // let nuevosRegistros = [...rows]
+        let nuevosRegistros = []
+        if (responsePuntos.length > 0 && responsePuntos !== "Sin registros") {
+            let fixData = agregarTipo(responsePuntos, "Punto")
+            fixData = fixData.map(e => {return{...e, fechaCreacion:new Date(e.fechaCreacion).toLocaleDateString()}})
+            nuevosRegistros = [...fixData]
+            // setRows(nuevosRegistros)
+        }
+        debugger
+        const responseLineas = await findAll(enviroment.findByIdProyectoLinea, projectSelected.id)
+        console.log("responseLineas => ", responseLineas);
+        if (responseLineas.length > 0 && responseLineas !== "Sin registros") {
+            let fixData = agregarTipo(responseLineas, "Linea")
+            fixData = fixData.map(e => {return{...e, fechaCreacion:new Date(e.fechaCreacion).toLocaleDateString()}})
+            nuevosRegistros = [...nuevosRegistros, ...fixData]
+            // setRows(nuevosRegistros)
+        }
+        debugger
+        const responsePoligon = await findAll(enviroment.findByIdProyectoPoligono, projectSelected.id)
+        console.log("responsePoligon => ", responsePoligon);
+        if (responsePoligon.length > 0 && responsePoligon !== "Sin registros") {
+            let fixData = agregarTipo(responsePoligon, "Poligono")
+            fixData = fixData.map(e => {return{...e, fechaCreacion:new Date(e.fechaCreacion).toLocaleDateString()}})
+            nuevosRegistros = [...nuevosRegistros, ...fixData]
+        }
+        if (nuevosRegistros.length>0) {
+            setRows(nuevosRegistros)            
+            setStore({...store, openBackop:false})
+        }else{
+            const variant = "info" // variant could be success, error, warning, info, or default
+            enqueueSnackbar(`El proyecto "${projectSelected.nombre}" no presenta geometrías creadas`,{variant});
+            setStore({...store, subMenuSelected:""})
+        }
+        */
+    }
+    useEffect(() => {
+      console.log("Consultar geometrias segun tipo y por Id proyecto");
+      console.log(projectSelected);
+      consultarGeomtrias();
+    
+      return () => {}
+    }, [])
+    
     
   return (
     <div style={{ height: 300, width: '100%', marginTop:'15px' }}>
         {
             <p className='tituloBtnCenter titulo3 ' style={
                 {height:'30px', margin:'5px 5px 5px 5px', width:'auto'}
-            }>{projectSelected.proyecto}</p>
+            }>{projectSelected.nombre}</p>
         }
             <DataGrid
                 className='datag'
@@ -95,7 +200,15 @@ export const ListGeomProye = ({projectSelected, actualizarProyectos}) => {
                 density="compact"
                 hideFooter={false}
                 hideFooterSelectedRowCount
-                pageSize={6}
+                initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 10,
+                        page:0
+                      },
+                    },
+                  }}
+                pageSizeOptions={[10]}
                 scrollbarSize={10}
                 loading={rows.length <= 0}
                 disableColumnMenu

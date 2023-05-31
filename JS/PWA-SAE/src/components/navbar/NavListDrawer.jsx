@@ -16,12 +16,15 @@ export const NavListDrawer = () => {
         <Box sx={{width:'100%', bgcolor: "whitesmoke"}}>
             <nav>
                 <List style={{width:'100%'}}>
-                    <ListItem disablePadding onClick={()=>changeMenu(menu.ListarProyectos)}>
-                        <ListItemButton divider style={{justifyContent:"space-between"}}>
-                            <FormatListNumberedIcon/>
-                            <ListItemText primary="Listar Proyectos" style={{marginLeft:'15px'}}/>
-                        </ListItemButton>
-                    </ListItem>
+                    {
+                        navigator.onLine &&
+                        <ListItem disablePadding onClick={()=>changeMenu(menu.ListarProyectos)}>
+                            <ListItemButton divider style={{justifyContent:"space-between"}}>
+                                <FormatListNumberedIcon/>
+                                <ListItemText primary="Listar Proyectos" style={{marginLeft:'15px'}}/>
+                            </ListItemButton>
+                        </ListItem>
+                    }
                     <ListItem disablePadding onClick={()=>changeMenu(menu.CrearProyecto)}>
                         <ListItemButton divider>
                             <AddCircleOutlineIcon/>

@@ -1,19 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { StoreContext } from '../../App';
-import { menu, tiposGeometrias } from '../../helpers/constantes';
 import { FormCrearGeom } from './FormCrearGeom';
-import { CapturaPunto } from './CapturaPunto';
-import { CapturaLinea } from './CapturaLinea';
-import { CapturaPoligono } from './CapturaPoligono';
 import { CapturaCoordenadas } from './CapturaCoordenadas';
 
 export const CrearProyecto = () => {
   const { store, setStore } = useContext(StoreContext);
-  const {menuSelected, subMenuSelected}=store;
+  const {subMenuSelected}=store;
   const [geometriesCreated, setGeometriesCreated] = useState([]);
   const [typeGeometry, setTypeGeometrySelected] = useState("")
   const [nomProject, setNomProject] = useState("")  
 
+  /* useEffect(() => {
+    if (subMenuSelected) {
+      console.log("subMenuSelected => ", subMenuSelected);
+      setGeometriesCreated([])
+    }
+    return () => {}
+  }, [subMenuSelected]) */
+  
 
 
   useEffect(() => {

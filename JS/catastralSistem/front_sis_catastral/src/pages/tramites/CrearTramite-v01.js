@@ -57,6 +57,12 @@ export const CrearTramiteCopy = () => {
                 value:'',
                 validation:''
             },
+            nombreTramite:{
+                name:'nombreTramite',
+                // value:'',
+                value:'',
+                validation:''
+            },
             tipoSolicitante:{
                 name:'tipoSolicitante',
                 // value:'PR',
@@ -183,13 +189,13 @@ export const CrearTramiteCopy = () => {
                 // value:'54385',
                 value:'',
                 validation:''
-            },
+            },/* 
             motivoDeLaSolicitud:{
                 name:'motivoDeLaSolicitud',
                 // value:'OFAC',
                 value:'',
                 validation:''
-            },
+            }, */
             titularesDeDerecho:[
                 /* {
                     id:0,
@@ -238,6 +244,7 @@ export const CrearTramiteCopy = () => {
         noEscrituraPublica,
         notariaOtorgante,
         motivoSolicitud,
+        nombreTramite,
         municipio,
         tipoTramite,
         tipoSolicitante,
@@ -258,21 +265,10 @@ export const CrearTramiteCopy = () => {
             name !== notariaOtorgante.name
         ) {
                 setFormularioTramite({...formularioTramite, [name]:{...formularioTramite[name], value}})
-        } else if(name === avaluoTerreno.name ||
-                name === avaluoConstruccion.name ||
-                name === areaTerreno.name ||
-                name === areaConstruccion.name
-        ){
+        } else if(name === avaluoTerreno.name || name === avaluoConstruccion.name || name === areaTerreno.name ||
+                name === areaConstruccion.name ){
             if (regExp10Num2dec.test(value)) {  // valida tipo de dato numerico 10 digitos y dos decimales
-                setFormularioTramite(
-                    {
-                        ...formularioTramite,
-                        [name]: {
-                            ...formularioTramite[name],
-                            value
-                        }
-                    }
-                );
+                setFormularioTramite({ ...formularioTramite, [name]: { ...formularioTramite[name], value }});
             }
         } else if(name === autoestimacionAvaluo.name){
             if (regExp10Num.test(value)) {  // valida tipo de dato numerico 10 digitos
@@ -299,6 +295,7 @@ export const CrearTramiteCopy = () => {
     }
 
     const avancePagina = (formularioTotalOk, avanza) => {
+        // console.log("avancePagina///////////////////////////");
         if (formularioTotalOk) {
             // setLastForm(forms);
             // setForms(avanza ? (forms + 1) : (forms - 1));
@@ -417,6 +414,7 @@ export const CrearTramiteCopy = () => {
     }
 
     const resetFormulario = () => {
+        // debugger
         setFormularioTramite(
             {
                 ...formularioTramite,
@@ -540,12 +538,12 @@ export const CrearTramiteCopy = () => {
                     name:'municipioNotaria',
                     value:'',
                     validation:''
-                },
+                },/* 
                 motivoDeLaSolicitud:{
                     name:'motivoDeLaSolicitud',
                     value:'',
                     validation:''
-                },
+                }, */
             }
         );
     }
@@ -630,7 +628,7 @@ export const CrearTramiteCopy = () => {
 
         if (!detalleTramite.idSolicitud) {
             renderizarInfoSegunTipoTramite();
-            resetFormulario();
+            // resetFormulario();
         }
         return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -652,7 +650,7 @@ export const CrearTramiteCopy = () => {
     }, [])
 
     const cargarInfoDetalleTramite = () => {
-        
+        // debugger
         setFormularioTramite(
             {
                 ...formularioTramite,
@@ -670,6 +668,11 @@ export const CrearTramiteCopy = () => {
                 motivoSolicitud:{
                     name:'motivoSolicitud',                    
                     value: detalleTramite.motivoSolicitud,
+                    validation:''
+                }, 
+                nombreTramite:{
+                    name:'nombreTramite',                    
+                    value: detalleTramite.nombreTramite,
                     validation:''
                 },
                 tipoSolicitante:{
@@ -777,12 +780,12 @@ export const CrearTramiteCopy = () => {
                     name:'municipioNotaria',                    
                     value: detalleTramite.municipioNotaria,
                     validation:''
-                },
+                },/* 
                 motivoDeLaSolicitud:{
                     name:'motivoDeLaSolicitud',                    
                     value: detalleTramite.motivoSolicitud,
                     validation:''
-                },
+                }, */
                 titularesDeDerecho: detalleTramite.titularesPredio,
                 prediosAsociados: detalleTramite.prediosAsociados,
 
@@ -802,6 +805,7 @@ export const CrearTramiteCopy = () => {
             const responseMunicipioDeLaNotaria = await getDataApi(enviroment.getCodigosDane);
             const responseTiposInscripcion = await getDataApi(enviroment.getTipoSolicitudIns);
             const responseObjetosRectificacion = await getDataApi(enviroment.getObjetoRectifica);
+            //debugger
             setFormularioTramite({
                 ...formularioTramite,
                 MotivosSolicitud: addPrimerOpcionSelect( responseMotivosSolicitud.resultado.dominios),
@@ -860,7 +864,8 @@ export const CrearTramiteCopy = () => {
             "municipioNotaria": formularioTramite.municipioNotaria.value===""?null:formularioTramite.municipioNotaria.value,
             "municipioPredio": municipio.value===""?null:municipio.value,
             "noEscrituraPublica": formularioTramite.noEscrituraPublica.value===""?null:formularioTramite.noEscrituraPublica.value,
-            "nombreTramite": motivoSolicitud.value===""?null:motivoSolicitud.value,
+            "nombreTramite": nombreTramite.value===""?null:nombreTramite.value,
+            // "nombreTramite": motivoSolicitud.value===""?null:motivoSolicitud.value,
             "notariaOtorgante": formularioTramite.notariaOtorgante.value===""?null:formularioTramite.notariaOtorgante.value,
             "numeroRadicado": "123456789",
             "objetoPeticion": formularioTramite.objetoPeticion.value===""?null:formularioTramite.objetoPeticion.value,
@@ -877,7 +882,8 @@ export const CrearTramiteCopy = () => {
           }
         // console.log("data => ", data)
         // console.log(JSON.stringify(data));
-        updateStore({...store, openBackDrop:true, llama:"L869FCrearTramite"});
+        // debugger
+        updateStore({...store, openBackDrop:true, llama:"L885FCrearTramite"});
         // setOpenBackDrop(true)
         try {
             const headers = {token: store.user.token};

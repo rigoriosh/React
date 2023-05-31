@@ -13,15 +13,19 @@ import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { ConfirmationDialog } from '../../components/ConfirmationDialog';
 import { DialogContenTextGeom } from '../../components/DialogContenTextGeom';
 import { Modal_1 } from '../../components/Modal_1';
+import { DialogContenSincronize } from '../../components/DialogContenSincronize';
+import { insertProjecGeometry } from '../../api/apis';
+import enviroment from '../../helpers/enviroment';
+import { textosInfoWarnig } from '../../helpers/utils';
 
 
 export const FormCrearGeom = ({geometriesCreated, setGeometriesCreated, nomProject, setNomProject,
     typeGeometry, setTypeGeometrySelected
 }) => {
-    const { store, setStore } = useContext(StoreContext);
-    const {menuSelected, subMenuSelected}=store;
     const { enqueueSnackbar } = useSnackbar();
-    const [geometriaSelected, setGeometriaSelected] = useState({ id:0,typeGeometry:'',FECHA_CAPTURA: ''});
+    const { store, setStore, openBackDrop } = useContext(StoreContext);
+    // const {menuSelected, subMenuSelected}=store;
+    const [geometriaSelected, setGeometriaSelected] = useState({ id:0,typeGeometry:'',fecha_captura: ''});
     const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
     const [openModal, setOpenModal] = useState(false);
 
@@ -47,10 +51,10 @@ export const FormCrearGeom = ({geometriesCreated, setGeometriesCreated, nomProje
                 </Tooltip>
             )
         },
-        { field: 'FECHA_CAPTURA', headerName:'Fecha', flex:0.2,
+        { field: 'fecha_captura', headerName:'Fecha', flex:0.2,
             renderCell: (params) => (
-                <Tooltip title={<strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.FECHA_CAPTURA}</strong>}>
-                    <p>{params.row.FECHA_CAPTURA}</p>
+                <Tooltip title={<strong style={{fontSize:"12px", lineHeight:'10px'}}>{params.row.fecha_captura}</strong>}>
+                    <p>{params.row.fecha_captura}</p>
                 </Tooltip>
             )
         },    
@@ -71,6 +75,8 @@ export const FormCrearGeom = ({geometriesCreated, setGeometriesCreated, nomProje
 
     const controlVistas = (subMenu) => {
         console.log(nomProject);
+        console.log("navigator.onLine  => ", navigator.onLine );
+
         if (nomProject == '') {
             const variant = "warning" // variant could be success, error, warning, info, or default
             enqueueSnackbar('Recuerda el nombre del proyecto es obligatorio',{variant});
@@ -80,16 +86,200 @@ export const FormCrearGeom = ({geometriesCreated, setGeometriesCreated, nomProje
         }
     }
 
-    const finalizar = () => {
-        console.log(finalizar);
-        setStore({...store, openBackop:true})
-        setTimeout(() => {
-            const variant = "success" // variant could be success, error, warning, info, or default
-            enqueueSnackbar('Proyecto creado con exito',{variant});
+    const finalizar_1 = () => {
+        console.log("finalizar");
+        // setStore({...store, openBackop:true})
+        openBackDrop()
+        console.log("navigator.onLine  => ", navigator.onLine );
+        console.log("geometriesCreated => ", geometriesCreated);
+        let features = [];
+        geometriesCreated.forEach(g => { 
+            features.push({
+                type:"Feature",
+                geometry:{
+                    type: g.typeGeometry == "Punto"
+                        ?"Point": g.typeGeometry == "Línea"
+                        ? 'LineString'
+                        : 'Polygon',
+                    coordinates: g.typeGeometry == "Punto"
+                        ? [g.longitudPunto, g.latitudPunto]
+                            : g.typeGeometry == "Línea" 
+                                ?[[g.puntoInicial.longitud, g.puntoInicial.latitud],[g.puntoFinal.longitud,g.puntoFinal.latitud]]
+                                : [g.poligon],              
+                },
+                properties:
+                g.typeGeometry == "Polígono" ?
+                    {
+                        "ID_INICIO":g.id_inicio,
+                        "ID_FINAL":g.id_final,
+                        "DESCRIPCIO":g.descripcion,
+                        "ID_PREDIO":g.id_predio, // por user
+                        "ACOMPANIAN":g.acompaniante,
+                        "OBSERVACIO":g.observaciones,
+                        "FUNCIONARI":g.funcionario,
+                        "AREA_M2":g.area_m2,
+                        "FIRMA":g.firma
+                        //"FECHA_CAPT":g.fecha_captura,
+                    }  
+                    : g.typeGeometry == "Punto" 
+                        ? {
+                            "OBJECTID": Number(new Date()),
+                            "ID_PUNTO":g.ID_PUNTO,// por user
+                            "DESCRIPCIO":g.descripcion,
+                            "ID_PREDIO":g.id_predio, // por user
+                            "ACOMPANIAN":g.acompaniante,
+                            "OBSERVACIO":g.observaciones,
+                            "FUNCIONARI":g.funcionario,
+                            "FIRMA":g.firma
+                        }
+                        : g.typeGeometry == "Línea" 
+                            ? {
+                                "ID_PREDIO":g.id_predio, // por user
+                                "ACOMPANIAN":g.acompaniante,
+                                "OBSERVACIO":g.observaciones,
+                                "FUNCIONARI":g.funcionario,
+                                "LONGITUD":g.longitud,
+                                "FIRMA":g.firma
+                            }
+                            :{}
+                
+            })
+        });
+        const dataToSend = {
+            "proyecto":{
+                "Nombre_Proyecto": nomProject,
+                "IdUsuario":"123"
+            },
+            "type":"FeatureCollection",
+            features
+        }
+        if (!navigator.onLine) {
+            let dbLocal = JSON.parse(localStorage.getItem("dbLocal"))?JSON.parse(localStorage.getItem("dbLocal")):[]
+            dbLocal.push(dataToSend);
+            localStorage.setItem("dbLocal",JSON.stringify(dbLocal))
+            const variant = "info" // variant could be success, error, warning, info, or default
+            enqueueSnackbar('Proyecto creado y almacenado localmente con exito',{variant});
             setNomProject('');
             setGeometriesCreated([]);
             setStore({...store, openBackop:false})
-        }, 2000);
+        }else{
+            console.log("dataToSend => ", dataToSend);
+            console.log(JSON.stringify(dataToSend));
+            insertarProyectoGeometrias(dataToSend);
+            
+        }
+    }
+    const finalizar = () => {
+        console.log("finalizar");
+        debugger
+        // setStore({...store, openBackop:true})
+        openBackDrop()
+        console.log("navigator.onLine  => ", navigator.onLine );
+        console.log("geometriesCreated => ", geometriesCreated);
+        let features = [];
+        geometriesCreated.forEach(g => { 
+            features.push({
+                type:"Feature",
+                geometry:{
+                    type: g.typeGeometry == "Punto"
+                        ?"Point": g.typeGeometry == "Línea"
+                        ? 'LineString'
+                        : 'Polygon',
+                    coordinates: g.typeGeometry == "Punto"
+                        ? [g.longitudPunto, g.latitudPunto]
+                            : g.typeGeometry == "Línea" 
+                                ?[[g.puntoInicial.longitud, g.puntoInicial.latitud],[g.puntoFinal.longitud,g.puntoFinal.latitud]]
+                                : [g.poligon],              
+                },
+                properties:
+                g.typeGeometry == "Polígono" ?
+                    {
+                        "ID_INICIO":g.id_inicio,
+                        "ID_FINAL":g.id_final,
+                        "DESCRIPCIO":g.descripcion,
+                        "ID_PREDIO":g.id_predio, // por user
+                        "ACOMPANIAN":g.acompaniante,
+                        "OBSERVACIO":g.observaciones,
+                        "FUNCIONARI":g.funcionario,
+                        "AREA_M2":g.area_m2,
+                        "FIRMA":g.firma
+                        //"FECHA_CAPT":g.fecha_captura,
+                    }  
+                    : g.typeGeometry == "Punto" 
+                        ? {
+                            "OBJECTID": Number(new Date()),
+                            "ID_PUNTO":g.ID_PUNTO,// por user
+                            "DESCRIPCIO":g.descripcion,
+                            "ID_PREDIO":g.id_predio, // por user
+                            "ACOMPANIAN":g.acompaniante,
+                            "OBSERVACIO":g.observaciones,
+                            "FUNCIONARI":g.funcionario,
+                            "FIRMA":g.firma
+                        }
+                        : g.typeGeometry == "Línea" 
+                            ? {
+                                "ID_PREDIO":g.id_predio, // por user
+                                "ACOMPANIAN":g.acompaniante,
+                                "OBSERVACIO":g.observaciones,
+                                "FUNCIONARI":g.funcionario,
+                                "LONGITUD":g.longitud,
+                                "FIRMA":g.firma
+                            }
+                            :{}
+                
+            })
+        });
+        const dataToSend = {
+            "proyecto":{
+                "Nombre_Proyecto": nomProject,
+                "IdUsuario":"123"
+            },
+            "type":"FeatureCollection",
+            features
+        }
+        if (!navigator.onLine) {
+            let dbLocal = JSON.parse(localStorage.getItem("dbLocal"))?JSON.parse(localStorage.getItem("dbLocal")):[]
+            dbLocal.push(dataToSend);
+            localStorage.setItem("dbLocal",JSON.stringify(dbLocal))
+            const variant = "info" // variant could be success, error, warning, info, or default
+            enqueueSnackbar('Proyecto creado y almacenado localmente con exito',{variant});
+            setNomProject('');
+            setGeometriesCreated([]);
+            setStore({...store, openBackop:false})
+        }else{
+            console.log("dataToSend => ", dataToSend);
+            console.log(JSON.stringify(dataToSend));
+            insertarProyectoGeometrias(dataToSend);
+            
+        }
+    }
+
+    const insertarProyectoGeometrias = async(dataToSend) => {
+        try {
+            debugger
+            const response = await insertProjecGeometry(JSON.stringify(dataToSend), enviroment.create);
+            console.log({response});
+            /* if (response.status == 0) {
+                const variant = "warning" // variant could be success, error, warning, info, or default
+                enqueueSnackbar(textosInfoWarnig.falloComunicacion,{variant});
+            } else { */
+                const variant = "success" // variant could be success, error, warning, info, or default
+                enqueueSnackbar('Proyecto creado con exito',{variant});
+                setNomProject('');
+                setGeometriesCreated([]);
+            // }
+            setStore({...store, openBackop:false})
+        } catch (error) {
+            falloLaPeticion(error);
+            setStore({...store, openBackop:false})
+        }
+    }
+
+    const falloLaPeticion = (error) => {        
+        console.error(error);
+        openBackDrop();
+        const variant = "error" // variant could be success, error, warning, info, or default
+        enqueueSnackbar('Estamos presentando inconvenientes en la comunicación, porfavor intentalo mas tarde, gracias',{variant});
     }
 
     const eliminarGeometry = () => {
@@ -106,7 +296,7 @@ export const FormCrearGeom = ({geometriesCreated, setGeometriesCreated, nomProje
 
     const handleResponseConfirmation = (response)=>{
         setOpenConfirmationDialog(false);
-        if(response)eliminarGeometry();
+        if(response)eliminarGeometry();                    
     }
     const closeModal = () => {
         setOpenModal(false);
@@ -114,7 +304,7 @@ export const FormCrearGeom = ({geometriesCreated, setGeometriesCreated, nomProje
 
     useEffect(() => {
       console.log("FormCrearGeom");
-    
+      
       return () => {}
     }, [])
     
@@ -181,6 +371,13 @@ export const FormCrearGeom = ({geometriesCreated, setGeometriesCreated, nomProje
                 )
             }
 
+            <Modal_1 open={openModal} closeModal={closeModal} geometriaSelected={geometriaSelected}/>
+            <ConfirmationDialog
+                openConfirmationDialog={openConfirmationDialog}
+                setOpenConfirmationDialog={setOpenConfirmationDialog}
+                handleResponseConfirmation={handleResponseConfirmation}
+                dialogContenText={ <DialogContenTextGeom geometriaSelected={geometriaSelected} /> }
+            />
 
 
             {/*
@@ -213,13 +410,7 @@ export const FormCrearGeom = ({geometriesCreated, setGeometriesCreated, nomProje
                 />
                 </RadioGroup> 
             */}
-            <Modal_1 open={openModal} closeModal={closeModal} data={geometriaSelected} geometriaSelected={geometriaSelected}/>
-            <ConfirmationDialog
-                openConfirmationDialog={openConfirmationDialog}
-                setOpenConfirmationDialog={setOpenConfirmationDialog}
-                handleResponseConfirmation={handleResponseConfirmation}
-                dialogContenText={<DialogContenTextGeom geometriaSelected={geometriaSelected}/>}
-            />
+            
         </Box>
     )
 }

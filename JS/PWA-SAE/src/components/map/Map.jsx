@@ -1,6 +1,6 @@
 import { Button } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { Circle, CircleMarker, MapContainer, Marker, Polygon, Polyline, Popup, Rectangle, TileLayer, Tooltip } from 'react-leaflet'
+import { Circle, CircleMarker, MapContainer, Marker, Polygon, Polyline, Popup, Rectangle, TileLayer, Tooltip, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { tiposGeometrias } from '../../helpers/constantes'
 
@@ -63,9 +63,14 @@ export const Map = ({currentLocation, startTracking, typeGeometry, formulario}) 
     const {latitud:latFin, longitud:longFin}=formulario.puntoFinal;
     const {poligon}=formulario;
     
+    function MyComponent() {
+      const map = useMap()
+      console.log('map center:', map.getCenter())
+      console.log(map);
+      return null
+    }
 
     useEffect(() => {
-      
       console.log(currentLocation);
       return () => {}
     }, [])
@@ -74,6 +79,7 @@ export const Map = ({currentLocation, startTracking, typeGeometry, formulario}) 
     <div style={{height:'75vh', backgroundColor:'aqua'}}>
         {/* <Button>+</Button> */}
         <MapContainer center={center} zoom={14} scrollWheelZoom={false}>
+          <MyComponent />
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

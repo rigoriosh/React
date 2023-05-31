@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FieldInput } from '../../../componets/FieldInput'
 
 export const ModeTramiteDetalle = ({formularioTramite}) => {
@@ -12,7 +12,7 @@ export const ModeTramiteDetalle = ({formularioTramite}) => {
         consideraMejora,
         diferenciaMayoEsta,
         municipioNotaria,
-        motivoDeLaSolicitud,
+        motivoSolicitud,
         noEscrituraPublica,
         notariaOtorgante,
         propiedadHorizontal,
@@ -22,6 +22,13 @@ export const ModeTramiteDetalle = ({formularioTramite}) => {
         objetoRectificacion,
         tipoInscripcion,
     } = formularioTramite;
+    useEffect(() => {
+    //   console.log("ModeTramiteDetalle");
+    //   console.log(formularioTramite);
+    
+      return () => {}
+    }, [])
+    
     return (
         <div style={{width:'100%'}}>
             <div className="row">
@@ -66,7 +73,7 @@ export const ModeTramiteDetalle = ({formularioTramite}) => {
                         />
                 }
                 {
-                    anioEscritura.value !== '' &&
+                    (anioEscritura.value !== ''&& anioEscritura.value !== null) &&
                         <FieldInput
                             disabled={true}
                             label="Año de la Escritura"
@@ -91,7 +98,7 @@ export const ModeTramiteDetalle = ({formularioTramite}) => {
             </div>
             <div className="row">
                 {
-                    (diferenciaMayoEsta.value !== ''&&diferenciaMayoEsta.value !==null) &&
+                    (diferenciaMayoEsta.value !== '' && diferenciaMayoEsta.value !==null) &&
                         <FieldInput
                             disabled={true}
                             label="Considera que la diferencia mayor esta en"
@@ -100,7 +107,7 @@ export const ModeTramiteDetalle = ({formularioTramite}) => {
                         />
                 }
                 {
-                    revisionBusca.value !== '' &&
+                    (revisionBusca.value !== '' && revisionBusca.value !== null) &&
                         <FieldInput
                             disabled={true}
                             label="La revisión busca"
@@ -143,11 +150,11 @@ export const ModeTramiteDetalle = ({formularioTramite}) => {
                         />
                 }
                 {
-                    motivoDeLaSolicitud.value !== '' &&
+                    (motivoSolicitud.value !== '' && motivoSolicitud.value !== null) &&
                         <FieldInput
                             disabled={true}
                             label="Motivo de la solicitud"
-                            value={motivoDeLaSolicitud.value}
+                            value={motivoSolicitud.value}
                             tipo="input"
                             styleOwn={{marginLeft: (tipoInscripcion.value !== ''&&tipoInscripcion.value !==null) ? '10px':'0'}}
                         />

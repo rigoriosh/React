@@ -31,7 +31,6 @@ export const SecondFormTramitre = ({
 }) => {
 
     // const [openDialogFormAddPredio, setOpenDialogFormAddPredio] = useState(false);
-
     const {
         avaluoTerreno,
         avaluoConstruccion,
@@ -51,7 +50,6 @@ export const SecondFormTramitre = ({
         motivoSolicitud,
         municipioNotaria,
         MunicipioDeLaNotaria,
-        motivoDeLaSolicitud,
         MotivosSolicitud,
         noEscrituraPublica,
         notariaOtorgante,
@@ -724,11 +722,11 @@ export const SecondFormTramitre = ({
                         />
                         <FieldSelect
                             label={'Motivo de la Solicitud'}
-                            value={motivoDeLaSolicitud.value}
+                            value={motivoSolicitud.value}
                             options={filtroMotivosSolicitud} 
                             handleOnchange={(target)=>{handleFormChange(target)}} 
-                            messageValidate={motivoDeLaSolicitud.validation}
-                            name={motivoDeLaSolicitud.name}
+                            messageValidate={motivoSolicitud.validation}
+                            name={motivoSolicitud.name}
                             styleOwn={{width:'100%', marginLeft: '10px'}}
                             required={true}
                         />
@@ -742,12 +740,12 @@ export const SecondFormTramitre = ({
                 <div className="row">
                    { motivoSolicitud.value === "RAT" &&
                     <FieldSelect
-                        label={'Motivo de la Solicitud'}
-                        value={motivoDeLaSolicitud.value}
+                        label={'Motivo de la Solicitud.'}
+                        value={motivoSolicitud.value}
                         options={filtroMotivosSolicitud} 
                         handleOnchange={(target)=>{handleFormChange(target)}} 
-                        messageValidate={motivoDeLaSolicitud.validation}
-                        name={motivoDeLaSolicitud.name}
+                        messageValidate={motivoSolicitud.validation}
+                        name={motivoSolicitud.name}
                         styleOwn={{width:'100%', marginRight:'10px'}}
                         required={true}
                     />}
@@ -770,18 +768,18 @@ export const SecondFormTramitre = ({
 
                 <FieldSelect
                     label={'Motivo de la Solicitud'}
-                    value={motivoDeLaSolicitud.value}
+                    value={motivoSolicitud.value}
                     options={MotivosSolicitud} 
                     handleOnchange={(target)=>{handleFormChange(target)}} 
-                    messageValidate={motivoDeLaSolicitud.validation}
-                    name={motivoDeLaSolicitud.name}
+                    messageValidate={motivoSolicitud.validation}
+                    name={motivoSolicitud.name}
                     styleOwn={{width:'100%', marginTop:'5px'}}
                     required={true}
                 />
             }
         */}
             {
-                modoTramite === 'Consulta' && <ModeTramiteDetalle formularioTramite={formularioTramite} key="ModeTramiteDetalle"/>
+                (modoTramite === 'Consulta' || modoTramite ==='Seguimiento') && <ModeTramiteDetalle formularioTramite={formularioTramite} key="ModeTramiteDetalle"/>
             }
 
 

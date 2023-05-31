@@ -1,0 +1,259 @@
+{
+	"info": {
+		"_postman_id": "3ce4f96d-900b-4538-84f4-ff8d0bcbf52d",
+		"name": "API_SAE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Proyecto",
+			"item": [
+				{
+					"name": "findById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/proyecto/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"proyecto",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findProyectsByIdUser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/proyecto/obtenerproyectosxUsuario/123",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"proyecto",
+								"obtenerproyectosxUsuario",
+								"123"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/proyecto/obtenertodoslosproyectos",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"proyecto",
+								"obtenertodoslosproyectos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"proyecto\":{\r\n\t\t\"Nombre_Proyecto\":\"Postman Monica 9\",\r\n\t\t\"IdUsuario\":\"123\"\r\n\t},\r\n\t\"type\":\"FeatureCollection\",\r\n\t\"features\":[\r\n\t\t{\r\n\t\t\t\"type\":\"Feature\",\r\n\t\t\t\"geometry\":{\r\n\t\t\t\t\"type\":\"Polygon\",\r\n\t\t\t\t\"coordinates\":[\r\n\t\t\t\t\t[\r\n\t\t\t\t\t\t[\r\n\t\t\t\t\t\t\t-74.069681,\r\n\t\t\t\t\t\t\t4.644245\r\n\t\t\t\t\t\t],\r\n\t\t\t\t\t\t[\r\n\t\t\t\t\t\t\t-74.067102,\r\n\t\t\t\t\t\t\t4.645076\r\n\t\t\t\t\t\t],\r\n\t\t\t\t\t\t[\r\n\t\t\t\t\t\t\t-74.064924,\r\n\t\t\t\t\t\t\t4.64154\r\n\t\t\t\t\t\t],\r\n\t\t\t\t\t\t[\r\n\t\t\t\t\t\t\t-74.068535,\r\n\t\t\t\t\t\t\t4.640514\r\n\t\t\t\t\t\t],\r\n\t\t\t\t\t\t[\r\n\t\t\t\t\t\t\t-74.069681,\r\n\t\t\t\t\t\t\t4.644245\r\n\t\t\t\t\t\t]\r\n\t\t\t\t\t]\r\n\t\t\t\t]\r\n\t\t\t},\r\n\t\t\t\"properties\":{\r\n\t\t\t\t\"ID_INICIO\":\"Prueba\",\r\n\t\t\t\t\"ID_FINAL\":\"Prueba 2\",\r\n\t\t\t\t\"DESCRIPCIO\":\"Descripcion del poligono Mónica Prueba\",\r\n\t\t\t\t\"ID_PREDIO\":\"Prueba\",\r\n\t\t\t\t\"ACOMPANIAN\":\"Acompanante 8 Prueba\",\r\n\t\t\t\t\"OBSERVACIO\":\"Observacion del poligono PostmanPrueba\",\r\n\t\t\t\t\"FUNCIONARI\":\"Funcionario PostmanPrueba\",\r\n\t\t\t\t\"AREA_M2\":87500,\r\n\t\t\t\t\"FIRMA\":\"Firma del  Postman Prueba\"\r\n\t\t\t}\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"type\":\"Feature\",\r\n\t\t\t\"geometry\":{\r\n\t\t\t\t\"type\":\"Point\",\r\n\t\t\t\t\"coordinates\":[\r\n\t\t\t\t\t-74.069,\r\n\t\t\t\t\t4.646\r\n\t\t\t\t]\r\n\t\t\t},\r\n\t\t\t\"properties\":{\r\n\t\t\t\t\"OBJECTID\":1,\r\n\t\t\t\t\"ID_PUNTO\":\"Punto 1 Prueba\",\r\n\t\t\t\t\"DESCRIPCIO\":\"Descripción del punto Postman Prueba\",\r\n\t\t\t\t\"ID_PREDIO\":\"ID del predio 1 Prueba\",\r\n\t\t\t\t\"ACOMPANIAN\":\"Personas que acompañan al punto Postman Prueba\",\r\n\t\t\t\t\"OBSERVACIO\":\"Observaciones del punto 1 Prueba\",\r\n\t\t\t\t\"FUNCIONARI\":\"Nombre del funcionario Postman el punto 1Prueba\",\r\n\t\t\t\t\"FIRMA\":\"Firma del funcionarioPostman\"\r\n\t\t\t}\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"type\":\"Feature\",\r\n\t\t\t\"geometry\":{\r\n\t\t\t\t\"type\":\"Point\",\r\n\t\t\t\t\"coordinates\":[\r\n\t\t\t\t\t-74.068,\r\n\t\t\t\t\t4.643\r\n\t\t\t\t]\r\n\t\t\t},\r\n\t\t\t\"properties\":{\r\n\t\t\t\t\"OBJECTID\":2,\r\n\t\t\t\t\"ID_PUNTO\":\"Punto 2 Prueba\",\r\n\t\t\t\t\"DESCRIPCIO\":\"Descripción del punto 2 Prueba\",\r\n\t\t\t\t\"ID_PREDIO\":\"ID del predio 2 Prueba\",\r\n\t\t\t\t\"ACOMPANIAN\":\"Personas que acompañan al punto 2\",\r\n\t\t\t\t\"OBSERVACIO\":\"Observaciones del punto 2\",\r\n\t\t\t\t\"FUNCIONARI\":\"Nombre del funcionario que capturó el punto 2\",\r\n\t\t\t\t\"FIRMA\":\"Firma del funcionario 2 Postman Prueba\"\r\n\t\t\t}\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"type\":\"Feature\",\r\n\t\t\t\"geometry\":{\r\n\t\t\t\t\"type\":\"LineString\",\r\n\t\t\t\t\"coordinates\":[\r\n\t\t\t\t\t[\r\n\t\t\t\t\t\t-74.072031,\r\n\t\t\t\t\t\t4.642277\r\n\t\t\t\t\t],\r\n\t\t\t\t\t[\r\n\t\t\t\t\t\t-74.065561,\r\n\t\t\t\t\t\t4.642059\r\n\t\t\t\t\t]\r\n\t\t\t\t]\r\n\t\t\t},\r\n\t\t\t\"properties\":{\r\n\t\t\t\t\"ID_PREDIO\":\"predio2\",\r\n\t\t\t\t\"ACOMPANIAN\":\"Acompanante 10\",\r\n\t\t\t\t\"OBSERVACIO\":\"Observacion de la linea Postman Prueba\",\r\n\t\t\t\t\"FUNCIONARI\":\"Funcionario 11\",\r\n\t\t\t\t\"LONGITUD\":9800,\r\n\t\t\t\t\"FIRMA\":\"Firma de la linea Postman Prueba\"\r\n\t\t\t}\r\n\t\t}\r\n\t]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/proyecto/insertarProyectoGeometrias",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"proyecto",
+								"insertarProyectoGeometrias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/proyecto/deleteProyecto/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"proyecto",
+								"deleteProyecto",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtenerGeometriasProyecto",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Punto",
+			"item": [
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/punto/6",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"punto",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FindByIdProyecto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/punto/proyecto/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"punto",
+								"proyecto",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Linea",
+			"item": [
+				{
+					"name": "findByIdProyecto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/linea/proyecto/5",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"linea",
+								"proyecto",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/linea/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"linea",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Poligono",
+			"item": [
+				{
+					"name": "findByIdProyecto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/poligono/proyecto/5",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"poligono",
+								"proyecto",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -13,7 +13,8 @@ export const Transition = React.forwardRef(function Transition(props, ref) {
   });
 
 export const ConfirmationDialog = ({openConfirmationDialog, setOpenConfirmationDialog,
-    handleResponseConfirmation, dialogContenText}) => {
+    handleResponseConfirmation, dialogContenText,
+  title="Mensaje de confirmación"}) => {
     
     
   return (
@@ -25,9 +26,9 @@ export const ConfirmationDialog = ({openConfirmationDialog, setOpenConfirmationD
         onClose={()=>setOpenConfirmationDialog(false)}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{"Mensaje de confirmación"}</DialogTitle>
+        <DialogTitle alignSelf={'center'}>{title}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
+          <DialogContentText id="alert-dialog-slide-description" >
             {dialogContenText}
           </DialogContentText>
         </DialogContent>

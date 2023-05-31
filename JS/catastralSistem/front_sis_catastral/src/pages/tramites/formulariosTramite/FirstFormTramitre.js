@@ -20,8 +20,6 @@ import enviroment from '../../../helpers/enviroment'
 import { regExp10Num, textosInfoWarnig } from '../../../helpers/utils'
 import { Transition } from '../../auth/Signin';
 
-
-
 const initForm = {
     nombres:{
         name: 'nombres',
@@ -45,7 +43,6 @@ const initForm = {
     }
 }
 
-
 export const constantes = {
     tipoFormulario:{
         editar: 'edit',
@@ -67,8 +64,8 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
         const {store, updateStore} = useContext(StoreContext);
         const {dialogTool} = store;
         const [openDialog, setOpenDialog] = useState(false);
-        const {tipoTramite, motivoSolicitud, tipoSolicitante, razonSolicitud, titularesDeDerecho,
-            } = formularioTramite;
+        const {tipoTramite, /* motivoSolicitud, */ tipoSolicitante, razonSolicitud, titularesDeDerecho,
+            nombreTramite } = formularioTramite;
         const [tiposDocumento, setTiposDocumento] = useState([]);
 
         const [stateFirsFormTramite, setStateFirsFormTramite] = useState(initialState);
@@ -259,7 +256,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
         }
 
         useEffect(() => {
-
+            // console.log("FirstFormTramitre");
             if (modoTramite === 'Nuevo') {
                 if (store.tiposDocumento.length === 0) {
                     getTiposDocumento();
@@ -305,7 +302,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
             return () => {
             }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [tipoTramite, motivoSolicitud, tipoSolicitante, titularesDeDerecho, razonSolicitud]);
+        }, [tipoTramite, nombreTramite, tipoSolicitante, titularesDeDerecho, razonSolicitud]);
 
         // eslint-disable-next-line no-unused-vars
         const [columns, setColumns] = useState([
@@ -338,8 +335,9 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
         ]);
 
         const validateTotalForm = () => {
+            // console.log("validateTotalForm////////////////////////////////////");
             let validacion = false;
-            if (tipoTramite.value !== '' && motivoSolicitud.value !== '' &&
+            if (tipoTramite.value !== '' && nombreTramite.value !== '' &&
              tipoSolicitante.value !== '' && razonSolicitud.value !== '' &&
              titularesDeDerecho.length > 0) {
                 validacion = true;
@@ -361,6 +359,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
 
     return (
         <form onSubmit={onSubmit}>
+
             <div className="row contenTitulo">
                 <div className="decorationTitle bgc1"></div>
                 <p className="titulo color1"style={{width:'100%'}}>TRÁMITES CATASTRALES</p>
@@ -374,6 +373,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                         </Tooltip>
                 }
             </div>
+
             <div style={{margin:'10px 0px'}}>
                 <div className="row aife">
                     {
@@ -403,19 +403,18 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                     }
                     
                 </div>
-
                 {
                     modoTramite === 'Nuevo'
                     ?   
                         <div>
                             <FieldSelect
                                 label={'Solicitud'}
-                                value={motivoSolicitud.value}
+                                value={nombreTramite.value}
                                 options={tipoSolicitud}
                                 styleOwn={{marginTop:'5px'}}
                                 handleOnchange={(target)=>handleFormChange(target)}
-                                messageValidate={motivoSolicitud.validation}
-                                name={motivoSolicitud.name}
+                                messageValidate={nombreTramite.validation}
+                                name={nombreTramite.name}
                                 required={true}
                             />
                             <FieldSelect
@@ -433,9 +432,9 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                         <div>
                             <FieldTextWidtLabel
                                 label={'Solicitud'}
-                                value={motivoSolicitud.value} 
-                                name={motivoSolicitud.name}
-                                messageValidate={motivoSolicitud.validation}
+                                value={nombreTramite.value} 
+                                name={nombreTramite.name}
+                                messageValidate={nombreTramite.validation}
                                 required={true}
                                 handleChange={(target)=>{handleFormChange(target)}}
                                 type="text"
@@ -473,7 +472,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                         </div>
                 }
             </div>
-
+ 
             {
                 titularesDeDerecho.length < 1 
                 ? modoTramite === 'Nuevo' ? <p className="subTitulo" style={{marginBottom:'10px', color: validacionTitulares ? 'red':''}}>Recuerda, se requiere mínimo un titular</p>
@@ -538,7 +537,6 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                         <p onClick={()=>{avancePagina( modoTramite === 'Nuevo' ? formularioTotalOk : true, true)}} 
                             className={`${(formularioTotalOk || modoTramite === 'Consulta' || modoTramite === 'Seguimiento') ?'color1 pointer':'grey2'}  `}>Siguiente <span style={{fontWeight:'bold'}}>{'>'}</span> </p>
                     </button>
-                    {/* <img onClick={()=>{avancePagina()}} className="imgWidth" src={PasodePagDer_Icon} alt="" style={{width:'12px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/> */}
                 </div>
             </div>
             <Dialog
@@ -580,7 +578,6 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                                     messageValidate={newTitularDerecho.numeroDeDocumento.validacion} type='number' styleOwn={{marginLeft:'10px', width:'60%'}}
                                 />
 
-                                {/* <img onClick={()=>{}} className="imgWidth" src={GestiondeUS_Eliminar_Icon} alt="" style={{width:'20px', height:'min-content', alignSelf:'center', cursor:'pointer', margin:'5px 1px 0 5px'}}/> */}
                             </div>
                             
                             <div className="row"></div>
@@ -600,6 +597,7 @@ export const FirstFormTramitre = ({handleFormChange, tiposTramites, tipoSolicitu
                     
                 </DialogActions>
             </Dialog>
+             
         </form>
     )
 }

@@ -1,0 +1,1 @@
+ejecutar el jar se debe abrir el la carpeta en donde se descargo y ejecutar el siguiente comando: java -jar .\ApiSAE-0.0.1-SNAPSHOT.jar

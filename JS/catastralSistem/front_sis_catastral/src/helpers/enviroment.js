@@ -1,7 +1,7 @@
 // Pruebas en local
 // const api = 'http://localhost:3000/api-ssc/'; // local json Server
-// const api = 'http://localhost:8080/api-ssc/'; // local
-const api = 'http://198.199.80.174:8080/api-ssc/'; // produccion
+const api = 'http://localhost:8080/api-ssc/'; // local
+// const api = 'http://198.199.80.174:8080/api-ssc/'; // produccion
 // const api = process.env.REACT_APP_API_URL;
 const enviroment = {
     // getToken:               `${api}getToken`,

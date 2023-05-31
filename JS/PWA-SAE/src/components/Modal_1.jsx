@@ -9,10 +9,11 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { Box, Fab, TextField, Zoom } from '@mui/material';
 import { StyledFab } from '../pages/home/HomePage';
+import { tiposGeometrias } from '../helpers/constantes';
 
 
 
-export const Modal_1 = ({open, closeModal, data, geometriaSelected}) => {
+export const Modal_1 = ({open, closeModal, geometriaSelected}) => {
     console.log(geometriaSelected);
     const {typeGeometry, id}=geometriaSelected
     const theme = useTheme();
@@ -38,15 +39,39 @@ export const Modal_1 = ({open, closeModal, data, geometriaSelected}) => {
                         {/* {JSON.stringify(data)} */}
                     </DialogContentText>
                     <div style={{fontSize:'20px', marginTop:'10px'}}>
-                        <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Id_predio:</span>{data.id}</p>
-                        {/* <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Proyecto:</span>{data.proyecto}</p> */}
-                        <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Acompañante:</span>{data.ACOMPANANTE}</p>
-                        {/* <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Descripción:</span>{data.DESCRIPCION}</p> */}
-                        <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Observaciones:</span>{data.OBSERVACIONES}</p>
-                        <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Funcionario:</span>{data.FUNCIONARIO}</p>
-                        <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Longitud:</span>{data.longitud}</p>
-                        <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Fecha:</span>{data.FECHA_CAPTURA}</p>
-                        <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Firma:</span>{data.FIRMA}</p>
+                        {
+                            geometriaSelected.id &&
+                            <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Id_predio:</span>{geometriaSelected.id}</p>
+                        }
+                        {/* <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Proyecto:</span>{geometriaSelected.proyecto}</p> */}
+                        {
+                            geometriaSelected.acompaniante &&
+                            <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Acompañante:</span>{geometriaSelected.acompaniante}</p>
+                        }
+                        {
+                            geometriaSelected.descripcion &&
+                                <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Descripción:</span>{geometriaSelected.descripcion}</p>
+                        }
+                        {
+                            geometriaSelected.observaciones &&
+                            <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Observaciones:</span>{geometriaSelected.observaciones}</p>
+                        }
+                        {
+                            geometriaSelected.funcionario &&
+                            <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Funcionario:</span>{geometriaSelected.funcionario}</p>
+                        }
+                        {
+                            (geometriaSelected.typeGeometry == tiposGeometrias.Linea||geometriaSelected.typeGeometry == "Linea") &&
+                            <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Longitud:</span>{geometriaSelected.longitud}</p>
+                        }
+                        {
+                            (geometriaSelected.fecha_captura || geometriaSelected.fechaCreacion) &&
+                            <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Fecha:</span>{new Date(geometriaSelected.fecha_captura?geometriaSelected.fecha_captura:geometriaSelected.fechaCreacion).toLocaleDateString()}</p>
+                        }
+                        {
+                            geometriaSelected.firma &&
+                            <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Firma:</span>{geometriaSelected.firma}</p>
+                        }
                     </div>
                 </DialogContent>
                 <DialogActions>

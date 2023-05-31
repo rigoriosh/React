@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { NavListDrawer } from './NavListDrawer'
 import { AppBar, Button, Container, Drawer, IconButton, Toolbar, Typography } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
+import WifiOffIcon from '@mui/icons-material/WifiOff';
 import { StoreContext } from '../../App';
 import { menu } from '../../helpers/constantes';
 
@@ -11,7 +12,7 @@ export const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false)
 
   useEffect(() => {
-    
+    console.log("Navbar");
     if (menuSelected != menu.Home) {
       setOpenMenu(false)
     }
@@ -38,6 +39,8 @@ export const Navbar = () => {
               Sistema de captura de geometrías
             </Typography>
             {/* <Button color="inherit">Login</Button> */}
+            { !navigator.onLine && <WifiOffIcon /> }
+            
           </Toolbar>
         </AppBar>
         <Drawer open={openMenu} anchor='top'  onClose={()=>setOpenMenu(false)}

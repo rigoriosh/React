@@ -27,6 +27,8 @@ function App() {
   
   const [store, setStore] = useState(initStore);
   const [login, setLogin] = useState(initLogin)
+  const [catchGeometries, setCatchGeometries] = useState(false)
+
   const{openBackop}=store;
   const closeBackDrop = () => {
     setStore({...store, openBackop:false})
@@ -37,6 +39,7 @@ function App() {
   const salir = () => {
     setLogin(initLogin);
     sessionStorage.clear();
+    setStore(initStore)
   };
 
   useEffect(() => {
@@ -45,7 +48,7 @@ function App() {
   }, [])
   
   return (
-    <StoreContext.Provider value={{ salir, store, setStore, login, setLogin, openBackDrop } }>
+    <StoreContext.Provider value={{ salir, store, setStore, login, setLogin, openBackDrop, catchGeometries, setCatchGeometries } }>
       <SnackbarProvider maxSnack={3} TransitionComponent={TransitionDown}>
         <div className="App">
           {

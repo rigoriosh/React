@@ -7,26 +7,31 @@ import Line from '../../assets/btnsIcons/Linea.png'
 import Polygon from '../../assets/btnsIcons/Poligono.png'
 import { useSnackbar } from 'notistack';
 import { Map } from '../../components/map/Map';
+import { calcularDistanciaEntreDosCoordenadas } from '../../helpers/utils';
 
 const initForm = {
   id:'',
-  ACOMPANANTE:'',
-  OBSERVACIONES:'',
-  DESCRIPCION:'',
-  FECHA_CAPTURA:'',
-  FUNCIONARIO:'',
-  FIRMA:'',
+  acompaniante:'',
+  id_punto:'',
+  id_predio:'',
+  observaciones:'',
+  descripcion:'',
+  fecha_captura:'',
+  funcionario:'',
+  firma:'',
   latitudPunto:'',
   longitudPunto:'',
 }
-const initFormPolygon = {
+/* const initFormPolygon = {
   id:'',
-  ACOMPANANTE:'',
-  OBSERVACIONES:'',
-  DESCRIPCION:'',
+  acompaniante:'',
+  id_punto:'',
+  id_predio:'',
+  observaciones:'',
+  descripcion:'',
   FECHA_CAPTURA:'',
-  FUNCIONARIO:'',
-  FIRMA:'',
+  funcionario:'',
+  firma:'',
   id_inicio:'',
   id_final:'' ,
   puntoInicial:{latitud:'',longitud:''},
@@ -34,15 +39,17 @@ const initFormPolygon = {
   poligon:[],
   latitudPunto:'',
   longitudPunto:'',
-}
+} */
 const initFormLine = {
   id:'',
-  ACOMPANANTE:'',
-  OBSERVACIONES:'',
-  DESCRIPCION:'',
-  FECHA_CAPTURA:'',
-  FUNCIONARIO:'',
-  FIRMA:'',
+  acompaniante:'',
+  id_punto:'',
+  id_predio:'',
+  observaciones:'',
+  descripcion:'',
+  fecha_captura:'',
+  funcionario:'',
+  firma:'',
   // id_inicio:'',
   // id_final:'' ,
   puntoInicial:{latitud:'',longitud:''},
@@ -52,32 +59,59 @@ const initFormLine = {
 }
 let interval;
 export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typeGeometry}) => {
-  const { store, setStore } = useContext(StoreContext);
+  const { store, setStore, catchGeometries, setCatchGeometries } = useContext(StoreContext);
   const { enqueueSnackbar } = useSnackbar();
   const [formulario, setFormulario] = useState(
-    typeGeometry==tiposGeometrias.Poligono ? initFormPolygon 
+    typeGeometry==tiposGeometrias.Poligono ? {
+      id:'',
+      acompaniante:'',
+      id_punto:'',
+      id_predio:'',
+      observaciones:'',
+      descripcion:'',
+      fecha_captura:'',
+      funcionario:'',
+      firma:'',
+      id_inicio:'',
+      id_final:'' ,
+      puntoInicial:{latitud:'',longitud:''},
+      puntoFinal:{latitud:'',longitud:''},
+      poligon:[],
+      latitudPunto:'',
+      longitudPunto:'',
+    } 
     : typeGeometry==tiposGeometrias.Linea ? initFormLine :initForm);
-  const { id, ACOMPANANTE, OBSERVACIONES, DESCRIPCION, FUNCIONARIO, FIRMA, id_inicio, id_final, latitudPunto,longitudPunto } = formulario;
-  const [catchGeometries, setCatchGeometries] = useState(false)
+  const { id_punto, id_predio, acompaniante, observaciones, descripcion, funcionario, firma, id_inicio, id_final, latitudPunto,longitudPunto } = formulario;
+  // const [catchGeometries, setCatchGeometries] = useState(false)
   const [startTracking, setStartTracking] = useState("");
   // const [catchPoligon, setCatchPoligon] = useState([]);
 
   const guardar = () => {
     console.log("guardar => ", formulario);
+    let calculoLongitud = 0;
+    if (typeGeometry == tiposGeometrias.Linea) {
+      calculoLongitud = calcularDistanciaEntreDosCoordenadas(
+        formulario.puntoInicial.latitud, formulario.puntoInicial.longitud,
+        formulario.puntoFinal.latitud,formulario.puntoFinal.longitud
+      )
+    }
     const newGeometryCreated = {
       ...formulario,
       id: geometriesCreated.length.toString(),
       // id: generateUUID(),
-      FECHA_CAPTURA:new Date().toLocaleDateString(),
+      fecha_captura:new Date().toLocaleDateString(),
       typeGeometry,
-      longitud:"pendiente del como se calcula"
+      area_m2: 1, //pendiente por determinar forma de calcular
+      longitud:calculoLongitud //logitud de la linea
     }
-    if (Object.keys(newGeometryCreated).filter(k => newGeometryCreated[k] == '').length>0) {
+    if (Object.keys(newGeometryCreated).filter(k => (newGeometryCreated[k] == '' && newGeometryCreated[k] != 0)).length) {
       const variant = "error" // variant could be success, error, warning, info, or default
       enqueueSnackbar('Recuerda todos los campos son obligatorios',{variant});
     } else {
-      setGeometriesCreated([...geometriesCreated, newGeometryCreated])
-      setStore({...store, subMenuSelected:""})
+      setGeometriesCreated([...geometriesCreated, newGeometryCreated]) // guarda en el array temporal antes de ser enviado al back con las demas geometrias
+      setStore({...store, subMenuSelected:""}) // regresa a la vista anterior "Crear proyecto"
+      setFormulario({})
+      setCatchGeometries(false);
     }
   }
   const handleFields = ({target})=>{
@@ -129,6 +163,7 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
   const callbackTraking = (position) => {
     console.log(position);
     // setCatchPoligon([...catchPoligon,[position.coords.latitude+Math.random(),position.coords.longitude]])
+    debugger
     let a = formulario.poligon;
     a.push([position.coords.latitude,position.coords.longitude]);
     console.log("a=>",a);
@@ -159,10 +194,36 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
       setCatchGeometries(false)
     }
     setStartTracking(start)
-    setTimeout(() => {
-    }, 4000);
+    /* setTimeout(() => {
+    }, 4000); */
     
   }
+  useEffect(() => {
+    console.log("CapturaCoordenadas");
+    console.log(formulario);
+    setFormulario(
+      typeGeometry==tiposGeometrias.Poligono ? {
+        id:'',
+        acompaniante:'',
+        id_punto:'',
+        id_predio:'',
+        observaciones:'',
+        descripcion:'',
+        fecha_captura:'',
+        funcionario:'',
+        firma:'',
+        id_inicio:'',
+        id_final:'' ,
+        puntoInicial:{latitud:'',longitud:''},
+        puntoFinal:{latitud:'',longitud:''},
+        poligon:[],
+        latitudPunto:'',
+        longitudPunto:'',
+      } 
+      : typeGeometry==tiposGeometrias.Linea ? initFormLine :initForm)
+    return () => {}
+  }, [])
+  
   return (
     <Box
         component="form"
@@ -233,26 +294,28 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
             <div>
               {
                 typeGeometry == tiposGeometrias.Poligono &&
-                <>
+                <div style={{display:'flex'}}>
                   <TextField id="id_inicio" name='id_inicio' value={id_inicio} label="Id_inicio" variant="outlined" fullWidth size='small' margin='dense' 
                     onChange={handleFields}/>
                   <TextField id="id_final" name='id_final' value={id_final} label="Id_final" variant="outlined" fullWidth size='small' margin='dense' 
                     onChange={handleFields}/>
-                </>
-              }
-              {/* <TextField id="id" name='id' value={id} label="Id_predio" color='success' variant="outlined" fullWidth size='small' margin='dense' 
-                onChange={handleFields}/> */}
-              <TextField id="ACOMPANANTE" name='ACOMPANANTE' value={ACOMPANANTE} label="Acompañante" variant="outlined" fullWidth size='small' margin='dense' 
+                </div>
+              }              
+              <TextField id="id_punto" name='id_punto' value={id_punto} label="Id Punto" variant="outlined" fullWidth size='small' margin='dense' 
                 onChange={handleFields}/>
-              <TextField id="OBSERVACIONES" name='OBSERVACIONES' value={OBSERVACIONES} label="Observaciones" variant="outlined" fullWidth size='small' margin='dense' 
+              <TextField id="id_predio" name='id_predio' value={id_predio} label="Id Predio" variant="outlined" fullWidth size='small' margin='dense' 
                 onChange={handleFields}/>
-              <TextField id="DESCRIPCION" name='DESCRIPCION' value={DESCRIPCION} label="Descripción" variant="outlined" fullWidth size='small' margin='dense' 
+              <TextField id="acompaniante" name='acompaniante' value={acompaniante} label="Acompañante" variant="outlined" fullWidth size='small' margin='dense' 
+                onChange={handleFields}/>
+              <TextField id="observaciones" name='observaciones' value={observaciones} label="Observaciones" variant="outlined" fullWidth size='small' margin='dense' 
+                onChange={handleFields}/>
+              <TextField id="descripcion" name='descripcion' value={descripcion} label="Descripción" variant="outlined" fullWidth size='small' margin='dense' 
                 onChange={handleFields}/>
               {/* <TextField id="FECHA_CAPTURA" name='FECHA_CAPTURA' value={FECHA_CAPTURA} label="Fecha" variant="outlined" fullWidth size='small' margin='dense' 
                 onChange={handleFields}/> */}
-              <TextField id="FUNCIONARIO" name='FUNCIONARIO' value={FUNCIONARIO} label="Funcionario" variant="outlined" fullWidth size='small' margin='dense' 
+              <TextField id="funcionario" name='funcionario' value={funcionario} label="Funcionario" variant="outlined" fullWidth size='small' margin='dense' 
                 onChange={handleFields}/>
-              <TextField id="FIRMA" name='FIRMA' value={FIRMA} label="Firmas" variant="outlined" fullWidth size='small' margin='dense' 
+              <TextField id="firma" name='firma' value={firma} label="Firmas" variant="outlined" fullWidth size='small' margin='dense' 
                 onChange={handleFields}/>
               {
                 typeGeometry == tiposGeometrias.Punto &&
