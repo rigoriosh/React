@@ -12,6 +12,7 @@ import { DialogContenSincronize } from '../../components/DialogContenSincronize'
 import { useSnackbar } from 'notistack';
 import enviroment from '../../helpers/enviroment';
 import { insertProjecGeometry } from '../../api/apis';
+import { agregarIdProyectoPunLinPol, formarJsonToPersistir, traer_idProyecto } from '../../helpers/utils';
 
 
 export const StyledFab = styled(Fab)({
@@ -25,17 +26,16 @@ export const StyledFab = styled(Fab)({
 
 export const HomePage = () => {
 
-  const { store, setStore, catchGeometries } = useContext(StoreContext);
+  const { store, setStore, catchGeometries, login } = useContext(StoreContext);
   const {menuSelected, subMenuSelected}=store;
   const { enqueueSnackbar } = useSnackbar();
   const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
 
-  const handleResponseConfirmation = async(response)=>{
+  const handleResponseConfirmationBackUp = async(response)=>{
     setOpenConfirmationDialog(false);
     
         if (response) {
             //TODO: send data to server
-
             setStore({...store, openBackop:true})
             const dbLocal = JSON.parse(localStorage.getItem("dbLocal"));
             dbLocal.forEach(async(dataToSend) => {
@@ -50,8 +50,38 @@ export const HomePage = () => {
             localStorage.clear();
         }
     }
+  const handleResponseConfirmation = async(response)=>{
+    setOpenConfirmationDialog(false);
+    
+    if (response) {
+        //TODO: send data to server
+        setStore({...store, openBackop:true})
+        const dbLocal = JSON.parse(localStorage.getItem("dbLocal"));
+        dbLocal.forEach(async({nomProject, puntos, lineas, poligonos}) => {
+          debugger
+          const ID_PROYECT = await traer_idProyecto(nomProject, login);
+          if (ID_PROYECT) {
+              const {fixPuntos, fixLineas, fixPoligonos} = agregarIdProyectoPunLinPol(ID_PROYECT, puntos, lineas, poligonos);
+              await formarJsonToPersistir(fixPuntos, fixLineas, fixPoligonos);
+          } else {
+            msgFalloCOmunicacion();
+          }
+          // await insertProjecGeometry(JSON.stringify(dataToSend), enviroment.create);
+        });
+        const variant = "info" // variant could be success, error, warning, info, or default
+        enqueueSnackbar('Datos sincronizados correctamente',{variant});
+        setStore({...store, openBackop:false});
+        localStorage.clear();    
+    }else{
+        localStorage.clear();
+    }
+  }
   
-
+  const msgFalloCOmunicacion = () => {
+    const variant = "warning" // variant could be success, error, warning, info, or default
+    setStore({...store, openBackop:false})
+    enqueueSnackbar('Problemas con la comunicación, porfavor intentalo mas tarde',{variant});
+  }
 
   useEffect(() => {
     console.log("HomePage");

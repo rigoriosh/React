@@ -13,17 +13,15 @@ import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { ConfirmationDialog } from '../../components/ConfirmationDialog';
 import { DialogContenTextGeom } from '../../components/DialogContenTextGeom';
 import { Modal_1 } from '../../components/Modal_1';
-import { DialogContenSincronize } from '../../components/DialogContenSincronize';
-import { insertProjecGeometry } from '../../api/apis';
-import enviroment from '../../helpers/enviroment';
-import { textosInfoWarnig } from '../../helpers/utils';
+import { insertProjecGeometry} from '../../api/apis';
+import { fechaActual, formarJsonToPersistir, getNorteEste, traer_idProyecto } from '../../helpers/utils';
 
 
 export const FormCrearGeom = ({geometriesCreated, setGeometriesCreated, nomProject, setNomProject,
     typeGeometry, setTypeGeometrySelected
 }) => {
     const { enqueueSnackbar } = useSnackbar();
-    const { store, setStore, openBackDrop } = useContext(StoreContext);
+    const { store, setStore, openBackDrop, login } = useContext(StoreContext);
     // const {menuSelected, subMenuSelected}=store;
     const [geometriaSelected, setGeometriaSelected] = useState({ id:0,typeGeometry:'',fecha_captura: ''});
     const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
@@ -87,7 +85,7 @@ export const FormCrearGeom = ({geometriesCreated, setGeometriesCreated, nomProje
     }
 
     const finalizar_1 = () => {
-        console.log("finalizar");
+        console.log("finalizar_1");
         // setStore({...store, openBackop:true})
         openBackDrop()
         console.log("navigator.onLine  => ", navigator.onLine );
@@ -169,89 +167,196 @@ export const FormCrearGeom = ({geometriesCreated, setGeometriesCreated, nomProje
             
         }
     }
-    const finalizar = () => {
+    const finalizar = async() => {
         console.log("finalizar");
-        debugger
-        // setStore({...store, openBackop:true})
         openBackDrop()
+        const idProyecto = await traer_idProyecto(nomProject, login);
+        console.log({idProyecto});
+
         console.log("navigator.onLine  => ", navigator.onLine );
         console.log("geometriesCreated => ", geometriesCreated);
-        let features = [];
+        let puntos=[], lineas=[], poligonos=[];
+        debugger
         geometriesCreated.forEach(g => { 
-            features.push({
-                type:"Feature",
-                geometry:{
-                    type: g.typeGeometry == "Punto"
-                        ?"Point": g.typeGeometry == "Línea"
-                        ? 'LineString'
-                        : 'Polygon',
-                    coordinates: g.typeGeometry == "Punto"
-                        ? [g.longitudPunto, g.latitudPunto]
-                            : g.typeGeometry == "Línea" 
-                                ?[[g.puntoInicial.longitud, g.puntoInicial.latitud],[g.puntoFinal.longitud,g.puntoFinal.latitud]]
-                                : [g.poligon],              
-                },
-                properties:
-                g.typeGeometry == "Polígono" ?
+            if (g.typeGeometry == "Punto") {
+                debugger
+                const {norte,este} = getNorteEste(g.longitudPunto, g.latitudPunto);
+                puntos.push(
                     {
-                        "ID_INICIO":g.id_inicio,
-                        "ID_FINAL":g.id_final,
-                        "DESCRIPCIO":g.descripcion,
-                        "ID_PREDIO":g.id_predio, // por user
-                        "ACOMPANIAN":g.acompaniante,
-                        "OBSERVACIO":g.observaciones,
-                        "FUNCIONARI":g.funcionario,
-                        "AREA_M2":g.area_m2,
-                        "FIRMA":g.firma
-                        //"FECHA_CAPT":g.fecha_captura,
-                    }  
-                    : g.typeGeometry == "Punto" 
-                        ? {
-                            "OBJECTID": Number(new Date()),
-                            "ID_PUNTO":g.ID_PUNTO,// por user
-                            "DESCRIPCIO":g.descripcion,
-                            "ID_PREDIO":g.id_predio, // por user
+                        "attributes": {
+                            "ID_PROYECT": idProyecto?idProyecto:'isOffline',
+                            "ID_PREDIO":g.id_predio,
                             "ACOMPANIAN":g.acompaniante,
                             "OBSERVACIO":g.observaciones,
                             "FUNCIONARI":g.funcionario,
-                            "FIRMA":g.firma
-                        }
-                        : g.typeGeometry == "Línea" 
-                            ? {
-                                "ID_PREDIO":g.id_predio, // por user
-                                "ACOMPANIAN":g.acompaniante,
-                                "OBSERVACIO":g.observaciones,
-                                "FUNCIONARI":g.funcionario,
-                                "LONGITUD":g.longitud,
-                                "FIRMA":g.firma
+                            "FIRMA":g.firma,
+                            "FECHA_CAPTURA":fechaActual(),
+                            "ID_PUNTO":g.id_punto,
+                            "DESCRIPCIO": g.descripcion
+                        },
+                        "geometry": {
+                            "x": norte,
+                            // "x": g.latitudPunto,
+                            // "x": 1.0274075,
+                            // "x": 4597688.575,
+                            "y": este,
+                            // "y": g.longitudPunto,
+                            // "y": -76.6150806,
+                            // "y": 1671791.415,
+                            
+                            "spatialReference": {
+                                // "wkid": 4326
+                                "wkid": 9377,
+                                "lateswkid": 4326 
                             }
-                            :{}
-                
-            })
-        });
-        const dataToSend = {
-            "proyecto":{
-                "Nombre_Proyecto": nomProject,
-                "IdUsuario":"123"
-            },
-            "type":"FeatureCollection",
-            features
-        }
+                        }
+                    }                        
+                )
+            } else if (g.typeGeometry == "Línea") {
+                debugger
+                const {norte:norteInicial, este:esteInicial} = getNorteEste(g.puntoInicial.longitud, g.puntoInicial.latitud);
+                const {norte:norteFinal, este:esteFinal} = getNorteEste(g.puntoFinal.longitud, g.puntoFinal.latitud);
+                lineas.push(                        
+                    {
+                        "attributes": {
+                            "ID_PROYECT": idProyecto?idProyecto:'isOffline',
+                            "ID_PREDIO": g.id_predio,
+                            "ACOMPANIAN": g.acompaniante,
+                            "OBSERVACIO": g.observaciones,
+                            "FUNCIONARI": g.funcionario,
+                            "FIRMA": g.firma,
+                        //   "FECHA_CAPTURA": "2023-06-21",
+                            "FECHA_CAPTURA": fechaActual(),
+                            "LONGITUD": g.longitud
+                        },
+                        "geometry": {
+                            "paths": [
+                            [
+                                [
+                                    /* -76.6097141, // to testing
+                                    1.0220083, */
+                                    // g.puntoInicial.latitud,
+                                    // g.puntoInicial.longitud
+                                    norteInicial,
+                                    esteInicial
+                                ],
+                                [
+                                    /* -77.6097141, // to testing
+                                    1.7220083, */
+                                    // g.puntoFinal.latitud,
+                                    // g.puntoFinal.longitud
+                                    norteFinal,
+                                    esteFinal
+                                ]
+                            ]
+                            ],
+                        //   "_path": 0,
+                            "spatialReference": {
+                                "wkid": 9377,
+                                "lateswkid": 4326
+                            }
+                        }
+                        }
+                )
+            } else if(g.typeGeometry == "Polígono") {
+                debugger
+                console.log(g.poligon);
+                let poligon = [];
+                g.poligon.forEach(e => { // convierte coordenas del poli a referencia nacional norte este
+                    const {norte,este} = getNorteEste(e[0], e[1]);
+                    poligon.push([norte,este])
+                })
+                poligonos.push(
+                    [
+                        {
+                            "attributes": {
+                                "ID_PROYECT": idProyecto?idProyecto:'isOffline',
+                                "ID_PREDIO": g.id_predio,
+                                "ACOMPANIAN": g.acompaniante,
+                                "OBSERVACIO": g.observaciones,
+                                "FUNCIONARI": g.funcionario,
+                                "FIRMA": g.firma,
+                                "FECHA_CAPTURA": fechaActual(),
+                                "ID_INICIO": g.id_inicio,
+                                "ID_FINAL": g.id_final,
+                                "DESCRIPCIO": g.descripcion,
+                                "AREA_M2": g.area_m2
+                            },
+                            "geometry": {
+                                "rings": 
+                                [
+                                // g.poligon
+                                poligon
+                                /* 
+                                    [
+                                        [
+                                            -76.6097141, // to testing
+                                            1.0220083
+                                        ],
+                                        [
+                                            -77.7097141, // to testing
+                                            2.1220083
+                                        ],
+                                        [
+                                            -79.8097141, // to testing
+                                            2.5220083
+                                        ],
+                                        [
+                                            -75.9097141, // to testing
+                                            1.3220083
+                                        ],
+                                        [
+                                            -80.0097141, // to testing
+                                            3.4220083
+                                        ],
+                                        [
+                                            -76.6097141, // to testing
+                                            1.0220083
+                                        ]
+                                    ]
+                                */
+                                ]
+                                ,
+                                "_ring": 0,
+                                "spatialReference": {
+                                    "wkid": 9377,
+                                    "lateswkid": 4326
+                                }
+                            }
+                            }
+                        ]
+                    
+                )
+            }
+        })
+
         if (!navigator.onLine) {
+            debugger
             let dbLocal = JSON.parse(localStorage.getItem("dbLocal"))?JSON.parse(localStorage.getItem("dbLocal")):[]
-            dbLocal.push(dataToSend);
+            dbLocal.push({nomProject, puntos, lineas, poligonos});
             localStorage.setItem("dbLocal",JSON.stringify(dbLocal))
             const variant = "info" // variant could be success, error, warning, info, or default
             enqueueSnackbar('Proyecto creado y almacenado localmente con exito',{variant});
             setNomProject('');
             setGeometriesCreated([]);
+        }else if(idProyecto){
+            console.log("dataToSend => ", puntos, lineas, poligonos);
+            // insertarProyectoGeometrias(dataToSend);
+            const estadoProceso = await formarJsonToPersistir(puntos, lineas, poligonos);
+            console.log({estadoProceso});
             setStore({...store, openBackop:false})
+            const variant = "success" // variant could be success, error, warning, info, or default
+            enqueueSnackbar(`El proyecto ${idProyecto} se creó de forma correcta`,{variant});       
         }else{
-            console.log("dataToSend => ", dataToSend);
-            console.log(JSON.stringify(dataToSend));
-            insertarProyectoGeometrias(dataToSend);
-            
+            msgFalloCOmunicacion();
         }
+        if(idProyecto || !navigator.onLine) setStore({...store, openBackop:false, subMenuSelected:"", menuSelected: menu.Home})     
+    }
+
+    const msgFalloCOmunicacion = () => {
+        const variant = "warning" // variant could be success, error, warning, info, or default
+        setStore({...store, openBackop:false})
+        enqueueSnackbar('Problemas con la comunicación, porfavor intentalo mas tarde',{variant});
     }
 
     const insertarProyectoGeometrias = async(dataToSend) => {

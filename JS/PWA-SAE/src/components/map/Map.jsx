@@ -59,6 +59,7 @@ export const Map = ({currentLocation, startTracking, typeGeometry, formulario}) 
       endTraking:false,
     }) */
     const [center, setCenter] = useState([currentLocation.latitudPunto, currentLocation.longitudPunto])
+    console.log({center});
     const {latitud:latIni, longitud:longIni}=formulario.puntoInicial;
     const {latitud:latFin, longitud:longFin}=formulario.puntoFinal;
     const {poligon}=formulario;
@@ -67,7 +68,9 @@ export const Map = ({currentLocation, startTracking, typeGeometry, formulario}) 
       const map = useMap()
       console.log('map center:', map.getCenter())
       console.log(map);
-      return null
+      return (
+        <h1>ddsf</h1>
+      )
     }
 
     useEffect(() => {

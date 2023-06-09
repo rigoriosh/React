@@ -1,5 +1,8 @@
 // import { doGetToken,  } from "../api";
 
+import { postData, postRawData } from "../api/apis";
+import enviroment, { urlPost_AddFeatures_PuntosLineasPoligonos } from "./enviroment";
+
 export const initStore = {
   modeTest:false,
   user:{
@@ -265,5 +268,94 @@ export const calcularDistanciaEntreDosCoordenadas = (lat1, lon1, lat2, lon2) => 
   let diferenciaEntreLatitudes = (lat2 - lat1);
   let a = Math.pow(Math.sin(diferenciaEntreLatitudes / 2.0), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(diferenciaEntreLongitudes / 2.0), 2);
   let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return RADIO_TIERRA_EN_KILOMETROS * c;
+  const absoluteValue = Math.abs(RADIO_TIERRA_EN_KILOMETROS * c);
+  return absoluteValue;
 };
+
+export const calculoAreaM2 = () => {
+  return 1;
+}
+
+export const fechaActual = ()=> new Date().toLocaleDateString().split('/').join('-');
+
+export const formarJsonToPersistir = async (puntos, lineas, poligonos) =>{
+  // se utiliza al momento de modificar alguna geometria
+  let estadoProceso = true; // significa todo ok
+  try {
+    let dataToSend = {};
+    let respAdd='';
+    debugger
+    if(puntos.length>0){
+      dataToSend = {features: puntos}
+      respAdd = await postData(urlPost_AddFeatures_PuntosLineasPoligonos.punto, dataToSend)
+      console.log(respAdd);
+    }
+    if(lineas.length>0){
+      dataToSend = {features: lineas}
+      respAdd = await postData(urlPost_AddFeatures_PuntosLineasPoligonos.linea, dataToSend)
+      console.log(respAdd);
+    }
+    if(poligonos.length>0){
+      dataToSend = {features: poligonos[0]}
+      console.log(dataToSend);
+      respAdd = await postData(urlPost_AddFeatures_PuntosLineasPoligonos.poligono, dataToSend)
+      console.log(respAdd);
+    }
+    estadoProceso = true
+  } catch (error) {
+    console.error(...error)          
+    estadoProceso = false;
+  }
+  return estadoProceso
+}
+
+export const traer_idProyecto = async (nomProject, login) => {
+  const dataToSend = {
+      "nombre": nomProject,
+      "fechaCreacion": "2023-05-31",
+      "idUsuario": login.userId
+    }
+  const {resp, response} = await postRawData(JSON.stringify(dataToSend), enviroment.insertarProyecto)
+  debugger
+  if (response) {
+      return response.status === 201 ? resp : undefined;
+  } else {
+    return undefined;
+      // msgFalloCOmunicacion();
+  }
+}
+
+export const  agregarIdProyectoPunLinPol = (ID_PROYECT, puntos, lineas, poligonos) => {
+  let fixPuntos = [];
+  puntos.forEach(p => fixPuntos.push(
+    {
+      ...p,
+      attributes: { ...p.attributes, ID_PROYECT}
+    }
+  ));
+  let fixLineas = [];
+  lineas.forEach(L => fixLineas.push(
+    {
+      ...L,
+      attributes: { ...L.attributes, ID_PROYECT}
+    }
+  ));
+  let fixPoligonos = [];
+  poligonos[0].forEach(p => fixPoligonos.push(
+    {
+      ...p,
+      attributes: { ...p.attributes, ID_PROYECT}
+    }
+  ));
+  return {fixPuntos, fixLineas, fixPoligonos}
+}
+
+export const getNorteEste = (longitud, latitud) => {
+    // https://origen.igac.gov.co/herramientas.html
+  const to = '+proj=tmerc +lat_0=4.0 +lon_0=-73.0 +k=0.9992 +x_0=5000000 +y_0=2000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs';
+  const from = '+proj=longlat +datum=WGS84 +no_defs'
+  var [norte,este] = proj4(from, to, [longitud, latitud]);
+  // var [x,y] = proj4(from, to, [-76.6150806, 1.0274075]);
+  console.log({norte,este});
+  return {norte,este}
+}

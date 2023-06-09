@@ -16,23 +16,30 @@ const enviroment = {
     DeleteLinea:                `${api}linea/`,
     findByIdProyectoPoligono:   `${api}poligono/proyecto/`,
     DeletePoligono:             `${api}poligono/`,
-    
+    insertarProyecto:           `${api}proyecto/insertarProyecto`,
+    obtenerproyectosxUsuario:   `${api}proyecto/obtenerproyectosxUsuario/`
     
     
 
 }
 
-const urlGetPuntosLineasPoligonos =[
+export const urlGetPuntosLineasPoligonos =[
     "https://sae.igac.gov.co/arcgis/rest/services/SAE/EDICION1/MapServer/0",
     "https://sae.igac.gov.co/arcgis/rest/services/SAE/EDICION1/MapServer/1",
     "https://sae.igac.gov.co/arcgis/rest/services/SAE/EDICION1/MapServer/2"
 ];
 
-const urlPost_AddFeatures_PuntosLineasPoligonos = {
+export const urlPost_AddFeatures_PuntosLineasPoligonos = {
     punto:"https://sae.igac.gov.co/arcgis/rest/services/SAE/EDICION1/FeatureServer/0/addFeatures",
     linea:"https://sae.igac.gov.co/arcgis/rest/services/SAE/EDICION1/FeatureServer/1/addFeatures",
     poligono:"https://sae.igac.gov.co/arcgis/rest/services/SAE/EDICION1/FeatureServer/2/addFeatures"
 }
 
+
+export const urlPost_deleteFeatures_PuntosLineasPoligonos = {
+    punto:"https://sae.igac.gov.co/arcgis/rest/services/SAE/EDICION1/FeatureServer/0/deleteFeatures",
+    linea:"https://sae.igac.gov.co/arcgis/rest/services/SAE/EDICION1/FeatureServer/1/deleteFeatures",
+    poligono:"https://sae.igac.gov.co/arcgis/rest/services/SAE/EDICION1/FeatureServer/2/deleteFeatures"
+  }
 
 export default enviroment;

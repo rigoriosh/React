@@ -9,8 +9,8 @@ import { StoreContext } from '../../App';
 import { Tooltip } from '@mui/material';
 import { ConfirmationDialog } from '../../components/ConfirmationDialog';
 import { DialogContenTextGeom } from '../../components/DialogContenTextGeom';
-import { deleteEndPoint, findAll } from '../../api/apis';
-import enviroment from '../../helpers/enviroment';
+import { findAll, postDeleteGeomtry } from '../../api/apis';
+import enviroment, { urlPost_deleteFeatures_PuntosLineasPoligonos } from '../../helpers/enviroment';
 
 export const ListGeomProye = ({projectSelected, actualizarProyectos}) => {
     const { store, setStore } = useContext(StoreContext);
@@ -42,11 +42,16 @@ export const ListGeomProye = ({projectSelected, actualizarProyectos}) => {
     const eliminarGeometria = async() => {
         setStore({...store, openBackop:true})
         console.log(geometriaSelected);
-        const url = geometriaSelected.typeGeometry === "Punto" ? enviroment.deletePunto
-        : geometriaSelected.typeGeometry === "Linea" ? enviroment.DeleteLinea
-        : enviroment.DeletePoligono
+        const url = geometriaSelected.typeGeometry === "Punto" ? urlPost_deleteFeatures_PuntosLineasPoligonos.punto
+        : geometriaSelected.typeGeometry === "Linea" ? urlPost_deleteFeatures_PuntosLineasPoligonos.linea
+        : urlPost_deleteFeatures_PuntosLineasPoligonos.poligono
         debugger
-        const responseDelete = await deleteEndPoint(url, geometriaSelected.id)
+        // const responseDelete = await deleteEndPoint(url, geometriaSelected.id)
+        const data = {
+            objectIds: geometriaSelected.id,
+            where : `ID_PROYECT = '${geometriaSelected.idProyecto}'`
+          }
+        const responseDelete = await postDeleteGeomtry(url, data)
         console.log(responseDelete);
         consultarGeomtrias();
         // console.log(newArray);

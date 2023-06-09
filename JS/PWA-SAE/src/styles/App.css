@@ -455,3 +455,10 @@ p{
   justify-content: space-between;
 }
 
+.css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input{
+  color: white !important;
+}
+
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root{
+  color: black !important;
+}

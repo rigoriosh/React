@@ -28,7 +28,7 @@ export const LoginPage = () => {
         }else{
             setStore({...store, openBackop: true});
             setTimeout(() => {
-                const sesion = {isLogin:true, user}
+                const sesion = {isLogin:true, user, userId:'123'}
                 sessionStorage.setItem("login",JSON.stringify(sesion))
                 setLogin(sesion)
                 enqueueSnackbar(`Bienvenido ${user}`,{variant});

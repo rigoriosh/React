@@ -107,7 +107,7 @@ const registrosPrueba = [
 
 export const ListarProyectos = () => {
     const { enqueueSnackbar } = useSnackbar();
-    const { store, setStore } = useContext(StoreContext);
+    const { store, setStore, login } = useContext(StoreContext);
     const {subMenuSelected}=store;
     const [projectSelected, setProjectSelected] = useState({proyecto:'',ID_PREDIO:''});
     const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
@@ -182,7 +182,7 @@ export const ListarProyectos = () => {
     const actualizarProyectos = async()=>{
         console.log("....actualizarProyectos....");
         debugger
-        const response = await findAll(enviroment.findAll);
+        const response = await findAll(enviroment.obtenerproyectosxUsuario, login.userId);
         console.log(response);
         if (response.message == 'Failed to fetch' || response.message == "Unexpected end of JSON input") {
             const variant = "warning" // variant could be success, error, warning, info, or default

@@ -7,7 +7,7 @@ import Line from '../../assets/btnsIcons/Linea.png'
 import Polygon from '../../assets/btnsIcons/Poligono.png'
 import { useSnackbar } from 'notistack';
 import { Map } from '../../components/map/Map';
-import { calcularDistanciaEntreDosCoordenadas } from '../../helpers/utils';
+import { calcularDistanciaEntreDosCoordenadas, calculoAreaM2 } from '../../helpers/utils';
 
 const initForm = {
   id:'',
@@ -60,6 +60,7 @@ const initFormLine = {
 let interval;
 export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typeGeometry}) => {
   const { store, setStore, catchGeometries, setCatchGeometries } = useContext(StoreContext);
+  const [poligono, setPoligono] = useState([])
   const { enqueueSnackbar } = useSnackbar();
   const [formulario, setFormulario] = useState(
     typeGeometry==tiposGeometrias.Poligono ? {
@@ -95,23 +96,26 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
         formulario.puntoFinal.latitud,formulario.puntoFinal.longitud
       )
     }
+    debugger
     const newGeometryCreated = {
       ...formulario,
       id: geometriesCreated.length.toString(),
       // id: generateUUID(),
       fecha_captura:new Date().toLocaleDateString(),
       typeGeometry,
-      area_m2: 1, //pendiente por determinar forma de calcular
-      longitud:calculoLongitud //logitud de la linea
+      area_m2: calculoAreaM2(), //pendiente por determinar forma de calcular
+      longitud:calculoLongitud, //logitud de la linea
+      poligon: poligono
     }
     if (Object.keys(newGeometryCreated).filter(k => (newGeometryCreated[k] == '' && newGeometryCreated[k] != 0)).length) {
       const variant = "error" // variant could be success, error, warning, info, or default
       enqueueSnackbar('Recuerda todos los campos son obligatorios',{variant});
     } else {
-      setGeometriesCreated([...geometriesCreated, newGeometryCreated]) // guarda en el array temporal antes de ser enviado al back con las demas geometrias
-      setStore({...store, subMenuSelected:""}) // regresa a la vista anterior "Crear proyecto"
+      debugger
       setFormulario({})
       setCatchGeometries(false);
+      setGeometriesCreated([...geometriesCreated, newGeometryCreated]) // guarda en el array temporal antes de ser enviado al back con las demas geometrias
+      setStore({...store, subMenuSelected:""}) // regresa a la vista anterior "Crear proyecto"
     }
   }
   const handleFields = ({target})=>{
@@ -123,15 +127,21 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
   }
   const capturarCoordenadas = () => {
     console.log("capturarCoordenadas => ", typeGeometry);
-    // setFormulario({...formulario, puntoInicial:{latitud:'',longitud:''}, puntoFinal:{latitud:'',longitud:''}});
+    setStore({...store, openBackop:true})
+    setPoligono([])
     setStartTracking("")
     getMyCurrentPosition();
     
   }
 
   const getMyCurrentPosition = (start) =>{
+    
     if(navigator.geolocation){
-      navigator.geolocation.getCurrentPosition((e)=>yesSuccess(e, start), noSuccess);
+      navigator.geolocation.getCurrentPosition((e)=>yesSuccess(e, start), noSuccess, {
+        enableHighAccuracy: true,
+        maximumAge: 90000,
+        timeout: 27000,
+      });
     }else{
       const variant = "info" // variant could be success, error, warning, info, or default
       enqueueSnackbar('Este dispositivo no cuenta con localizador',{variant});
@@ -140,20 +150,26 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
 
   const yesSuccess = (position, start)=>{
     console.log("position => ", position);
-    const latitud = position.coords.latitude,
-          longitud = position.coords.longitude;
+    setStore({...store, openBackop:false})
+    let  longitud = position.coords.longitude, latitud = position.coords.latitude;
+    
+    debugger
     if (start == "startTracking") {
-      if (formulario.puntoInicial.latitud == '') {
-        setFormulario({...formulario, puntoInicial:{latitud,longitud}});        
-      }
+      // if (formulario.puntoInicial.latitud == '') {
+        setFormulario({...formulario, puntoInicial:{latitud,longitud},poligon:[[latitud,longitud]]});        
+      // }
       if (typeGeometry==tiposGeometrias.Poligono) {
+        setPoligono([])
         getContinusTraking();
       }
     } else if (start == "endTracking") {
+      formulario.poligon
+        ?formulario.poligon[formulario.poligon.length-1] = formulario.poligon[0]
+        :''; // asegura que la ultima coordenada de un poligno sea la misma q la primera, para que cierre el polig
       setFormulario({...formulario, puntoFinal:{latitud,longitud}})  
       // setFormulario({...formulario, puntoFinal:{latitud:latitud+0.009,longitud}})  
     } else {
-      setFormulario({...formulario,latitudPunto:latitud,longitudPunto:longitud})
+      setFormulario({...formulario,latitudPunto:latitud,longitudPunto:longitud})// para centrar el mapa
     }
           
     setCatchGeometries(true)
@@ -164,10 +180,12 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
     console.log(position);
     // setCatchPoligon([...catchPoligon,[position.coords.latitude+Math.random(),position.coords.longitude]])
     debugger
-    let a = formulario.poligon;
-    a.push([position.coords.latitude,position.coords.longitude]);
+    // let a = formulario.poligon;
+    let a = poligono;
+    a.push([position.coords.longitude, position.coords.latitude]);
     console.log("a=>",a);
-    setFormulario({...formulario,poligon:a})
+    // setFormulario({...formulario,poligon:a})
+    setPoligono(a)
 
   }
 
@@ -178,9 +196,28 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
     }, 5000);
   }
 
-  const noSuccess = (msg)=>{
-    console.error(msg)
-  }
+  const noSuccess = (error)=>{
+    const variant = "info" // variant could be success, error, warning, info, or default
+    switch(error.code){
+      case error.PERMISSION_DENIED: 
+        // alert("Location not provided");
+        enqueueSnackbar('Ubicación no proveida',{variant});
+        break;
+      case error.POSITION_UNAVAILABLE: 
+      // alert("Current location not available");
+      enqueueSnackbar('Ubicación actual no habilitada',{variant});
+      break;
+      case error.TIMEOUT: 
+      // alert("Timeout");
+      enqueueSnackbar('Ha tomado demaciado tiempo, intenta mas tarde',{variant});
+      break;
+      default: 
+      // alert("unknown error");
+      enqueueSnackbar('Error desconocido, intenta mas tarde o comunicate con tecnología',{variant});
+      break;
+      }
+      setStore({...store, openBackop:false})
+    }
 
   const iniciarRecorrido = (start) => {
     if (start == "startTracking") {
