@@ -1,1 +1,4 @@
-ejecutar el jar se debe abrir el la carpeta en donde se descargo y ejecutar el siguiente comando: java -jar .\ApiSAE-0.0.1-SNAPSHOT.jar
+-   en "C:\ASPI-SAE" ejecutar el jar se debe abrir el la carpeta en donde se descargo y ejecutar el siguiente comando: java -jar .\ApiSAE-0.0.1-SNAPSHOT.jar
+-   Se debe correr el back "Geo Portal afanumerico (SIGSAE)" de login desde visual studio, pero primero configurar visual para que el proyecto de inicio sea "RestUserAuth".
+-   ingresar con las credenciales de prueba "lozada123" y "lozada123".
+-   Debe estar conectado a la vpn

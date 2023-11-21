@@ -359,3 +359,16 @@ export const getNorteEste = (longitud, latitud) => {
   console.log({norte,este});
   return {norte,este}
 }
+
+export const validarObjeto = (objeto) => {
+  for (var propiedad in objeto) {
+    if (objeto.hasOwnProperty(propiedad)) {
+      if (objeto[propiedad] === "") {
+        // Si uno de los campos está vacío, retornamos falso
+        return false;
+      }
+    }
+  }
+  // Si llegamos aquí, significa que todos los campos tienen datos
+  return true;
+}

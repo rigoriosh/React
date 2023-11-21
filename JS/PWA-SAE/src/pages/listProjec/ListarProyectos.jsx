@@ -187,7 +187,7 @@ export const ListarProyectos = () => {
         if (response.message == 'Failed to fetch' || response.message == "Unexpected end of JSON input") {
             const variant = "warning" // variant could be success, error, warning, info, or default
             enqueueSnackbar('Presentamos inconvenientes de red, intenta mas tarde o contacta con el administrador',{variant});
-            setStore({...store, menuSelected:menu.Home, subMenuSelected:'', openBackop:false})
+            setStore({...store, menuSelected:menu[2].nameMenu, subMenuSelected:'', openBackop:false})
             console.error({response});
         } else {
             setRows(response)

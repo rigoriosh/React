@@ -1,22 +1,22 @@
 import { Box, Button, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
-import { menu, tiposGeometrias } from '../../helpers/constantes'
+import { tiposGeometrias } from '../../helpers/constantes'
 import { StoreContext } from '../../App';
 import Punto from '../../assets/btnsIcons/Punto.png'
 import Line from '../../assets/btnsIcons/Linea.png'
 import Polygon from '../../assets/btnsIcons/Poligono.png'
 import { useSnackbar } from 'notistack';
 import { Map } from '../../components/map/Map';
-import { calcularDistanciaEntreDosCoordenadas, calculoAreaM2 } from '../../helpers/utils';
+import { calcularDistanciaEntreDosCoordenadas, calculoAreaM2, validarObjeto } from '../../helpers/utils';
 
 const initForm = {
-  id:'',
+  // id:'',
   acompaniante:'',
   id_punto:'',
   id_predio:'',
   observaciones:'',
   descripcion:'',
-  fecha_captura:'',
+  // fecha_captura:'',
   funcionario:'',
   firma:'',
   latitudPunto:'',
@@ -41,13 +41,13 @@ const initForm = {
   longitudPunto:'',
 } */
 const initFormLine = {
-  id:'',
+  // id:'',
   acompaniante:'',
   id_punto:'',
   id_predio:'',
   observaciones:'',
   descripcion:'',
-  fecha_captura:'',
+  // fecha_captura:'',
   funcionario:'',
   firma:'',
   // id_inicio:'',
@@ -64,13 +64,13 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
   const { enqueueSnackbar } = useSnackbar();
   const [formulario, setFormulario] = useState(
     typeGeometry==tiposGeometrias.Poligono ? {
-      id:'',
+      // id:'',
       acompaniante:'',
       id_punto:'',
       id_predio:'',
       observaciones:'',
       descripcion:'',
-      fecha_captura:'',
+      // fecha_captura:'',
       funcionario:'',
       firma:'',
       id_inicio:'',
@@ -89,6 +89,17 @@ export const CapturaCoordenadas = ({geometriesCreated, setGeometriesCreated, typ
 
   const guardar = () => {
     console.log("guardar => ", formulario);
+    // valida si el formulario si esta completo
+    if(typeGeometry==tiposGeometrias.Poligono){
+      const currentDate = new Date;
+      setFormulario({...formulario, id:formulario.id_punto, fecha_captura: currentDate.toLocaleString()})
+    }
+    if (!validarObjeto(formulario)){
+      const variant = "warning" // variant could be success, error, warning, info, or default
+      enqueueSnackbar('Recuerda todo el formulario debe esta diligenciado',{variant});
+      return
+    } 
+
     let calculoLongitud = 0;
     if (typeGeometry == tiposGeometrias.Linea) {
       calculoLongitud = calcularDistanciaEntreDosCoordenadas(

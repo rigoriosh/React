@@ -1,6 +1,6 @@
 import { Box, Button, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
-import { menu, tiposGeometrias } from '../../helpers/constantes'
+import { tiposGeometrias } from '../../helpers/constantes'
 import { StoreContext } from '../../App';
 import Punto from '../../assets/btnsIcons/Punto.png'
 import { useSnackbar } from 'notistack';

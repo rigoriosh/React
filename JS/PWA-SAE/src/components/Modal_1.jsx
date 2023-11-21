@@ -66,7 +66,8 @@ export const Modal_1 = ({open, closeModal, geometriaSelected}) => {
                         }
                         {
                             (geometriaSelected.fecha_captura || geometriaSelected.fechaCreacion) &&
-                            <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Fecha:</span>{new Date(geometriaSelected.fecha_captura?geometriaSelected.fecha_captura:geometriaSelected.fechaCreacion).toLocaleDateString()}</p>
+                            // <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Fecha:</span>{geometriaSelected.fecha_captura?geometriaSelected.fecha_captura:new Date(geometriaSelected.fechaCreacion).toLocaleDateString()}</p>
+                            <p style={{margin:"0px"}}><span style={{fontWeight:'bold', marginRight:'5px'}}>Fecha:</span>{geometriaSelected.fecha_captura?geometriaSelected.fecha_captura:geometriaSelected.fechaCreacion}</p>
                         }
                         {
                             geometriaSelected.firma &&

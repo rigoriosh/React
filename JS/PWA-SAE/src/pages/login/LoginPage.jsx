@@ -6,10 +6,12 @@ import PersonIcon from '@mui/icons-material/Person';
 import LoginIcon from '@mui/icons-material/Login';
 import { useSnackbar } from 'notistack';
 import { StoreContext } from '../../App';
+import enviroment from '../../helpers/enviroment';
+import { getIdUsuario } from '../../api/apis';
+import { initStore } from '../../helpers/utils';
 
 export const LoginPage = () => {
     const { store, setStore, setLogin } = useContext(StoreContext);
-
     const { enqueueSnackbar } = useSnackbar();
     const [seePass, setSeePass] = useState(false)
     const [form, setForm] = useState({user:'', pwd:''});
@@ -18,7 +20,7 @@ export const LoginPage = () => {
     
     const handleClickShowPassword = () => setSeePass((seePass) => !seePass);
 
-    const logIn = (e) => {
+    const logIn = async (e) => {
         e.preventDefault();
         console.log("form => ", form);
         let variant = "success";
@@ -27,12 +29,36 @@ export const LoginPage = () => {
             enqueueSnackbar('Recuerda todos los campos son obligatorios',{variant});
         }else{
             setStore({...store, openBackop: true});
-            setTimeout(() => {
-                const sesion = {isLogin:true, user, userId:'123'}
+            console.log("Logica pendiente para realizar petición de autenticación");
+            console.log(enviroment.getIdUsuario+`user=${user}&pass=${pwd}&type=Standar`);
+            let responseLogin = await getIdUsuario(enviroment.getIdUsuario+`user=${user}&pass=${pwd}&type=Standar`);
+            console.log("responseLogin => ", responseLogin );
+            let mensajeEnqueueSnackbar = ``;
+
+            if (initStore.modeTest) {
+                responseLogin = {
+                    IdUsuario:123,                    
+                }
+            }
+
+            if (responseLogin.IdUsuario !== undefined) {
+                const sesion = {isLogin:true, user, userId: responseLogin.IdUsuario}
                 sessionStorage.setItem("login",JSON.stringify(sesion))
                 setLogin(sesion)
-                enqueueSnackbar(`Bienvenido ${user}`,{variant});
-            }, 1000);
+                mensajeEnqueueSnackbar = `Bienvenido ${user}`;
+            }else if(responseLogin.error !== undefined){
+                mensajeEnqueueSnackbar = responseLogin.msm;
+                variant = "error"
+            }else{
+                mensajeEnqueueSnackbar = `Credenciales incorrectas`;
+                console.error("Credenciales incorrectas o fallo en comunicacion DB");
+                variant = "error"
+            }
+            setStore({...store, openBackop:false})
+            enqueueSnackbar(mensajeEnqueueSnackbar, {variant});                
+            // setTimeout(() => {
+            //     enqueueSnackbar(`Bienvenido ${user}`,{variant});
+            // }, 1000);
         }
     }
 

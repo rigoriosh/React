@@ -13,7 +13,7 @@ export const Navbar = () => {
 
   useEffect(() => {
     console.log("Navbar");
-    if (menuSelected != menu.Home) {
+    if (menuSelected != menu[2].nameMenu) {
       setOpenMenu(false)
     }
   

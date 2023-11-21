@@ -350,7 +350,7 @@ export const FormCrearGeom = ({geometriesCreated, setGeometriesCreated, nomProje
         }else{
             msgFalloCOmunicacion();
         }
-        if(idProyecto || !navigator.onLine) setStore({...store, openBackop:false, subMenuSelected:"", menuSelected: menu.Home})     
+        if(idProyecto || !navigator.onLine) setStore({...store, openBackop:false, subMenuSelected:"", menuSelected: menu[2].nameMenu})     
     }
 
     const msgFalloCOmunicacion = () => {

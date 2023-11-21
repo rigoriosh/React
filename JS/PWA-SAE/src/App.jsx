@@ -9,8 +9,7 @@ import { Backdrop, CircularProgress, Slide } from '@mui/material'
 import { SnackbarProvider } from 'notistack'
 
 const initStore = {
-  menuSelected: menu.Home,
-  // menuSelected: menu.CrearProyecto,
+  menuSelected: menu[2].nameMenu,
   subMenuSelected:"",
   openBackop: false
 }

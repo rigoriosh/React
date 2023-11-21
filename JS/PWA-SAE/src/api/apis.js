@@ -1,4 +1,24 @@
-
+export const getIdUsuario = async(url) => {    
+    try {
+        console.log("getIdUsuario");
+        const response = await fetch(url, {
+            method:'GET',
+            mode: "cors",
+        });
+        console.log(response);
+        if (response.status == 404) {
+            return "No se encuentraron registro en DB"    
+        } else if(response.status == 200){
+            const res = await response.json();
+            return res
+            
+        } else{
+            return "Fallo en comunicación con los servidores"
+        }
+    } catch (error) {
+        return {error, msm:"Fallo en comunicación con los servidores"};
+    }
+}
 
 export const insertProjecGeometry = async(dataToSend, url) => {
     // let formData = new FormData();

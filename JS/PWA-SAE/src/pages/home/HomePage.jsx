@@ -100,17 +100,17 @@ export const HomePage = () => {
     <Container sx={{mt:0, ml:0, p:0/* , backgroundColor:'red' */, /* height:'100%' */}}>
         <Navbar/>
         {
-          menuSelected == menu.ListarProyectos
+          menuSelected == menu[0].nameMenu
           ? <ListarProyectos/> 
-          : menuSelected == menu.CrearProyecto
+          : menuSelected == menu[1].nameMenu
           ? <CrearProyecto/>
           : <Container sx={{mt:0, ml:1, p:0}}>
-              <h2>HOME</h2>
+              <h2>INICIO</h2>
               <p>Sistema de captura de coordenadas</p>
             </Container> //Home
         }
         {
-          (subMenuSelected == "" && (menuSelected == menu.CrearProyecto || menuSelected == menu.ListarProyectos)) &&
+          (subMenuSelected == "" && (menuSelected == menu[1].nameMenu || menuSelected == menu[0].nameMenu)) &&
           <StyledFab color="default" aria-label="add" 
             onClick={()=>setStore({...store, menuSelected: menu.Home, subMenuSelected:""})}
           >
@@ -118,7 +118,7 @@ export const HomePage = () => {
           </StyledFab>
         }
         {
-          (subMenuSelected != "" && !catchGeometries && (menuSelected == menu.CrearProyecto || menuSelected == menu.ListarProyectos) || subMenuSelected === tiposGeometrias.Punto) &&
+          (subMenuSelected != "" && !catchGeometries && (menuSelected == menu[1].nameMenu || menuSelected == menu[0].nameMenu) || subMenuSelected === tiposGeometrias.Punto) &&
           <StyledFab color="warning" aria-label="add" 
             onClick={()=>setStore({...store, subMenuSelected:""})}
           >
