@@ -3,7 +3,7 @@ export const getIdUsuario = async(url) => {
         console.log("getIdUsuario");
         const response = await fetch(url, {
             method:'GET',
-            mode: "cors",
+            mode: "no-cors",
         });
         console.log(response);
         if (response.status == 404) {
